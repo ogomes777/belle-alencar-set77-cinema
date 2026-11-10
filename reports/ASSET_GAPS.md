@@ -1,9 +1,13 @@
-# ASSET_GAPS (Living Palace)
-| Ativo | Situação | Substituto honesto |
-|---|---|---|
-| Logo/monograma oficial | **Recebido** (kit Living Palace) e vetorizado: `public/brand/*.svg` | — (vetor oficial em alta resolução ainda recomendado) |
-| Fotos oficiais de vestidos em PNG transparente | Não fornecido | 11 recortes renderizados do estudo 3D (`public/rack/*.webp`, `scripts/render-rack.mjs`) |
-| Fotos com modelo para a ficha | Não fornecido | Recorte 3D grande com selo "estudo 3D" |
-| GLB de vestido real | Não fornecido | Vestido paramétrico com física de tecido |
-| Catálogo, preço, grade, estoque | Não fornecido | `catalog.demo.ts` (17 refs DEMO, preço sob consulta) |
-| Direitos do vídeo de referência | Não confirmados | Vídeo mantido fora do repositório |
+# Lacunas reais — integração de 48 produtos
+
+Os 48 estudos sintéticos do kit estão instalados, com 144 arquivos alpha auditados. Não são o catálogo oficial. A arara utiliza 30 roupas; bolsas, pulseiras e anéis permanecem em seus suportes e categorias.
+
+| Material | Estado e limite |
+|---|---|
+| Packshots e recortes | 48 conjuntos PNG/WebP integrados; vestido 06 corrigido para remover perna humana. Auditoria em ASSET_AUDIT.md. |
+| Catálogo oficial, preços, estoque e disponibilidade | Não confirmados. Nenhum preço ou estoque foi inventado; checkout permanece desabilitado. |
+| Geometria completa, costas e tecido das peças reais | Não fornecidos. Fotografias frontais em planos 2.5D; provador não promete prova virtual nem caimento real. |
+| Editoriais oficiais com modelos | Não fornecidos para esta integração. Produtos isolados não contêm pessoas. |
+| Vídeo original | Referência local de 818 quadros; não publicado no repositório público. |
+| Preview Vercel | Bloqueado pelo ambiente: ferramentas Vercel não expostas e CONNECT 403 na API. Produção preservada. |
+| Dispositivos físicos e Safari | Não disponíveis; validação realizada em Chromium desktop e emulação touch. |
