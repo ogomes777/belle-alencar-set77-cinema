@@ -1,4 +1,4 @@
-import type { Category, StoreId } from './types';
+import { SHOP_CATEGORIES, type Category, type StoreId } from './types';
 import { isStoreId } from './stores';
 
 export interface UrlIntent {
@@ -7,7 +7,7 @@ export interface UrlIntent {
   category: Category | null;
 }
 
-const CATS: Category[] = ['vestidos', 'conjuntos', 'acessorios'];
+const CATS: readonly Category[] = SHOP_CATEGORIES;
 
 /** `?loja=` tem prioridade; `?cidade=` é o parâmetro legado da V3. */
 export function parseUrl(search: string): UrlIntent {

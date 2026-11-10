@@ -10,8 +10,8 @@ import { applyFilters, DEFAULT_FILTERS } from '../../src/commerce/filters';
 import type { AvailabilityMap, AvailabilityProvider, StoreId } from '../../src/commerce/types';
 
 const dress = DEMO_CATALOG.find((p) => p.category === 'vestidos')!;
-const set = DEMO_CATALOG.find((p) => p.category === 'conjuntos')!;
-const acc = DEMO_CATALOG.find((p) => p.category === 'acessorios')!;
+const set = DEMO_CATALOG.find((p) => p.category === 'camisas')!;
+const acc = DEMO_CATALOG.find((p) => p.category === 'bolsas')!;
 
 /** Provider falso: estoque diferente por loja e registro de chamadas. */
 class FakeProvider implements AvailabilityProvider {
@@ -35,7 +35,7 @@ describe('dados demonstrativos honestos', () => {
     for (const p of DEMO_CATALOG) {
       expect(p.isDemo).toBe(true);
       expect(p.price.priceCents).toBeNull();
-      expect(p.sku).toMatch(/^DEMO-\d+$/);
+      expect(p.sku).toMatch(/^DEMO-[A-Z]+-\d{2}$/);
       expect(p.mediaRights.status).toBe('demo');
     }
   });
@@ -218,6 +218,6 @@ describe('mensagem para a loja e filtros', () => {
     expect(fluid.length).toBeGreaterThan(0);
     expect(fluid.every((p) => p.silhouette === 'fluido')).toBe(true);
     const unico = applyFilters(DEMO_CATALOG, { ...DEFAULT_FILTERS, size: 'Único' });
-    expect(unico.every((p) => p.category === 'acessorios')).toBe(true);
+    expect(unico.every((p) => ['pulseiras','bolsas','aneis'].includes(p.category))).toBe(true);
   });
 });

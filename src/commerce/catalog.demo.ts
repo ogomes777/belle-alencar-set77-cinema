@@ -359,9 +359,9 @@ function tone(color:string):Tone {
  if(x.includes('dourado'))return 'dourado';
  return x.includes('branco')||x.includes('off-white')?'perola':'champagne';
 }
-function silhouette(i:number):Silhouette { return (['fluido','marcante','classico'] as const)[i%3]; }
+function silhouette(i:number):Silhouette { return (['fluido','marcante','classico'] as const)[i%3]!; }
 function occasion(category:Category, i:number):Occasion {
- if(category==='vestidos')return (['celebrar','noite','celebrar','dia','noite','celebrar'] as const)[i%6];
+ if(category==='vestidos')return (['celebrar','noite','celebrar','dia','noite','celebrar'] as const)[i%6]!;
  if(category==='bolsas'||category==='aneis'||category==='pulseiras')return i%2?'noite':'celebrar';
  return i%3===1?'noite':'dia';
 }
