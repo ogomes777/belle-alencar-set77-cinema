@@ -37,8 +37,10 @@ export function detectCapabilities(): Capabilities {
 export function resolveTier(c: Capabilities, intensity: Intensity, forced?: string | null): Tier {
   if (forced === 'cinema' || forced === 'touch' || forced === 'static') return forced;
   if (intensity === 'essential' || c.reducedMotion || c.saveData || !c.webgl2) return 'static';
-  if (c.memory !== null && c.memory < 2) return 'static';
-  if (c.coarse || c.small || c.cores < 4 || (c.memory !== null && c.memory < 4)) return 'touch';
+  // On devices with fewer than four CPU cores, constructing the 3D scene can
+  // cause long main-thread stalls. Preserve cinematic posters and navigation.
+  if (c.cores < 4 || (c.memory !== null && c.memory < 3)) return 'static';
+  if (c.coarse || c.small || (c.memory !== null && c.memory < 4)) return 'touch';
   return 'cinema';
 }
 

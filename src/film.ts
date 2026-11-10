@@ -194,6 +194,12 @@ export function initFilm(director: Director): void {
     loading = true;
     stage!.classList.add('is-loading');
     try {
+      // Critical: do not initialize WebGL or compile shaders while the short
+      // opening curtain is on screen. Poster paints immediately without stalling.
+      if (!posterMode) {
+        await new Promise<void>(resolve => window.setTimeout(resolve, 1050));
+        if (tier === 'static') { stage!.classList.remove('is-loading'); return; }
+      }
       const mod = await import('./experience');
       if ((tier as Tier) === 'static') return;
       world = await mod.createWorld({
