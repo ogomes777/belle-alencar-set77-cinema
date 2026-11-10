@@ -1,199 +1,250 @@
 <!doctype html>
-<html lang="pt-BR"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8f6f0">
-<meta name="description" content="Belle Alencar. Moda e acessórios em Araxá, Frutal, Catalão e Mineiros. Encontre sua loja e descubra a seleção.">
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f2ea">
+<title>Belle Alencar | Moda & Acessórios</title>
+<meta name="description" content="Belle Alencar, moda feminina e acessórios em Araxá, Frutal, Catalão e Mineiros. Entre na loja, conheça a coleção e fale com a unidade da sua cidade.">
 <meta property="og:title" content="Belle Alencar | Moda & Acessórios">
 <meta property="og:description" content="O look começa aqui. O resto é seu.">
-<title>Belle Alencar | Moda & Acessórios</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css">
-<link rel="stylesheet" href="/cinema.css">
-<link rel="stylesheet" href="/maximum.css">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-</head><body>
-<div class="scroll-line" id="scrollLine" aria-hidden="true"></div>
-<div class="opening" id="opening" aria-hidden="true"><div class="opening__mark" aria-hidden="true"><span>B</span><span>A</span></div><div class="opening__line"></div><p>BELLE ALENCAR</p></div>
-<div class="announcement"><span>MODA & ACESSÓRIOS</span><span class="announcement__middle">BELLE ALENCAR / EST. ARAXÁ</span><span>4 CIDADES, UMA BELLE</span></div>
-<header class="site-header" id="siteHeader">
-<a class="wordmark" href="#inicio" aria-label="Belle Alencar, voltar ao início"><span class="wordmark__icon" aria-hidden="true">BA</span><span>BELLE <em>ALENCAR</em><small>MODA & ACESSÓRIOS</small></span></a>
-<nav class="header-nav" aria-label="Navegação principal"><a href="#colecao">A seleção</a><a href="#portal">A experiência</a><a href="#atelier">O ateliê</a><a href="#editorial">Editorial</a></nav>
-<div class="header-actions"><button class="city-pill" id="cityButton" type="button" aria-label="Escolher cidade"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="city-label">Escolher cidade</span><span class="chevron">⌄</span></button><button class="icon-btn" id="profileButton" type="button" aria-label="Minhas preferências"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></button><button class="menu-btn" id="menuButton" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu"><span></span><span></span></button></div>
-</header>
-<nav class="mobile-nav" id="mobileNav" aria-label="Menu móvel" hidden><a href="#colecao">A seleção</a><a href="#atelier">O ateliê</a><a href="#editorial">Editorial</a><button type="button" data-open-city>Escolher cidade</button><button type="button" id="mobileProfileButton">Minhas preferências</button></nav>
+<link rel="preload" as="image" href="/posters/vitrine.jpg" fetchpriority="high">
+<script>
+  /* Antes da pintura: marca a sessão para pular a intro e sinaliza JS. Sem dependências. */
+  document.documentElement.classList.add('js');
+  try { if (sessionStorage.getItem('belle:v4:intro')) document.documentElement.classList.add('intro-seen'); } catch (e) {}
+</script>
+<script type="module" src="/src/main.ts"></script>
+</head>
+<body>
+<a class="skip-link" href="#colecao">Pular para a coleção</a>
+<div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-<nav class="ba-scene-nav" aria-label="Capítulos da experiência">
-<a href="#inicio" data-scene="inicio">00<span>Início</span></a>
-<a href="#colecao" data-scene="colecao">01<span>Seleção</span></a>
-<a href="#filme" data-scene="filme">02<span>Filme</span></a>
-<a href="#materia" data-scene="materia">03<span>Matéria</span></a>
-<a href="#atelier" data-scene="atelier">04<span>Ateliê</span></a>
-<a href="#lookbook" data-scene="lookbook">05<span>Lookbook</span></a>
-<a href="#lojas" data-scene="lojas">06<span>Lojas</span></a>
-</nav>
-<main>
-<section class="hero section" id="inicio" data-chapter="01">
-<div class="hero__text"><div class="eyebrow enter"><span class="small-square"></span> UMA NOVA FORMA DE DESCOBRIR A BELLE</div><h1 class="hero-title enter">O look começa <i>aqui.</i><br>O resto é <em>seu.</em></h1><p class="hero-desc enter">Tem peça que você vê. Tem peça que você já imagina usando.</p><div class="hero-actions enter"><a href="#colecao" class="primary-link magnetic">Conhecer a seleção <span>↗</span></a><button type="button" class="under-link" data-open-city>Encontre sua loja <span>↗</span></button></div><div class="hero-foot"><span>ARAXÁ · FRUTAL · CATALÃO · MINEIROS</span><span>DESLIZE PARA DESCOBRIR <b>↓</b></span></div></div>
-<div class="hero__visual" id="heroVisual"><div class="hero__halo" aria-hidden="true"></div><div class="hero__frame"><img class="hero-image" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=86" alt="Imagem editorial ilustrativa de moda feminina" fetchpriority="high"></div><div class="hero__corner">THE BELLE EDIT<br>2026 / 01</div><div class="hero__vertical">PEÇAS PARA ENCONTRAR O SEU JEITO DE VESTIR</div><div class="hero__bottom">01 <span>UMA HISTÓRIA EM CADA ESCOLHA</span> <span>↘</span></div></div>
-</section>
-<div class="running-band" aria-label="Categorias"><div class="running-band__track" aria-hidden="true"><span>VESTIDOS ✦ CONJUNTOS ✦ MODA FEMININA ✦ ACESSÓRIOS ✦</span><span>VESTIDOS ✦ CONJUNTOS ✦ MODA FEMININA ✦ ACESSÓRIOS ✦</span><span>VESTIDOS ✦ CONJUNTOS ✦ MODA FEMININA ✦ ACESSÓRIOS ✦</span></div></div>
-
-<!-- SET77 / CINEMA EXPERIMENT 03: loja em perspectiva real, controlada pelo scroll -->
-<section class="ba-portal" id="portal" aria-labelledby="portalTitle">
-  <div class="ba-portal__sticky" id="portalSticky">
-    <div class="ba-portal__scene" id="portalScene">
-      <div class="ba-portal__street" aria-hidden="true">
-        <div class="ba-portal__sun"></div><div class="ba-portal__arch ba-portal__arch--back"></div><div class="ba-portal__arch ba-portal__arch--middle"></div>
-        <div class="ba-portal__hallway">
-          <div class="ba-portal__wall ba-portal__wall--left"></div><div class="ba-portal__wall ba-portal__wall--right"></div><div class="ba-portal__ceiling"></div>
-          <div class="ba-portal__back"><div class="ba-portal__insignia" aria-hidden="true">BA</div><span>THE BELLE ROOM</span></div>
-          <div class="ba-portal__rail" aria-hidden="true"><div class="ba-portal__beam"></div>
-            <div class="ba-portal__hanger ba-portal__hanger--a"><i></i><b></b></div>
-            <div class="ba-portal__hanger ba-portal__hanger--b"><i></i><b></b></div>
-            <div class="ba-portal__hanger ba-portal__hanger--c"><i></i><b></b></div>
-            <div class="ba-portal__hanger ba-portal__hanger--d"><i></i><b></b></div>
-            <div class="ba-portal__hanger ba-portal__hanger--e"><i></i><b></b></div>
-          </div>
-          <div class="ba-portal__floor"></div>
-        </div>
-        <div class="ba-portal__door ba-portal__door--left"><div class="ba-portal__door-glass"></div><span>BA</span></div>
-        <div class="ba-portal__door ba-portal__door--right"><div class="ba-portal__door-glass"></div><span>BELLE ALENCAR</span></div>
-        <div class="ba-portal__frame"><span class="ba-portal__frame-top"></span><span class="ba-portal__frame-left"></span><span class="ba-portal__frame-right"></span></div>
-      </div>
-      <div class="ba-portal__title" id="portalTitle"><span>00 / ENTRE NO UNIVERSO BELLE</span><h2>Entre.<br><em>Fique à vontade.</em></h2><p>Uma boutique. Várias cidades. Um jeito todo seu de se vestir.</p></div>
-      <div class="ba-portal__inside"><span>DO OUTRO LADO / UM NOVO OLHAR</span><h3>O espaço é seu.<br><em>Explore.</em></h3></div>
-      <div class="ba-portal__crosshair"><span>SCENE / 01</span><i></i><span>SCROLL TO ENTER</span></div>
-    </div>
-    <div class="ba-portal__skip"><a href="#colecao" aria-label="Ir direto para seleção da Belle">PULAR EXPERIÊNCIA ↗</a></div>
-  </div>
-</section>
-<section class="intro-chapter section" id="colecao"><div class="section-top"><span>01 / A SELEÇÃO</span><span>BELLE ALENCAR / CURADORIA</span></div><div class="intro-chapter__grid"><h2 class="display-heading reveal">Para cada <em>versão</em><br>de você.</h2><div class="intro-chapter__side reveal"><div class="mini-rule"></div><p>Do vestido que você estava procurando à peça que nem sabia que queria. Comece pela categoria. O resto a gente te ajuda a encontrar.</p><a href="#atelier" class="arrow-link">Entre no nosso universo <span>↗</span></a></div></div><div class="category-grid">
-<a class="category-card category-card--dress reveal" href="#atelier" data-parallax><div class="category-card__image"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=1100&q=83" alt="Fotografia editorial ilustrativa de vestido" loading="lazy"></div><div class="category-card__meta"><span>01</span><span>VESTIDOS</span><b>↗</b></div></a>
-<a class="category-card category-card--looks reveal" href="#editorial" data-parallax><div class="category-card__image"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=950&q=83" alt="Fotografia editorial ilustrativa de look feminino" loading="lazy"></div><div class="category-card__meta"><span>02</span><span>LOOKS & CONJUNTOS</span><b>↗</b></div></a>
-<a class="category-card category-card--access reveal" href="#editorial" data-parallax><div class="category-card__image"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=950&q=83" alt="Fotografia editorial ilustrativa de estilo e acessórios" loading="lazy"></div><div class="category-card__meta"><span>03</span><span>ACESSÓRIOS</span><b>↗</b></div></a>
-</div></section>
-
-<section class="cinefilm" id="filme" aria-label="Filme editorial controlado pelo scroll">
- <div class="cinefilm__stage" id="cineStage">
-  <article class="cinefilm__shot is-active" data-cineshot="0"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1700&q=82" alt="Imagem editorial ilustrativa de moda feminina" loading="lazy"><div class="cinefilm__copy"><span>CAPÍTULO 02 / O PRIMEIRO OLHAR</span><h2>Tem coisa que<br><em>te encontra.</em></h2><p>Às vezes, antes mesmo de experimentar.</p></div></article>
-  <article class="cinefilm__shot" data-cineshot="1"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1700&q=82" alt="Imagem editorial ilustrativa de roupas e acessórios" loading="lazy"><div class="cinefilm__copy"><span>CAPÍTULO 02 / O QUE FAZ SENTIDO</span><h2>Não é só<br><em>uma peça.</em></h2><p>É o jeito como ela faz sentido em você.</p></div></article>
-  <article class="cinefilm__shot" data-cineshot="2"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1700&q=82" alt="Imagem editorial ilustrativa de composição feminina" loading="lazy"><div class="cinefilm__copy"><span>CAPÍTULO 02 / OS DETALHES</span><h2>Nos detalhes,<br><em>tudo muda.</em></h2><p>Uma textura, um caimento, uma combinação.</p></div></article>
-  <article class="cinefilm__shot" data-cineshot="3"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=1700&q=82" alt="Imagem editorial ilustrativa de vestido" loading="lazy"><div class="cinefilm__copy"><span>CAPÍTULO 02 / SEU MOMENTO</span><h2>O resto da história<br><em>é seu.</em></h2><p>Encontre sua Belle e descubra seu próximo favorito.</p></div></article>
-  <div class="cinefilm__top"><span>BELLE ALENCAR / A EXPERIÊNCIA</span><span>UM FILME EM QUATRO ATOS</span></div>
-  <div class="cinefilm__bottom"><span id="cineCount">01</span><div class="cinefilm__progress"><i id="cineProgress"></i></div><span>04</span><div class="cinefilm__buttons"><button type="button" id="cinePrev" aria-label="Cena anterior">←</button><button type="button" id="cineNext" aria-label="Cena seguinte">→</button></div></div>
- </div>
-</section>
-<section class="manifesto section" aria-label="Manifesto Belle"><div class="manifesto__light"></div><div class="manifesto__inner"><span class="manifesto__chapter">BELLE / INTERLÚDIO 02</span><p class="manifesto__quote reveal">O momento é seu.<br><em>O jeito de chegar também.</em></p><span class="manifesto__signature">BELLE ALENCAR</span></div></section>
-
-<section class="silk section" id="materia" aria-labelledby="silkTitle">
- <div class="section-top"><span>03 / A MATÉRIA</span><span>ESCULTURA EM TEMPO REAL / WEBGL</span></div>
- <div class="silk__grid">
-  <div class="silk__copy"><span class="eyebrow">UM ESTUDO DE MOVIMENTO</span><h2 class="display-heading split-on-scroll" id="silkTitle">A beleza<br>mora no <em>gesto.</em></h2><p>A luz encontra o tecido. O movimento transforma tudo. Uma pequena experiência sobre a sensação de vestir.</p>
-    <div class="silk__choices" role="group" aria-label="Tom do tecido digital"><button data-silk="perola" aria-pressed="true" class="is-active">Pérola</button><button data-silk="champagne" aria-pressed="false">Champagne</button><button data-silk="noite" aria-pressed="false">Noite</button></div>
-    <span class="silk__legal">ESCULTURA DIGITAL ABSTRATA. NÃO REPRESENTA UM PRODUTO REAL.</span>
-  </div>
-  <div class="silk__stage" id="silkStage"><div class="silk__arch"></div><div class="silk__backup" aria-hidden="true"></div><canvas id="silkCanvas" aria-hidden="true"></canvas><span class="silk__stamp">MOTION STUDY / 001</span><span class="silk__signature">SET77 × BELLE</span></div>
- </div>
-</section>
-<section class="atelier section" id="atelier"><div class="section-top"><span>02 / THE DRESS ROOM</span><span>ARRASTE · ESCOLHA · DESCUBRA</span></div><div class="atelier__heading"><div><span class="eyebrow">UMA EXPERIÊNCIA BELLE</span><h2 class="display-heading reveal">Seu próximo <em>favorito</em><br>pode estar aqui.</h2></div><p class="atelier__note">Um pequeno provador de ideias. Escolha um estilo para conhecer nossas categorias e conversar com a loja da sua cidade.</p></div>
-<div class="dress-room" id="dressRoom"><div class="dress-room__back"><div class="room-arch"></div><div class="room-title">B<span>ELLE</span></div><div class="room-lights"></div></div><div class="dress-room__bar"></div><div class="dress-room__floor"></div><div class="dress-room__stage" id="dressStage" role="group" aria-label="Escolha um estilo de vestido">
-<button class="dress-figure" data-look="0" type="button" aria-pressed="false" aria-label="Selecionar vestidos fluidos"><span class="hanger"></span><span class="dress-shape dress-shape--one"></span><span class="dress-shadow"></span></button>
-<button class="dress-figure is-selected" data-look="1" type="button" aria-pressed="true" aria-label="Selecionar vestidos marcantes"><span class="hanger"></span><span class="dress-shape dress-shape--two"></span><span class="dress-shadow"></span></button>
-<button class="dress-figure" data-look="2" type="button" aria-pressed="false" aria-label="Selecionar vestidos clássicos"><span class="hanger"></span><span class="dress-shape dress-shape--three"></span><span class="dress-shadow"></span></button>
-</div><div class="dress-room__index">03 ESTILOS / UMA ESCOLHA SUA</div><div class="dress-room__caption" id="lookCaption"><span>02 / 03</span><div><h3>Para marcar presença.</h3><p>Uma seleção para quando o vestido é parte do plano.</p></div><a href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer" class="round-arrow" aria-label="Ver Instagram da Belle">↗</a></div></div><div class="atelier__foot"><span>ESTUDO INTERATIVO DE SILHUETAS · NÃO REPRESENTA ESTOQUE</span><span>ESCOLHA PELO TOQUE OU CLIQUE</span></div>
-</section>
-
-
-<section class="ba-break" id="assinatura" aria-labelledby="breakTitle">
- <div class="ba-break__noise"></div>
- <div class="ba-break__top"><span>THE BELLE EXPERIMENT / 04</span><span>UMA ASSINATURA, MIL FORMAS DE SER</span></div>
- <div class="ba-break__stage">
-   <div class="ba-break__orbit ba-break__orbit--one"></div><div class="ba-break__orbit ba-break__orbit--two"></div>
-   <div class="ba-break__type" aria-hidden="true">BELLE</div>
-   <div class="ba-break__outline" aria-hidden="true">ALENCAR</div>
-   <h2 id="breakTitle">O estilo não<br><em>pede licença.</em></h2>
-   <svg class="ba-break__thread" viewBox="0 0 960 380" fill="none" preserveAspectRatio="none" aria-hidden="true"><path id="baThread" d="M-20,230 C120,50 280,340 440,180 S770,20 980,205" stroke="currentColor" stroke-width="1.2" /></svg>
-   <div class="ba-break__seal" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><path id="baRingPath" d="M60 60 m-43 0 a43 43 0 1 1 86 0 a43 43 0 1 1 -86 0"/></defs><text><textPath href="#baRingPath">BELLE ALENCAR • YOUR WAY • BELLE ALENCAR • </textPath></text></svg><span>BA</span></div>
- </div>
- <div class="ba-break__bottom"><span>MODA & ACESSÓRIOS</span><span>ARAXÁ / FRUTAL / CATALÃO / MINEIROS</span></div>
-</section>
-<section class="ba-runway section" id="lookbook" aria-labelledby="runwayTitle">
- <div class="section-top"><span>05 / LOOKBOOK</span><span>O ESTILO EM MOVIMENTO</span></div>
- <div class="ba-runway__intro"><h2 class="display-heading split-on-scroll" id="runwayTitle">Um momento.<br><em>Três histórias.</em></h2><p>Troque a cena pelo toque, pelo clique ou pelo teclado. O próximo look pode começar com uma inspiração.</p></div>
- <div class="ba-runway__window" id="runwayWindow" tabindex="0" aria-label="Lookbook navegável, use as setas esquerda e direita">
-  <div class="ba-runway__track" id="runwayTrack">
-   <article class="ba-runway__panel" data-slide="0"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=82" alt="Inspiração editorial ilustrativa para o dia" loading="lazy"><div><span>01 / O DIA</span><h3>Chegar do<br><em>seu jeito.</em></h3><p>Quando o primeiro passo já diz muito.</p></div></article>
-   <article class="ba-runway__panel" data-slide="1"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=1200&q=82" alt="Inspiração editorial ilustrativa para um encontro" loading="lazy"><div><span>02 / O ENCONTRO</span><h3>Um motivo<br><em>a mais.</em></h3><p>Para estar presente de verdade.</p></div></article>
-   <article class="ba-runway__panel" data-slide="2"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=82" alt="Inspiração editorial ilustrativa para celebrar" loading="lazy"><div><span>03 / O DEPOIS</span><h3>Levar com você<br><em>a sensação.</em></h3><p>O look muda. Você continua sendo você.</p></div></article>
-  </div>
-  <div class="ba-runway__controls"><span id="runwayCount">01 / 03</span><button type="button" id="runwayPrev" aria-label="Look anterior">←</button><button type="button" id="runwayNext" aria-label="Próximo look">→</button></div>
- </div><p class="ba-runway__disclaimer">EDITORIAL CONCEITUAL. IMAGENS DE DEMONSTRAÇÃO, NÃO CATÁLOGO DE ESTOQUE.</p>
-</section>
-
-<section class="ba-tactile section" id="detalhes" aria-labelledby="tactileTitle">
- <div class="section-top"><span>06 / DETALHES QUE CONTAM</span><span>EXPERIÊNCIA TÁTIL / EXPLORE COM O CURSOR</span></div>
- <div class="ba-tactile__grid">
-  <div class="ba-tactile__visual" id="tactileVisual">
-   <div class="ba-tactile__img ba-tactile__img--base"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=1600&q=88" alt="Fotografia ilustrativa de vestido feminino, detalhes e caimento" loading="lazy"></div>
-   <div class="ba-tactile__lens" id="tactileLens" aria-hidden="true"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=2000&q=90" alt=""></div>
-   <span class="ba-tactile__corner">STUDY / 06</span>
-   <span class="ba-tactile__drag">ARRASTE O OLHAR <i>↗</i></span>
-   <div class="ba-tactile__cursor" id="tactileCursor" aria-hidden="true"><span>VER<br>MAIS</span></div>
-  </div>
-  <div class="ba-tactile__copy">
-    <span class="eyebrow"><span class="small-square"></span> O DETALHE MUDA TUDO</span>
-    <h2 id="tactileTitle" class="display-heading ba-type-lift">É no detalhe<br>que você<br><em>se encontra.</em></h2>
-    <p>O caimento. A textura. A escolha que você percebe antes mesmo de colocar. Moda também é essa conversa silenciosa com o espelho.</p>
-    <div class="ba-tactile__modes" role="group" aria-label="Explorar detalhes">
-      <button type="button" class="is-active" data-texture="toque" aria-pressed="true"><span>01</span> O toque <b>↗</b></button>
-      <button type="button" data-texture="caimento" aria-pressed="false"><span>02</span> O caimento <b>↗</b></button>
-      <button type="button" data-texture="presenca" aria-pressed="false"><span>03</span> A presença <b>↗</b></button>
-    </div>
-    <p class="ba-tactile__disclaimer">FOTOGRAFIAS EDITORIAIS DE DEMONSTRAÇÃO. A COLEÇÃO OFICIAL SERÁ INSERIDA COM AS IMAGENS AUTORIZADAS DA LOJA.</p>
-  </div>
- </div>
-</section>
-<section class="editorial section" id="editorial"><div class="section-top"><span>03 / NOSSO OLHAR</span><span>ESTILO EM MOVIMENTO</span></div><div class="editorial__layout"><div class="editorial__intro"><h2 class="display-heading reveal">Não é só<br>sobre a <em>roupa.</em></h2><p>É sobre se olhar no espelho e saber que é isso. A Belle está nas escolhas pequenas e nos momentos que merecem atenção.</p><a href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer" class="primary-link magnetic">Acompanhe as novidades <span>↗</span></a><span class="editorial__counter">BA / 2026</span></div><div class="editorial__image reveal"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85" alt="Editorial ilustrativo de moda feminina em tons neutros" loading="lazy"><span>O QUE VOCÊ VESTE TAMBÉM CONTA SUA HISTÓRIA</span></div></div></section>
-
-<section class="ba-plan section" id="momentos" aria-labelledby="planTitle">
- <div class="section-top"><span>07 / SEU MOMENTO</span><span>ESCOLHER NÃO PRECISA SER COMPLICADO</span></div>
- <div class="ba-plan__grid"><div class="ba-plan__copy"><span class="eyebrow">BEM-VINDA À SUA BELLE</span><h2 class="display-heading split-on-scroll" id="planTitle">Qual é o<br>seu <em>plano?</em></h2><p>Uma boa escolha começa com o que você tem vontade de viver. Explore estilos e fale com a loja da sua cidade.</p>
- <div class="ba-plan__options" role="group" aria-label="Escolha uma ocasião"><button class="is-active" data-occasion="dia" aria-pressed="true"><span>01</span>Para o dia a dia <b>↗</b></button><button data-occasion="sair" aria-pressed="false"><span>02</span>Para sair <b>↗</b></button><button data-occasion="celebrar" aria-pressed="false"><span>03</span>Para celebrar <b>↗</b></button></div>
- <a class="ba-plan__link" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Converse com a Belle sobre seu look <span>↗</span></a>
- </div><div class="ba-plan__visual" id="planVisual"><img id="planImage" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1100&q=82" alt="Editorial ilustrativo do dia a dia" loading="lazy"><div class="ba-plan__text"><span>THE BELLE NOTE / <span id="planNum">01</span></span><h3 id="planHeading">Conforto também tem presença.</h3><p id="planDescription">Peças para acompanhar o dia sem perder o seu jeito.</p></div></div></div>
-</section>
-
-<section class="ba-curtain" id="interludio" aria-labelledby="curtainTitle">
- <div class="ba-curtain__top"><span>ATELIER / 09</span><span>UM NOVO CAPÍTULO</span></div>
- <div class="ba-curtain__fold ba-curtain__fold--l" aria-hidden="true"></div>
- <div class="ba-curtain__fold ba-curtain__fold--r" aria-hidden="true"></div>
- <h2 id="curtainTitle">Não importa a cidade.<br><em>O seu jeito chega primeiro.</em></h2>
- <div class="ba-curtain__bottom"><span>ARAXÁ</span><i></i><span>FRUTAL</span><i></i><span>CATALÃO</span><i></i><span>MINEIROS</span></div>
-</section>
-<section class="locations section" id="lojas"><div class="section-top section-top--light"><span>04 / PERTO DE VOCÊ</span><span>QUATRO CIDADES · UMA BELLE</span></div><div class="locations__layout"><div><span class="eyebrow eyebrow--light">SUA CIDADE, SUA BELLE</span><h2 class="display-heading reveal">Onde você está,<br><em>a Belle chega.</em></h2><p>Escolha sua cidade para deixar sua experiência do seu jeito. Sua preferência fica salva neste navegador e pode ser alterada quando quiser.</p><button type="button" class="outline-link" data-open-city>Escolher minha cidade <span>↗</span></button></div><div class="locations__list" id="locationsList"><button data-city="araxa" type="button"><span>01</span><strong>Araxá</strong><span>MG</span><b>↗</b></button><button data-city="frutal" type="button"><span>02</span><strong>Frutal</strong><span>MG</span><b>↗</b></button><button data-city="catalao" type="button"><span>03</span><strong>Catalão</strong><span>GO</span><b>↗</b></button><button data-city="mineiros" type="button"><span>04</span><strong>Mineiros</strong><span>GO</span><b>↗</b></button></div></div></section>
-<section class="finale section"><div class="finale__mini">BELLE ALENCAR / MODA & ACESSÓRIOS</div><div class="finale__mark" aria-hidden="true">BA</div><h2 class="display-heading reveal">A próxima escolha<br><em>é sua.</em></h2><div class="finale__links"><a class="primary-link magnetic" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar com a Belle <span>↗</span></a><a class="under-link" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Ver Instagram <span>↗</span></a></div><span class="finale__fine">ATENDIMENTO E DISPONIBILIDADE CONFIRMADOS DIRETAMENTE COM A LOJA.</span></section>
-
-<div class="ba-director" id="baDirector" aria-label="Preferências de experiência">
- <button type="button" id="directorToggle" class="ba-director__toggle" aria-expanded="false" aria-controls="directorMenu"><span class="ba-director__spark">✧</span><span>CINEMA</span><i></i></button>
- <div id="directorMenu" class="ba-director__menu" hidden>
-   <span>DIREÇÃO DE EXPERIÊNCIA / SET77</span>
-   <h2>Seu ritmo.</h2>
-   <p>Movimento cinematográfico ou navegação essencial. Você decide.</p>
-   <div class="ba-director__switch" role="group" aria-label="Intensidade do movimento">
-     <button type="button" data-cinema-mode="max" aria-pressed="true">Cinema máximo</button>
-     <button type="button" data-cinema-mode="essential" aria-pressed="false">Essencial</button>
-   </div>
-   <small>O sistema respeita as preferências de movimento reduzido do dispositivo.</small>
- </div>
+<!-- 00 · SELO: intro curta, uma vez por sessão, com pular -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro__panel intro__panel--top"></div>
+  <div class="intro__panel intro__panel--bottom"></div>
+  <div class="intro__mark" data-monogram="intro"></div>
+  <p class="intro__word"><span>BELLE ALENCAR</span><small>MODA &amp; ACESSÓRIOS</small></p>
+  <button type="button" class="intro__skip" id="introSkip" tabindex="-1">Pular intro</button>
 </div>
-</main><footer class="site-footer"><a class="wordmark wordmark--footer" href="#inicio"><span class="wordmark__icon" aria-hidden="true">BA</span><span>BELLE <em>ALENCAR</em><small>MODA & ACESSÓRIOS</small></span></a><div><span>ARAXÁ · FRUTAL · CATALÃO · MINEIROS</span><p>© 2026 BELLE ALENCAR. EXPERIÊNCIA CONCEITO.</p></div><a href="#inicio">VOLTAR AO TOPO ↑</a></footer>
-<dialog class="city-dialog" id="cityDialog" aria-labelledby="cityTitle"><div class="dialog-inner"><button type="button" class="dialog-close" data-close aria-label="Fechar">×</button><span class="dialog-eyebrow">BELLE ALENCAR / SUA LOJA</span><div class="dialog-mark" aria-hidden="true">BA</div><h2 id="cityTitle">Em qual cidade<br><em>você está?</em></h2><p>Escolha a unidade que deseja acompanhar. Você pode mudar depois.</p><div class="city-options"><button type="button" data-city="araxa"><span>01</span>Araxá <small>MG</small><b>↗</b></button><button type="button" data-city="frutal"><span>02</span>Frutal <small>MG</small><b>↗</b></button><button type="button" data-city="catalao"><span>03</span>Catalão <small>GO</small><b>↗</b></button><button type="button" data-city="mineiros"><span>04</span>Mineiros <small>GO</small><b>↗</b></button></div><div class="dialog-foot">PREFERÊNCIA SALVA APENAS NESTE NAVEGADOR.</div></div></dialog>
-<dialog class="profile-dialog" id="profileDialog" aria-labelledby="profileTitle"><div class="dialog-inner"><button type="button" class="dialog-close" data-close aria-label="Fechar">×</button><span class="dialog-eyebrow">MINHA BELLE / PREFERÊNCIAS</span><div class="dialog-mark" aria-hidden="true">BA</div><h2 id="profileTitle">Seu espaço,<br><em>seu jeito.</em></h2><p>Salve seu nome e sua cidade neste navegador para personalizar a visita. Isto ainda não é uma conta com login.</p><form id="profileForm"><label for="customerName">COMO PODEMOS CHAMAR VOCÊ?</label><input id="customerName" maxlength="60" autocomplete="given-name" placeholder="Seu primeiro nome"><label for="customerCity">SUA LOJA</label><select id="customerCity"><option value="araxa">Araxá · MG</option><option value="frutal">Frutal · MG</option><option value="catalao">Catalão · GO</option><option value="mineiros">Mineiros · GO</option></select><button type="submit" class="primary-link">Salvar minhas preferências <span>↗</span></button><p class="profile-feedback" id="profileFeedback" role="status"></p></form></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="/app.js" defer></script>
-<script src="/cinema.js" defer></script>
-<script src="/maximum.js" defer></script>
-<script type="module" src="/silk.js"></script>
-</body></html>
+
+<header class="site-header" id="siteHeader">
+  <a class="brand" href="#inicio" aria-label="Belle Alencar, voltar ao início">
+    <span class="brand__mark" data-monogram="header" aria-hidden="true"></span>
+    <span class="brand__word">BELLE ALENCAR<small>MODA &amp; ACESSÓRIOS</small></span>
+  </a>
+  <nav class="site-nav" aria-label="Principal">
+    <a href="#inicio">A loja</a>
+    <a href="#colecao">Coleção</a>
+    <a href="#lojas">Lojas</a>
+  </nav>
+  <div class="site-actions">
+    <button type="button" class="store-pill" id="storeButton" data-open-store aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <span class="store-pill__label" data-store-label>Escolher loja</span>
+    </button>
+    <button type="button" class="icon-btn" id="searchButton" aria-label="Buscar" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="wishlistButton" aria-label="Favoritos, 0 peças" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20Z"/></svg>
+      <span class="icon-btn__count" data-wishlist-count hidden>0</span>
+    </button>
+    <button type="button" class="icon-btn" id="bagButton" aria-label="Sacola de interesse, 0 peças" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+      <span class="icon-btn__count" data-bag-count hidden>0</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- O FILME: um plano-sequência controlado pelo scroll nativo -->
+  <section class="film" id="filme" aria-label="Filme: uma visita à boutique Belle Alencar">
+    <div class="film__stage" id="filmStage">
+      <div class="film__posters" id="filmPosters" aria-hidden="true">
+        <img class="film__poster is-active" data-poster="vitrine" src="/posters/vitrine.jpg" alt="" width="1600" height="1000" fetchpriority="high" decoding="async">
+      </div>
+      <div class="film__canvas" id="filmCanvas" aria-hidden="true"></div>
+      <div class="film__veil" aria-hidden="true"></div>
+      <p class="film__label" id="filmLabel" hidden>Estudo 3D procedural · não é uma peça do acervo</p>
+      <div class="film__loading" id="filmLoading" aria-hidden="true"><i></i></div>
+    </div>
+
+    <nav class="chapter-rail" id="chapterRail" aria-label="Capítulos do filme">
+      <ol>
+        <li><a href="#inicio" data-chapter-link="inicio"><span>01</span><b>Vitrine</b></a></li>
+        <li><a href="#porta" data-chapter-link="porta"><span>02</span><b>Porta</b></a></li>
+        <li><a href="#sala" data-chapter-link="sala"><span>03</span><b>Sala</b></a></li>
+        <li><a href="#vestido" data-chapter-link="vestido"><span>04</span><b>Vestido</b></a></li>
+        <li><a href="#detalhe" data-chapter-link="detalhe"><span>05</span><b>Detalhe</b></a></li>
+        <li><a href="#categorias" data-chapter-link="categorias"><span>06</span><b>Categorias</b></a></li>
+        <li><a href="#provador" data-chapter-link="provador"><span>07</span><b>Provador</b></a></li>
+      </ol>
+      <div class="chapter-rail__bar" aria-hidden="true"><i id="filmProgress"></i></div>
+    </nav>
+
+    <div class="film__chapters">
+      <article class="chapter chapter--hero" id="inicio" data-chapter="vitrine">
+        <div class="chapter__card">
+          <p class="eyebrow">Belle Alencar · Moda &amp; Acessórios</p>
+          <h1 class="display" data-split>O look começa <em>aqui.</em><br>O resto é <em>seu.</em></h1>
+          <p class="lede">Araxá, Frutal, Catalão e Mineiros. Role para entrar na loja ou vá direto ao que procura.</p>
+          <div class="cta-row">
+            <a class="btn btn--solid" href="#colecao">Ver a coleção</a>
+            <button type="button" class="btn btn--line" data-open-store>Escolher minha loja</button>
+          </div>
+          <p class="scroll-cue" aria-hidden="true"><span></span>Role para entrar</p>
+        </div>
+      </article>
+
+      <article class="chapter" id="porta" data-chapter="porta">
+        <div class="chapter__card chapter__card--center">
+          <p class="eyebrow">02 · A porta</p>
+          <h2 class="display" data-split>Entre.<br><em>Fique à vontade.</em></h2>
+          <p class="lede">A porta abre no seu ritmo. É só continuar.</p>
+        </div>
+      </article>
+
+      <article class="chapter" id="sala" data-chapter="sala">
+        <div class="chapter__card chapter__card--left">
+          <p class="eyebrow">03 · Sala viva</p>
+          <h2 class="display" data-split>Cada arara,<br><em>uma conversa.</em></h2>
+          <p class="lede">Vestidos, conjuntos e acessórios para o dia a dia e para a ocasião. Passe o cursor ou o dedo pela cena: os cabides respondem.</p>
+          <button type="button" class="btn btn--line" data-filter-category="vestidos">Ver vestidos</button>
+        </div>
+      </article>
+
+      <article class="chapter" id="vestido" data-chapter="vestido">
+        <div class="chapter__card chapter__card--right">
+          <p class="eyebrow">04 · O vestido desperta</p>
+          <h2 class="display" data-split>Tem peça que você vê.<br><em>Tem peça que você já imagina usando.</em></h2>
+          <p class="fineprint">Estudo 3D procedural com física de tecido. Ele não é uma peça do acervo; as peças reais você vê na loja.</p>
+        </div>
+      </article>
+
+      <article class="chapter" id="detalhe" data-chapter="detalhe">
+        <div class="chapter__card chapter__card--left">
+          <p class="eyebrow">05 · Fio e caimento</p>
+          <h2 class="display" data-split>No detalhe,<br><em>tudo muda.</em></h2>
+          <p class="lede">Trama, caimento e a luz passando pelo tecido. Na loja você sente com as mãos; aqui, a câmera chega perto.</p>
+        </div>
+      </article>
+
+      <article class="chapter" id="categorias" data-chapter="categorias">
+        <div class="chapter__card chapter__card--center">
+          <p class="eyebrow">06 · Categorias</p>
+          <h2 class="display" data-split>Um caminho<br><em>para cada momento.</em></h2>
+          <div class="portal-list" role="group" aria-label="Ir para uma categoria da coleção">
+            <button type="button" data-filter-category="vestidos"><span>I</span>Vestidos</button>
+            <button type="button" data-filter-category="conjuntos"><span>II</span>Conjuntos</button>
+            <button type="button" data-filter-category="acessorios"><span>III</span>Acessórios</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter chapter--fitting" id="provador" data-chapter="provador">
+        <div class="chapter__card chapter__card--left">
+          <p class="eyebrow">07 · Provador</p>
+          <h2 class="display" data-split>O próximo favorito<br><em>pode estar aqui.</em></h2>
+          <div class="fitting" id="fitting">
+            <fieldset class="fitting__group">
+              <legend>Silhueta</legend>
+              <button type="button" data-silhouette="fluido" aria-pressed="true">Fluido</button>
+              <button type="button" data-silhouette="marcante" aria-pressed="false">Marcante</button>
+              <button type="button" data-silhouette="classico" aria-pressed="false">Clássico</button>
+            </fieldset>
+            <fieldset class="fitting__group fitting__group--tones">
+              <legend>Tom</legend>
+              <button type="button" data-tone="perola" aria-pressed="true" aria-label="Pérola"><i style="--sw:#e9dfcf"></i><span>Pérola</span></button>
+              <button type="button" data-tone="champagne" aria-pressed="false" aria-label="Champagne"><i style="--sw:#c9a77c"></i><span>Champagne</span></button>
+              <button type="button" data-tone="noite" aria-pressed="false" aria-label="Noite"><i style="--sw:#2b2629"></i><span>Noite</span></button>
+              <button type="button" data-tone="terracota" aria-pressed="false" aria-label="Terracota"><i style="--sw:#b8735a"></i><span>Terracota</span></button>
+              <button type="button" data-tone="salvia" aria-pressed="false" aria-label="Sálvia"><i style="--sw:#a9b19a"></i><span>Sálvia</span></button>
+            </fieldset>
+            <p class="fitting__hint" id="fittingHint">Arraste o vestido para girar. Setas do teclado também giram.</p>
+            <div class="fitting__static" id="fittingStatic" aria-hidden="true"></div>
+            <div class="cta-row">
+              <button type="button" class="btn btn--solid" id="fittingToCatalog">Ver peças nesta linha</button>
+            </div>
+            <p class="fineprint">Provador conceitual: o vestido é um estudo 3D, não uma peça real nem uma prova virtual no corpo.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 09 · COLEÇÃO (renderizada pelo módulo de comércio) -->
+  <section class="collection" id="colecao" aria-labelledby="colecaoTitle">
+    <header class="section-head">
+      <p class="eyebrow">A coleção</p>
+      <h2 class="display" id="colecaoTitle">Escolha com calma.<br><em>A loja confirma o resto.</em></h2>
+      <p class="notice" role="note"><strong>Pré-lançamento.</strong> As peças abaixo são ilustrações demonstrativas enquanto o acervo oficial é fotografado. Preço, tamanho e estoque são confirmados pela loja da sua cidade.</p>
+    </header>
+    <div id="catalogMount" class="catalog">
+      <noscript><p class="notice">Ative o JavaScript para filtrar a coleção. Você também pode falar direto com a Belle pelo <a href="https://wa.me/message/YYDB5NC7JMUQP1" rel="noopener">WhatsApp</a>.</p></noscript>
+    </div>
+  </section>
+
+  <!-- 10 · MINHA BELLE: lojas -->
+  <section class="stores" id="lojas" aria-labelledby="lojasTitle">
+    <header class="section-head section-head--light">
+      <p class="eyebrow">Quatro cidades, uma Belle</p>
+      <h2 class="display" id="lojasTitle">A Belle <em>da sua cidade.</em></h2>
+      <p class="lede">Escolha sua loja. Sua sacola e suas preferências ficam salvas neste navegador e você pode trocar quando quiser.</p>
+    </header>
+    <ul class="store-list" id="storeList">
+      <li class="store-card" data-store-card="araxa">
+        <p class="store-card__uf">MG</p>
+        <h3>Araxá</h3>
+        <p class="store-card__addr">Av. Vereador João Sena, 103, Centro</p>
+        <button type="button" class="btn btn--line" data-select-store="araxa">Definir como minha loja</button>
+      </li>
+      <li class="store-card" data-store-card="frutal">
+        <p class="store-card__uf">MG</p>
+        <h3>Frutal</h3>
+        <p class="store-card__addr is-pending">Endereço a confirmar com a loja</p>
+        <button type="button" class="btn btn--line" data-select-store="frutal">Definir como minha loja</button>
+      </li>
+      <li class="store-card" data-store-card="catalao">
+        <p class="store-card__uf">GO</p>
+        <h3>Catalão</h3>
+        <p class="store-card__addr is-pending">Endereço a confirmar com a loja</p>
+        <button type="button" class="btn btn--line" data-select-store="catalao">Definir como minha loja</button>
+      </li>
+      <li class="store-card" data-store-card="mineiros">
+        <p class="store-card__uf">GO</p>
+        <h3>Mineiros</h3>
+        <p class="store-card__addr is-pending">Endereço a confirmar com a loja</p>
+        <button type="button" class="btn btn--line" data-select-store="mineiros">Definir como minha loja</button>
+      </li>
+    </ul>
+    <p class="stores__note">Atendimento por WhatsApp pelo canal oficial da Belle. Contatos individuais de cada unidade ainda estão sendo confirmados.</p>
+  </section>
+
+  <!-- 11 · ÚLTIMA PÁGINA -->
+  <section class="finale" aria-labelledby="finaleTitle">
+    <div class="finale__mark" data-monogram="finale" aria-hidden="true"></div>
+    <h2 class="display" id="finaleTitle">A próxima escolha<br><em>é sua.</em></h2>
+    <div class="cta-row cta-row--center">
+      <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar com a Belle</a>
+      <a class="btn btn--line" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__brand"><span data-monogram="footer" aria-hidden="true"></span><p>BELLE ALENCAR<small>MODA &amp; ACESSÓRIOS</small></p></div>
+  <p>Araxá · Frutal (MG) · Catalão · Mineiros (GO)</p>
+  <p class="site-footer__legal">Pré-lançamento digital. Ilustrações e estudo 3D são demonstrativos e não representam estoque. Disponibilidade, preço e atendimento são confirmados diretamente com a loja. Direção e engenharia: SET77 Labs.</p>
+  <button type="button" class="director" id="directorToggle" aria-pressed="false">
+    <span class="director__dot" aria-hidden="true"></span><span data-director-label>Movimento: cinema</span>
+  </button>
+</footer>
+
+<div id="overlays"></div>
+</body>
+</html>

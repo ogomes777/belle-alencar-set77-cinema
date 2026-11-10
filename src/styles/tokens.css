@@ -1,0 +1,50 @@
+/* BELLE ALENCAR · tokens de design (docs/ART_DIRECTION.md) */
+:root {
+  --ivory: #f6f2ea;
+  --paper: #fdfcf8;
+  --sand: #e9e2d5;
+  --stone: #d9cfbf;
+  --ink: #231d17;
+  --ink-soft: #4a4037;
+  --muted: #6f655a;      /* 5.3:1 sobre ivory */
+  --gold: #a48753;       /* acento; não usar para texto pequeno sobre ivory */
+  --gold-deep: #7d6438;  /* dourado legível: 5.0:1 sobre ivory */
+  --gold-light: #d6be92;
+  --line: rgba(35, 29, 23, 0.14);
+  --line-strong: rgba(35, 29, 23, 0.28);
+  --night: #1c1814;
+  --on-night: #f3ede2;
+  --danger: #9b3b2c;
+  --ok: #4f6b45;
+
+  --serif: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  --sans: 'DM Sans Variable', 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-display: clamp(2.6rem, 1.4rem + 5.2vw, 6.6rem);
+  --fs-h3: clamp(1.5rem, 1.1rem + 1.4vw, 2.3rem);
+  --fs-lede: clamp(1rem, 0.94rem + 0.3vw, 1.18rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.75rem;
+  --track-micro: 0.22em;
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --radius: 2px;
+  --header-h: 68px;
+
+  /* motion tokens (docs/MOTION_ORCHESTRATION.md) */
+  --t-feedback: 150ms;
+  --t-ui: 320ms;
+  --t-scene: 700ms;
+  --t-hero: 1100ms;
+  --ease-out: cubic-bezier(0.22, 0.82, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-back: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --z-stage: 0;
+  --z-content: 2;
+  --z-rail: 20;
+  --z-header: 40;
+  --z-overlay: 60;
+  --z-intro: 90;
+}

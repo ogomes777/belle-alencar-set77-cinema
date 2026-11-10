@@ -1,11 +1,30 @@
 {
-  "name": "belle-alencar-cinema-master",
-  "version": "1.0.0",
+  "name": "belle-alencar-cinema",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
+  "description": "SET77 Labs — Belle Alencar: boutique cinematográfica em primeira pessoa (Three.js + GSAP) com jornada comercial multiloja",
   "scripts": {
-    "dev": "node scripts/dev-server.mjs",
-    "check": "node scripts/doctor.mjs"
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host --port 4173",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "node tests/e2e/run.mjs",
+    "check": "node scripts/doctor.mjs",
+    "legacy": "node legacy/v3/dev-server.mjs"
   },
-  "description": "SET77 Labs — Belle Alencar immersive commerce project and Claude Code handoff"
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "gsap": "^3.15.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.187.0",
+    "jsdom": "^31.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.7",
+    "vitest": "^5.1.0"
+  }
 }
