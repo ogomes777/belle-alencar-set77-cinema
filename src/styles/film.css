@@ -118,6 +118,8 @@ html.in-film .chapter-rail { opacity: 1; visibility: visible; }
   .fitting { margin-top: 14px; }
   .fitting__group { gap: 6px; margin-bottom: 10px; }
   .fitting__group--tones span { display: none; }
+  .chapter--fitting .fineprint { display: none; }
+  .fitting__hint { font-size: 0.82rem; }
   .fitting__group--tones button { padding: 0 11px; }
   .chapter-rail { top: auto; bottom: auto; right: 0; left: 0; transform: none; top: var(--header-h); }
   .chapter-rail ol { display: none; }
@@ -127,7 +129,8 @@ html.in-film .chapter-rail { opacity: 1; visibility: visible; }
 }
 
 /* modo pôster (geração de quadros estáticos) */
-html.poster-mode .site-header, html.poster-mode .film__chapters, html.poster-mode .chapter-rail,
+html.poster-mode .film__chapters { visibility: hidden; }
+html.poster-mode .site-header, html.poster-mode .chapter-rail,
 html.poster-mode .film__veil, html.poster-mode .film__label, html.poster-mode .film__loading,
 html.poster-mode main > section:not(.film), html.poster-mode .site-footer, html.poster-mode #overlays { display: none !important; }
 html.poster-mode .film__canvas { opacity: 1; transition: none; }

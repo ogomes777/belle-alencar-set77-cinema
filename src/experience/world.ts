@@ -262,6 +262,7 @@ export class World {
       archFocus: this.story.archFocus(p, this.camera.position.x),
       fittingActive: this.camera.position.z < -10.5 && this.camera.position.x > 1.5,
       heroOnRail: d.onRail,
+      sweep: this.story.span('detalhe') && p > this.story.span('detalhe')!.s - 0.03 && p < this.story.span('detalhe')!.e + 0.03 ? this.story.local('detalhe', p) : -1,
     });
   }
 
@@ -303,6 +304,9 @@ export class World {
     const h = el.clientHeight || innerHeight;
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
+    // retrato: lens shift vertical — o assunto sobe para a metade livre acima da folha de texto
+    if (w / h < 0.85) this.camera.setViewOffset(w, h, 0, Math.round(h * 0.17), w, h);
+    else this.camera.clearViewOffset();
     this.camera.fov = this.fitFov(this.camera.fov);
     this.camera.updateProjectionMatrix();
     this.kick();

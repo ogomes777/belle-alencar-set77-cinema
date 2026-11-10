@@ -132,7 +132,7 @@ for (const vp of viewports) {
   await skipIntro(page);
   await page.goto(`${BASE}/?tier=static&loja=araxa`, { waitUntil: 'load' });
   await page.locator('#colecao').scrollIntoViewIfNeeded();
-  await page.locator('[data-qv]').first().click();
+  await page.locator('.pcard__title [data-qv]').first().evaluate((el) => el.scrollIntoView({ block: 'center' })); await page.locator('.pcard__title [data-qv]').first().click();
   await page.waitForSelector('.qv', { state: 'visible' });
   await page.click('[data-add]');
   const err = await page.locator('.qv__error').isVisible();
@@ -174,10 +174,10 @@ for (const vp of viewports) {
   await page.waitForTimeout(600);
   check('?peca= abre o quick view', await page.locator('.qv').isVisible());
   await page.keyboard.press('Escape');
-  await page.waitForTimeout(400);
-  check('Esc fecha o quick view', !(await page.locator('.qv').isVisible()));
+  const closed = await page.waitForSelector('.qv', { state: 'hidden', timeout: 3000 }).then(() => true).catch(() => false);
+  check('Esc fecha o quick view', closed);
   await page.locator('#colecao').scrollIntoViewIfNeeded();
-  const trigger = page.locator('[data-qv]').nth(1);
+  const trigger = page.locator('.pcard__title [data-qv]').nth(1);
   await trigger.focus();
   await page.keyboard.press('Enter');
   await page.waitForSelector('.qv', { state: 'visible' });

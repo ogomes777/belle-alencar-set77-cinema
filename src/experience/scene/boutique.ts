@@ -21,7 +21,7 @@ export const ARCHES = [-3.6, -1.2, 1.2];
 
 export interface BoutiqueHandle {
   group: THREE.Group;
-  update(dt: number, ctx: { camera: THREE.Camera; camVel: number; pointer: THREE.Vector2 | null; pointerVel: number; archFocus: number; fittingActive: boolean; heroOnRail: boolean }): void;
+  update(dt: number, ctx: { camera: THREE.Camera; camVel: number; pointer: THREE.Vector2 | null; pointerVel: number; archFocus: number; fittingActive: boolean; heroOnRail: boolean; sweep: number }): void;
   mirror: Reflector | null;
 }
 
@@ -307,6 +307,9 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   }
   const backSpot = spot('#ffe6c0', 50, [-1.2, H - 0.05, -13.4], [-1.2, 1.4, zBack], 0.85, 0.9);
   g.add(backSpot, backSpot.target);
+  // faixa de luz dourada que atravessa o tecido no capítulo "detalhe"
+  const sweep = spot('#ffd28a', 0, [-1.6, 2.6, -6.4], [0, 1.0, -8], 0.16, 0.55);
+  g.add(sweep, sweep.target);
   const fitSpot = spot('#ffeacc', 34, [3.9, H - 0.05, -14.0], [FITTING.x, 1.0, FITTING.z], 0.6, 0.8);
   g.add(fitSpot, fitSpot.target);
 
@@ -363,6 +366,12 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         m.emissiveIntensity += (target - m.emissiveIntensity) * Math.min(1, dt * 5);
       });
       if (mirror) mirror.visible = ctx.fittingActive;
+      if (ctx.sweep >= 0) {
+        const sx = -0.9 + ctx.sweep * 1.8;
+        sweep.target.position.set(sx, 1.2 - ctx.sweep * 0.5, PODIUM.z);
+        sweep.target.updateMatrixWorld();
+        sweep.intensity = 90 * Math.sin(Math.min(1, Math.max(0, ctx.sweep)) * Math.PI);
+      } else sweep.intensity = 0;
     },
   };
 }

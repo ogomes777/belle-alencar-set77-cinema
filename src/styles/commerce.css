@@ -314,3 +314,8 @@ html.is-locked { overflow: hidden; }
   .ov__panel, .ov__backdrop, .toast, .pcard__ill, .seg__ink { transition: none !important; }
   .pgrid.is-entering .pcard, .wish-btn.is-burst svg, [data-bag-count].is-bump { animation: none !important; }
 }
+
+/* QA P2: selo não quebra nem encosta no favorito em cards estreitos */
+@media (max-width: 599px) {
+  .pcard .badge { font-size: 0.55rem; letter-spacing: 0.1em; white-space: nowrap; max-width: calc(100% - 56px); overflow: hidden; text-overflow: ellipsis; }
+}

@@ -119,8 +119,8 @@ export function herringbone(size = 1024, seed = 21): THREE.CanvasTexture {
         x.translate(ox + k * pw * 0.70710678 * 2, oy + k * pw * 0.70710678 * 2);
         x.rotate(k === 0 ? Math.PI / 4 : -Math.PI / 4);
         const hue = 28 + r() * 8;
-        const light = 52 + r() * 14;
-        x.fillStyle = `hsl(${hue}, ${32 + r() * 10}%, ${light}%)`;
+        const light = 60 + r() * 9;
+        x.fillStyle = `hsl(${hue}, ${20 + r() * 8}%, ${light}%)`;
         x.fillRect(0, 0, pl, pw);
         for (let g = 0; g < 7; g++) {
           x.strokeStyle = `rgba(90,58,30,${0.05 + r() * 0.08})`;
