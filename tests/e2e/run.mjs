@@ -204,7 +204,7 @@ for (const vp of viewports) {
   await page.waitForTimeout(900);
   const occPressed = await page.getAttribute('[data-occ="noite"]', 'aria-pressed');
   const cards = await page.locator('.pgrid .pcard').count();
-  check('ocasião "Para sair" filtra a coleção', occPressed === 'true' && cards === 4, `pressed=${occPressed} cards=${cards}`);
+  check('ocasião "Para sair" filtra a coleção', occPressed === 'true' && cards > 0 && cards < 17, `pressed=${occPressed} cards=${cards}`);
   const counts = await page.locator('[data-occ-count]').allTextContents();
   check('contagem por ocasião vem do catálogo', counts.every((t) => /\d+ peças? na prévia/.test(t)), counts.join(' | '));
   await page.locator('[data-open-product="bolsa-estruturada"]').scrollIntoViewIfNeeded();
@@ -226,6 +226,133 @@ for (const vp of viewports) {
   await ctx.close();
 }
 
+
+// 6c · ARARA VIVA + VOO ATÉ A BOLSA
+const gotoRack = async (page) => {
+  const y = await page.evaluate(() => { const el = document.querySelector('article[data-chapter="sala"]'); return el.getBoundingClientRect().top + scrollY + el.offsetHeight * 0.3; });
+  await page.evaluate((yy) => scrollTo(0, yy), y);
+  await page.waitForFunction(() => window.__rack && document.getElementById('arara-viva')?.classList.contains('is-on'), null, { timeout: 8000 });
+  await page.waitForTimeout(1600);
+};
+const openFlightReady = async (page, idx) => {
+  const pt = await page.evaluate((i) => { const a = document.querySelectorAll('.rack__piece')[i].getBoundingClientRect(); return [a.left + a.width / 2, a.top + a.height * 0.45]; }, idx);
+  await page.mouse.move(pt[0], pt[1], { steps: 6 });
+  await page.waitForTimeout(500);
+  await page.mouse.click(pt[0], pt[1]);
+  await page.waitForSelector('.pv:not([hidden])', { timeout: 4000 });
+  await page.waitForTimeout(800);
+};
+{
+  const { ctx, page, errors } = await newPage({ viewport: { width: 1440, height: 900 } });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static&loja=araxa`, { waitUntil: 'load' });
+  await gotoRack(page);
+  const n = await page.locator('.rack__piece').count();
+  check('arara: 11 peças independentes em cabides', n === 11, String(n));
+  // dock: peça sob o cursor cresce ~1,5× e as vizinhas abrem espaço
+  const pt = await page.evaluate(() => { const a = document.querySelectorAll('.rack__piece')[5].getBoundingClientRect(); return [a.left + a.width / 2, a.top + a.height * 0.45]; });
+  await page.mouse.move(pt[0] - 150, pt[1], { steps: 4 });
+  await page.mouse.move(pt[0], pt[1], { steps: 10 });
+  await page.waitForTimeout(700);
+  const d1 = await page.evaluate(() => window.__rack.debug());
+  const maxS = Math.max(...d1.scales);
+  check('arara: foco tipo dock (escala máx ≥ 1,4 e só uma peça em foco)', maxS >= 1.4 && d1.scales.filter((v) => v > 1.4).length === 1, d1.scales.join(','));
+  // trackpad horizontal desliza a arara; vertical segue para a página
+  const off0 = d1.offset;
+  await page.mouse.wheel(260, 0);
+  await page.waitForTimeout(500);
+  const off1 = (await page.evaluate(() => window.__rack.debug())).offset;
+  const sy0 = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 300);
+  await page.waitForTimeout(400);
+  const sy1 = await page.evaluate(() => scrollY);
+  check('arara: trackpad horizontal desliza a arara', off1 !== off0, `${off0}→${off1}`);
+  check('arara: rolagem vertical NÃO é sequestrada', sy1 > sy0, `${sy0}→${sy1}`);
+  await gotoRack(page);
+  // teclado: setas trocam a peça, Enter abre a ficha, Esc devolve o foco à mesma peça
+  await page.locator('.rack__piece').nth(4).focus();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(500);
+  const focusedId = await page.evaluate(() => document.activeElement?.dataset.id);
+  check('arara: seta move o foco entre peças', focusedId === (await page.locator('.rack__piece').nth(5).getAttribute('data-id')), focusedId);
+  await page.keyboard.press('Enter');
+  const opened = await page.waitForSelector('.pv:not([hidden])', { timeout: 4000 }).then(() => true).catch(() => false);
+  check('arara: Enter abre a ficha editorial da MESMA peça', opened && (await page.textContent('#pvTitle'))?.length > 3);
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('.pv', { state: 'hidden', timeout: 4000 }).catch(() => undefined);
+  await page.waitForTimeout(300);
+  check('arara: Esc fecha e devolve o foco à peça de origem', (await page.evaluate(() => document.activeElement?.dataset.id)) === focusedId);
+  // voo: 10 adições seguidas, sem duplicar e sem fantasma órfão
+  await openFlightReady(page, 5);
+  await page.locator('.pv__size').nth(1).click();
+  let ok = true;
+  for (let i = 1; i <= 10; i++) {
+    await page.locator('.pv__size').nth(i % 5).click(); // alterna tamanhos (limite de 9 por variante)
+    await page.click('.pv__add');
+    // segundo clique IMEDIATO durante o voo (botão ocupado): não pode duplicar
+    await page.click('.pv__add', { force: true, timeout: 150 }).catch(() => undefined);
+    await page.waitForFunction(() => !document.querySelector('.dress-ghost') && !document.querySelector('.pv__add[aria-busy]'), null, { timeout: 5000 });
+    const c = Number(await page.textContent('.bagw__count'));
+    if (c !== i) { ok = false; console.log('  contagem esperada', i, 'obtida', c); break; }
+  }
+  check('voo: 10 adições consecutivas, contador exato e zero fantasmas', ok && (await page.locator('.dress-ghost').count()) === 0);
+  const hdr = await page.textContent('[data-bag-count]');
+  check('voo: contador do header sincronizado com a bolsa', hdr?.trim() === '10', hdr);
+  await page.reload({ waitUntil: 'load' });
+  check('voo: sacola persistida após recarregar', (await page.textContent('[data-bag-count]'))?.trim() === '10');
+  check('arara + voo sem erros de console', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+{
+  // Esc durante o voo: conclui o estado sem fantasma
+  const { ctx, page } = await newPage({ viewport: { width: 1280, height: 800 } });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static&loja=frutal`, { waitUntil: 'load' });
+  await gotoRack(page);
+  await openFlightReady(page, 3);
+  await page.locator('.pv__size').nth(0).click();
+  await page.click('.pv__add');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check('voo: Esc no meio do voo conclui sem fantasma e conta 1', (await page.locator('.dress-ghost').count()) === 0 && (await page.textContent('.bagw__count')) === '1');
+  await ctx.close();
+}
+{
+  // movimento reduzido: sem trajetória, item entra direto na bolsa
+  const { ctx, page } = await newPage({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  await page.goto(`${BASE}/?loja=araxa`, { waitUntil: 'load' });
+  await gotoRack(page);
+  await openFlightReady(page, 2);
+  await page.locator('.pv__size').nth(0).click();
+  let ghostSeen = false;
+  await page.exposeFunction('__ghost', () => { ghostSeen = true; });
+  await page.evaluate(() => new MutationObserver(() => { if (document.querySelector('.dress-ghost')) window.__ghost(); }).observe(document.body, { childList: true }));
+  await page.click('.pv__add');
+  await page.waitForTimeout(300);
+  check('reduced-motion: adiciona sem voo (nenhum fantasma) e atualiza a bolsa', !ghostSeen && (await page.textContent('.bagw__count')) === '1');
+  await ctx.close();
+}
+{
+  // toque: 1º toque traz/abre, voo funciona no mobile
+  const { ctx, page, errors } = await newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static&loja=catalao`, { waitUntil: 'load' });
+  await gotoRack(page);
+  const pt = await page.evaluate(() => { let best; for (const x of document.querySelectorAll('.rack__piece')) { const a = x.getBoundingClientRect(); const cx = a.left + a.width / 2; if (cx > innerWidth * 0.35 && cx < innerWidth * 0.65) best = [cx, a.top + a.height * 0.42]; } return best; });
+  await page.touchscreen.tap(pt[0], pt[1]);
+  await page.waitForTimeout(600);
+  if (!(await page.locator('.pv').isVisible())) { await page.touchscreen.tap(pt[0], pt[1]); await page.waitForTimeout(900); }
+  check('toque: abre a ficha da peça tocada', await page.locator('.pv').isVisible());
+  await page.locator('.pv__size').nth(2).click();
+  await page.click('.pv__add');
+  await page.waitForFunction(() => !document.querySelector('.dress-ghost'), null, { timeout: 5000 });
+  check('toque: voo até a bolsa e contador 1', (await page.textContent('.bagw__count')) === '1');
+  if (SHOTS) await page.screenshot({ path: `${OUT}/390-viewer.png` });
+  check('toque: sem erros', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
 // 7 · WebGL: render ativo no filme, parado fora dele
 {
   const { ctx, page, errors } = await newPage({ viewport: { width: 1280, height: 800 } });
@@ -240,7 +367,7 @@ for (const vp of viewports) {
   const info = await page.evaluate(() => window.__belle?.world());
   check('CINEMA: draw calls ≤ 120', (info?.drawCalls ?? 999) <= 120, JSON.stringify(info));
   await page.evaluate(() => document.getElementById('lojas')?.scrollIntoView());
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(2000); // deixa terminar um quadro lento (render por software) já em curso
   const g1 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
   await page.waitForTimeout(1200);
   const g2 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);

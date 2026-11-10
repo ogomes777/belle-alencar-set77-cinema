@@ -315,7 +315,9 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
     const focus = best >= 0 ? pieces[best]! : null;
     if (focus && !viewerFor) {
       labelName.textContent = focus.p.title;
-      label.style.transform = `translate3d(${(focus.x).toFixed(1)}px, ${(geo.railY + geo.ph * focus.s * 0.99 + 14).toFixed(1)}px, 0) translateX(-50%)`;
+      const ly = Math.min(geo.railY + geo.ph * focus.s * 0.99 + 14, geo.mobile ? geo.floorY - 4 : geo.h - 60);
+      const lx = Math.max(geo.mobile ? 120 : 160, Math.min(geo.w - (geo.mobile ? 120 : 160), focus.x));
+      label.style.transform = `translate3d(${lx.toFixed(1)}px, ${ly.toFixed(1)}px, 0) translateX(-50%)`;
       label.classList.add('is-on');
     } else label.classList.remove('is-on');
     if (!viewerFor) placeBag();
@@ -352,7 +354,7 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
         drag.dragging = true;
         phase = 'rack-drag';
         offsetTarget = null;
-        layer.setPointerCapture?.(e.pointerId);
+        try { layer.setPointerCapture(e.pointerId); } catch { /* ponteiro já liberado */ }
         layer.classList.add('is-dragging');
       }
       if (drag.dragging) {

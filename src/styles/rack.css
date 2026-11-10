@@ -150,10 +150,14 @@ html.pv-open .bagw { opacity: 1; visibility: visible; }
 
 @media (max-width: 899px) {
   .pv { padding: 0; place-items: stretch; }
-  .pv__panel { grid-template-columns: 1fr; grid-template-rows: 44vh 1fr; max-height: none; height: 100%; width: 100%; }
+  .pv__panel { grid-template-columns: 1fr; grid-template-rows: 36vh 1fr; max-height: none; height: 100%; width: 100%; }
   .pv__media { min-height: 0; }
-  .pv__info { padding: 20px 18px 28px; }
-  .pv__actions { position: sticky; bottom: 0; background: var(--paper); padding-top: 10px; }
+  .pv__info { padding: 18px 18px 28px; gap: 8px; }
+  .pv__title { font-size: 1.9rem; }
+  /* compra primeiro: tamanho e ações sobem; descrição desce */
+  .pv__desc { order: 6; font-size: 0.95rem; }
+  .pv__fine { order: 7; margin-top: 6px; }
+  .pv__sizes { margin-top: 4px; }
   .rack__hint { display: none; }
   .rack__track { top: 64px; }
 }

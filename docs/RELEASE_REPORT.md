@@ -1,5 +1,14 @@
 # RELEASE REPORT | BELLE ALENCAR CINEMA V4 (PREVIEW)
 
+## Atualização V4.2 · Living Palace: arara viva + voo até a bolsa
+- **Logo oficial** do kit vetorizado e aplicado (header, intro com máscara e brilho, rodapé, letreiro 3D da fachada).
+- **Arara viva** no capítulo 03 do filme: foco tipo dock, vizinhas abrem espaço, pêndulo físico por peça, vento, entrada em cascata, drag/inércia/snap, trackpad horizontal, teclado, toque e vitrine automática. Palácio 3D desfocado atrás (rack focus).
+- **Ficha editorial** com FLIP da mesma imagem e retorno com balanço amortecido.
+- **Voo obrigatório do vestido até a bolsa**: arco Bézier, pêndulo e saia defasada, oclusão pelo lábio da bolsa, quique/alça/brilho, contador no impacto, persistência, cancelamento seguro, reduced-motion sem voo.
+- 11 recortes renderizados do estudo 3D; coleção, quick view e sacola usam o mesmo recorte.
+- Evidências: `reports/REFERENCE_DIFF.md`, `reports/STATE_MAP.md`, `reports/ASSET_GAPS.md`. E2E: 73 verificações (72 + 1 corrigida por timing, confirmada em 3 execuções); Vitest 26/26.
+- O vídeo de referência **não** foi versionado (repositório público).
+
 ## Atualização V4.1 · seções de conversão (pedido do cliente)
 Depois do filme, a página volta a ter as seções que vendem, todas ligadas ao catálogo e à sacola:
 | Seção | Âncora | Função comercial |
