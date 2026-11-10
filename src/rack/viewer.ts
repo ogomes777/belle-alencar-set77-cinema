@@ -4,18 +4,20 @@
  * por todas as peças. Sem modelo real nem preço: estudo 3D rotulado e "preço sob consulta".
  */
 import { commerceApi } from '../commerce/api';
-import type { Product, Size } from '../commerce/types';
+import { CATEGORY_LABEL, type Product, type Size } from '../commerce/types';
+import { flightOrigin } from '../commerce/flight-origin';
 import { bus } from '../core/bus';
 import { announce, trapFocus } from '../core/a11y';
 import { flyToBag, isFlying } from './flight';
 import type { BagWidget } from './bag';
 
 export interface Viewer {
+  close(then?: () => void): Promise<void>;
   open(p: Product, from: HTMLImageElement, hideSource: () => void): void;
   bagAnchor(size: number): { x: number; y: number };
 }
 
-const CAT: Record<string, string> = { vestidos: 'Vestidos', conjuntos: 'Conjuntos', acessorios: 'Acessórios' };
+
 const EASE = 'cubic-bezier(0.22, 0.82, 0.2, 1)';
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -27,7 +29,7 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
     <div class="pv__backdrop"></div>
     <div class="pv__panel" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
       <button type="button" class="pv__close" aria-label="Fechar e voltar à arara"><span aria-hidden="true">×</span></button>
-      <div class="pv__media"><i class="pv__arch" aria-hidden="true"></i><span class="pv__floor" aria-hidden="true"></span><img class="pv__img" alt=""><span class="badge pv__badge">Estudo 3D · demonstração</span></div>
+      <div class="pv__media"><i class="pv__arch" aria-hidden="true"></i><span class="pv__floor" aria-hidden="true"></span><img class="pv__img" alt=""><span class="badge pv__badge">Packshot sintético · demonstração</span></div>
       <div class="pv__info">
         <p class="pv__eyebrow"></p>
         <h2 class="pv__title" id="pvTitle"></h2>
@@ -38,9 +40,9 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
         <p class="pv__error" role="alert" hidden>Escolha um tamanho para continuar.</p>
         <div class="pv__actions">
           <button type="button" class="btn btn--solid pv__add">Adicionar à sacola</button>
-          <button type="button" class="btn btn--line pv__try">Ver no provador 3D</button>
+          <button type="button" class="btn btn--line pv__try">Ver no espaço de provador</button>
         </div>
-        <p class="fineprint pv__fine">Estudo 3D procedural. A foto oficial com modelo entra aqui quando o acervo for fotografado. Tamanho, preço e estoque são confirmados pela loja.</p>
+        <p class="fineprint pv__fine">Estudo sintético em vista frontal. Não é uma prova virtual nem uma peça oficial da Belle. Tamanho e disponibilidade são confirmados pela loja.</p>
       </div>
     </div>`;
   document.body.appendChild(root);
@@ -56,8 +58,17 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
   let size: Size | null = null;
   let untrap: (() => void) | null = null;
   let closing = false;
+  let focusTimer = 0;
 
   const refreshAvail = () => { if (current) avail.textContent = commerceApi()?.availabilityText(current.id, size) ?? ''; };
+  function fitImage(): void {
+    if (!current || root.hidden) return;
+    const r=media.getBoundingClientRect(), [w,h]=current.cutoutSize ?? [720,1200];
+    const scale=Math.min(r.width*.88/w,r.height*.88/h);
+    img.style.width=`${w*scale}px`;img.style.height=`${h*scale}px`;
+    img.style.top=`${(r.height-h*scale)/2}px`;
+  }
+  addEventListener('resize',fitImage,{passive:true});
   commerceApi()?.onChange(refreshAvail);
 
   function flipFrom(rect: DOMRect, reverse = false): Animation | null {
@@ -74,9 +85,10 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
   function open(p: Product, from: HTMLImageElement, hideSource: () => void): void {
     current = p;
     source = from;
+    root.dataset.productId = p.id;
     size = null;
     closing = false;
-    $('.pv__eyebrow').textContent = `${CAT[p.category] ?? ''} · ${p.sku}`;
+    $('.pv__eyebrow').textContent = `${CATEGORY_LABEL[p.category]} · ${p.sku}`;
     $('.pv__title').textContent = p.title;
     $('.pv__desc').textContent = p.description;
     err.hidden = true;
@@ -86,10 +98,11 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
     row.innerHTML = p.variants.map((v) => `<label class="pv__size"><input type="radio" name="pv-size" value="${v.size}"><span>${v.size}</span></label>`).join('');
     refreshAvail();
     img.src = p.cutout ?? '';
-    img.alt = `${p.title}, estudo 3D demonstrativo`;
+    img.alt = `${p.title}, packshot sintético demonstrativo`;
     media.style.setProperty('--tone', toneBg(p.tone));
     const rect = from.getBoundingClientRect();
     root.hidden = false;
+    fitImage();
     document.documentElement.classList.add('is-locked', 'pv-open');
     hideSource();
     // FLIP: a imagem nasce exatamente sobre o cabide e assenta na ficha
@@ -102,12 +115,14 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
       );
     }
     untrap = trapFocus(panel);
-    window.setTimeout(() => $('.pv__close').focus({ preventScroll: true }), 30);
+    clearTimeout(focusTimer);
+    focusTimer = window.setTimeout(() => { if (!root.hidden && !closing) $('.pv__close').focus({ preventScroll: true }); }, 30);
   }
 
   async function close(then?: () => void): Promise<void> {
     if (!current || closing) return;
     closing = true;
+    clearTimeout(focusTimer);
     const id = current.id;
     untrap?.();
     if (source && !reduce()) {
@@ -151,13 +166,15 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
       return;
     }
     const chosen = size;
+    const selectedCity = api.storeCity();
     const go = () => {
       addBtn.disabled = true;
       addBtn.setAttribute('aria-busy', 'true');
       addBtn.animate?.([{ transform: 'scale(1)' }, { transform: 'scale(0.97)' }, { transform: 'scale(1)' }], { duration: 160 });
+      const origin = flightOrigin(img, p, 'cutout');
       void flyToBag({
-        from: img,
-        image: p.cutout ?? img.src,
+        from: origin,
+        image: p.cutout ?? img.src, productId: p.id,
         target: {
           mouth: () => opts.bag.mouth(),
           ghostZ: 72,
@@ -170,10 +187,12 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
           },
         },
         onImpact: () => {
+          if (api.storeCity() !== selectedCity) { announce('A loja mudou. Confirme a peça novamente.'); return; }
           const r = api.add(p.id, chosen);
           if (r.ok) announce(`${p.title}, tamanho ${chosen}, está na sacola de ${api.storeCity()}.`);
         },
-      }).then(() => {
+      }).finally(() => {
+        origin.remove();
         addBtn.removeAttribute('aria-busy');
         addBtn.disabled = false;
         addBtn.textContent = 'Na sacola ✓ · adicionar outra';
@@ -188,11 +207,11 @@ export function createViewer(opts: { bag: BagWidget; onClosed: (id: string) => v
   $('.pv__try').addEventListener('click', () => {
     const p = current;
     if (!p) return;
-    void close(() => bus.emit('dress:try', { silhouette: p.silhouette ?? 'fluido', tone: p.tone, label: p.title }));
+    void close(() => bus.emit('dress:try', { silhouette: p.silhouette ?? 'fluido', tone: p.tone, label: p.title, productId: p.id }));
   });
 
   return {
-    open,
+    open, close,
     bagAnchor(sz) {
       if (innerWidth < 900) {
         const m = media.getBoundingClientRect();

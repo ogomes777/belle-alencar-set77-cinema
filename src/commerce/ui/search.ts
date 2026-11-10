@@ -1,5 +1,7 @@
 /** Busca: peças demo, lojas e capítulos do filme. */
 import { h } from '../../core/dom';
+import { productImage } from '../media';
+import '../media.css';
 import { DEMO_CATALOG } from '../catalog.demo';
 import { STORE_LIST } from '../stores';
 import { normalize, searchProducts } from '../filters';
@@ -27,7 +29,7 @@ const CHAPTERS = [
 
 export function createSearch(ctx: Ctx) {
   const ov = createOverlay({ id: 'searchDialog', labelledBy: 'searchTitle', variant: 'search', className: 'ov--search' });
-  const input = h('input', { type: 'search', id: 'searchInput', class: 'search-input', placeholder: 'Vestido, conjunto, Araxá…', autocomplete: 'off', 'aria-describedby': 'searchCount' }) as HTMLInputElement;
+  const input = h('input', { type: 'search', id: 'searchInput', class: 'search-input', placeholder: 'Vestido, camisa, Araxá…', autocomplete: 'off', 'aria-describedby': 'searchCount' }) as HTMLInputElement;
   const count = h('p', { class: 'search-count', id: 'searchCount', 'aria-live': 'polite' });
   const results = h('div', { class: 'search-results' });
   ov.body.append(
@@ -48,7 +50,7 @@ export function createSearch(ctx: Ctx) {
     const chapters = CHAPTERS.filter((c) => n && normalize(`${c.label} ${c.k}`).includes(n));
     results.replaceChildren(
       ...[
-        group(n ? 'Peças (demonstrativas)' : 'Sugestões', prods.map((p) => h('button', { type: 'button', class: 'search-hit', 'data-hit-product': p.id }, h('span', { text: p.title }), h('small', { text: `${CATEGORY_LABEL[p.category]} · ${p.sku}` })))),
+        group(n ? 'Peças (demonstrativas)' : 'Sugestões', prods.map((p) => h('button', { type: 'button', class: 'search-hit search-hit--product', 'data-hit-product': p.id }, productImage(p, { alt: '' }), h('span', { text: p.title }), h('small', { text: `${CATEGORY_LABEL[p.category]} · demonstração` })))),
         group('Lojas', stores.map((s) => h('button', { type: 'button', class: 'search-hit', 'data-hit-store': s.id }, h('span', { text: `Belle ${s.city}` }), h('small', { text: s.address ?? `${s.state} · endereço a confirmar` })))),
         group('Na experiência', chapters.map((c) => h('button', { type: 'button', class: 'search-hit', 'data-hit-anchor': c.id }, h('span', { text: c.label }), h('small', { text: 'Ir para o capítulo' })))),
       ].filter((x): x is HTMLElement => !!x),

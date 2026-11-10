@@ -1,9 +1,11 @@
 /** Quick view acessível com FLIP card → painel e escolha de tamanho. */
-import { mountEditorialMedia } from '../../runway/media';
+import { productImage } from '../media';
+import { flightOrigin } from '../flight-origin';
+import '../media.css';
+import type { BagWidget } from '../../rack/bag';
 import { h } from '../../core/dom';
 import { bus } from '../../core/bus';
 import { announce } from '../../core/a11y';
-import { illustrate } from '../../core/illustration';
 import { createOverlay } from './overlay';
 import { loadGsap } from './motion';
 import { STORES } from '../stores';
@@ -18,9 +20,13 @@ import type { Ctx } from './context';
 export function createQuickView(ctx: Ctx) {
   let current: Product | null = null;
   let size: Size | null = null;
+  let adding = false;
+  let targetBag: BagWidget | null = null;
+  let bagTimer = 0;
+  let pendingOpen = 0;
   const ov = createOverlay({
     id: 'quickView', labelledBy: 'qvTitle', variant: 'drawer', className: 'ov--qv',
-    onClose: () => { setParam('peca', null); current = null; },
+    onClose: () => { setParam('peca', null); current = null; if (!adding) targetBag?.show(false); },
   });
 
   function availText(): string {
@@ -37,11 +43,9 @@ export function createQuickView(ctx: Ctx) {
     const single = p.variants.length === 1;
     size = single ? p.variants[0]!.size : null;
     const media = h('div', { class: 'qv__media' });
-    media.innerHTML = p.cutout
-      ? `<span class="qv__ill qv__ill--cutout" data-flip-id="ill-${p.id}"><img src="${p.cutout}" alt="Imagem editorial demonstrativa: ${p.title}" decoding="async" width="720" height="1200"></span>`
-      : `<span class="qv__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
-    if (p.sprite) mountEditorialMedia(media.querySelector<HTMLElement>('.qv__ill')!, p);
-    media.append(h('span', { class: 'badge', text: p.cutout ? 'Editorial · demonstração' : 'Ilustração · demonstração' }));
+    const image = h('span', { class: 'qv__ill qv__ill--cutout', 'data-flip-id': `ill-${p.id}` });
+    image.append(productImage(p, { eager: true }));
+    media.append(image, h('span', { class: 'badge', text: 'Packshot sintético · demonstração' }));
     // zoom do detalhe: botão acessível + lupa que acompanha ponteiro/dedo
     const zoomBtn = h('button', { type: 'button', class: 'qv__zoom', 'aria-pressed': 'false', text: 'Ampliar' });
     const setZoom = (on: boolean) => {
@@ -59,7 +63,7 @@ export function createQuickView(ctx: Ctx) {
     media.append(zoomBtn);
 
     const sizes = h('fieldset', { class: 'sizes' },
-      h('legend', { text: single ? 'Tamanho único' : 'Tamanho' }),
+      h('legend', { text: single ? 'Interesse em tamanho único' : 'Tamanho de interesse · grade a confirmar' }),
       ...p.variants.map((v) =>
         h('label', { class: 'size' },
           h('input', { type: 'radio', name: 'qv-size', value: v.size, checked: single }),
@@ -75,7 +79,7 @@ export function createQuickView(ctx: Ctx) {
       h('button', { type: 'button', class: 'btn btn--line wish-btn wish-btn--wide', 'data-qv-wish': true, 'aria-pressed': String(wished), html: `${heart}<span>${wished ? 'Nos favoritos' : 'Favoritar'}</span>` }),
     );
     const extra = p.illustration.kind === 'dress' && p.silhouette
-      ? h('button', { type: 'button', class: 'link-btn qv__try', 'data-try': true, html: `Ver no provador 3D ${arrow}` })
+      ? h('button', { type: 'button', class: 'link-btn qv__try', 'data-try': true, html: `Ver no provador ${arrow}` })
       : null;
 
     ov.body.replaceChildren(
@@ -88,7 +92,7 @@ export function createQuickView(ctx: Ctx) {
           h('p', { class: 'qv__price', text: formatPrice(p.price) }),
           h('p', { class: 'qv__desc', text: p.description }),
           sizes, avail, err, actions, extra,
-          h('p', { class: 'fineprint', text: 'Ilustração demonstrativa do pré-lançamento. Não representa uma peça real nem o estoque da loja.' }),
+          h('p', { class: 'fineprint', text: 'Estudo sintético demonstrativo. Não representa uma peça real, grade disponível ou estoque da Belle. O provador é uma apresentação frontal; não simula vestir nem giro 360°.' }),
         ),
       ),
     );
@@ -114,18 +118,64 @@ export function createQuickView(ctx: Ctx) {
         ov.body.querySelector<HTMLInputElement>('input[name="qv-size"]')?.focus();
         return;
       }
+      if (adding) return;
       const chosen = size;
       const doAdd = () => {
-        const r = ctx.commerce.add(p.id, chosen);
-        if (r.ok) {
-          const city = STORES[ctx.commerce.get().storeId!].city;
-          toast(`${p.title} (${chosen}) está na sacola de ${city}.`);
-          const btn = ov.body.querySelector<HTMLElement>('[data-add]');
-          if (btn && ov.isOpen()) {
-            btn.textContent = 'Adicionado à sacola ✓';
-            window.setTimeout(() => { btn.textContent = 'Adicionar à sacola de interesse'; }, 1800);
+        const storeId = ctx.commerce.get().storeId;
+        if (!storeId || adding) return;
+        const button = ov.body.querySelector<HTMLButtonElement>('[data-add]');
+        const commit = () => {
+          if (ctx.commerce.get().storeId !== storeId) {
+            toast('A loja mudou durante a animação. Confira a unidade e adicione novamente.', 'warn');
+            return;
           }
+          const result = ctx.commerce.add(p.id, chosen);
+          if (result.ok) {
+            toast(`${p.title} (${chosen}) está na sacola de ${STORES[storeId].city}.`);
+            if (button && ov.isOpen()) button.textContent = 'Adicionado à sacola ✓';
+          } else if (result.reason) toast(result.reason, 'warn');
+        };
+        const source = ov.body.querySelector<HTMLImageElement>('.qv__ill img');
+        // Reduced motion and unavailable visible origins keep the same synchronous commerce path.
+        if (ctx.reduced() || !source || source.getBoundingClientRect().width < 4 || !ov.isOpen()) {
+          commit();
+          return;
         }
+        adding = true;
+        if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+        void (async () => {
+          let origin: HTMLElement | null = null;
+          let committed = false;
+          try {
+            const [flight, bagModule] = await Promise.all([import('../../rack/flight'), import('../../rack/bag'), import('../../styles/rack.css')]);
+            if (flight.isFlying()) return;
+            if (!targetBag) {
+              targetBag = bagModule.createBag(() => { if (!adding) ctx.openBag(document.getElementById('bagButton')); });
+              targetBag.front.setAttribute('aria-hidden', 'true');
+              targetBag.front.tabIndex = -1;
+              targetBag.front.dataset.commerceBag = 'true';
+              targetBag.back.dataset.commerceBag = 'true';
+            }
+            clearTimeout(bagTimer);
+            const size = innerWidth < 600 ? 76 : 100;
+            targetBag.place(innerWidth - size - 18, innerHeight - size - 18, size);
+            targetBag.setLayer('overlay'); targetBag.setCount(ctx.commerce.currentBag().reduce((n,it) => n + it.qty, 0));
+            targetBag.show(true);
+            origin = flightOrigin(source, p);
+            source.classList.add('is-departing');
+            await flight.flyToBag({
+              from: origin, image: p.cutout!, productId: p.id,
+              target: { mouth: () => targetBag!.mouth(), ghostZ: 72, impact: () => targetBag!.impact() },
+              onImpact: () => { committed = true; commit(); targetBag!.setCount(ctx.commerce.currentBag().reduce((n,it) => n + it.qty, 0)); },
+            });
+          } catch {
+            if (!committed) commit();
+          } finally {
+            origin?.remove(); source.classList.remove('is-departing'); adding = false;
+            if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
+            bagTimer = window.setTimeout(() => targetBag?.show(false), 550);
+          }
+        })();
       };
       if (!ctx.commerce.get().storeId) {
         announce('Escolha sua loja para adicionar à sacola.');
@@ -142,7 +192,7 @@ export function createQuickView(ctx: Ctx) {
       return;
     }
     if (t.closest('[data-try]') && p.silhouette) {
-      bus.emit('dress:try', { silhouette: p.silhouette, tone: p.tone, label: p.title });
+      bus.emit('dress:try', { silhouette: p.silhouette, tone: p.tone, label: p.title, productId: p.id });
       ov.close({ restoreFocus: false });
       ctx.scrollTo('provador');
     }
@@ -157,10 +207,13 @@ export function createQuickView(ctx: Ctx) {
 
   return {
     async open(productId: string, trigger?: HTMLElement | null, flipFrom?: HTMLElement | null) {
+      if (adding) return;
+      const request = ++pendingOpen;
       const p = ctx.commerce.product(productId);
       if (!p) return;
       const canFlip = !!flipFrom && !ctx.reduced();
       const mod = canFlip ? await loadGsap() : null;
+      if (request !== pendingOpen) return;
       const state = mod && flipFrom ? mod.Flip.getState(flipFrom) : null;
       current = p;
       render(p);

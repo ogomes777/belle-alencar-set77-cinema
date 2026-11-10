@@ -40,15 +40,19 @@ const FRONT = `<svg viewBox="0 0 120 120" aria-hidden="true">
   <rect x="53" y="56" width="14" height="11" rx="2.5" fill="#c09a5b"/><rect x="56.5" y="59" width="7" height="5" rx="1.5" fill="#e8cf96"/>
 </svg>`;
 
+let bagId = 0;
+
 export function createBag(onOpen: (trigger: HTMLElement) => void): BagWidget {
+  const prefix = `bag-${++bagId}-`;
+  const unique = (svg: string) => svg.replace(/bg(Back|Strap|Front|Shade)/g, name => prefix + name);
   const back = document.createElement('div');
   back.className = 'bagw bagw--back';
-  back.innerHTML = BACK;
+  back.innerHTML = unique(BACK);
   back.setAttribute('aria-hidden', 'true');
   const front = document.createElement('button');
   front.type = 'button';
   front.className = 'bagw bagw--front';
-  front.innerHTML = `${FRONT}<span class="bagw__glint" aria-hidden="true"></span><span class="bagw__count" hidden>0</span>`;
+  front.innerHTML = `${unique(FRONT)}<span class="bagw__glint" aria-hidden="true"></span><span class="bagw__count" hidden>0</span>`;
   front.setAttribute('aria-label', 'Abrir sacola de interesse');
   front.addEventListener('click', () => onOpen(front));
   document.body.append(back, front);

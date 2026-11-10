@@ -1,7 +1,7 @@
 /** Drawers: sacola de interesse (por filial) e favoritos. */
 import { h } from '../../core/dom';
 import { announce } from '../../core/a11y';
-import { illustrate } from '../../core/illustration';
+import { productImage } from '../media';
 import { createOverlay } from './overlay';
 import { STORES } from '../stores';
 import { countItems, MAX_QTY } from '../cart';
@@ -29,9 +29,9 @@ async function copyText(text: string, area: HTMLTextAreaElement): Promise<boolea
   }
 }
 
-const mini = (svg: string) => {
+const mini = (image: Node) => {
   const s = h('span', { class: 'mini-ill', 'aria-hidden': 'true' });
-  s.innerHTML = svg;
+  s.append(image);
   return s;
 };
 
@@ -65,7 +65,7 @@ export function createBag(ctx: Ctx) {
       if (!p) return h('li', {});
       const st = ctx.commerce.statusOf(storeId, it.variantId);
       return h('li', { class: `bag-item${st === 'out' ? ' is-out' : ''}` },
-        mini(p.cutout ? `<img src="${p.cutout}" alt="" loading="lazy" width="720" height="1200">` : illustrate(p.illustration, p.title)),
+        mini(productImage(p, { alt: '' })),
         h('div', { class: 'bag-item__info' },
           h('p', { class: 'bag-item__title', text: p.title }),
           h('p', { class: 'bag-item__meta', text: `${p.sku} · ${it.size === 'Único' ? 'tamanho único' : `tam. ${it.size}`}` }),
@@ -188,7 +188,7 @@ export function createWishlist(ctx: Ctx) {
       const p = ctx.commerce.product(id);
       if (!p) return h('li', {});
       return h('li', { class: 'bag-item' },
-        mini(p.cutout ? `<img src="${p.cutout}" alt="" loading="lazy" width="720" height="1200">` : illustrate(p.illustration, p.title)),
+        mini(productImage(p, { alt: '' })),
         h('div', { class: 'bag-item__info' },
           h('p', { class: 'bag-item__title', text: p.title }),
           h('p', { class: 'bag-item__meta', text: `${p.sku} · referência demonstrativa` }),

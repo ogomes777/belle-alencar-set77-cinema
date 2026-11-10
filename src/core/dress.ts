@@ -11,6 +11,7 @@ export interface DressParams {
   tone: Tone;
   /** Rótulo humano opcional (ex.: referência demo). */
   label?: string;
+  productId?: string;
 }
 
 export interface ToneSpec {

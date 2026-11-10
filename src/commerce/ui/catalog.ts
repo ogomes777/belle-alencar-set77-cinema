@@ -1,6 +1,6 @@
 /** Catálogo: filtros (categoria/ocasião/tamanho/silhueta), grade e cards. */
 import { h } from '../../core/dom';
-import { illustrate } from '../../core/illustration';
+import { productImage } from '../media';
 import { SILHOUETTES, type Silhouette } from '../../core/dress';
 import { DEMO_CATALOG } from '../catalog.demo';
 import { applyFilters, DEFAULT_FILTERS, isFiltered, type Filters } from '../filters';
@@ -19,10 +19,9 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
     tabindex: '-1',
     'aria-hidden': 'true',
   });
-  media.innerHTML = p.cutout
-    ? `<span class="pcard__ill pcard__ill--cutout" data-flip-id="ill-${p.id}"><img src="${p.cutout}" alt="Imagem editorial demonstrativa: ${p.title}" loading="lazy" decoding="async" width="720" height="1200"></span>`
-    : `<span class="pcard__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
-  media.append(h('span', { class: 'badge', 'aria-hidden': 'true', text: p.cutout ? 'Editorial · demonstração' : 'Ilustração · demonstração' }));
+  const image = h('span', { class: 'pcard__ill pcard__ill--cutout', 'data-flip-id': `ill-${p.id}` });
+  image.append(productImage(p));
+  media.append(image, h('span', { class: 'badge', 'aria-hidden': 'true', text: 'Packshot sintético · demonstração' }));
   const wish = h('button', {
     type: 'button',
     class: 'pcard__wish wish-btn',

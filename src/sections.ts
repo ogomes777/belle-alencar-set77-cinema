@@ -15,7 +15,7 @@ export function initSections(): void {
   // Imagens são sintéticas; não representam estoque ou SKUs oficiais da Belle.
   const artSlugs = [
     'camisas-01','bolsas-02', 'croppeds-03','bolsas-03', 'vestidos-01','aneis-02',
-    'vestidos-01','pulseiras-05', 'vestidos-05','bolsas-05', 'camisas-03','calcas-01',
+    'vestidos-01','aneis-02', 'vestidos-02','bolsas-03', 'vestidos-03','pulseiras-03',
   ];
   $$<HTMLElement>('[data-ill]').forEach((el, i) => {
     const product=DEMO_CATALOG.find(p=>p.slug===artSlugs[i]);
@@ -23,12 +23,20 @@ export function initSections(): void {
     const img=document.createElement('img');
     img.src=product.cutout;
     img.alt='';
-    img.width=360;img.height=480;
+    img.width=product.cutoutSize?.[0] ?? 600;img.height=product.cutoutSize?.[1] ?? 900;
+    img.dataset.productId=product.id;
     img.decoding='async';img.loading='lazy';
     img.className='editorial-cutout';
     el.replaceChildren(img);
   });
 
+  $$<HTMLElement>('[data-open-product]').forEach(el => {
+    const product=DEMO_CATALOG.find(p=>p.slug===el.dataset.openProduct);
+    if (!product) return;
+    const suffix=el.querySelector('span');
+    el.replaceChildren(document.createTextNode(product.title+' '));
+    if(suffix)el.append(suffix);
+  });
   // contagem real de peças por ocasião (prévia)
   $$<HTMLElement>('[data-occ-count]').forEach((el) => {
     const n = DEMO_CATALOG.filter((p) => p.active && p.occasion === el.dataset.occCount).length;
@@ -39,7 +47,9 @@ export function initSections(): void {
   $$<HTMLButtonElement>('[data-try-look]').forEach((b) =>
     b.addEventListener('click', () => {
       try {
-        bus.emit('dress:try', JSON.parse(b.dataset.tryLook!) as DressParams);
+        const selected = b.closest('.look')?.querySelector<HTMLElement>('[data-open-product]');
+        const p = DEMO_CATALOG.find(p=>p.slug===selected?.dataset.openProduct);
+        bus.emit('dress:try', { ...(JSON.parse(b.dataset.tryLook!) as DressParams), ...(p ? { productId:p.id, tone:p.tone, silhouette:p.silhouette ?? 'fluido', label:p.title } : {}) });
       } catch {
         /* ignore */
       }

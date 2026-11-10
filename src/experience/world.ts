@@ -10,6 +10,7 @@ import { bakeStatic, createKit } from './scene/kit';
 import { buildMall } from './scene/mall';
 import { buildFacade } from './scene/facade';
 import { buildBoutique } from './scene/boutique';
+import { sceneProductReadiness, waitForSceneProducts } from './scene/product';
 import { DressRig } from './cloth/dress';
 import { Story, type Span } from './story';
 import type { Tier } from '../core/tier';
@@ -33,6 +34,7 @@ export interface WorldInfo {
   triangles: number;
   avgFrameMs: number;
   running: boolean;
+  products: { total: number; ready: number; failed: number };
   progress: number;
   camera: number[];
 }
@@ -43,6 +45,7 @@ export class World {
   private camera: THREE.PerspectiveCamera;
   private story = new Story();
   private dress: DressRig;
+  private fittingProductId: string | null = null;
   private facade;
   private boutique;
   private mall;
@@ -113,6 +116,8 @@ export class World {
     document.addEventListener('visibilitychange', this.onVis);
   }
 
+  readyMedia(): Promise<void> { return waitForSceneProducts(this.scene); }
+
   setSpans(spans: Span[]): void {
     this.story.setSpans(spans);
     this.kick();
@@ -125,6 +130,8 @@ export class World {
   }
 
   setDress(params: DressParams): void {
+    this.fittingProductId = params.productId ?? null;
+    this.boutique.setProduct(this.fittingProductId);
     this.dress.setParams(params);
     this.dress.energy = Math.max(this.dress.energy, 0.8);
     this.kick();
@@ -167,7 +174,7 @@ export class World {
   info(): WorldInfo {
     const r = this.renderer.info.render;
     const c = this.camera.position;
-    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100) };
+    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100) };
   }
 
   private kick(): void {
@@ -182,7 +189,7 @@ export class World {
     if (!this.visible || document.hidden || this.failed) return;
     // dt real (até 250 ms) para a suavização não "atrasar" em GPU lenta;
     // a física usa passo fixo e as molas recebem dt limitado.
-    const dt = Math.min(0.25, (now - this.last) / 1000 || 1 / 60);
+    const dt = Math.max(1 / 240, Math.min(0.25, (now - this.last) / 1000 || 1 / 60));
     this.last = now;
     this.step(dt, false);
     this.renderer.render(this.scene, this.camera);
@@ -238,6 +245,9 @@ export class World {
     // vestido
     const d = this.dressState;
     this.story.dress(p, d);
+    const inFitting = this.camera.position.z < -10.5 && this.camera.position.x > 1.5;
+    this.dress.group.visible = !(inFitting && this.fittingProductId);
+    this.dress.skirt.visible = this.dress.group.visible;
     this.dress.group.position.copy(d.pos);
     const bob = d.onRail ? 0 : Math.sin(this.time * 1.1) * 0.012 * (0.4 + d.energy);
     this.dress.group.position.y += bob;

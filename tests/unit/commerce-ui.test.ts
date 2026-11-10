@@ -25,7 +25,7 @@ describe('initCommerce (DOM)', () => {
   it('renderiza um card por peça demonstrativa, com selo e sem preço', () => {
     const cards = document.querySelectorAll('#catalogMount .pcard');
     expect(cards).toHaveLength(DEMO_CATALOG.length);
-    expect(document.querySelector('.pcard .badge')?.textContent).toMatch(/Ilustração|Estudo 3D/);
+    expect(document.querySelector('.pcard .badge')?.textContent).toMatch(/Packshot sintético/);
     expect(document.querySelector('.pcard__price')?.textContent).toBe('Preço sob consulta');
     expect(document.querySelector('#catalogMount noscript')).not.toBeNull();
   });
@@ -37,21 +37,21 @@ describe('initCommerce (DOM)', () => {
   });
 
   it('filtro de categoria do filme filtra e rola até a coleção', () => {
-    (document.querySelector('[data-filter-category="acessorios"]') as HTMLElement).click();
-    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(3);
-    expect(location.search).toContain('categoria=acessorios');
+    (document.querySelector('[data-filter-category="bolsas"]') as HTMLElement).click();
+    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(6);
+    expect(location.search).toContain('categoria=bolsas');
     (document.querySelector('[data-clear]') as HTMLElement).click();
     expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(DEMO_CATALOG.length);
   });
 
   it('quick view: exige tamanho, adiciona à sacola de Frutal e atualiza o contador', async () => {
-    const title = document.querySelector('.pcard[data-product="demo-101"] .pcard__title button') as HTMLElement;
+    const title = document.querySelector('.pcard[data-product="belle-demo-vestidos-01"] .pcard__title button') as HTMLElement;
     title.click();
     await flush();
     const qv = document.getElementById('quickView')!;
     expect(qv.hidden).toBe(false);
     expect(qv.querySelector('.ov__panel')?.getAttribute('aria-modal')).toBe('true');
-    expect(location.search).toContain('peca=vestido-longo-fluido');
+    expect(location.search).toContain('peca=vestidos-01');
     (qv.querySelector('[data-add]') as HTMLElement).click();
     expect((qv.querySelector('.qv__error') as HTMLElement).hidden).toBe(false);
     const m = qv.querySelector('input[value="M"]') as HTMLInputElement;
@@ -100,15 +100,15 @@ describe('initCommerce (DOM)', () => {
     expect(window.open).toHaveBeenCalledWith('https://wa.me/message/YYDB5NC7JMUQP1', '_blank', 'noopener,noreferrer');
     const area = document.querySelector('#bagDrawer .send-msg') as HTMLTextAreaElement;
     expect(area.value).toContain('Belle Frutal');
-    expect(area.value).toContain('DEMO-101');
+    expect(area.value).toContain('DEMO-VESTIDOS-01');
   });
 
   it('favoritos atualizam contador e persistem', () => {
-    (document.querySelector('[data-wish="demo-302"]') as HTMLElement).click();
+    (document.querySelector('[data-wish="belle-demo-aneis-02"]') as HTMLElement).click();
     const c = document.querySelector('[data-wishlist-count]') as HTMLElement;
     expect(c.hidden).toBe(false);
     expect(c.textContent).toBe('1');
-    expect(JSON.parse(localStorage.getItem('belle:v4:wishlist')!)).toEqual(['demo-302']);
+    expect(JSON.parse(localStorage.getItem('belle:v4:wishlist')!)).toEqual(['belle-demo-aneis-02']);
   });
 
   it('busca encontra peça e loja', () => {
@@ -116,7 +116,7 @@ describe('initCommerce (DOM)', () => {
     const input = document.getElementById('searchInput') as HTMLInputElement;
     input.value = 'bolsa';
     input.dispatchEvent(new Event('input'));
-    expect(document.querySelector('[data-hit-product="demo-301"]')).not.toBeNull();
+    expect(document.querySelector('[data-hit-product="belle-demo-bolsas-01"]')).not.toBeNull();
     input.value = 'catalao';
     input.dispatchEvent(new Event('input'));
     expect(document.querySelector('[data-hit-store="catalao"]')).not.toBeNull();

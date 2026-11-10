@@ -74,6 +74,14 @@ export interface Product {
   illustration: IllustrationSpec;
   /** Recorte com fundo transparente (render do estudo 3D ou, no futuro, foto oficial). */
   cutout?: string;
+  /** Stable public kit identity; product.id stays compatible with saved interest bags. */
+  demoId?: string;
+  packshot?: string;
+  cutoutSize?: readonly [number, number];
+  /** Absolute-pixel alpha bounds x0/y0/x1/y1, for physical anchoring without distortion. */
+  cutoutBounds?: readonly [number, number, number, number];
+  packshotBounds?: readonly [number, number, number, number];
+  inventoryConfirmed?: false;
   sprite?: { src: string; box: [number, number, number, number]; sheet: [number, number] };
   variants: Variant[];
   price: Price;

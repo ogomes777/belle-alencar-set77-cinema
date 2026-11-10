@@ -167,3 +167,21 @@ html.pv-open .bagw { opacity: 1; visibility: visible; }
 
 /* o trilho de capítulos sai de cena enquanto a arara está ativa */
 html[data-film-chapter='sala'] .chapter-rail ol { opacity: 0; pointer-events: none; transition: opacity var(--t-ui); }
+
+/* Each garment shares a bar anchor but retains its own optical dimensions. */
+.rack__hanger {position:absolute;left:6%;width:88%;height:40px;top:var(--hanger-top,0px);pointer-events:none;z-index:2;}
+.rack__hanger svg {width:100%;height:100%;fill:none;stroke:#aa8b56;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #fff8);}
+.rack__cloth {position:absolute;inset:0;transform-origin:50% 8%;transform:rotate(var(--body-sway,0rad));pointer-events:none;}
+.rack__cloth>img {clip-path:inset(0 0 40% 0);}
+.rack__hem {position:absolute;inset:0;background-size:100% 100%;background-repeat:no-repeat;clip-path:inset(59.8% 0 0 0);transform-origin:50% 60%;transform:rotate(var(--hem-sway,0rad));}
+.pv__img {width:88%;height:88%;max-width:88%;object-fit:contain;aspect-ratio:auto;top:6%;}
+html.pv-open .bagw:not(.is-on) {visibility:hidden;opacity:0;}
+
+.dress-ghost {transform-origin:50% 0;}
+/* Absolute garments need a full-height clipping surface; a zero-height ul hides them. */
+.rack__items {position:absolute;inset:0;}
+
+@media(max-width:899px){
+ .rack__label {left:50%;width:calc(100% - 24px);max-width:440px;white-space:normal;display:grid;gap:3px;text-align:center;transform:translate3d(0,var(--label-y,0px),0) translateX(-50%)!important;}
+ .rack__label span {font-size:8px;letter-spacing:.1em;}
+}

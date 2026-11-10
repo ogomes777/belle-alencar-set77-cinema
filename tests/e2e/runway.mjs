@@ -15,7 +15,9 @@ for(const width of [360,390,768,1440]) {
  const page=await context.newPage();const errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
  await page.goto(`${base}/?tier=static&loja=araxa`);
+ await page.locator('#passarela').scrollIntoViewIfNeeded();
  await page.waitForSelector('.runway__model');
+ await page.waitForFunction(()=>document.body.classList.contains('is-runway-visible'));
  check(await page.locator('#floatCta').isHidden(),`${width}: contact CTA does not obscure product rail`);
  check(await page.locator('.runway__model').count()===6,`${width}: six depth layers`);
  check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${width}: no horizontal overflow`);
@@ -34,11 +36,11 @@ for(const width of [360,390,768,1440]) {
  await page.waitForFunction(()=>document.getElementById('passarela').dataset.position==='0.0000');
  const fav=page.locator('.runway__card').first().locator('.runway__fav');
  await fav.click();check(await fav.getAttribute('aria-pressed')==='true',`${width}: real commerce wishlist`);
- await page.reload();await page.waitForSelector('.runway__card');
+ await page.reload();await page.locator('#passarela').scrollIntoViewIfNeeded();await page.waitForSelector('.runway__card');
  check(await page.locator('.runway__card').first().locator('.runway__fav').getAttribute('aria-pressed')==='true',`${width}: wishlist persists`);
  await page.locator('.runway__card').first().locator('.runway__add').click();
  await page.waitForSelector('.qv');
- check((await page.locator('#qvTitle').textContent()).includes('Jaqueta'),`${width}: correct editorial product detail`);
+ check((await page.locator('#qvTitle').textContent()).includes('Vestido'),`${width}: correct editorial product detail`);
  await page.locator('.qv .size').nth(1).click();await page.click('.qv [data-add]');
  await page.waitForFunction(()=>document.querySelector('[data-bag-count]').textContent==='1');
  check(true,`${width}: chosen variant enters store bag`);
@@ -51,18 +53,18 @@ for(const width of [360,390,768,1440]) {
 // Animated pointer interaction and native vertical scroll on a normal-motion desktop.
 const page=await browser.newPage({viewport:{width:1440,height:900}});
 await page.addInitScript(()=>sessionStorage.setItem('belle:v4:intro','1'));
-await page.goto(`${base}/?tier=static`);await page.waitForSelector('.runway__model');
+await page.goto(`${base}/?tier=static`);await page.locator('#passarela').scrollIntoViewIfNeeded();await page.waitForSelector('.runway__model');
 const bounds=await page.locator('.runway__stage').boundingBox();
 await page.mouse.move(bounds.x+200,bounds.y+bounds.height*.65);await page.mouse.down();
 await page.mouse.move(bounds.x+200+bounds.width*.21,bounds.y+bounds.height*.65,{steps:10});await page.mouse.up();
 await page.waitForFunction(()=>document.getElementById('passarela').dataset.position==='1.0000');
 check(true,'pointer drag eases and snaps to next look');
-await page.mouse.wheel(0,600);await page.waitForFunction(()=>scrollY>100);
+const beforeY=await page.evaluate(()=>scrollY);await page.mouse.wheel(0,600);await page.waitForFunction(y=>scrollY>y+100,beforeY);
 check(true,'vertical wheel keeps native landing scroll');
 await page.close();
 const touchContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
 const touchPage=await touchContext.newPage();
-await touchPage.goto(`${base}/?tier=static`);await touchPage.waitForSelector('.runway__model');
+await touchPage.goto(`${base}/?tier=static`);await touchPage.locator('#passarela').scrollIntoViewIfNeeded();await touchPage.waitForSelector('.runway__model');
 const touchBox=await touchPage.locator('.runway__stage').boundingBox();
 const cdp=await touchContext.newCDPSession(touchPage), y=touchBox.y+touchBox.height*.65;
 await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:40,y}]});

@@ -1,5 +1,6 @@
 import type { Product } from '../commerce/types';
 import { illustrate } from '../core/illustration';
+import { productImage } from '../commerce/media';
 const NS = 'http://www.w3.org/2000/svg';
 export function crop(src: string, box: readonly number[], sheet: readonly number[]): SVGSVGElement {
   const [x,y,w,h] = box;
@@ -16,10 +17,7 @@ export function crop(src: string, box: readonly number[], sheet: readonly number
 // Render local artwork immediately. A failed reference request never hides the interface.
 export function mountEditorialMedia(host: HTMLElement, product: Product): void {
   if (product.cutout) {
-    const img = document.createElement('img');
-    img.src = product.cutout;
-    img.alt = 'Referência editorial de '+product.title+', não é produto cadastrado da Belle';
-    img.loading = 'lazy'; img.decoding = 'async';
+    const img = productImage(product, { eager: true });
     img.className = 'editorial-product-image';
     host.replaceChildren(img);
     return;

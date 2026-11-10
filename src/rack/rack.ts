@@ -22,6 +22,7 @@ interface Piece {
   shadow: HTMLElement;
   x: number; vx: number; s: number; vs: number; y: number; vy: number;
   theta: number; omega: number; prevVx: number;
+  width: number; height: number; padTop: number; body: number; bodyV: number; hem: number; hemV: number;
   g: number; // magnificação atual (0..1)
   nextGust: number;
   enterAt: number; entered: boolean;
@@ -40,8 +41,8 @@ const MAG = 0.5; // ganho de escala da peça focada (referência ≈ 1,4–1,6×
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initRack(stage: HTMLElement, card: HTMLElement | null): RackController {
-  // Hero rack curated to 20 pieces; all 48 remain discoverable in the catalog.
-  const products=DEMO_CATALOG.filter(p=>p.cutout&&p.active&&(p.category==='vestidos'||Number(p.slug.slice(-2))<=2));
+  // Only apparel belongs on hangers; every one of the 30 garments is reachable.
+  const products=DEMO_CATALOG.filter(p=>p.cutout&&p.active&&['camisas','croppeds','vestidos','saias','calcas'].includes(p.category));
   const layer = document.createElement('div');
   layer.className = 'rack';
   layer.id = 'arara-viva';
@@ -67,13 +68,15 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
     el.className = 'rack__piece';
     el.tabIndex = i === Math.floor(products.length / 2) ? 0 : -1;
     el.dataset.id = p.id;
-    el.setAttribute('aria-label', `${p.title}. Estudo 3D demonstrativo. Abrir ficha`);
-    el.innerHTML = `<span class="rack__shadow" aria-hidden="true"></span><img src="${p.cutout}" alt="" draggable="false" decoding="async" width="720" height="1200">`;
+    el.setAttribute('aria-label', `${p.title}. Packshot sintético demonstrativo. Abrir ficha`);
+    const clips = p.category === 'saias' || p.category === 'calcas';
+    const hanger = `<svg viewBox="0 0 100 40" aria-hidden="true"><path d="M50 17v-4c0-4 7-3 7-8 0-6-10-6-10 0"/><path d="${clips ? 'M50 17v6M10 25h80M15 24v10m70-10v10' : 'M50 17 8 35q42 5 84 0L50 17'}"/></svg>`;
+    el.innerHTML = `<span class="rack__shadow" aria-hidden="true"></span><span class="rack__hanger">${hanger}</span><span class="rack__cloth"><img src="${p.cutout}" alt="" draggable="false" decoding="async"><span class="rack__hem" style="background-image:url('${p.cutout}')"></span></span>`;
     li.appendChild(el);
     list.appendChild(li);
     return {
       p, i, el, img: el.querySelector('img')!, shadow: el.querySelector<HTMLElement>('.rack__shadow')!,
-      x: 0, vx: 0, s: 1, vs: 0, y: 0, vy: 0, theta: 0, omega: 0, prevVx: 0, g: 0,
+      x: 0, vx: 0, s: 1, vs: 0, y: 0, vy: 0, theta: 0, omega: 0, prevVx: 0, width:0, height:0, padTop:0, body:0, bodyV:0, hem:0, hemV:0, g: 0,
       nextGust: 0, enterAt: 0, entered: false,
     };
   });
@@ -93,13 +96,17 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
   let lastInput = 0;
   let touchFocusUntil = 0;
   let kbIndex = -1;
+  let keyboardRequest = 0;
   let drag: { x0: number; y0: number; off0: number; lastX: number; lastT: number; v: number; dragging: boolean; id: number } | null = null;
   let phase = 'rack-idle';
   let viewerFor: Piece | null = null;
   let introDone = false;
   let attract = 0;
 
-  const bag = createBag((trigger) => commerceApi()?.openBag(trigger));
+  const bag = createBag((trigger) => {
+    if(viewerFor)void viewer.close(()=>commerceApi()?.openBag(trigger));
+    else commerceApi()?.openBag(trigger);
+  });
   const syncCount = () => bag.setCount(commerceApi()?.count() ?? 0);
   syncCount();
   commerceApi()?.onChange(syncCount);
@@ -124,8 +131,10 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
   // ---------- geometria ----------
   function measure(): void {
     const r = layer.getBoundingClientRect();
+    const centerIndex = geo.bw > 0 ? (offset + (geo.railR - geo.railL) / 2) / geo.bw : pieces.length / 2;
     const w = r.width;
     const h = r.height;
+    if (w < 100 || h < 100) return;
     const mobile = w < 900;
     if (mobile) {
       const cardTop = card ? Math.min(h, card.getBoundingClientRect().top - r.top) : h * 0.6;
@@ -139,18 +148,19 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
       geo = { w, h, railL, railR, railY, bw, pw: ph * 0.6, ph, floorY: railY + ph * 1.5, mobile };
     } else {
       const cardR = card ? card.getBoundingClientRect().right - r.left : w * 0.32;
-      const railL = Math.max(w * 0.36, cardR + 48);
+      const railL = Math.min(w * .64, Math.max(w * 0.36, cardR + 48));
       const railR = w - Math.max(90, w * 0.06);
       const railY = Math.max(120, h * 0.24);
       // densidade da referência: cabides quase encostados, peças se sobrepondo levemente
       const visible = Math.max(6, Math.min(9.5, (railR - railL) / 88));
       const bw = (railR - railL) / visible;
-      const ph = Math.min(bw * 3.35, (h - railY - 70) / 1.6);
+      const ph = Math.max(110, Math.min(bw * 3.35, (h - railY - 70) / 1.6));
       geo = { w, h, railL, railR, railY, bw, pw: ph * 0.6, ph, floorY: railY + ph * 1.55, mobile };
     }
     const content = pieces.length * geo.bw;
     const railW = geo.railR - geo.railL;
-    if (!introDone) offset = (content - railW) / 2;
+    offset = introDone ? centerIndex * geo.bw - railW / 2 : (content - railW) / 2;
+    offsetTarget = null; offsetV = 0;
     offset = clampOffset(offset);
     // moldura de latão e trilho de luz
     frameEl.style.left = `${geo.railL - geo.bw * 0.25}px`;
@@ -160,9 +170,17 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
     track.style.left = `${geo.railL - geo.bw * 0.4}px`;
     track.style.width = `${railW + geo.bw * 0.8}px`;
     pieces.forEach((pc) => {
-      pc.el.style.width = `${geo.pw}px`;
-      pc.el.style.height = `${geo.ph}px`;
+      const relative = { vestidos: 1, camisas: .57, croppeds: .35, saias: .58, calcas: .85 }[pc.p.category as 'vestidos'] ?? .7;
+      const dims = pc.p.cutoutSize ?? [720,1200];
+      pc.height = geo.ph * relative;
+      pc.width = pc.height * dims[0] / dims[1];
+      pc.padTop = pc.height * (pc.p.cutoutBounds?.[1] ?? 30) / dims[1];
+      pc.el.style.width = `${pc.width}px`;
+      pc.el.style.height = `${pc.height}px`;
+      pc.el.style.transformOrigin = `50% ${pc.padTop - 28}px`;
+      pc.el.style.setProperty('--hanger-top', `${pc.padTop - 28}px`);
     });
+    list.style.clipPath = `inset(0 ${Math.max(0,w-geo.railR-geo.bw*.35)}px 0 ${Math.max(0,geo.railL-geo.bw*.35)}px)`;
     placeBag();
   }
   function clampOffset(o: number): number {
@@ -210,12 +228,8 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
   function step(now: number, dt: number): void {
     const railW = geo.railR - geo.railL;
     const calm = reduce();
-    // vitrine automática: sem interação, o foco passeia sozinho (como no vídeo)
-    const idleFor = now - lastInput;
-    if (!calm && !viewerFor && idleFor > 3500 && pointerX === null && kbIndex < 0 && now > touchFocusUntil && !drag) {
-      attract += dt;
-      fx = geo.railL + railW * (0.5 + 0.38 * Math.sin(attract * 0.42));
-    } else if (pointerX !== null && !drag) {
+    // The reference responds to a gesture; it does not autoplay through the garments.
+    if (pointerX !== null && !drag) {
       fx = pointerX;
     } else if (kbIndex >= 0 && pieces[kbIndex]) {
       fx = baseX(kbIndex);
@@ -280,6 +294,7 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
       pc.vy += ((0 - pc.y) * 160 - pc.vy * 16) * dt;
       pc.y += pc.vy * dt;
       pc.g += (g - pc.g) * Math.min(1, dt * 10);
+      if (calm) { pc.x=tx;pc.s=ts;pc.y=0;pc.theta=0;pc.omega=0;pc.body=0;pc.bodyV=0;pc.hem=0;pc.hemV=0; }
       // pêndulo: aceleração do gancho + roçar do cursor + rajadas irregulares
       if (!calm) {
         const ax = (pc.vx - pc.prevVx) / dt;
@@ -300,24 +315,31 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
         pc.omega += (torque - k * pc.theta - c * pc.omega) * dt;
         pc.theta = Math.max(-0.38, Math.min(0.38, pc.theta + pc.omega * dt));
       }
+      pc.bodyV += ((pc.theta * .38 - pc.body) * 75 - pc.bodyV * 13) * dt;
+      pc.body += pc.bodyV * dt;
+      pc.hemV += ((pc.body * .7 - pc.hem) * 58 - pc.hemV * 11) * dt;
+      pc.hem += pc.hemV * dt;
       if (g > bestG) { bestG = g; best = i; }
     }
 
     // render: transform com origem no gancho; z pela magnificação
     for (const pc of pieces) {
-      const left = pc.x - geo.pw / 2;
-      const top = geo.railY - geo.ph * 0.025 + pc.y;
+      const left = pc.x - pc.width / 2;
+      const top = geo.railY + 28 - pc.padTop + pc.y;
       pc.el.style.transform = `translate3d(${left.toFixed(1)}px, ${top.toFixed(1)}px, 0) rotate(${pc.theta.toFixed(4)}rad) scale(${pc.s.toFixed(4)})`;
       pc.el.style.zIndex = String(10 + Math.round(pc.g * 40));
       pc.el.style.setProperty('--g', pc.g.toFixed(3));
+      pc.el.style.setProperty('--body-sway', `${pc.body.toFixed(5)}rad`);
+      pc.el.style.setProperty('--hem-sway', `${pc.hem.toFixed(5)}rad`);
       pc.el.classList.toggle('is-focus', pieces.indexOf(pc) === best);
     }
     // etiqueta sob a peça em foco
     const focus = best >= 0 ? pieces[best]! : null;
     if (focus && !viewerFor) {
       labelName.textContent = focus.p.title;
-      const ly = Math.min(geo.railY + geo.ph * focus.s * 0.99 + 14, geo.mobile ? geo.floorY - 4 : geo.h - 60);
+      const ly = Math.min(geo.railY + (focus.height - focus.padTop) * focus.s + 42, geo.mobile ? geo.floorY - 4 : geo.h - 60);
       const lx = Math.max(geo.mobile ? 120 : 160, Math.min(geo.w - (geo.mobile ? 120 : 160), focus.x));
+      label.style.setProperty('--label-y', `${ly.toFixed(1)}px`);
       label.style.transform = `translate3d(${lx.toFixed(1)}px, ${ly.toFixed(1)}px, 0) translateX(-50%)`;
       label.classList.add('is-on');
     } else label.classList.remove('is-on');
@@ -332,7 +354,7 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
       pc.entered = false;
       pc.enterAt = now + 120 + Math.abs(pc.i - mid) * 75;
     });
-    lastInput = now - 1500; // a vitrine automática começa ~2 s depois
+    lastInput = now;
     introDone = true;
   }
 
@@ -426,7 +448,7 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
       openPiece(pc);
     });
     pc.el.addEventListener('focus', () => {
-      kbIndex = pc.i;
+      kbIndex = pc.i; pointerX = null;
       pieces.forEach((x) => (x.el.tabIndex = x === pc ? 0 : -1));
       ensureVisible(pc.i);
       lastInput = performance.now();
@@ -435,15 +457,24 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
     pc.el.addEventListener('blur', () => { if (kbIndex === pc.i) kbIndex = -1; });
     pc.el.addEventListener('keydown', (e) => {
       const k = e.key;
+      if (k === 'Enter' || k === ' ') { e.preventDefault(); openPiece(pc); return; }
       let n = -1;
-      if (k === 'ArrowRight') n = Math.min(pieces.length - 1, pc.i + 1);
-      else if (k === 'ArrowLeft') n = Math.max(0, pc.i - 1);
+      const currentIndex = kbIndex >= 0 ? kbIndex : pc.i;
+      if (k === 'ArrowRight') n = Math.min(pieces.length - 1, currentIndex + 1);
+      else if (k === 'ArrowLeft') n = Math.max(0, currentIndex - 1);
       else if (k === 'Home') n = 0;
       else if (k === 'End') n = pieces.length - 1;
       if (n >= 0) {
         e.preventDefault();
         pieces[n]!.omega += (n > pc.i ? -1 : 1) * 0.35;
-        pieces[n]!.el.focus({ preventScroll: true });
+        kbIndex=n;pointerX=null;ensureVisible(n);kick();
+        const request=++keyboardRequest, start=performance.now();
+        const focusWhenVisible=()=>{
+          if(request!==keyboardRequest||!active||viewerFor)return;
+          pieces[n]!.el.focus({preventScroll:true});
+          if(document.activeElement!==pieces[n]!.el&&performance.now()-start<2000)requestAnimationFrame(focusWhenVisible);
+        };
+        focusWhenVisible();
       }
     });
   });
@@ -463,6 +494,8 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
 
   // ---------- ciclo de vida ----------
   addEventListener('resize', () => { if (active) { measure(); kick(); } }, { passive: true });
+  const layoutObserver = new ResizeObserver(() => { if (active) { measure(); kick(); } });
+  layoutObserver.observe(layer); if(card)layoutObserver.observe(card);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
 
   return {

@@ -1,7 +1,7 @@
 import '../styles/runway.css';
 import type { Ctx } from '../commerce/ui/context';
 import { heart } from '../commerce/ui/icons';
-import { MODEL_BOXES, FALLBACKS, RUNWAY_PRODUCTS } from './data';
+import { RUNWAY_PRODUCTS } from './data';
 import { mountEditorialMedia } from './media';
 import { depthAt, railOffset, wrap } from './depth';
 
@@ -21,12 +21,13 @@ export function initRunway(ctx: Ctx): () => void {
   let down = false, startX = 0, startY = 0, start = 0, moved = 0, pointer = -1, hitIndex: number | null = null;
   let wheelTimer = 0, mx = 0, my = 0, cx = 0, cy = 0, cursor = false, announced = -1;
 
-  const people = MODEL_BOXES.map(([a,b], i) => {
-    const el = document.createElement('div'); el.className = 'runway__model'; el.dataset.look = String(i);
-    // Existing transparent garment renders are an explicit fallback, never fake model photos.
-    el.innerHTML = `<img src="/editorial/${FALLBACKS[i]}.webp" alt="Peça editorial conceitual do look ${15+i}" width="360" height="480" draggable="false">`;
+  const people = Array.from({length:6}, (_,i) => {
+    const product=RUNWAY_PRODUCTS[i*2]!;
+    const el=document.createElement('div');el.className='runway__model';el.dataset.look=String(i);el.dataset.productId=product.id;
+    const [w,h]=product.cutoutSize ?? [600,900];
+    el.innerHTML=`<img src="${product.cutout}" alt="${product.title}, estudo sintético" width="${w}" height="${h}" draggable="false">`;
     line.append(el);
-    return { el, ratio: (b-a)/448 };
+    return {el,ratio:w/h,product};
   });
   const cards = RUNWAY_PRODUCTS.map((product, i) => {
     const el = document.createElement('article'); el.className = 'runway__card'; el.dataset.product = product.id;
@@ -53,8 +54,14 @@ export function initRunway(ctx: Ctx): () => void {
   }
   function paint() {
     people.forEach((model,i) => {
-      const d=depthAt(i,p), h=d.height*height, scale=h/base;
-      model.el.style.transform=`translate3d(${d.x*width-h*model.ratio/2}px,${d.feet*height-h}px,0) scale(${scale})`;
+      const d=depthAt(i,p), category=model.product.category;
+      const relative: Record<string,number>={vestidos:1,camisas:.57,croppeds:.35,saias:.58,calcas:.85};
+      const h=d.height*height*(relative[category] ?? .65), scale=h/base;
+      const modelWidth=h*model.ratio;
+      const fitCenter=Math.max(modelWidth/2+12,Math.min(width-modelWidth/2-12,d.x*width));
+      const fitWeight=d.depth<0?1-Math.min(1,-d.depth):1;
+      const center=d.x*width+(fitCenter-d.x*width)*fitWeight;
+      model.el.style.transform=`translate3d(${center-modelWidth/2}px,${d.feet*height-h}px,0) scale(${scale})`;
       model.el.style.filter=d.blur<.2?'none':`blur(${d.blur/scale}px)`;
       model.el.style.opacity=String(d.opacity); model.el.style.zIndex=String(d.z);
     });
@@ -130,7 +137,7 @@ export function initRunway(ctx: Ctx): () => void {
   window.addEventListener('resize',size,{signal});
   document.body.classList.add('is-runway-visible');
   const io=typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);document.body.classList.toggle('is-runway-visible',visible);if(visible)wake();else{cancelAnimationFrame(raf);raf=0;} }) : null; io?.observe(root);
-  root.dataset.media='fallback'; // original reference sheet removed: all images from editorial category assets
+  root.dataset.media='products'; // Only approved-for-demo isolated garment assets, never people/sprites.
   size(); paint();
   return () => {document.body.classList.remove('is-runway-visible');destroyed=true;abort.abort();unsub();ro?.disconnect();io?.disconnect();cancelAnimationFrame(raf);clearTimeout(wheelTimer);};
 }

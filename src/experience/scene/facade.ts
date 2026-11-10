@@ -9,6 +9,7 @@ import { signTexture, monogramTexture } from '../textures';
 import { staticDressGeometry } from '../cloth/dress';
 import { TONES, type Silhouette, type Tone } from '../../core/dress';
 import type { Tier } from '../../core/tier';
+import { supportedProduct } from './product';
 
 export interface FacadeHandle {
   group: THREE.Group;
@@ -102,8 +103,12 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
 
   // vitrines: caixa rasa, fundo quente, plinto, manequins com vestidos-estudo
   const backMat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissive: new THREE.Color('#f3dfbd'), emissiveIntensity: 0.38, emissiveMap: kit.glowTex, roughness: 0.9 });
-  const editorialLoader = new THREE.TextureLoader();
-  const facadeEditorial = ['vestidos-01','camisas-03','vestidos-02','croppeds-03'] as const;
+  const facadeProducts = [
+    { slug: 'vestidos-01', height: 1.48, top: false, y: .55 },
+    { slug: 'camisas-03', height: .72, top: true, y: 2.15 },
+    { slug: 'vestidos-02', height: 1.48, top: false, y: .55 },
+    { slug: 'croppeds-03', height: .40, top: true, y: 2.15 },
+  ] as const;
   const windows: { x: number; forms: [Silhouette, Tone, number, number][] }[] = [
     { x: -3.8, forms: [['fluido', 'champagne', -0.75, 3], ['classico', 'perola', 0.8, 5]] },
     { x: 3.8, forms: [['marcante', 'noite', -0.55, 2], ['fluido', 'terracota', 0.85, 8]] },
@@ -126,29 +131,19 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
     top.position.set(w.x, 3.4, -0.6);
     g.add(top);
     g.add(box(3.4, 0.03, 0.05, kit.light, w.x, 3.38, -0.2));
-    for (const [sil, tone, dx, seed] of w.forms) {
-      const form = dressForm(kit, sil, tone, seed);
-      form.position.set(w.x + dx, 0.55, -0.75);
-      form.rotation.y = -dx * 0.25;
-      g.add(form);
-      // Graphic store display uses authorized synthetic editorial alpha, with true 3D mesh fallback.
-      // This is a textured flat photo plane, not a reconstructed cloth mesh.
-      const idx = (w.x<0?0:2)+(dx<0?0:1);
-      const slug = facadeEditorial[idx]!;
-      const planeMat = new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,alphaTest:.04,side:THREE.DoubleSide,toneMapped:false});
-      const photo = new THREE.Mesh(new THREE.PlaneGeometry(1.12,1.86),planeMat);
-      photo.position.set(w.x+dx,1.76,-0.65);
-      photo.visible=false;
-      photo.userData.editorialSlug=slug;
-      g.add(photo);
-      editorialLoader.load('/editorial/'+slug+'.webp',(tx)=>{
-        tx.colorSpace=THREE.SRGBColorSpace;
-        tx.anisotropy=2;
-        planeMat.map=tx;planeMat.needsUpdate=true;
-        photo.visible=true;form.visible=false;
-      },undefined,()=>{photo.visible=false;form.visible=true;});
-      g.add(contact(kit, 0.9, 0.7, w.x + dx, -0.75, 0.556));
+    for (const [, , dx] of w.forms) {
+      const index = (w.x < 0 ? 0 : 2) + (dx < 0 ? 0 : 1);
+      const entry = facadeProducts[index]!;
+      const display = supportedProduct(kit, entry.slug, entry.height, entry.y, entry.top);
+      display.position.set(w.x + dx, 0, -.65);
+      // Window photos remain frontal, behind the real glass and its architectural occlusion.
+      g.add(display);
+      g.add(contact(kit, .72, .45, w.x + dx, -.65, .556));
     }
+    // Bags have their own low stone pedestal rather than sharing a garment hanger.
+    const accessory = supportedProduct(kit, w.x < 0 ? 'bolsas-01' : 'bolsas-02', .30, .85);
+    accessory.position.set(w.x + (w.x < 0 ? .05 : -.05), 0, -.32);
+    g.add(accessory);
     const glass = plane(3.6, 2.85, kit.glass);
     glass.position.set(w.x, 1.975, 0.16);
     g.add(glass);

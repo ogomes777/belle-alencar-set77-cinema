@@ -21,6 +21,7 @@ export interface FlightOptions {
   target: FlightTarget;
   onImpact: () => void; // adicionar/persistir aqui (contador só muda no impacto)
   duration?: number;
+  productId?: string;
 }
 
 const prefersReduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -30,7 +31,7 @@ export function isFlying(): boolean {
   return running;
 }
 
-export function flyToBag(o: FlightOptions): Promise<void> {
+export async function flyToBag(o: FlightOptions): Promise<void> {
   if (running) return Promise.resolve(); // idempotência: sem add duplicado
   const r0 = o.from.getBoundingClientRect();
   if (prefersReduced() || r0.width < 4) {
@@ -39,14 +40,17 @@ export function flyToBag(o: FlightOptions): Promise<void> {
     return Promise.resolve();
   }
   running = true;
+  // Decode the actual cutout before flight: catalogue packshots are a different canvas.
+  try { const image = new Image(); image.src=o.image; await image.decode(); }
+  catch { try { o.onImpact(); o.target.impact(); } finally { running=false; } return; }
   const W = r0.width;
   const H = r0.height;
   // gancho = topo-centro do recorte (onde o vestido "pende")
   const p0 = { x: r0.left + W / 2, y: r0.top + H * 0.03 };
   const m = o.target.mouth();
   // ao fim, o vestido deve caber na boca: altura final ~ 1,25 × largura da boca
-  const sEnd = Math.max(0.035, (m.w * 1.25) / H);
-  const p3 = { x: m.x, y: m.y - H * sEnd * 0.35 };
+  const sEnd = Math.max(0.025, Math.min(m.w * .72 / W, m.w * .95 / H));
+  const p3 = { x: m.x, y: m.y - H * sEnd * 1.05 + H * .03 };
   const dx = p3.x - p0.x;
   const dy = p3.y - p0.y;
   // arco: sobe com clareza, cruza a tela e desce por cima da boca da bolsa
@@ -56,6 +60,8 @@ export function flyToBag(o: FlightOptions): Promise<void> {
 
   const ghost = document.createElement('div');
   ghost.className = 'dress-ghost';
+  ghost.dataset.productId = o.productId ?? o.from.dataset.productId ?? '';
+  ghost.dataset.source = o.image;
   ghost.style.width = `${W}px`;
   ghost.style.height = `${H}px`;
   ghost.style.zIndex = String(o.target.ghostZ);
@@ -107,6 +113,7 @@ export function flyToBag(o: FlightOptions): Promise<void> {
       running = false;
       removeEventListener('keydown', onKey, true);
       removeEventListener('resize', finish);
+      motion.removeEventListener('change', finish);
       document.removeEventListener('visibilitychange', onVis);
       resolve();
     };
@@ -114,6 +121,8 @@ export function flyToBag(o: FlightOptions): Promise<void> {
     const onVis = () => { if (document.hidden) finish(); };
     addEventListener('keydown', onKey, true);
     addEventListener('resize', finish);
+    const motion=matchMedia('(prefers-reduced-motion: reduce)');
+    motion.addEventListener('change', finish);
     document.addEventListener('visibilitychange', onVis);
 
     const frame = (now: number) => {
@@ -151,17 +160,16 @@ export function flyToBag(o: FlightOptions): Promise<void> {
       ghost.style.transform = `translate3d(${(x - W / 2).toFixed(1)}px, ${(y - H * 0.03).toFixed(1)}px, 0) rotate(${rot.toFixed(4)}rad) scale(${s.toFixed(4)})`;
       skirt.style.transform = `rotate(${(phi * fade * 0.8).toFixed(4)}rad)`;
       shadow.style.opacity = String(0.35 * (1 - raw));
-      // impacto: quando a barra (base) do vestido cruza a boca
-      const hemY = y - H * 0.03 + H * s * 0.97;
-      if (!impacted && raw > 0.6 && hemY >= m.y + 2) {
-        impacted = true;
-        o.onImpact();
-        o.target.impact();
-      }
+      // The whole miniature goes behind the front lip before the cart is committed.
       if (raw >= 1) {
         // afunda mais 110 ms atrás do lábio antes de sumir
-        const sink = Math.min(1, (el - ANT - D) / 110);
-        ghost.style.transform = `translate3d(${(x - W / 2).toFixed(1)}px, ${(y - H * 0.03 + sink * H * s * 0.6).toFixed(1)}px, 0) rotate(0rad) scale(${(s * (1 - sink * 0.35)).toFixed(4)})`;
+        const sink = Math.min(1, (el - ANT - D) / 160);
+        ghost.style.transform = `translate3d(${(x - W / 2).toFixed(1)}px, ${(y - H * 0.03 + sink * H * sEnd * 1.2).toFixed(1)}px, 0) rotate(0rad) scale(${(s * (1 - sink * 0.35)).toFixed(4)})`;
+        if (!impacted && sink >= .92) {
+          impacted = true;
+          o.onImpact(); o.target.impact();
+          ghost.dataset.phase = 'impact';
+        }
         if (sink >= 1) return finish();
       }
       raf = requestAnimationFrame(frame);

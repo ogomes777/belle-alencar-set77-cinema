@@ -4,7 +4,7 @@ Boutique feminina cinematográfica em primeira pessoa (Three.js + GSAP) com jorn
 
 ## Rodar
 ```bash
-npm install
+npm ci
 npm run dev          # desenvolvimento (Vite)
 npm test             # Vitest: lógica comercial + integração DOM
 npm run build        # typecheck + build de produção em dist/
@@ -14,7 +14,7 @@ npm run check        # verificação estrutural
 node scripts/render-posters.mjs   # regenera os pôsteres do modo estático a partir do 3D
 npm run legacy       # V3 original (referência/rollback) em legacy/v3
 ```
-Parâmetros úteis: `?tier=cinema|touch|static`, `?loja=araxa`, `?peca=vestido-longo-fluido`, `?categoria=vestidos`, `?gov=off` (só QA).
+Parâmetros úteis: `?tier=cinema|touch|static`, `?loja=araxa`, `?peca=vestidos-01`, `?categoria=vestidos`, `?gov=off` (só QA).
 
 ## Estrutura
 - `index.html`: shell semântico, legível sem JS.
@@ -30,12 +30,21 @@ Parâmetros úteis: `?tier=cinema|touch|static`, `?loja=araxa`, `?peca=vestido-l
 Ver `docs/RELEASE_REPORT.md` (o que foi construído, medido, publicado como preview e o que falta).
 
 
-## Passarela em profundidade
+## Produtos e passarela
 
-A primeira dobra inclui seis looks em loop, arraste/toque, setas do teclado, botões anterior/próximo e trilho sincronizado com duas peças por look. A rolagem vertical continua levando para a boutique; trackpad horizontal ou Shift + roda controla a passarela. Movimento reduzido troca os looks diretamente.
+A sequência preservada é filme → manifesto → faixa → passarela → ocasiões. Os 48 estudos sintéticos novos têm oito categorias com seis peças, IDs estáveis, cutouts para cenas/voo e packshots transparentes para catálogo, busca, ficha e sacola. Todos permanecem demonstrações: sem preço ou estoque confirmado, sem checkout.
 
-As peças do editorial são demonstrativas, sem preço ou estoque real, e usam os mesmos favoritos e sacolas por filial. O botão + abre a escolha de tamanho antes de adicionar.
+`public/assets/belle/products/catalogo_48_novo.json` registra a origem fornecida e a correção do vestido 06. Nenhuma cena ativa usa as imagens antigas de `/editorial`. PNG/WebP transparentes são fotografias frontais 2.5D, não malhas 3D nem prova virtual. O estudo de tecido procedural é separado dos produtos.
 
-Para usar as duas sprites originais da referência fornecida, execute `node scripts/fetch-runway-media.mjs` e refaça o build. São necessários os domínios `images.higgs.ai` e, caso haja redirecionamento, `d8j0ntlcm91z4.cloudfront.net`. Sem as sprites, os estudos locais são exibidos com identificação; a interface não depende de requisições externas.
+A passarela tem seis looks em loop, arraste/toque, setas, botões e trilho sincronizado. A rolagem vertical permanece nativa. A arara contém as 30 roupas em cabides/presilhas; joias e bolsas ficam em expositores. A miniatura mantém a identidade da peça até entrar atrás da borda da bolsa; o contador atualiza no impacto.
 
-Teste específico: `node tests/e2e/runway.mjs` com Playwright disponível e `npm run preview` ativo. `BASE` altera o servidor; `SHOTS=1` salva capturas e `SHOTS_DIR` altera a pasta. Nesta nuvem: `NODE_PATH=/workspace/.belle-tools/node_modules NODE_OPTIONS=--require=/workspace/.belle-tools/system-chromium.cjs node tests/e2e/runway.mjs`.
+Validação adicional:
+
+```bash
+python scripts/audit_product_alpha.py
+node tests/e2e/products.mjs     # preview ativo, Playwright disponível
+```
+
+`BASE` altera o servidor. `SHOTS_DIR` e `VIDEO_DIR` alteram as pastas de evidência. Nesta nuvem, use `NODE_PATH=/workspace/.belle-tools/node_modules NODE_OPTIONS=--require=/workspace/.belle-tools/system-chromium.cjs` antes dos comandos de navegador para selecionar o Chromium instalado.
+
+Consulte `reports/RELEASE_EVIDENCE.md` para commits, testes, capturas, limitações e situação real do Preview. Produção só após revisão visual e autorização expressa.

@@ -7,6 +7,7 @@
  * Nunca intercepta a rolagem (sem scroll hijack).
  */
 import { bus } from './core/bus';
+import { productById } from './commerce/catalog.demo';
 import { $, $$, clamp } from './core/dom';
 import { detectCapabilities, resolveTier, type Tier } from './core/tier';
 
@@ -52,7 +53,7 @@ export function initFilm(director: Director): void {
   let active: ChapterId = 'vitrine';
   let filmTop = 0;
   let range = 1;
-  const dressParams: DressParams = { silhouette: 'fluido', tone: 'perola' };
+  const dressParams: DressParams = { silhouette: 'fluido', tone: 'perola', productId: 'belle-demo-vestidos-01' };
 
   document.documentElement.dataset.tier = tier;
   const debug: FilmDebug = { tier, progress: 0, chapter: active, world: () => world?.info() ?? null };
@@ -172,6 +173,13 @@ export function initFilm(director: Director): void {
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', () => requestAnimationFrame(measure), { passive: true });
   if ('fonts' in document) document.fonts.ready.then(measure).catch(() => undefined);
+  // Product previews can change chapter heights after font/image readiness.
+  // Recompute normalized spans whenever the real document geometry changes.
+  if (typeof ResizeObserver !== 'undefined') {
+    const geometryObserver = new ResizeObserver(measure);
+    geometryObserver.observe(film);
+    articles.forEach(article => geometryObserver.observe(article));
+  }
   measure();
   setActive('vitrine');
   // pré-carrega a arara em idle para a chegada ser instantânea
@@ -208,6 +216,7 @@ export function initFilm(director: Director): void {
       });
       world.setSpans(spans);
       world.setDress(dressParams);
+      await world.readyMedia();
       world.setProgress(progress, true);
       mod.initReveals(film!);
       if (posterMode) {
@@ -296,12 +305,11 @@ export function initFilm(director: Director): void {
     $$<HTMLButtonElement>('[data-silhouette]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.silhouette === dressParams.silhouette)));
     $$<HTMLButtonElement>('[data-tone]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tone === dressParams.tone)));
     if (fittingStatic) {
-      const productSlug = dressParams.tone==='noite'?'vestidos-05'
-        :dressParams.tone==='vinho'?'vestidos-02'
-        :dressParams.tone==='gelo'?'vestidos-04'
-        :dressParams.silhouette==='classico'?'vestidos-03'
-        :dressParams.silhouette==='marcante'?'vestidos-02':'vestidos-01';
-      fittingStatic.innerHTML = '<img class="editorial-cutout" src="/editorial/'+productSlug+'.webp" alt="Estudo editorial de vestido, sem prova real de caimento" width="360" height="480">';
+      const selected = productById(dressParams.productId ?? 'belle-demo-vestidos-01');
+      if (selected?.cutout) {
+        fittingStatic.dataset.productId = selected.id;
+        fittingStatic.innerHTML = `<img class="editorial-cutout" src="${selected.cutout}" alt="${selected.title}, estudo sintético em vista frontal" width="${selected.cutoutSize?.[0] ?? 600}" height="${selected.cutoutSize?.[1] ?? 900}"><p class="fineprint">${selected.title} · vista frontal demonstrativa, sem simulação de prova.</p>`;
+      }
     }
     world?.setDress(dressParams);
   }
@@ -325,6 +333,7 @@ export function initFilm(director: Director): void {
   bus.on('dress:try', (p) => {
     dressParams.silhouette = p.silhouette;
     dressParams.tone = p.tone;
+    dressParams.productId = p.productId ?? dressParams.productId;
     syncFitting();
     const sp = spans.find((s) => s.id === 'provador');
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;

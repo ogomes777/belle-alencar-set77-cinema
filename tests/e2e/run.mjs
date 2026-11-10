@@ -139,7 +139,7 @@ for (const vp of viewports) {
   check('adicionar sem tamanho mostra erro', err);
   await page.locator('.qv .size').first().click();
   await page.click('[data-add]');
-  await page.waitForTimeout(400);
+  await page.waitForFunction(() => document.querySelector('[data-bag-count]')?.textContent?.trim() === '1', null, { timeout: 10000 });
   const count = await page.textContent('[data-bag-count]');
   check('sacola conta 1 peça', count?.trim() === '1', count || '');
   if (SHOTS) await page.screenshot({ path: `${OUT}/390-quickview.png` });
@@ -170,7 +170,7 @@ for (const vp of viewports) {
 {
   const { ctx, page } = await newPage({ viewport: { width: 1440, height: 900 } });
   await skipIntro(page);
-  await page.goto(`${BASE}/?tier=static&peca=vestido-longo-fluido`, { waitUntil: 'load' });
+  await page.goto(`${BASE}/?tier=static&peca=vestidos-01`, { waitUntil: 'load' });
   await page.waitForTimeout(600);
   check('?peca= abre o quick view', await page.locator('.qv').isVisible());
   await page.keyboard.press('Escape');
@@ -204,11 +204,11 @@ for (const vp of viewports) {
   await page.waitForTimeout(900);
   const occPressed = await page.getAttribute('[data-occ="noite"]', 'aria-pressed');
   const cards = await page.locator('.pgrid .pcard').count();
-  check('ocasião "Para sair" filtra a coleção', occPressed === 'true' && cards > 0 && cards < 17, `pressed=${occPressed} cards=${cards}`);
+  check('ocasião "Para sair" filtra a coleção', occPressed === 'true' && cards > 0 && cards < 48, `pressed=${occPressed} cards=${cards}`);
   const counts = await page.locator('[data-occ-count]').allTextContents();
   check('contagem por ocasião vem do catálogo', counts.every((t) => /\d+ peças? na prévia/.test(t)), counts.join(' | '));
-  await page.locator('[data-open-product="bolsa-estruturada"]').scrollIntoViewIfNeeded();
-  await page.click('[data-open-product="bolsa-estruturada"]');
+  await page.locator('[data-open-product="bolsas-03"]').scrollIntoViewIfNeeded();
+  await page.click('[data-open-product="bolsas-03"]');
   const qv = await page.waitForSelector('.qv', { state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
   check('look completo abre a peça (quick view)', qv);
   if (qv) {
@@ -248,9 +248,9 @@ const openFlightReady = async (page, idx) => {
   await page.goto(`${BASE}/?tier=static&loja=araxa`, { waitUntil: 'load' });
   await gotoRack(page);
   const n = await page.locator('.rack__piece').count();
-  check('arara: 11 peças independentes em cabides', n === 11, String(n));
+  check('arara: 30 roupas independentes em cabides', n === 30, String(n));
   // dock: peça sob o cursor cresce ~1,5× e as vizinhas abrem espaço
-  const pt = await page.evaluate(() => { const a = document.querySelectorAll('.rack__piece')[5].getBoundingClientRect(); return [a.left + a.width / 2, a.top + a.height * 0.45]; });
+  const pt = await page.evaluate(() => { const a = document.querySelectorAll('.rack__piece')[15].getBoundingClientRect(); return [a.left + a.width / 2, a.top + a.height * 0.45]; });
   await page.mouse.move(pt[0] - 150, pt[1], { steps: 4 });
   await page.mouse.move(pt[0], pt[1], { steps: 10 });
   await page.waitForTimeout(700);
@@ -264,17 +264,17 @@ const openFlightReady = async (page, idx) => {
   const off1 = (await page.evaluate(() => window.__rack.debug())).offset;
   const sy0 = await page.evaluate(() => scrollY);
   await page.mouse.wheel(0, 300);
-  await page.waitForTimeout(400);
+  await page.waitForFunction((before) => scrollY > before, sy0, { timeout: 3000 }).catch(() => undefined);
   const sy1 = await page.evaluate(() => scrollY);
   check('arara: trackpad horizontal desliza a arara', off1 !== off0, `${off0}→${off1}`);
   check('arara: rolagem vertical NÃO é sequestrada', sy1 > sy0, `${sy0}→${sy1}`);
   await gotoRack(page);
   // teclado: setas trocam a peça, Enter abre a ficha, Esc devolve o foco à mesma peça
-  await page.locator('.rack__piece').nth(4).focus();
+  await page.locator('.rack__piece').nth(14).focus();
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(500);
   const focusedId = await page.evaluate(() => document.activeElement?.dataset.id);
-  check('arara: seta move o foco entre peças', focusedId === (await page.locator('.rack__piece').nth(5).getAttribute('data-id')), focusedId);
+  check('arara: seta move o foco entre peças', focusedId === (await page.locator('.rack__piece').nth(15).getAttribute('data-id')), focusedId);
   await page.keyboard.press('Enter');
   const opened = await page.waitForSelector('.pv:not([hidden])', { timeout: 4000 }).then(() => true).catch(() => false);
   check('arara: Enter abre a ficha editorial da MESMA peça', opened && (await page.textContent('#pvTitle'))?.length > 3);
@@ -283,7 +283,7 @@ const openFlightReady = async (page, idx) => {
   await page.waitForTimeout(300);
   check('arara: Esc fecha e devolve o foco à peça de origem', (await page.evaluate(() => document.activeElement?.dataset.id)) === focusedId);
   // voo: 10 adições seguidas, sem duplicar e sem fantasma órfão
-  await openFlightReady(page, 5);
+  await openFlightReady(page, 15);
   await page.locator('.pv__size').nth(1).click();
   let ok = true;
   for (let i = 1; i <= 10; i++) {
@@ -309,7 +309,7 @@ const openFlightReady = async (page, idx) => {
   await skipIntro(page);
   await page.goto(`${BASE}/?tier=static&loja=frutal`, { waitUntil: 'load' });
   await gotoRack(page);
-  await openFlightReady(page, 3);
+  await openFlightReady(page, 14);
   await page.locator('.pv__size').nth(0).click();
   await page.click('.pv__add');
   await page.waitForTimeout(250);
@@ -323,7 +323,7 @@ const openFlightReady = async (page, idx) => {
   const { ctx, page } = await newPage({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
   await page.goto(`${BASE}/?loja=araxa`, { waitUntil: 'load' });
   await gotoRack(page);
-  await openFlightReady(page, 2);
+  await openFlightReady(page, 13);
   await page.locator('.pv__size').nth(0).click();
   let ghostSeen = false;
   await page.exposeFunction('__ghost', () => { ghostSeen = true; });

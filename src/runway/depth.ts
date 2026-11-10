@@ -11,7 +11,7 @@ export function depthAt(index: number, position: number) {
   const k = Math.max(0, Math.min(6, d + 1));
   const a = Math.floor(k), b = Math.min(6, a + 1), t = k - a;
   const mix = (v: number[]) => v[a]! + (v[b]! - v[a]!) * t;
-  return { x: mix(KX), feet: mix(KF), height: mix(KH), blur: mix(KB), opacity: mix(KO), z: 100 - Math.round(d * 10) };
+  return { depth:d, x: mix(KX), feet: mix(KF), height: mix(KH), blur: mix(KB), opacity: mix(KO), z: 100 - Math.round(d * 10) };
 }
 export function railOffset(index: number, position: number, card: number) {
   const length = 12 * card;
