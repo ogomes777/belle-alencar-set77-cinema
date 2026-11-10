@@ -73,6 +73,8 @@ export class DressRig {
   wind = new THREE.Vector3(0.6, 0, 0.3);
   /** impulso do usuário (arraste no provador) */
   spin = 0;
+  /** semente das dobras (godês) — varia o caimento entre peças */
+  foldSeed = 3;
 
   constructor(private quality: Quality, weave: THREE.Texture) {
     weave.repeat.set(26, 18);
@@ -154,11 +156,15 @@ export class DressRig {
       const rr = row === 0 ? WAIST_R : restRadius(sil, v);
       this.restR[row] = rr;
       const y = -v * spec.length;
+      // godês: ondulação da barra que cresce da cintura para baixo
+      const folds = 6 + (this.foldSeed % 4);
+      const amp = (sil === 'marcante' ? 0.03 + Math.max(0, v - 0.7) * 0.22 : 0.085) * v;
       for (let col = 0; col < C; col++) {
         const a = (col / C) * Math.PI * 2;
         const i = row * C + col;
-        const lx = Math.sin(a) * rr;
-        const lz = Math.cos(a) * rr * Z_RATIO;
+        const fr = row === 0 ? 1 : 1 + amp * Math.sin(a * folds + this.foldSeed * 1.7) + amp * 0.45 * Math.sin(a * (folds * 2 + 1) - this.foldSeed);
+        const lx = Math.sin(a) * rr * fr;
+        const lz = Math.cos(a) * rr * Z_RATIO * fr;
         this.local[i * 3] = lx;
         this.local[i * 3 + 1] = y;
         this.local[i * 3 + 2] = lz;

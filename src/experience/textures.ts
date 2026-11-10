@@ -197,8 +197,34 @@ export function weaveNormal(size = 512): THREE.CanvasTexture {
   return toTexture(c, [1, 1], false);
 }
 
-/** Letreiro em latão: BELLE ALENCAR / MODA & ACESSÓRIOS. */
+let brandLogo: HTMLImageElement | null = null;
+/** Logo oficial vetorizado (public/brand), carregado antes de montar a cena. */
+export function setBrandLogo(img: HTMLImageElement | null): void {
+  brandLogo = img;
+}
+
+/** Letreiro em latão. Usa o logo oficial quando disponível; senão, tipografia. */
 export function signTexture(): THREE.CanvasTexture {
+  if (brandLogo) {
+    const w = 2048;
+    const hgt = 980;
+    const [c, x] = canvas(w, hgt);
+    const ratio = brandLogo.naturalWidth / brandLogo.naturalHeight || 2.07;
+    const dh = hgt * 0.92;
+    const dw = Math.min(w * 0.96, dh * ratio);
+    x.drawImage(brandLogo, (w - dw) / 2, (hgt - dw / ratio) / 2, dw, dw / ratio);
+    x.globalCompositeOperation = 'source-in';
+    const g = x.createLinearGradient(0, 0, 0, hgt);
+    g.addColorStop(0, '#f7e6bb');
+    g.addColorStop(0.5, '#d4b273');
+    g.addColorStop(1, '#a8854c');
+    x.fillStyle = g;
+    x.fillRect(0, 0, w, hgt);
+    const t = toTexture(c);
+    t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+    t.userData.aspect = w / hgt;
+    return t;
+  }
   const w = 2048;
   const hgt = 360;
   const [c, x] = canvas(w, hgt);

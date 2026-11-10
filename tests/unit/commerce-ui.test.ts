@@ -1,3 +1,4 @@
+import { DEMO_CATALOG } from '../../src/commerce/catalog.demo';
 // Integração DOM: initCommerce sobre o index.html real (jsdom).
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import indexHtml from '../../index.html?raw';
@@ -21,10 +22,10 @@ beforeAll(async () => {
 });
 
 describe('initCommerce (DOM)', () => {
-  it('renderiza 12 cards demonstrativos com selo e sem preço', () => {
+  it('renderiza um card por peça demonstrativa, com selo e sem preço', () => {
     const cards = document.querySelectorAll('#catalogMount .pcard');
-    expect(cards).toHaveLength(12);
-    expect(document.querySelector('.pcard .badge')?.textContent).toContain('Ilustração');
+    expect(cards).toHaveLength(DEMO_CATALOG.length);
+    expect(document.querySelector('.pcard .badge')?.textContent).toMatch(/Ilustração|Estudo 3D/);
     expect(document.querySelector('.pcard__price')?.textContent).toBe('Preço sob consulta');
     expect(document.querySelector('#catalogMount noscript')).not.toBeNull();
   });
@@ -40,7 +41,7 @@ describe('initCommerce (DOM)', () => {
     expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(3);
     expect(location.search).toContain('categoria=acessorios');
     (document.querySelector('[data-clear]') as HTMLElement).click();
-    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(12);
+    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(DEMO_CATALOG.length);
   });
 
   it('quick view: exige tamanho, adiciona à sacola de Frutal e atualiza o contador', async () => {

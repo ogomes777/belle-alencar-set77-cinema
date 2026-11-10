@@ -36,6 +36,8 @@ html.js .film__stage { background-image: none; }
 .chapter { position: relative; display: flex; min-height: 175vh; padding: 0 var(--gutter); }
 .chapter--hero { min-height: 150vh; }
 .chapter--fitting { min-height: 210vh; }
+.chapter--rack { min-height: 250vh; }
+.chapter__card--rack { width: min(400px, 100%); }
 .chapter__card {
   position: sticky; top: calc(var(--header-h) + 7vh); align-self: flex-start; pointer-events: auto;
   width: min(520px, 100%); margin-top: 18vh; padding: clamp(24px, 3vw, 40px);
@@ -104,6 +106,8 @@ html.in-film .chapter-rail { opacity: 1; visibility: visible; }
 @media (max-width: 899px) {
   .chapter { min-height: 150vh; padding: 0 12px; }
   .chapter--fitting { min-height: 190vh; }
+  .chapter--rack { min-height: 230vh; }
+  .chapter--rack .lede { display: none; }
   .chapter__card, .chapter__card--right, .chapter__card--center, .chapter--hero .chapter__card {
     top: auto; bottom: 12px; align-self: flex-end; margin: 0 auto 12px; width: 100%;
     padding: 22px 20px; text-align: left;

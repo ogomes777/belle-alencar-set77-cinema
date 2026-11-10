@@ -14,6 +14,7 @@ import type { DressParams, Silhouette, Tone } from './core/dress';
 import type { Director } from './shell/director';
 import type { World } from './experience/world';
 import type { ChapterId, Span } from './experience/story';
+import type { RackController } from './rack/rack';
 
 const CHAPTERS: ChapterId[] = ['vitrine', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador'];
 const LABELED: ChapterId[] = ['vestido', 'detalhe', 'provador'];
@@ -114,6 +115,23 @@ export function initFilm(director: Director): void {
     void el;
   }
 
+  // ---------- arara viva (independente do WebGL: funciona em todos os tiers) ----------
+  let rack: RackController | null = null;
+  let rackLoading: Promise<RackController | null> | null = null;
+  function ensureRack(): Promise<RackController | null> {
+    if (rack) return Promise.resolve(rack);
+    if (!rackLoading) {
+      rackLoading = import('./rack/rack')
+        .then((m) => {
+          rack = m.initRack(stage!, $('[data-chapter="sala"] .chapter__card', film!));
+          (window as Window & { __rack?: RackController }).__rack = rack;
+          return rack;
+        })
+        .catch((e) => { console.warn('[belle] arara indisponível', e); return null; });
+    }
+    return rackLoading;
+  }
+
   // ---------- scroll → progresso ----------
   let ticking = false;
   function onScroll(): void {
@@ -142,6 +160,11 @@ export function initFilm(director: Director): void {
       if (on) a.setAttribute('aria-current', 'step');
     });
     if (label) label.hidden = !LABELED.includes(id);
+    // arara viva: assume o palco quando a câmera chega à arara
+    const onRack = id === 'sala' && !posterMode;
+    stage!.classList.toggle('is-rack', onRack);
+    if (onRack) void ensureRack().then((r) => r?.setActive(active === 'sala'));
+    else rack?.setActive(false);
     if (!world) showPoster(id);
     bus.emit('film:chapter', { id, index: CHAPTERS.indexOf(id) });
   }
@@ -151,6 +174,11 @@ export function initFilm(director: Director): void {
   if ('fonts' in document) document.fonts.ready.then(measure).catch(() => undefined);
   measure();
   setActive('vitrine');
+  // pré-carrega a arara em idle para a chegada ser instantânea
+  if (!posterMode) {
+    const pre = () => setTimeout(() => void ensureRack(), 1200);
+    if (document.readyState === 'complete') pre(); else addEventListener('load', pre, { once: true });
+  }
 
   // ---------- 3D sob demanda ----------
   async function startWorld(): Promise<void> {

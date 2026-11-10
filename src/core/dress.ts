@@ -4,7 +4,7 @@
  * NÃO representam peças reais do acervo Belle.
  */
 export type Silhouette = 'fluido' | 'marcante' | 'classico';
-export type Tone = 'perola' | 'champagne' | 'noite' | 'terracota' | 'salvia';
+export type Tone = 'perola' | 'champagne' | 'noite' | 'terracota' | 'salvia' | 'rosa' | 'vinho' | 'gelo' | 'dourado';
 
 export interface DressParams {
   silhouette: Silhouette;
@@ -26,6 +26,10 @@ export const TONES: Record<Tone, ToneSpec> = {
   noite: { name: 'Noite', base: '#2b2629', sheen: '#8a7a70', shade: '#171416' },
   terracota: { name: 'Terracota', base: '#b8735a', sheen: '#f0b89a', shade: '#8a4f3b' },
   salvia: { name: 'Sálvia', base: '#a9b19a', sheen: '#e3e8d6', shade: '#7f876f' },
+  rosa: { name: 'Rosa antigo', base: '#d8a4ae', sheen: '#f6d5dc', shade: '#a8737e' },
+  vinho: { name: 'Vinho', base: '#561520', sheen: '#9c4652', shade: '#3a0e16' },
+  gelo: { name: 'Azul gelo', base: '#b9cad6', sheen: '#eef5fa', shade: '#8798a5' },
+  dourado: { name: 'Dourado', base: '#c7a25e', sheen: '#f6e2a8', shade: '#8f7039' },
 };
 
 export interface SilhouetteSpec {

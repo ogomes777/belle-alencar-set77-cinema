@@ -5,6 +5,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { World, type WorldOptions } from './world';
+import { setBrandLogo } from './textures';
 
 gsap.registerPlugin(ScrollTrigger);
 // tempo real: em aparelho lento o texto não fica "preso" no meio da animação
@@ -22,6 +23,14 @@ export async function createWorld(opts: WorldOptions): Promise<World> {
       new Promise((r) => setTimeout(r, 1500)),
     ]).catch(() => undefined);
   }
+  // logo oficial para o letreiro da fachada (fallback tipográfico se falhar)
+  await new Promise<void>((resolve) => {
+    const img = new Image();
+    img.onload = () => { setBrandLogo(img); resolve(); };
+    img.onerror = () => resolve();
+    img.src = '/brand/belle-alencar-logo.svg';
+    setTimeout(resolve, 2000);
+  });
   return new World(opts);
 }
 

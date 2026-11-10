@@ -72,6 +72,8 @@ export interface Product {
   silhouette?: Silhouette;
   tone: Tone;
   illustration: IllustrationSpec;
+  /** Recorte com fundo transparente (render do estudo 3D ou, no futuro, foto oficial). */
+  cutout?: string;
   variants: Variant[];
   price: Price;
   isDemo: boolean;

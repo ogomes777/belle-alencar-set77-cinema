@@ -65,7 +65,7 @@ export function createBag(ctx: Ctx) {
       if (!p) return h('li', {});
       const st = ctx.commerce.statusOf(storeId, it.variantId);
       return h('li', { class: `bag-item${st === 'out' ? ' is-out' : ''}` },
-        mini(illustrate(p.illustration, p.title)),
+        mini(p.cutout ? `<img src="${p.cutout}" alt="" loading="lazy" width="720" height="1200">` : illustrate(p.illustration, p.title)),
         h('div', { class: 'bag-item__info' },
           h('p', { class: 'bag-item__title', text: p.title }),
           h('p', { class: 'bag-item__meta', text: `${p.sku} · ${it.size === 'Único' ? 'tamanho único' : `tam. ${it.size}`}` }),
@@ -188,7 +188,7 @@ export function createWishlist(ctx: Ctx) {
       const p = ctx.commerce.product(id);
       if (!p) return h('li', {});
       return h('li', { class: 'bag-item' },
-        mini(illustrate(p.illustration, p.title)),
+        mini(p.cutout ? `<img src="${p.cutout}" alt="" loading="lazy" width="720" height="1200">` : illustrate(p.illustration, p.title)),
         h('div', { class: 'bag-item__info' },
           h('p', { class: 'bag-item__title', text: p.title }),
           h('p', { class: 'bag-item__meta', text: `${p.sku} · referência demonstrativa` }),

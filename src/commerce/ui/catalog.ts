@@ -19,8 +19,10 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
     tabindex: '-1',
     'aria-hidden': 'true',
   });
-  media.innerHTML = `<span class="pcard__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
-  media.append(h('span', { class: 'badge', 'aria-hidden': 'true', text: 'Ilustração · demonstração' }));
+  media.innerHTML = p.cutout
+    ? `<span class="pcard__ill pcard__ill--cutout" data-flip-id="ill-${p.id}"><img src="${p.cutout}" alt="Estudo 3D demonstrativo: ${p.title}" loading="lazy" decoding="async" width="720" height="1200"></span>`
+    : `<span class="pcard__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
+  media.append(h('span', { class: 'badge', 'aria-hidden': 'true', text: p.cutout ? 'Estudo 3D · demonstração' : 'Ilustração · demonstração' }));
   const wish = h('button', {
     type: 'button',
     class: 'pcard__wish wish-btn',

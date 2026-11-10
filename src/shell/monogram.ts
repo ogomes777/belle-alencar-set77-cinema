@@ -1,24 +1,33 @@
 /**
- * Monograma BA PROVISÓRIO.
- * O JPEG de referência do kit está corrompido (docs/AUDIT_V3.md, A1).
- * Este desenho tipográfico (Cormorant Garamond) mantém a equidade visual da V3
- * até a chegada do vetor oficial. Substituir por /public/brand/ba-monogram.svg.
+ * Marca oficial Belle Alencar, vetorizada a partir de brand/MONOGRAMA_BA_REFERENCIA.jpg
+ * e brand/LOGO_OFICIAL_REFERENCIA.jpg (kit Living Palace). Cor herdada (currentColor).
+ * Substitui o monograma tipográfico provisório da V4.0.
  */
-export function monogramSVG(variant: 'intro' | 'header' | 'footer' | 'finale' = 'header'): string {
-  const arch = variant === 'intro' || variant === 'finale';
-  return `<svg class="mono mono--${variant}" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-    ${arch ? `<path class="mono__arch" d="M14 136 V58 A46 46 0 0 1 106 58 V136" fill="none" stroke="currentColor" stroke-width="1"/>
-    <path class="mono__arch mono__arch--inner" d="M22 136 V60 A38 38 0 0 1 98 60 V136" fill="none" stroke="currentColor" stroke-width=".6"/>` : ''}
-    <g class="mono__letters" font-family="'Cormorant Garamond', Georgia, serif" fill="currentColor">
-      <text x="${arch ? 30 : 14}" y="${arch ? 100 : 96}" font-size="${arch ? 62 : 92}" font-weight="400">B</text>
-      <text x="${arch ? 55 : 52}" y="${arch ? 110 : 112}" font-size="${arch ? 62 : 92}" font-weight="400" font-style="italic">A</text>
-    </g>
+import * as MONO from './mono-path';
+import * as LOGO from './logo-path';
+
+type Variant = 'intro' | 'header' | 'footer' | 'finale';
+
+export function monogramSVG(variant: Variant = 'header'): string {
+  if (variant === 'footer' || variant === 'intro') {
+    return `<svg class="mono mono--${variant} mono--logo" viewBox="${LOGO.VB}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path class="mono__shape" fill="currentColor" fill-rule="evenodd" d="${LOGO.D}"/>
+    </svg>`;
+  }
+  const arch = variant === 'finale';
+  const [x, y, w, h] = MONO.VB.split(' ').map(Number) as [number, number, number, number];
+  const vb = arch ? `${x - w * 0.18} ${y - h * 0.16} ${w * 1.36} ${h * 1.3}` : MONO.VB;
+  const cx = x + w / 2;
+  const r = w * 0.62;
+  const base = y + h * 1.12;
+  return `<svg class="mono mono--${variant}" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    ${arch ? `<path class="mono__arch" d="M${cx - r} ${base} V${y + r * 0.7} A${r} ${r} 0 0 1 ${cx + r} ${y + r * 0.7} V${base}" fill="none" stroke="currentColor" stroke-width="${w * 0.006}"/>` : ''}
+    <path class="mono__shape" fill="currentColor" fill-rule="evenodd" d="${MONO.D}"/>
   </svg>`;
 }
 
 export function mountMonograms(root: ParentNode = document): void {
   root.querySelectorAll<HTMLElement>('[data-monogram]').forEach((el) => {
-    const v = el.dataset.monogram as 'intro' | 'header' | 'footer' | 'finale';
-    el.innerHTML = monogramSVG(v);
+    el.innerHTML = monogramSVG(el.dataset.monogram as Variant);
   });
 }

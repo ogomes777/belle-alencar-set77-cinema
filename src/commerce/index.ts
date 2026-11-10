@@ -22,6 +22,9 @@ import { createSearch } from './ui/search';
 import { bindHeader } from './ui/header';
 import { loadGsap } from './ui/motion';
 import { toast } from './ui/toast';
+import { setCommerceApi } from './api';
+import { AVAILABILITY_LABEL } from './availability';
+import type { Size } from './types';
 
 export function initCommerce(): void {
   const commerce = createCommerce({ provider: new DemoAvailabilityProvider(), catalog: DEMO_CATALOG });
@@ -92,6 +95,25 @@ export function initCommerce(): void {
     setParam('categoria', category === 'todas' ? null : category);
     if (scroll) scrollTo('colecao');
   };
+
+  setCommerceApi({
+    product: (id) => commerce.product(id),
+    add: (productId, size) => commerce.add(productId, size as Size),
+    count: () => commerce.currentBag().reduce((n, it) => n + it.qty, 0),
+    storeCity: () => { const sid = commerce.get().storeId; return sid ? STORES[sid].city : null; },
+    hasStore: () => !!commerce.get().storeId,
+    ensureStore: (trigger, then) => { if (commerce.get().storeId) then(); else ctx.openStorePicker(trigger, then); },
+    openBag: (trigger) => ctx.openBag(trigger ?? null),
+    availabilityText: (productId, size) => {
+      const sid = commerce.get().storeId;
+      if (!sid) return 'Escolha sua loja para consultar disponibilidade.';
+      const city = STORES[sid].city;
+      const v = size ? commerce.product(productId)?.variants.find((x) => x.size === size) : undefined;
+      const st = v ? commerce.statusOf(sid, v.id) : 'unknown';
+      return st === 'unknown' ? `Disponibilidade: consultar a loja de ${city}.` : `${AVAILABILITY_LABEL[st]} em ${city}.`;
+    },
+    onChange: (fn) => commerce.subscribe(() => fn()),
+  });
 
   bindHeader(ctx);
   catalog?.onFirstHover(() => {

@@ -80,8 +80,10 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
   // faixa em bronze escuro: letras de latão ganham contraste e presença
   const fascia = box(16, 1.16, 0.05, new THREE.MeshStandardMaterial({ color: '#2a231c', roughness: 0.42, metalness: 0.35, envMapIntensity: 0.8 }), 0, 4.26, 0.205);
   g.add(fascia);
-  const signMat = new THREE.MeshStandardMaterial({ map: signTexture(), transparent: true, alphaTest: 0.08, metalness: 0.85, roughness: 0.32, envMapIntensity: 1.6 });
-  const sign = plane(6.2, 1.09, signMat);
+  const signTex = signTexture();
+  const signMat = new THREE.MeshStandardMaterial({ map: signTex, transparent: true, alphaTest: 0.08, metalness: 0.85, roughness: 0.32, envMapIntensity: 1.6 });
+  const signH = 1.06;
+  const sign = plane(signTex.userData.aspect ? signH * (signTex.userData.aspect as number) : 6.2, signTex.userData.aspect ? signH : 1.09, signMat);
   sign.position.set(0, 4.26, 0.235);
   g.add(sign);
 
