@@ -13,10 +13,20 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Belle Alencar — Araxá","description":"Moda feminina e acessórios.","sameAs":["https://www.instagram.com/belle.alencar/"],"address":{"@type":"PostalAddress","streetAddress":"Av. Vereador João Sena, 103, Centro","addressLocality":"Araxá","addressRegion":"MG","addressCountry":"BR"}}</script>
 <link rel="preload" as="image" href="/posters/vitrine.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/belle/products/cutouts/vestidos-01.webp">
+<link rel="preload" as="image" href="/assets/belle/products/cutouts/camisas-03.webp">
+<link rel="preload" as="image" href="/assets/belle/products/cutouts/vestidos-02.webp">
+<link rel="preload" as="image" href="/assets/belle/products/cutouts/croppeds-03.webp">
 <script>
   /* Antes da pintura: marca a sessão para pular a intro e sinaliza JS. Sem dependências. */
   document.documentElement.classList.add('js');
   try { if (sessionStorage.getItem('belle:v4:intro')) document.documentElement.classList.add('intro-seen'); } catch (e) {}
+  // Guaranteed exit even when a module import fails or the event loop is busy.
+  setTimeout(function(){
+    var intro=document.getElementById('intro');if(intro)intro.remove();
+    document.documentElement.classList.remove('intro-playing','intro-opening','intro-skipped');
+    document.documentElement.classList.add('intro-done');
+  },1500);
 </script>
 <script type="module" src="/src/main.ts"></script>
 </head>

@@ -317,11 +317,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   const fitSpot = spot('#ffeacc', 34, [3.9, H - 0.05, -14.0], [FITTING.x, 1.0, FITTING.z], 0.6, 0.8);
   g.add(fitSpot, fitSpot.target);
 
-  // The opaque facade occludes these photographs from outside. Avoid spending
-  // texture draws (including floor-reflection passes) on the hidden shop interior.
-  const interiorPhotos: THREE.Object3D[]=[];
-  g.traverse(object=>{if(object.userData.productId)interiorPhotos.push(object);});
-
+  // Keep distant products in scene; architectural occlusion and frustum culling handle visibility.
   // atualização: molas dos cabides + foco dos arcos + espelho
   const proj = new THREE.Vector3();
   let t = 0;
@@ -336,8 +332,6 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       const k = 26; // rigidez da mola
       const c = 2.6; // amortecimento
       const camPos = (ctx.camera as THREE.PerspectiveCamera).position;
-      const inside=camPos.z<.7;
-      interiorPhotos.forEach(photo=>{photo.visible=inside;});
       swings.forEach((s, i) => {
         const dx = camPos.x - s.hook.x;
         const dz = camPos.z - s.hook.z;

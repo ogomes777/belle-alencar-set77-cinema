@@ -166,7 +166,7 @@ export function initFilm(director: Director): void {
     stage!.classList.toggle('is-rack', onRack);
     if (onRack) void ensureRack().then((r) => r?.setActive(active === 'sala'));
     else rack?.setActive(false);
-    if (!world) showPoster(id);
+    if (!stage!.classList.contains('is-live')) showPoster(id);
     bus.emit('film:chapter', { id, index: CHAPTERS.indexOf(id) });
   }
 
@@ -202,8 +202,13 @@ export function initFilm(director: Director): void {
         poster: !!posterMode,
         governor: params.get('gov') !== 'off',
         onFirstFrame: () => {
-          stage!.classList.remove('is-loading');
-          stage!.classList.add('is-live');
+          // A first GPU frame can precede alpha textures: avoid empty facade windows.
+          const current=world;
+          void current?.readyEntranceMedia().then(()=>{
+            if(world!==current)return;
+            stage!.classList.remove('is-loading');
+            stage!.classList.add('is-live');
+          }).catch(()=>stage!.classList.remove('is-loading'));
         },
         onFail: (reason) => {
           console.warn('[belle] 3D desativado, usando pôsteres:', reason);

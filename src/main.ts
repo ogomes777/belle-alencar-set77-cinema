@@ -15,9 +15,9 @@ import { initFilm } from './film';
 import { initSections } from './sections';
 
 mountMonograms();
+initIntro(); // Run before costly commerce and canvas modules.
 initHeader();
 initCommerce();
 initSections();
 const director = initDirector();
 initFilm(director);
-initIntro();

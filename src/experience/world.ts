@@ -117,6 +117,8 @@ export class World {
   }
 
   readyMedia(): Promise<void> { return waitForSceneProducts(this.scene); }
+  /** Hero photographs must be decoded before switching off the facade poster. */
+  readyEntranceMedia(): Promise<void> { return waitForSceneProducts(this.facade.group); }
 
   setSpans(spans: Span[]): void {
     this.story.setSpans(spans);
