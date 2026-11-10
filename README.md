@@ -28,3 +28,14 @@ Parâmetros úteis: `?tier=cinema|touch|static`, `?loja=araxa`, `?peca=vestido-l
 
 ## Estado
 Ver `docs/RELEASE_REPORT.md` (o que foi construído, medido, publicado como preview e o que falta).
+
+
+## Passarela em profundidade
+
+A primeira dobra inclui seis looks em loop, arraste/toque, setas do teclado, botões anterior/próximo e trilho sincronizado com duas peças por look. A rolagem vertical continua levando para a boutique; trackpad horizontal ou Shift + roda controla a passarela. Movimento reduzido troca os looks diretamente.
+
+As peças do editorial são demonstrativas, sem preço ou estoque real, e usam os mesmos favoritos e sacolas por filial. O botão + abre a escolha de tamanho antes de adicionar.
+
+Para usar as duas sprites originais da referência fornecida, execute `node scripts/fetch-runway-media.mjs` e refaça o build. São necessários os domínios `images.higgs.ai` e, caso haja redirecionamento, `d8j0ntlcm91z4.cloudfront.net`. Sem as sprites, os estudos locais são exibidos com identificação; a interface não depende de requisições externas.
+
+Teste específico: `node tests/e2e/runway.mjs` com Playwright disponível e `npm run preview` ativo. `BASE` altera o servidor; `SHOTS=1` salva capturas e `SHOTS_DIR` altera a pasta. Nesta nuvem: `NODE_PATH=/workspace/.belle-tools/node_modules NODE_OPTIONS=--require=/workspace/.belle-tools/system-chromium.cjs node tests/e2e/runway.mjs`.

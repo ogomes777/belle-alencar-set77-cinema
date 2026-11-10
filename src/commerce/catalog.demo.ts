@@ -3,6 +3,7 @@
  * Referências genéricas para desenhar a jornada enquanto o catálogo oficial
  * (SKU, preço, grade, fotos) não é fornecido. Sem preço, sem estoque, sem nomes de coleção.
  */
+import { RUNWAY_PRODUCTS } from '../runway/data';
 import type { Category, Occasion, Product, Size, Variant, CatalogSource } from './types';
 import type { Silhouette, Tone } from '../core/dress';
 import type { IllustrationKind, Neckline } from '../core/illustration';
@@ -79,5 +80,5 @@ export const demoCatalogSource: CatalogSource = {
   },
 };
 
-export const productById = (id: string) => DEMO_CATALOG.find((p) => p.id === id);
-export const productBySlug = (slug: string) => DEMO_CATALOG.find((p) => p.slug === slug);
+export const productById = (id: string) => [...DEMO_CATALOG, ...RUNWAY_PRODUCTS].find((p) => p.id === id);
+export const productBySlug = (slug: string) => [...DEMO_CATALOG, ...RUNWAY_PRODUCTS].find((p) => p.slug === slug);

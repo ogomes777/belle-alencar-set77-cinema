@@ -74,6 +74,7 @@ export interface Product {
   illustration: IllustrationSpec;
   /** Recorte com fundo transparente (render do estudo 3D ou, no futuro, foto oficial). */
   cutout?: string;
+  sprite?: { src: string; box: [number, number, number, number]; sheet: [number, number] };
   variants: Variant[];
   price: Price;
   isDemo: boolean;

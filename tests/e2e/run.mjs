@@ -358,10 +358,12 @@ const openFlightReady = async (page, idx) => {
   const { ctx, page, errors } = await newPage({ viewport: { width: 1280, height: 800 } });
   await skipIntro(page);
   await page.goto(`${BASE}/?tier=cinema`, { waitUntil: 'load' });
+  await page.locator('#inicio').scrollIntoViewIfNeeded();
   const live = await page.waitForSelector('.film__stage.is-live', { timeout: 60000 }).then(() => true).catch(() => false);
   check('CINEMA: palco 3D ativo (1º frame)', live);
   const f1 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
-  await page.waitForTimeout(1500);
+  // SwiftShader may take seconds per frame: test liveness separately from FPS.
+  await page.waitForFunction((before) => (window.__belle?.world()?.frames ?? 0) > before, f1, { timeout: 30000 }).catch(() => undefined);
   const f2 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
   check('CINEMA: render loop roda dentro do filme', f2 > f1, `${f1}→${f2}`);
   const info = await page.evaluate(() => window.__belle?.world());

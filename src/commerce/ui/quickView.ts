@@ -1,4 +1,5 @@
 /** Quick view acessível com FLIP card → painel e escolha de tamanho. */
+import { mountEditorialMedia } from '../../runway/media';
 import { h } from '../../core/dom';
 import { bus } from '../../core/bus';
 import { announce } from '../../core/a11y';
@@ -39,6 +40,7 @@ export function createQuickView(ctx: Ctx) {
     media.innerHTML = p.cutout
       ? `<span class="qv__ill qv__ill--cutout" data-flip-id="ill-${p.id}"><img src="${p.cutout}" alt="Estudo 3D demonstrativo: ${p.title}" decoding="async" width="720" height="1200"></span>`
       : `<span class="qv__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
+    if (p.sprite) mountEditorialMedia(media.querySelector<HTMLElement>('.qv__ill')!, p);
     media.append(h('span', { class: 'badge', text: p.cutout ? 'Estudo 3D · demonstração' : 'Ilustração · demonstração' }));
     // zoom do detalhe: botão acessível + lupa que acompanha ponteiro/dedo
     const zoomBtn = h('button', { type: 'button', class: 'qv__zoom', 'aria-pressed': 'false', text: 'Ampliar' });

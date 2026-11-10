@@ -243,11 +243,12 @@ export function initFilm(director: Director): void {
     document.documentElement.classList.add('poster-mode', 'intro-seen');
     startWorld();
   } else if (tier !== 'static') {
-    const go = () => startWorld();
-    const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
-    const later = () => (idle ? idle(go, { timeout: 1800 }) : setTimeout(go, 600));
-    if (document.readyState === 'complete') later();
-    else addEventListener('load', later, { once: true });
+    const preload = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      preload.disconnect();
+      void startWorld();
+    }, { rootMargin: '200px' });
+    preload.observe(film);
   }
 
   director.onChange((intensity) => {

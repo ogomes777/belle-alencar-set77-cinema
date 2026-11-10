@@ -3,6 +3,8 @@
  * sacola de interesse por filial. Sem checkout real: ver docs/STORE_COMMERCE_CONTRACT.md.
  */
 import '../styles/commerce.css';
+import { RUNWAY_PRODUCTS } from '../runway/data';
+import { initRunway } from '../runway/runway';
 import { bus } from '../core/bus';
 import { createCommerce } from './state';
 import { DEMO_CATALOG, productBySlug } from './catalog.demo';
@@ -27,7 +29,7 @@ import { AVAILABILITY_LABEL } from './availability';
 import type { Size } from './types';
 
 export function initCommerce(): void {
-  const commerce = createCommerce({ provider: new DemoAvailabilityProvider(), catalog: DEMO_CATALOG });
+  const commerce = createCommerce({ provider: new DemoAvailabilityProvider(), catalog: [...DEMO_CATALOG, ...RUNWAY_PRODUCTS] });
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // late-binding: os módulos de UI recebem o mesmo objeto ctx, completado abaixo
@@ -116,6 +118,7 @@ export function initCommerce(): void {
   });
 
   bindHeader(ctx);
+  initRunway(ctx);
   catalog?.onFirstHover(() => {
     if (!reduced()) void loadGsap();
   });
