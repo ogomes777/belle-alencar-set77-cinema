@@ -1,32 +1,30 @@
-# BELLE ALENCAR | SET77 LABS | CINEMA MASTER KIT
-> Pacote técnico e criativo para reconstrução cinematográfica no Claude Code. Versão 1.0, 09/11/2026.
+# BELLE ALENCAR | SET77 LABS | CINEMA V4
 
-## Começar
-1. Extraia este ZIP em uma pasta nova e abra a pasta inteira no VS Code / Claude Code.
-2. Leia **LEIA_PRIMEIRO.md**, **CLAUDE.md**, **AGENTS.md**, **docs/MASTER_BRIEF.md** e **docs/STORYBOARD.md**.
-3. Execute `npm run check` e `npm run dev`. O site atual está incluído como baseline navegável.
-4. Rode em sequência **prompts/01_AUDITORIA_E_ARQUITETURA.md**, **02_RECONSTRUCAO_CINEMA.md**, **03_COMERCIO_MULTILOJA.md**, **04_QA_E_RELEASE.md**. Não tente um único prompt infinito.
-5. Use os agentes/skills da pasta `.claude/`; as personas são arquivos de instrução e só executam quando chamados por um ambiente de agentes real.
+Boutique feminina cinematográfica em primeira pessoa (Three.js + GSAP) com jornada comercial multiloja (Araxá, Frutal, Catalão, Mineiros). **Pré-lançamento:** o vestido 3D é um estudo procedural e o catálogo é demonstrativo. Nada aqui é estoque real ou checkout.
 
-## Regras inegociáveis
-- Você **pode reescrever layout, seções e arquitetura inteiros**: identidade + objetivo de negócio são os únicos pilares.
-- Fazer filme primeiro-pessoa em boutique/shopping; vestidos digitais vivos, transições com continuidade e catálogo encontrável.
-- Produtos reais, estoque, variantes, pagamentos, endereço completo e prova social **somente com fonte aprovada**. Até lá usar representação conceitual explicitamente identificada.
-- Garantir opção sem movimento, touch/teclado, mobile, performance e caminho de compra direto.
-- Site atual: https://belle-alencar-set77.vercel.app (V3).
-- O ZIP inclui código real da V3, monograma de referência e 371 técnicas do Motion Atlas. **Não inclui GLB de vestido, fotos de produto oficiais, cadastro Auth ou estoque real.**
-- A publicação existente é um preview: não conectar checkout em produção sem backend e confirmação do cliente.
+## Rodar
+```bash
+npm install
+npm run dev          # desenvolvimento (Vite)
+npm test             # Vitest: lógica comercial + integração DOM
+npm run build        # typecheck + build de produção em dist/
+npm run preview      # serve dist/ em :4173
+npm run e2e          # Playwright (com o preview rodando). SHOTS=1 salva capturas em docs/qa/
+npm run check        # verificação estrutural
+node scripts/render-posters.mjs   # regenera os pôsteres do modo estático a partir do 3D
+npm run legacy       # V3 original (referência/rollback) em legacy/v3
+```
+Parâmetros úteis: `?tier=cinema|touch|static`, `?loja=araxa`, `?peca=vestido-longo-fluido`, `?categoria=vestidos`, `?gov=off` (só QA).
 
 ## Estrutura
-- Raiz: HTML/CSS/JS estáticos do deploy existente.
-- `.claude/agents/`: equipes especialistas de direção, 3D, motion,-commerce, QA e entrega.
-- `.claude/skills/`: instruções práticas sob demanda.
-- `docs/`: direção de arte, narrativa, contratos de dados, cenas, QA, orçamento de performance e plano.
-- `prompts/`: quatro passes orquestrados para Claude.
-- `knowledge/`: cópias dos estudos recuperados do SET77 COFRE.
-- `scripts/`: servidor dev e verificação local.
-- `assets/brand/`: monograma de referência da Belle recuperado do site.
+- `index.html`: shell semântico, legível sem JS.
+- `src/film.ts`: orquestrador do filme (scroll nativo → progresso, pôsteres, provador).
+- `src/experience/`: chunk 3D lazy (`world.ts`, `story.ts`, `scene/*`, `cloth/*`, texturas procedurais).
+- `src/commerce/`: contratos, lojas, catálogo demo, sacola por filial, UI (quick view, sacola, busca, lojas).
+- `src/core/`, `src/shell/`, `src/styles/`: estado, tiers, a11y, intro, header, tokens.
+- `tests/unit`, `tests/e2e`: suítes automatizadas.
+- `docs/`: brief, storyboard, **AUDIT_V3, IMPLEMENTATION_PLAN, ASSETS_MISSING, QA_PLAN, MOTION_APPLIED, RELEASE_REPORT**, ADRs.
+- `.claude/agents`, `.claude/skills`, `prompts/`, `knowledge/`: kit SET77 original.
 
-## GitHub
-O conector GitHub nesta sessão permite escrita em repositórios existentes, mas não oferece criação de novos. **Este ZIP está pronto para um repositório separado**, sem misturar material da Belle no repositório GB.
-Crie um repositório privado chamado `belle-alencar-set77-cinema` e faça commit de todo o conteúdo (instruções em docs/GITHUB_E_VERCEL.md).
+## Estado
+Ver `docs/RELEASE_REPORT.md` (o que foi construído, medido, publicado como preview e o que falta).
