@@ -1,0 +1,2657 @@
+{
+  "productCount": 48,
+  "categoryCounts": {
+    "camisas": 6,
+    "croppeds": 6,
+    "vestidos": 6,
+    "saias": 6,
+    "calcas": 6,
+    "bolsas": 6,
+    "pulseiras": 6,
+    "aneis": 6
+  },
+  "fileCount": 144,
+  "errors": [],
+  "products": [
+    {
+      "slug": "camisas-01",
+      "name": "Camisa branca de corte estruturado",
+      "category": "camisas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/camisas-01.png",
+          "size": [
+            376,
+            492
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            346,
+            462
+          ],
+          "transparentPercent": 40.43,
+          "bytes": 174986,
+          "sha256": "3ec5373b869e2d15e3befe415b7cf0213f7244b57c86fd918782abd84d9f65f1"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/camisas-01.webp",
+          "size": [
+            376,
+            492
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            346,
+            462
+          ],
+          "transparentPercent": 40.43,
+          "bytes": 31260,
+          "sha256": "e790e996ccd368ee2166e22b4a3ec8b71d34b8cba3772d1fcf10743fe83099c3"
+        },
+        "packshotWebp": {
+          "path": "packshots/camisas-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            154,
+            139,
+            746,
+            949
+          ],
+          "transparentPercent": 61.1,
+          "bytes": 76412,
+          "sha256": "f4640a012d7faf7b8b89cf83b3a6978e727065dde4951962713f4d6a2bb2bccb"
+        }
+      }
+    },
+    {
+      "slug": "camisas-02",
+      "name": "Camisa champagne com brilho acetinado",
+      "category": "camisas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/camisas-02.png",
+          "size": [
+            399,
+            489
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            369,
+            459
+          ],
+          "transparentPercent": 41.18,
+          "bytes": 204850,
+          "sha256": "3c766a749ecfd152687bf7608c3a97ba01a281775dec9d52582f92bb04c3e4df"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/camisas-02.webp",
+          "size": [
+            399,
+            489
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            369,
+            459
+          ],
+          "transparentPercent": 41.18,
+          "bytes": 36410,
+          "sha256": "e499ee7d166f2998b64ec5e81596c195d372e9de9c32306f0ff12a39a0c1781d"
+        },
+        "packshotWebp": {
+          "path": "packshots/camisas-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            130,
+            139,
+            770,
+            949
+          ],
+          "transparentPercent": 59.05,
+          "bytes": 79930,
+          "sha256": "925208cd9a41e73de3337717b77d9668c5f8ca89e9d892d3df41a4a83382d7eb"
+        }
+      }
+    },
+    {
+      "slug": "camisas-03",
+      "name": "Camisa azul de tecido listrado",
+      "category": "camisas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/camisas-03.png",
+          "size": [
+            412,
+            501
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            381,
+            470
+          ],
+          "transparentPercent": 43.49,
+          "bytes": 226960,
+          "sha256": "ec0e34c4d5b63a9fd9e0f794691c370d26b03d723151731097360d880541faff"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/camisas-03.webp",
+          "size": [
+            412,
+            501
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            381,
+            470
+          ],
+          "transparentPercent": 43.49,
+          "bytes": 48802,
+          "sha256": "3d57be290a2fef6788c171e2944877a3eed80c7dede2a2de48912a0c185ef4db"
+        },
+        "packshotWebp": {
+          "path": "packshots/camisas-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            127,
+            139,
+            773,
+            949
+          ],
+          "transparentPercent": 60.28,
+          "bytes": 97732,
+          "sha256": "69f6e6d2143291f0b26d5cff9fc8d6f81ee256dce5262e7007fc7c64d1e6d8d4"
+        }
+      }
+    },
+    {
+      "slug": "camisas-04",
+      "name": "Camisa rosé com laço",
+      "category": "camisas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/camisas-04.png",
+          "size": [
+            412,
+            498
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            381,
+            467
+          ],
+          "transparentPercent": 41.15,
+          "bytes": 205944,
+          "sha256": "73097299c52fdff365f4aad7d696d5a2dfc6bad92390be91af4653f096c40e1a"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/camisas-04.webp",
+          "size": [
+            412,
+            498
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            381,
+            467
+          ],
+          "transparentPercent": 41.15,
+          "bytes": 36438,
+          "sha256": "5c8d3f327feebba9cbae04e11703693a0e46d5640acf82365f18bc0edbe17839"
+        },
+        "packshotWebp": {
+          "path": "packshots/camisas-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            125,
+            139,
+            775,
+            949
+          ],
+          "transparentPercent": 58.28,
+          "bytes": 81448,
+          "sha256": "4a46d9d4638b0634d78bcf58a92a78e576aedd454df0b0bb281484c070ec6817"
+        }
+      }
+    },
+    {
+      "slug": "camisas-05",
+      "name": "Camisa utilitária areia",
+      "category": "camisas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/camisas-05.png",
+          "size": [
+            400,
+            501
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            369,
+            470
+          ],
+          "transparentPercent": 39.06,
+          "bytes": 232228,
+          "sha256": "ed860de2daa3ebeb9c3f875b8efbbabc8efa2475fa8c99f8aa872361e0851429"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/camisas-05.webp",
+          "size": [
+            400,
+            501
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            369,
+            470
+          ],
+          "transparentPercent": 39.06,
+          "bytes": 43480,
+          "sha256": "0a8d4483a328f70cde8c703bd0afbba0ac2faac463b87b70e07e5a367cc59efe"
+        },
+        "packshotWebp": {
+          "path": "packshots/camisas-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            138,
+            139,
+            762,
+            949
+          ],
+          "transparentPercent": 58.27,
+          "bytes": 92568,
+          "sha256": "74d892701ff811c77f8e1371bdf6fb51fb5183a743bad8d59cc19ff8525f8481"
+        }
+      }
+    },
+    {
+      "slug": "camisas-06",
+      "name": "Camisa estampada de corrente dourada",
+      "category": "camisas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/camisas-06.png",
+          "size": [
+            417,
+            501
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            386,
+            470
+          ],
+          "transparentPercent": 41.13,
+          "bytes": 268017,
+          "sha256": "ccbc69ea7704573d477699fc3f3113e6647fd6169886ee3d20d4c3a8406a67d0"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/camisas-06.webp",
+          "size": [
+            417,
+            501
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            386,
+            470
+          ],
+          "transparentPercent": 41.13,
+          "bytes": 58278,
+          "sha256": "45e6bc64bb529fd55a1eb73778ad067cb9c78c58b6a9a7d3527ebff09ffbd6b1"
+        },
+        "packshotWebp": {
+          "path": "packshots/camisas-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            122,
+            139,
+            777,
+            949
+          ],
+          "transparentPercent": 57.96,
+          "bytes": 124378,
+          "sha256": "6ed86714f464bc2b82137ba99acd5bc92493108d7e27a962ff197ccb809c50f7"
+        }
+      }
+    },
+    {
+      "slug": "croppeds-01",
+      "name": "Cropped preto de corset",
+      "category": "croppeds",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/croppeds-01.png",
+          "size": [
+            403,
+            472
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            374,
+            443
+          ],
+          "transparentPercent": 56.48,
+          "bytes": 156006,
+          "sha256": "55b59d7004b351f399174cbe94bce93c808ab44d377f565dd5c3c69dffa99b4b"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/croppeds-01.webp",
+          "size": [
+            403,
+            472
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            374,
+            443
+          ],
+          "transparentPercent": 56.48,
+          "bytes": 29608,
+          "sha256": "8834e3c99773590ac8c4708f7692651fec9d9def010ef9543ec9fdff144e4e4b"
+        },
+        "packshotWebp": {
+          "path": "packshots/croppeds-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            112,
+            139,
+            787,
+            949
+          ],
+          "transparentPercent": 68.09,
+          "bytes": 66238,
+          "sha256": "b704a1d2e2f01a0b4092a5f34dedc5d27b261799ec4d98625fcbc4e607d212f7"
+        }
+      }
+    },
+    {
+      "slug": "croppeds-02",
+      "name": "Cropped vinho de cetim drapeado",
+      "category": "croppeds",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/croppeds-02.png",
+          "size": [
+            437,
+            466
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            408,
+            437
+          ],
+          "transparentPercent": 56.05,
+          "bytes": 179232,
+          "sha256": "d1a66ccdcbb4cf40d164cdac91a1ce083270183a6dad4346b279eacebb0a02ca"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/croppeds-02.webp",
+          "size": [
+            437,
+            466
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            408,
+            437
+          ],
+          "transparentPercent": 56.05,
+          "bytes": 32412,
+          "sha256": "bb47bf7b91c47db1c41b031f82ccb3faf83841a22bba6dfd23a1de2693173c9e"
+        },
+        "packshotWebp": {
+          "path": "packshots/croppeds-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            81,
+            146,
+            819,
+            940
+          ],
+          "transparentPercent": 65.72,
+          "bytes": 79086,
+          "sha256": "35b42e7a160046e90875f3aa98c3f70fe9faff5da903c542af178586980a974b"
+        }
+      }
+    },
+    {
+      "slug": "croppeds-03",
+      "name": "Cropped champagne de um ombro",
+      "category": "croppeds",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/croppeds-03.png",
+          "size": [
+            413,
+            478
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            384,
+            449
+          ],
+          "transparentPercent": 45.64,
+          "bytes": 221574,
+          "sha256": "4149f031059555da233d48edcd0534a0e2c8e0443936964b1dd8798037996933"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/croppeds-03.webp",
+          "size": [
+            413,
+            478
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            384,
+            449
+          ],
+          "transparentPercent": 45.64,
+          "bytes": 41460,
+          "sha256": "6244ba355885ef29fa6553b019bd7693d172fc48adfa370885fb676ac6c9f5bb"
+        },
+        "packshotWebp": {
+          "path": "packshots/croppeds-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            107,
+            139,
+            792,
+            949
+          ],
+          "transparentPercent": 60.09,
+          "bytes": 88756,
+          "sha256": "a20f1a9c0bba69a820d19dc2c7cfbf43b1d86c53b7d51501a5f84568354b2b65"
+        }
+      }
+    },
+    {
+      "slug": "croppeds-04",
+      "name": "Cropped verde oliva frente única",
+      "category": "croppeds",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/croppeds-04.png",
+          "size": [
+            410,
+            485
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            380,
+            455
+          ],
+          "transparentPercent": 43.54,
+          "bytes": 216828,
+          "sha256": "70d7c39e0230944481fbb9d8df4cd715708067d26f881d9cbf82dba24940d329"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/croppeds-04.webp",
+          "size": [
+            410,
+            485
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            380,
+            455
+          ],
+          "transparentPercent": 43.54,
+          "bytes": 36514,
+          "sha256": "9dde6da08fbebaabe54a10a134746ae3af4003bf837215305a1f72ebb64bbc33"
+        },
+        "packshotWebp": {
+          "path": "packshots/croppeds-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            116,
+            139,
+            783,
+            949
+          ],
+          "transparentPercent": 59.28,
+          "bytes": 75636,
+          "sha256": "a50045cf558579ec28c130e4843b45456da9592db35265a9cfe2511716030882"
+        }
+      }
+    },
+    {
+      "slug": "croppeds-05",
+      "name": "Cropped branco com mangas bufantes",
+      "category": "croppeds",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/croppeds-05.png",
+          "size": [
+            598,
+            445
+          ],
+          "alphaBBox": [
+            37,
+            37,
+            561,
+            408
+          ],
+          "transparentPercent": 54.04,
+          "bytes": 227112,
+          "sha256": "296a6a5a3afc293e9ec67872b708fefd2bab5a953ae54ec6d3c1209bd80e309c"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/croppeds-05.webp",
+          "size": [
+            598,
+            445
+          ],
+          "alphaBBox": [
+            37,
+            37,
+            561,
+            408
+          ],
+          "transparentPercent": 54.04,
+          "bytes": 37774,
+          "sha256": "3ac4666e612040946aa4899e4ef5db92ee1699259e38cdd5655f2b4e2143654a"
+        },
+        "packshotWebp": {
+          "path": "packshots/croppeds-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            81,
+            265,
+            819,
+            788
+          ],
+          "transparentPercent": 75.66,
+          "bytes": 58152,
+          "sha256": "5a4c364dbe921a681c6eabf93a22c215f682e74b1d2955a46234fab0401c2090"
+        }
+      }
+    },
+    {
+      "slug": "croppeds-06",
+      "name": "Cropped champagne com nó",
+      "category": "croppeds",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/croppeds-06.png",
+          "size": [
+            436,
+            479
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            407,
+            450
+          ],
+          "transparentPercent": 56.32,
+          "bytes": 208526,
+          "sha256": "e37a463863e9b59a4487266fe3104121235aab9f1e9bc6898fedd55bd3a4a390"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/croppeds-06.webp",
+          "size": [
+            436,
+            479
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            407,
+            450
+          ],
+          "transparentPercent": 56.32,
+          "bytes": 46016,
+          "sha256": "a48e1425ba7dc14b6ce044090f67149c0c72a6290c3c5240887bb971fabca49b"
+        },
+        "packshotWebp": {
+          "path": "packshots/croppeds-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            86,
+            139,
+            813,
+            949
+          ],
+          "transparentPercent": 65.83,
+          "bytes": 106692,
+          "sha256": "c6710b039b26903c5e6b2c56766be19478cc5feca1bf93787e2b314d5c9672e7"
+        }
+      }
+    },
+    {
+      "slug": "vestidos-01",
+      "name": "Vestido champagne assimétrico",
+      "category": "vestidos",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/vestidos-01.png",
+          "size": [
+            308,
+            489
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            278,
+            459
+          ],
+          "transparentPercent": 61.48,
+          "bytes": 117074,
+          "sha256": "bdd9e10e6a2de44c5502e1d1000d92d42455d74e0a00b116f1671f9299cfed46"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/vestidos-01.webp",
+          "size": [
+            308,
+            489
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            278,
+            459
+          ],
+          "transparentPercent": 61.48,
+          "bytes": 25608,
+          "sha256": "9bd454128735419dfc69e3e818d0a425207437304dee661f2c55a1c1760b9e7f"
+        },
+        "packshotWebp": {
+          "path": "packshots/vestidos-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            180,
+            84,
+            720,
+            1018
+          ],
+          "transparentPercent": 72.28,
+          "bytes": 71278,
+          "sha256": "eb717f4851c1a3131bdbe1688b325d97cd5bc3c8f0803d7a150b8d2f11748ae6"
+        }
+      }
+    },
+    {
+      "slug": "vestidos-02",
+      "name": "Vestido vinho com laço no busto",
+      "category": "vestidos",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/vestidos-02.png",
+          "size": [
+            207,
+            438
+          ],
+          "alphaBBox": [
+            27,
+            27,
+            180,
+            411
+          ],
+          "transparentPercent": 55.21,
+          "bytes": 87982,
+          "sha256": "d378e1904cc9bb101f83cb9ea91cf5a52d51698a9496e9a79c97b521d9237b3b"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/vestidos-02.webp",
+          "size": [
+            207,
+            438
+          ],
+          "alphaBBox": [
+            27,
+            27,
+            180,
+            411
+          ],
+          "transparentPercent": 55.21,
+          "bytes": 18678,
+          "sha256": "091bda44de650263dd762c848d90b75bb1116039e4e485a0d10ecb3f5118486a"
+        },
+        "packshotWebp": {
+          "path": "packshots/vestidos-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            264,
+            84,
+            636,
+            1018
+          ],
+          "transparentPercent": 75.66,
+          "bytes": 56666,
+          "sha256": "ab05315f6db6bc8d72a29af7807c89c1398c04cecc7c7996f8ada01935529f33"
+        }
+      }
+    },
+    {
+      "slug": "vestidos-03",
+      "name": "Vestido renda off-white",
+      "category": "vestidos",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/vestidos-03.png",
+          "size": [
+            340,
+            455
+          ],
+          "alphaBBox": [
+            28,
+            28,
+            312,
+            427
+          ],
+          "transparentPercent": 62.05,
+          "bytes": 165429,
+          "sha256": "32b39413084de2449858526065987f2ffda63531377ee57914b270ee8988b879"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/vestidos-03.webp",
+          "size": [
+            340,
+            455
+          ],
+          "alphaBBox": [
+            28,
+            28,
+            312,
+            427
+          ],
+          "transparentPercent": 62.05,
+          "bytes": 46180,
+          "sha256": "8407ed74bc1a2c98b82930617fd26e703d0dd6734e5cd650561c0be1146ff3b9"
+        },
+        "packshotWebp": {
+          "path": "packshots/vestidos-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            117,
+            84,
+            782,
+            1018
+          ],
+          "transparentPercent": 67.48,
+          "bytes": 128328,
+          "sha256": "dab517c51cbb957bc1a66da8057856a900a40ed0694a4d394372c46608dd568f"
+        }
+      }
+    },
+    {
+      "slug": "vestidos-04",
+      "name": "Vestido longo floral",
+      "category": "vestidos",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/vestidos-04.png",
+          "size": [
+            377,
+            467
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            348,
+            438
+          ],
+          "transparentPercent": 64.18,
+          "bytes": 175486,
+          "sha256": "d2f3f97199d152d27be9c6d8bab0ae6c117da9a0fc00b27627f8db3e41698298"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/vestidos-04.webp",
+          "size": [
+            377,
+            467
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            348,
+            438
+          ],
+          "transparentPercent": 64.18,
+          "bytes": 49566,
+          "sha256": "6b8cfda8a2d96b2fe6b02969ccf16f2df908404a5e3f5d173d34489e36bd26a9"
+        },
+        "packshotWebp": {
+          "path": "packshots/vestidos-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            86,
+            84,
+            814,
+            1018
+          ],
+          "transparentPercent": 66.87,
+          "bytes": 135456,
+          "sha256": "0886ced7ea07326dc5cde6de1293bd7e2514d001f96ac2435d3aed1a4d5b049f"
+        }
+      }
+    },
+    {
+      "slug": "vestidos-05",
+      "name": "Vestido azul fluido",
+      "category": "vestidos",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/vestidos-05.png",
+          "size": [
+            336,
+            517
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            304,
+            485
+          ],
+          "transparentPercent": 61.96,
+          "bytes": 142005,
+          "sha256": "391bc70d75d76bda655040e5c120686da67d63efa7241b228273225d166e414d"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/vestidos-05.webp",
+          "size": [
+            336,
+            517
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            304,
+            485
+          ],
+          "transparentPercent": 61.96,
+          "bytes": 34962,
+          "sha256": "df61cbc101721985f3b004e1515385ef6abab82945e994356f4dfa34101de35d"
+        },
+        "packshotWebp": {
+          "path": "packshots/vestidos-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            169,
+            84,
+            730,
+            1018
+          ],
+          "transparentPercent": 71.72,
+          "bytes": 80342,
+          "sha256": "be3e57c8ff52781f9daefd97356f329de3c6f0a2336f2a152c41f2d367b45527"
+        }
+      }
+    },
+    {
+      "slug": "vestidos-06",
+      "name": "Vestido preto com detalhe dourado",
+      "category": "vestidos",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/vestidos-06.png",
+          "size": [
+            827,
+            1629
+          ],
+          "alphaBBox": [
+            38,
+            38,
+            793,
+            1595
+          ],
+          "transparentPercent": 52.51,
+          "bytes": 846486,
+          "sha256": "2b4ad2587cb204cb7441f21a21f3b583f5a748a6e76438128835f443f09e1700"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/vestidos-06.webp",
+          "size": [
+            827,
+            1629
+          ],
+          "alphaBBox": [
+            38,
+            38,
+            793,
+            1595
+          ],
+          "transparentPercent": 52.51,
+          "bytes": 112714,
+          "sha256": "d5ce5c4bff125dcea4f3aa6f5987437d34e8a87e71f0a23347b90ccccd61407e"
+        },
+        "packshotWebp": {
+          "path": "packshots/vestidos-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            254,
+            139,
+            646,
+            949
+          ],
+          "transparentPercent": 82.74,
+          "bytes": 45888,
+          "sha256": "99ad740cdf09c5a61383d28d4c64df866c73845a2370070e71868e7e905d8b0c"
+        }
+      }
+    },
+    {
+      "slug": "saias-01",
+      "name": "Saia acetinada pérola",
+      "category": "saias",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/saias-01.png",
+          "size": [
+            287,
+            488
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            257,
+            458
+          ],
+          "transparentPercent": 51.47,
+          "bytes": 113988,
+          "sha256": "f5db3e09c68e77fc47edbfcac65010964c9c16b23b6e5e16b0c7f13a4ddcaa8a"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/saias-01.webp",
+          "size": [
+            287,
+            488
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            257,
+            458
+          ],
+          "transparentPercent": 51.47,
+          "bytes": 18158,
+          "sha256": "8449e6cd7b97e5944be0cbcd99cb2be5b6d56926456eb5201655e169afa1f163"
+        },
+        "packshotWebp": {
+          "path": "packshots/saias-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            202,
+            84,
+            697,
+            1018
+          ],
+          "transparentPercent": 67.51,
+          "bytes": 56958,
+          "sha256": "33942b9ae3d35d47dfa46bb063976009f75f8e767937a3938e4f1b8a50f7c7d1"
+        }
+      }
+    },
+    {
+      "slug": "saias-02",
+      "name": "Saia plissada areia",
+      "category": "saias",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/saias-02.png",
+          "size": [
+            391,
+            499
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            360,
+            468
+          ],
+          "transparentPercent": 50.9,
+          "bytes": 166646,
+          "sha256": "234391c49cacd35764332f11e0988db74611737d9cf2b9470bf8e0e2e63c63f5"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/saias-02.webp",
+          "size": [
+            391,
+            499
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            360,
+            468
+          ],
+          "transparentPercent": 50.9,
+          "bytes": 34388,
+          "sha256": "b4d92f4ed452594e553b43bf0a2f8c7ee2efe736e76cc1ef63e95b19840a8ead"
+        },
+        "packshotWebp": {
+          "path": "packshots/saias-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            98,
+            84,
+            801,
+            1018
+          ],
+          "transparentPercent": 56.21,
+          "bytes": 87850,
+          "sha256": "bfc14bc7baae710902bdaa1b352671392bffcd8f385ad015f10902902f3c0164"
+        }
+      }
+    },
+    {
+      "slug": "saias-03",
+      "name": "Saia envelope off-white",
+      "category": "saias",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/saias-03.png",
+          "size": [
+            347,
+            488
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            317,
+            458
+          ],
+          "transparentPercent": 45.95,
+          "bytes": 143861,
+          "sha256": "73105043e4828d45976e0bc6ad187f36b4d24092c0cd147b33a447978c13ddfd"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/saias-03.webp",
+          "size": [
+            347,
+            488
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            317,
+            458
+          ],
+          "transparentPercent": 45.95,
+          "bytes": 21734,
+          "sha256": "8f7e96730f9eac2286a57bbbe7b0f5ca6e62b05b020ef0c200b630edcee39bb8"
+        },
+        "packshotWebp": {
+          "path": "packshots/saias-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            137,
+            84,
+            763,
+            1018
+          ],
+          "transparentPercent": 56.32,
+          "bytes": 63596,
+          "sha256": "72fc220132763e2795e9e36ddd6a7283d61a51ba5b03637281c20beb72375e3b"
+        }
+      }
+    },
+    {
+      "slug": "saias-04",
+      "name": "Saia curta tweed claro",
+      "category": "saias",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/saias-04.png",
+          "size": [
+            419,
+            352
+          ],
+          "alphaBBox": [
+            26,
+            26,
+            393,
+            326
+          ],
+          "transparentPercent": 40.79,
+          "bytes": 236803,
+          "sha256": "60734fe788230a795474184cace5d2c8483ac2639714f4858c73455d998089f3"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/saias-04.webp",
+          "size": [
+            419,
+            352
+          ],
+          "alphaBBox": [
+            26,
+            26,
+            393,
+            326
+          ],
+          "transparentPercent": 40.79,
+          "bytes": 60088,
+          "sha256": "bed8cdda2f6ad87a76146f19af220fc86405ae4ed1c40f64c9596f56d4071b91"
+        },
+        "packshotWebp": {
+          "path": "packshots/saias-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            76,
+            226,
+            823,
+            837
+          ],
+          "transparentPercent": 63.85,
+          "bytes": 130972,
+          "sha256": "7d0e87377fba81867e900a315c073e52cf6cf79e3a8d328881f08cbd245a60f9"
+        }
+      }
+    },
+    {
+      "slug": "saias-05",
+      "name": "Saia de camadas off-white",
+      "category": "saias",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/saias-05.png",
+          "size": [
+            363,
+            517
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            331,
+            485
+          ],
+          "transparentPercent": 45.91,
+          "bytes": 162954,
+          "sha256": "1732542a489e7e6f3f3949fd56a68cce24f962843fe964cf25a5a183451eec71"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/saias-05.webp",
+          "size": [
+            363,
+            517
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            331,
+            485
+          ],
+          "transparentPercent": 45.91,
+          "bytes": 25770,
+          "sha256": "7e0bfee97f24bc8a4d877300179d3076c137d84ccd2c2fd9067d04ddc3c7ab1d"
+        },
+        "packshotWebp": {
+          "path": "packshots/saias-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            142,
+            84,
+            758,
+            1018
+          ],
+          "transparentPercent": 56.84,
+          "bytes": 68620,
+          "sha256": "d9ea4c1a556292ee8e848ac53056400a338e7bb27f3be7dfb5d71fda5a77570f"
+        }
+      }
+    },
+    {
+      "slug": "saias-06",
+      "name": "Saia chocolate drapeada",
+      "category": "saias",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/saias-06.png",
+          "size": [
+            308,
+            517
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            276,
+            485
+          ],
+          "transparentPercent": 40.57,
+          "bytes": 157771,
+          "sha256": "2683a63fc2b15371362b661951c31b55ef945f9f875d5a571eaaab97f0afdbe6"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/saias-06.webp",
+          "size": [
+            308,
+            517
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            276,
+            485
+          ],
+          "transparentPercent": 40.57,
+          "bytes": 25280,
+          "sha256": "f0e0ee18d27a1c1581455019d613dd8f76e7082c10a0d46434d19296b8bded0b"
+        },
+        "packshotWebp": {
+          "path": "packshots/saias-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            198,
+            84,
+            701,
+            1018
+          ],
+          "transparentPercent": 59.81,
+          "bytes": 58912,
+          "sha256": "08067b058fd82892ecf0fe611684071c1d1f3b9688d73fa6e920d21c324b7805"
+        }
+      }
+    },
+    {
+      "slug": "calcas-01",
+      "name": "Calça pantalona off-white",
+      "category": "calcas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/calcas-01.png",
+          "size": [
+            292,
+            488
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            262,
+            458
+          ],
+          "transparentPercent": 49.79,
+          "bytes": 104221,
+          "sha256": "1cd15456ef3fdb1f91556288687ee6b821856b94d63a9159e74879ffcf79f5da"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/calcas-01.webp",
+          "size": [
+            292,
+            488
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            262,
+            458
+          ],
+          "transparentPercent": 49.79,
+          "bytes": 17448,
+          "sha256": "2a6cee49f61b5f0264c122cf2ee78e55ffa85143878deffa40e0733c3bd4b1da"
+        },
+        "packshotWebp": {
+          "path": "packshots/calcas-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            197,
+            84,
+            703,
+            1018
+          ],
+          "transparentPercent": 65.61,
+          "bytes": 53460,
+          "sha256": "756b41040de986504689dc36b0681ccd352466a9ad8e1d375bcba4450dfb3244"
+        }
+      }
+    },
+    {
+      "slug": "calcas-02",
+      "name": "Calça chocolate de caimento amplo",
+      "category": "calcas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/calcas-02.png",
+          "size": [
+            316,
+            491
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            286,
+            461
+          ],
+          "transparentPercent": 50.44,
+          "bytes": 121236,
+          "sha256": "9d799500a43e199280754fc7c063d9528c3cdfd0c0ff4d0cff2924a02641f4b6"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/calcas-02.webp",
+          "size": [
+            316,
+            491
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            286,
+            461
+          ],
+          "transparentPercent": 50.44,
+          "bytes": 23310,
+          "sha256": "db9190c2f4e64e5e32f6b75e67c63da055f19da30fd950b3e81f6950c5d0441b"
+        },
+        "packshotWebp": {
+          "path": "packshots/calcas-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            172,
+            84,
+            727,
+            1018
+          ],
+          "transparentPercent": 63.72,
+          "bytes": 60532,
+          "sha256": "b478971553d8ebadbd89b9cee0c7fa42a1bdbdcabe9ae0468852be3031515cc2"
+        }
+      }
+    },
+    {
+      "slug": "calcas-03",
+      "name": "Calça alfaiataria areia",
+      "category": "calcas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/calcas-03.png",
+          "size": [
+            237,
+            490
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            207,
+            460
+          ],
+          "transparentPercent": 42.79,
+          "bytes": 129934,
+          "sha256": "ec2e53c73ec2eb1d46e820509a8ef1c705e9d602059d8baa3a82651f712147e0"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/calcas-03.webp",
+          "size": [
+            237,
+            490
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            207,
+            460
+          ],
+          "transparentPercent": 42.79,
+          "bytes": 25406,
+          "sha256": "fe8f6769b1e85a701a9d2c82fb6e33450c125cfd4f6c478a1fbbacd3f23e25ad"
+        },
+        "packshotWebp": {
+          "path": "packshots/calcas-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            258,
+            84,
+            642,
+            1018
+          ],
+          "transparentPercent": 68.41,
+          "bytes": 64896,
+          "sha256": "17c94091951a09c804d5a24fa91531c5a9b78bf64903cc80924506e6b6a2aec1"
+        }
+      }
+    },
+    {
+      "slug": "calcas-04",
+      "name": "Calça reta preta",
+      "category": "calcas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/calcas-04.png",
+          "size": [
+            217,
+            489
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            187,
+            459
+          ],
+          "transparentPercent": 51.15,
+          "bytes": 78606,
+          "sha256": "d55542885b78233c589691947cc2fd1417604df07539dabab30732cc48302ae8"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/calcas-04.webp",
+          "size": [
+            217,
+            489
+          ],
+          "alphaBBox": [
+            30,
+            30,
+            187,
+            459
+          ],
+          "transparentPercent": 51.15,
+          "bytes": 13536,
+          "sha256": "f6d127c3ec7f342aa43ca50da98d00f7c7343d1c7e03008f33b7c550a31cb7dd"
+        },
+        "packshotWebp": {
+          "path": "packshots/calcas-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            279,
+            84,
+            621,
+            1018
+          ],
+          "transparentPercent": 75.0,
+          "bytes": 35344,
+          "sha256": "38c0561a830776dc5d018581d2d7e72383c52c460731ab23e4f7ef143b46785c"
+        }
+      }
+    },
+    {
+      "slug": "calcas-05",
+      "name": "Calça cargo oliva",
+      "category": "calcas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/calcas-05.png",
+          "size": [
+            251,
+            507
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            220,
+            476
+          ],
+          "transparentPercent": 43.58,
+          "bytes": 114662,
+          "sha256": "bea0c4aa4bdcfab60056ded514a3217986073f43243f8ac6ba98acb8de9cf406"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/calcas-05.webp",
+          "size": [
+            251,
+            507
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            220,
+            476
+          ],
+          "transparentPercent": 43.58,
+          "bytes": 19994,
+          "sha256": "33d19091117564c0b1ae708ecaab1033ae2c441a6f7d20ea524467195f177875"
+        },
+        "packshotWebp": {
+          "path": "packshots/calcas-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            251,
+            84,
+            648,
+            1018
+          ],
+          "transparentPercent": 67.97,
+          "bytes": 51388,
+          "sha256": "03e936925b92651af1b6b5a998ceccf709b79e928226af8e15772d93faf2d6a3"
+        }
+      }
+    },
+    {
+      "slug": "calcas-06",
+      "name": "Calça jeans flare azul",
+      "category": "calcas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/calcas-06.png",
+          "size": [
+            278,
+            510
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            247,
+            479
+          ],
+          "transparentPercent": 54.54,
+          "bytes": 147430,
+          "sha256": "f2d886bf119f59ca8f879ab5895701894ae4441965d5548adf3bc693e4ca9379"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/calcas-06.webp",
+          "size": [
+            278,
+            510
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            247,
+            479
+          ],
+          "transparentPercent": 54.54,
+          "bytes": 34122,
+          "sha256": "07f5bdd227bd41ab8ca4d1ce4f9ddf2de498781901d408b2cfec76f4a65e6f60"
+        },
+        "packshotWebp": {
+          "path": "packshots/calcas-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            225,
+            84,
+            675,
+            1018
+          ],
+          "transparentPercent": 71.58,
+          "bytes": 81980,
+          "sha256": "e24832d48820c52b8c2e4f8d7528a775824629d65977b1faf14993c539fc80bf"
+        }
+      }
+    },
+    {
+      "slug": "bolsas-01",
+      "name": "Bolsa shoulder marfim",
+      "category": "bolsas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/bolsas-01.png",
+          "size": [
+            445,
+            500
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            414,
+            469
+          ],
+          "transparentPercent": 66.14,
+          "bytes": 150383,
+          "sha256": "7374149a3c453d3bcc065a019afd8a98b31e66bf4388e10ebad84b4f97779b3e"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/bolsas-01.webp",
+          "size": [
+            445,
+            500
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            414,
+            469
+          ],
+          "transparentPercent": 66.14,
+          "bytes": 32302,
+          "sha256": "d783b95d348ede77277b64dec26c375ee96fc6c30ce270d564ef0172645a8af0"
+        },
+        "packshotWebp": {
+          "path": "packshots/bolsas-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            140,
+            208,
+            760,
+            917
+          ],
+          "transparentPercent": 79.99,
+          "bytes": 66554,
+          "sha256": "ed3e9c053f97167e58bbe7f04adf1479c4ce9cc75535ec988e7465125b601489"
+        }
+      }
+    },
+    {
+      "slug": "bolsas-02",
+      "name": "Bolsa de mão dourado champagne",
+      "category": "bolsas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/bolsas-02.png",
+          "size": [
+            404,
+            422
+          ],
+          "alphaBBox": [
+            26,
+            26,
+            378,
+            396
+          ],
+          "transparentPercent": 56.93,
+          "bytes": 217206,
+          "sha256": "df07b7a67eacc02e63e4ea5bd05183d4d8746d0559ea8ca5665bcc083b5460f3"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/bolsas-02.webp",
+          "size": [
+            404,
+            422
+          ],
+          "alphaBBox": [
+            26,
+            26,
+            378,
+            396
+          ],
+          "transparentPercent": 56.93,
+          "bytes": 56818,
+          "sha256": "a53167c48c4cf524f3688773ae77e1c88c3414576bc8310329e4bac8b80a6bb2"
+        },
+        "packshotWebp": {
+          "path": "packshots/bolsas-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            113,
+            208,
+            787,
+            917
+          ],
+          "transparentPercent": 72.84,
+          "bytes": 130894,
+          "sha256": "e33ca2459869cb18d0aeb2bf766fc4c3e42b5a950ee32e7acb8854516a0a0275"
+        }
+      }
+    },
+    {
+      "slug": "bolsas-03",
+      "name": "Bolsa matelassê preta",
+      "category": "bolsas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/bolsas-03.png",
+          "size": [
+            455,
+            335
+          ],
+          "alphaBBox": [
+            28,
+            28,
+            427,
+            307
+          ],
+          "transparentPercent": 32.76,
+          "bytes": 228866,
+          "sha256": "c416e68bc581d10c72d55fa15beeed53421cd820862aa25c4c90e780dea687e6"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/bolsas-03.webp",
+          "size": [
+            455,
+            335
+          ],
+          "alphaBBox": [
+            28,
+            28,
+            427,
+            307
+          ],
+          "transparentPercent": 32.76,
+          "bytes": 46930,
+          "sha256": "eacb3c3cd091e720995a17cb28cb5dda4d7497476acfeaf96e2c1142b500dd83"
+        },
+        "packshotWebp": {
+          "path": "packshots/bolsas-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            85,
+            308,
+            814,
+            818
+          ],
+          "transparentPercent": 65.83,
+          "bytes": 89892,
+          "sha256": "dadbd9eaeecf3a1422fad550d960068ac5d12e3c887c64a523e8a5bbd63bcfd4"
+        }
+      }
+    },
+    {
+      "slug": "bolsas-04",
+      "name": "Bolsa tote areia",
+      "category": "bolsas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/bolsas-04.png",
+          "size": [
+            456,
+            472
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            427,
+            443
+          ],
+          "transparentPercent": 50.37,
+          "bytes": 238161,
+          "sha256": "7e71d9a4509f82eb0375e915adda970afb78d62acd18a9199f76753036d03139"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/bolsas-04.webp",
+          "size": [
+            456,
+            472
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            427,
+            443
+          ],
+          "transparentPercent": 50.37,
+          "bytes": 49036,
+          "sha256": "664b543d8e97a34f8461fb700c8527f39595759d6c034160417be85574aab892"
+        },
+        "packshotWebp": {
+          "path": "packshots/bolsas-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            109,
+            208,
+            790,
+            917
+          ],
+          "transparentPercent": 68.62,
+          "bytes": 90124,
+          "sha256": "59f120d6d18160e9ebdf0716dd127505509d396188795f5affbfdcb86d1694f7"
+        }
+      }
+    },
+    {
+      "slug": "bolsas-05",
+      "name": "Bolsa shoulder vinho",
+      "category": "bolsas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/bolsas-05.png",
+          "size": [
+            523,
+            362
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            491,
+            330
+          ],
+          "transparentPercent": 40.73,
+          "bytes": 272922,
+          "sha256": "d8526d0a8331c1ec1efe33b27188a0092390a0ea8de23c8177eb70695d9abd41"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/bolsas-05.webp",
+          "size": [
+            523,
+            362
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            491,
+            330
+          ],
+          "transparentPercent": 40.73,
+          "bytes": 60056,
+          "sha256": "6b2a108e1c02d08f2831ca059526ba896cebfc691ebbe4dbef9190eeefbe11f4"
+        },
+        "packshotWebp": {
+          "path": "packshots/bolsas-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            85,
+            326,
+            814,
+            799
+          ],
+          "transparentPercent": 71.65,
+          "bytes": 99114,
+          "sha256": "2551f199692573f51816f87bcf99f768a9481b9fbdd7f4671851f8f7e1de20f7"
+        }
+      }
+    },
+    {
+      "slug": "bolsas-06",
+      "name": "Bolsa champagne drapeada",
+      "category": "bolsas",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/bolsas-06.png",
+          "size": [
+            458,
+            451
+          ],
+          "alphaBBox": [
+            28,
+            28,
+            430,
+            423
+          ],
+          "transparentPercent": 53.2,
+          "bytes": 209079,
+          "sha256": "a9bedc62e4bf75cf543ec97a39d3c798166fcb146b7f7ba1063754a0a4ac0434"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/bolsas-06.webp",
+          "size": [
+            458,
+            451
+          ],
+          "alphaBBox": [
+            28,
+            28,
+            430,
+            423
+          ],
+          "transparentPercent": 53.2,
+          "bytes": 43052,
+          "sha256": "a858bb2dd5176e7718f70e437442624dfc6e0e72305fe6b3bb72b2d9cdb71d66"
+        },
+        "packshotWebp": {
+          "path": "packshots/bolsas-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            89,
+            208,
+            810,
+            917
+          ],
+          "transparentPercent": 68.72,
+          "bytes": 87824,
+          "sha256": "ded836257c7470a3844332a58d456713aefcfaaa3ad65043b5a598f052b21990"
+        }
+      }
+    },
+    {
+      "slug": "pulseiras-01",
+      "name": "Pulseira de elos dourados",
+      "category": "pulseiras",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/pulseiras-01.png",
+          "size": [
+            516,
+            354
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            484,
+            322
+          ],
+          "transparentPercent": 64.77,
+          "bytes": 191569,
+          "sha256": "e28dfe707825597c103115782ff23bce61389f0479d201c58ba0909d149d86b6"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/pulseiras-01.webp",
+          "size": [
+            516,
+            354
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            484,
+            322
+          ],
+          "transparentPercent": 64.77,
+          "bytes": 61572,
+          "sha256": "47353e169a7d25f1d947210814d893bcc686ce9bf340daffd051ee8615d39626"
+        },
+        "packshotWebp": {
+          "path": "packshots/pulseiras-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            338,
+            801,
+            788
+          ],
+          "transparentPercent": 84.03,
+          "bytes": 113934,
+          "sha256": "3f8f2317f3a59e592a66d1f717173c9c475f9f5b94ea9be9275aeb1499fb4fec"
+        }
+      }
+    },
+    {
+      "slug": "pulseiras-02",
+      "name": "Pulseira riviera delicada",
+      "category": "pulseiras",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/pulseiras-02.png",
+          "size": [
+            566,
+            284
+          ],
+          "alphaBBox": [
+            35,
+            35,
+            531,
+            249
+          ],
+          "transparentPercent": 76.84,
+          "bytes": 123679,
+          "sha256": "3e9adde0f4bf93422434d90238f4ef5ea3b6a15a5ca53ddceecaf588b7ed8906"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/pulseiras-02.webp",
+          "size": [
+            566,
+            284
+          ],
+          "alphaBBox": [
+            35,
+            35,
+            531,
+            249
+          ],
+          "transparentPercent": 76.84,
+          "bytes": 44160,
+          "sha256": "9aae2b71e69d929958d925518f0e8efa070dfe3b468a9335c201ff1c1c94a439"
+        },
+        "packshotWebp": {
+          "path": "packshots/pulseiras-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            411,
+            801,
+            714
+          ],
+          "transparentPercent": 92.25,
+          "bytes": 75774,
+          "sha256": "341de26a719544a343f76998ab8ed2f64ebf99806afecfbd3e27be71b57bfa91"
+        }
+      }
+    },
+    {
+      "slug": "pulseiras-03",
+      "name": "Bracelete escultural dourado",
+      "category": "pulseiras",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/pulseiras-03.png",
+          "size": [
+            535,
+            300
+          ],
+          "alphaBBox": [
+            33,
+            33,
+            502,
+            267
+          ],
+          "transparentPercent": 58.13,
+          "bytes": 140599,
+          "sha256": "2447f4ceb78951cfa5d0db034ab0f7bfb5163e4f7862bdd732541f8afd908e28"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/pulseiras-03.webp",
+          "size": [
+            535,
+            300
+          ],
+          "alphaBBox": [
+            33,
+            33,
+            502,
+            267
+          ],
+          "transparentPercent": 58.13,
+          "bytes": 33136,
+          "sha256": "07ee490120336826c38d1cd8a854a11e2abbf3c1b64dc23ad65f8aca94863c79"
+        },
+        "packshotWebp": {
+          "path": "packshots/pulseiras-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            388,
+            801,
+            738
+          ],
+          "transparentPercent": 84.8,
+          "bytes": 57404,
+          "sha256": "257f5684983fefab243e0848b5b6e943edeb02069bd19fd1e7737e426baa4a07"
+        }
+      }
+    },
+    {
+      "slug": "pulseiras-04",
+      "name": "Pulseira de pérolas",
+      "category": "pulseiras",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/pulseiras-04.png",
+          "size": [
+            555,
+            374
+          ],
+          "alphaBBox": [
+            34,
+            34,
+            521,
+            340
+          ],
+          "transparentPercent": 48.75,
+          "bytes": 230009,
+          "sha256": "cef03694b0acad0dc8f0e4e7e5b8ae71e447ea63ce485ae9fe822d072b51d3a4"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/pulseiras-04.webp",
+          "size": [
+            555,
+            374
+          ],
+          "alphaBBox": [
+            34,
+            34,
+            521,
+            340
+          ],
+          "transparentPercent": 48.75,
+          "bytes": 57180,
+          "sha256": "3b3622c850073a8b04d410a06dafd1d05919e854565fa79065108e825a6b02aa"
+        },
+        "packshotWebp": {
+          "path": "packshots/pulseiras-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            342,
+            801,
+            783
+          ],
+          "transparentPercent": 77.72,
+          "bytes": 90902,
+          "sha256": "3f2c57bc4c8a4f0a622ade7bee81738be83e31ba9dd7f4bbf01ea1eab8353b25"
+        }
+      }
+    },
+    {
+      "slug": "pulseiras-05",
+      "name": "Pulseira corda dourada",
+      "category": "pulseiras",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/pulseiras-05.png",
+          "size": [
+            541,
+            367
+          ],
+          "alphaBBox": [
+            33,
+            33,
+            508,
+            334
+          ],
+          "transparentPercent": 77.22,
+          "bytes": 146276,
+          "sha256": "99afc43ea1a2662933e40b5e4ea1004e61be82fa938e174343dcef98a4b3f7d7"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/pulseiras-05.webp",
+          "size": [
+            541,
+            367
+          ],
+          "alphaBBox": [
+            33,
+            33,
+            508,
+            334
+          ],
+          "transparentPercent": 77.22,
+          "bytes": 48720,
+          "sha256": "3a807de43c0279c1335d4e38b53a2c833f40b5d71521e2dc7fb8c23c08e27a81"
+        },
+        "packshotWebp": {
+          "path": "packshots/pulseiras-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            340,
+            801,
+            785
+          ],
+          "transparentPercent": 89.8,
+          "bytes": 85740,
+          "sha256": "214698e1c5b2fcbffece9b2e6df4270c89e1c70f734a94a0ae1f8fc813094033"
+        }
+      }
+    },
+    {
+      "slug": "pulseiras-06",
+      "name": "Pulseira com pingentes",
+      "category": "pulseiras",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/pulseiras-06.png",
+          "size": [
+            558,
+            416
+          ],
+          "alphaBBox": [
+            34,
+            34,
+            524,
+            382
+          ],
+          "transparentPercent": 87.28,
+          "bytes": 113761,
+          "sha256": "c197ac1d7717a38c4508d6bd6077a591fd0c86ad8c3bc4b9f2f84b6a32c5e0cf"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/pulseiras-06.webp",
+          "size": [
+            558,
+            416
+          ],
+          "alphaBBox": [
+            34,
+            34,
+            524,
+            382
+          ],
+          "transparentPercent": 87.28,
+          "bytes": 51342,
+          "sha256": "652936b89c46c283d90f7b8bc92e0daf13ee23880b6b6841185d445ea9b15e78"
+        },
+        "packshotWebp": {
+          "path": "packshots/pulseiras-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            313,
+            801,
+            812
+          ],
+          "transparentPercent": 93.27,
+          "bytes": 100892,
+          "sha256": "0a56f28fe395463e2fbffb28d753934f18792885c3b52ade1910a8dc929b35fe"
+        }
+      }
+    },
+    {
+      "slug": "aneis-01",
+      "name": "Anel solitário de cristal",
+      "category": "aneis",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/aneis-01.png",
+          "size": [
+            507,
+            321
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            476,
+            290
+          ],
+          "transparentPercent": 66.72,
+          "bytes": 146540,
+          "sha256": "a12a0f97e029b057d96303cfca1b4b8c386490e4e6663a1bd286e8a4d265bf9e"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/aneis-01.webp",
+          "size": [
+            507,
+            321
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            476,
+            290
+          ],
+          "transparentPercent": 66.72,
+          "bytes": 44470,
+          "sha256": "8227f11a40a6db06107066d6805018ce9c987d16d9359aaabb06274c7fdb3a7f"
+        },
+        "packshotWebp": {
+          "path": "packshots/aneis-01.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            358,
+            801,
+            767
+          ],
+          "transparentPercent": 86.22,
+          "bytes": 86786,
+          "sha256": "4cff376c8de0997d93f32c18f1ef6a31b1cd09e617772c6f50fa7e63d33f79ed"
+        }
+      }
+    },
+    {
+      "slug": "aneis-02",
+      "name": "Anel de pedra rosé",
+      "category": "aneis",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/aneis-02.png",
+          "size": [
+            515,
+            356
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            483,
+            324
+          ],
+          "transparentPercent": 59.71,
+          "bytes": 216697,
+          "sha256": "ef9781d04251edcbab4949aa1f09cfcc5884dd62c96bd8e4b17a7e0887927ab0"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/aneis-02.webp",
+          "size": [
+            515,
+            356
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            483,
+            324
+          ],
+          "transparentPercent": 59.71,
+          "bytes": 61696,
+          "sha256": "e62e4c09eaed06b31ec3392da1af780b5d7da0e68045c34be6c101758dec8f44"
+        },
+        "packshotWebp": {
+          "path": "packshots/aneis-02.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            335,
+            801,
+            790
+          ],
+          "transparentPercent": 81.96,
+          "bytes": 107690,
+          "sha256": "b0edd19acfbb1a3f085aa106ac1e4cf81c4a0f03162993069b5a5163598a4ffd"
+        }
+      }
+    },
+    {
+      "slug": "aneis-03",
+      "name": "Anel dourado de curvas",
+      "category": "aneis",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/aneis-03.png",
+          "size": [
+            473,
+            383
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            444,
+            354
+          ],
+          "transparentPercent": 52.11,
+          "bytes": 185890,
+          "sha256": "04a5a1024638f47c8708af409716fa05f68ffcc4679bd3851e634a76a7c1f786"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/aneis-03.webp",
+          "size": [
+            473,
+            383
+          ],
+          "alphaBBox": [
+            29,
+            29,
+            444,
+            354
+          ],
+          "transparentPercent": 52.11,
+          "bytes": 42406,
+          "sha256": "3eb78edfc0f66e3f1da7ce85d381209ae2db298c95b279145cd617de0ca5269e"
+        },
+        "packshotWebp": {
+          "path": "packshots/aneis-03.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            288,
+            801,
+            838
+          ],
+          "transparentPercent": 75.01,
+          "bytes": 81328,
+          "sha256": "d78135edf020a0d2581c640f2c3427c6d8c88a28f5b505d8036b726c3cf25199"
+        }
+      }
+    },
+    {
+      "slug": "aneis-04",
+      "name": "Anel cravejado de brilho fino",
+      "category": "aneis",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/aneis-04.png",
+          "size": [
+            522,
+            288
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            490,
+            256
+          ],
+          "transparentPercent": 51.51,
+          "bytes": 201953,
+          "sha256": "647219a73a043ac44e44f4d6b93b903edea0cba5e50fdd4efe1414717883445a"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/aneis-04.webp",
+          "size": [
+            522,
+            288
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            490,
+            256
+          ],
+          "transparentPercent": 51.51,
+          "bytes": 55620,
+          "sha256": "ea5a17256f8a588c64585e5ee91e7b70eb9b0b6362943a8396ff4349cf21fa98"
+        },
+        "packshotWebp": {
+          "path": "packshots/aneis-04.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            391,
+            801,
+            734
+          ],
+          "transparentPercent": 82.73,
+          "bytes": 99990,
+          "sha256": "bdecdf0ca0351241640d13e9eb6b1e55193611aba751adf29595eb288c63bfc6"
+        }
+      }
+    },
+    {
+      "slug": "aneis-05",
+      "name": "Anel trançado dourado",
+      "category": "aneis",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/aneis-05.png",
+          "size": [
+            515,
+            261
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            483,
+            229
+          ],
+          "transparentPercent": 60.73,
+          "bytes": 146019,
+          "sha256": "77c2ba24387456f0e51af9760ee1b990e589220d7263a9b6babee2ac81ab2ceb"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/aneis-05.webp",
+          "size": [
+            515,
+            261
+          ],
+          "alphaBBox": [
+            32,
+            32,
+            483,
+            229
+          ],
+          "transparentPercent": 60.73,
+          "bytes": 43786,
+          "sha256": "b8b778c25f3f8eab6d077ac6a5f0500f4c0aacc97f0186f0355ce4e008f4faf4"
+        },
+        "packshotWebp": {
+          "path": "packshots/aneis-05.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            99,
+            409,
+            801,
+            716
+          ],
+          "transparentPercent": 86.94,
+          "bytes": 81902,
+          "sha256": "94e4d958549adfff738e00e52b8d4190d6fd15377283499fff730151da79acf4"
+        }
+      }
+    },
+    {
+      "slug": "aneis-06",
+      "name": "Anel statement de cristais",
+      "category": "aneis",
+      "files": {
+        "cutoutPng": {
+          "path": "cutouts/aneis-06.png",
+          "size": [
+            510,
+            438
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            479,
+            407
+          ],
+          "transparentPercent": 64.52,
+          "bytes": 230621,
+          "sha256": "e4ca4a8cb685af589856921d96da8f755ae10a6fd77897e998ac84e9d2e0a2cd"
+        },
+        "cutoutWebp": {
+          "path": "cutouts/aneis-06.webp",
+          "size": [
+            510,
+            438
+          ],
+          "alphaBBox": [
+            31,
+            31,
+            479,
+            407
+          ],
+          "transparentPercent": 64.52,
+          "bytes": 64238,
+          "sha256": "dc12dd5f0d306b30d0d18df2761e7c677cbbc4b73b4b9cd2a44e7f8abec74dc9"
+        },
+        "packshotWebp": {
+          "path": "packshots/aneis-06.webp",
+          "size": [
+            900,
+            1125
+          ],
+          "alphaBBox": [
+            115,
+            282,
+            785,
+            844
+          ],
+          "transparentPercent": 82.15,
+          "bytes": 102522,
+          "sha256": "eccec3c950a7d8f208aa6433617f58e2cecefaec228c2eeec6cb7ea984edd7a8"
+        }
+      }
+    }
+  ]
+}

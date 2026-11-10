@@ -1,0 +1,3513 @@
+[
+  {
+    "id": "BELLE-DEMO-CAMISAS-01",
+    "slug": "camisas-01",
+    "category": "camisas",
+    "name": "Camisa branca de corte estruturado",
+    "color": "Branco",
+    "description": "Camisa clara de gola pontuda, abertura frontal e mangas longas.",
+    "cutoutPng": "assets/products/cutouts/camisas-01.png",
+    "cutoutWebp": "assets/products/cutouts/camisas-01.webp",
+    "packshotWebp": "assets/products/packshots/camisas-01.webp",
+    "sourceSheet": "assets/products/source_sheets/camisas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      376,
+      492
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4199,
+    "productPixelArea": 108971,
+    "productBBoxInSourceCell": [
+      160,
+      8,
+      476,
+      440
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1711,
+      0.1236,
+      0.8289,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/camisas-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/camisas-01.png",
+      "productCard": "public/assets/belle/products/packshots/camisas-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CAMISAS-02",
+    "slug": "camisas-02",
+    "category": "camisas",
+    "name": "Camisa champagne com brilho acetinado",
+    "color": "Champagne",
+    "description": "Blusa social acetinada, com mangas amplas e abotoamento frontal.",
+    "cutoutPng": "assets/products/cutouts/camisas-02.png",
+    "cutoutWebp": "assets/products/cutouts/camisas-02.webp",
+    "packshotWebp": "assets/products/packshots/camisas-02.webp",
+    "sourceSheet": "assets/products/source_sheets/camisas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      399,
+      489
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4372,
+    "productPixelArea": 113876,
+    "productBBoxInSourceCell": [
+      58,
+      12,
+      397,
+      441
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1444,
+      0.1236,
+      0.8556,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/camisas-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/camisas-02.png",
+      "productCard": "public/assets/belle/products/packshots/camisas-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CAMISAS-03",
+    "slug": "camisas-03",
+    "category": "camisas",
+    "name": "Camisa azul de tecido listrado",
+    "color": "Azul claro",
+    "description": "Camisa azul de corte alongado com padronagem de listras discretas.",
+    "cutoutPng": "assets/products/cutouts/camisas-03.png",
+    "cutoutWebp": "assets/products/cutouts/camisas-03.webp",
+    "packshotWebp": "assets/products/packshots/camisas-03.webp",
+    "sourceSheet": "assets/products/source_sheets/camisas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      412,
+      501
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4467,
+    "productPixelArea": 115921,
+    "productBBoxInSourceCell": [
+      151,
+      0,
+      501,
+      439
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1411,
+      0.1236,
+      0.8589,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/camisas-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/camisas-03.png",
+      "productCard": "public/assets/belle/products/packshots/camisas-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CAMISAS-04",
+    "slug": "camisas-04",
+    "category": "camisas",
+    "name": "Camisa rosé com laço",
+    "color": "Rosé",
+    "description": "Blusa rosé com laço no decote e mangas volumosas.",
+    "cutoutPng": "assets/products/cutouts/camisas-04.png",
+    "cutoutWebp": "assets/products/cutouts/camisas-04.webp",
+    "packshotWebp": "assets/products/packshots/camisas-04.webp",
+    "sourceSheet": "assets/products/source_sheets/camisas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      412,
+      498
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.462,
+    "productPixelArea": 119773,
+    "productBBoxInSourceCell": [
+      53,
+      0,
+      403,
+      436
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1389,
+      0.1236,
+      0.8611,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/camisas-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/camisas-04.png",
+      "productCard": "public/assets/belle/products/packshots/camisas-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CAMISAS-05",
+    "slug": "camisas-05",
+    "category": "camisas",
+    "name": "Camisa utilitária areia",
+    "color": "Areia",
+    "description": "Camisa estruturada com bolsos frontais e botões metálicos.",
+    "cutoutPng": "assets/products/cutouts/camisas-05.png",
+    "cutoutWebp": "assets/products/cutouts/camisas-05.webp",
+    "packshotWebp": "assets/products/packshots/camisas-05.webp",
+    "sourceSheet": "assets/products/source_sheets/camisas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      400,
+      501
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4655,
+    "productPixelArea": 121105,
+    "productBBoxInSourceCell": [
+      151,
+      0,
+      489,
+      439
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1533,
+      0.1236,
+      0.8467,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/camisas-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/camisas-05.png",
+      "productCard": "public/assets/belle/products/packshots/camisas-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CAMISAS-06",
+    "slug": "camisas-06",
+    "category": "camisas",
+    "name": "Camisa estampada de corrente dourada",
+    "color": "Off-white e dourado",
+    "description": "Camisa clara com estampa de correntes, gola clássica e mangas longas.",
+    "cutoutPng": "assets/products/cutouts/camisas-06.png",
+    "cutoutWebp": "assets/products/cutouts/camisas-06.webp",
+    "packshotWebp": "assets/products/packshots/camisas-06.webp",
+    "sourceSheet": "assets/products/source_sheets/camisas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      417,
+      501
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4683,
+    "productPixelArea": 121673,
+    "productBBoxInSourceCell": [
+      48,
+      0,
+      403,
+      439
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1356,
+      0.1236,
+      0.8633,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/camisas-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/camisas-06.png",
+      "productCard": "public/assets/belle/products/packshots/camisas-06.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CROPPEDS-01",
+    "slug": "croppeds-01",
+    "category": "croppeds",
+    "name": "Cropped preto de corset",
+    "color": "Preto",
+    "description": "Top preto estruturado com recortes frontais e alças finas.",
+    "cutoutPng": "assets/products/cutouts/croppeds-01.png",
+    "cutoutWebp": "assets/products/cutouts/croppeds-01.webp",
+    "packshotWebp": "assets/products/packshots/croppeds-01.webp",
+    "sourceSheet": "assets/products/source_sheets/croppeds_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      403,
+      472
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3153,
+    "productPixelArea": 81540,
+    "productBBoxInSourceCell": [
+      150,
+      33,
+      495,
+      447
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1244,
+      0.1236,
+      0.8744,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/croppeds-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/croppeds-01.png",
+      "productCard": "public/assets/belle/products/packshots/croppeds-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CROPPEDS-02",
+    "slug": "croppeds-02",
+    "category": "croppeds",
+    "name": "Cropped vinho de cetim drapeado",
+    "color": "Vinho",
+    "description": "Top vinho de alças finas com drapeado na frente.",
+    "cutoutPng": "assets/products/cutouts/croppeds-02.png",
+    "cutoutWebp": "assets/products/cutouts/croppeds-02.webp",
+    "packshotWebp": "assets/products/packshots/croppeds-02.webp",
+    "sourceSheet": "assets/products/source_sheets/croppeds_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      437,
+      466
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.341,
+    "productPixelArea": 88440,
+    "productBBoxInSourceCell": [
+      76,
+      32,
+      455,
+      440
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.09,
+      0.1298,
+      0.91,
+      0.8356
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/croppeds-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/croppeds-02.png",
+      "productCard": "public/assets/belle/products/packshots/croppeds-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CROPPEDS-03",
+    "slug": "croppeds-03",
+    "category": "croppeds",
+    "name": "Cropped champagne de um ombro",
+    "color": "Champagne",
+    "description": "Top assimétrico acetinado com drapeado lateral.",
+    "cutoutPng": "assets/products/cutouts/croppeds-03.png",
+    "cutoutWebp": "assets/products/cutouts/croppeds-03.webp",
+    "packshotWebp": "assets/products/packshots/croppeds-03.webp",
+    "sourceSheet": "assets/products/source_sheets/croppeds_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      413,
+      478
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4083,
+    "productPixelArea": 106544,
+    "productBBoxInSourceCell": [
+      135,
+      20,
+      490,
+      440
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1189,
+      0.1236,
+      0.88,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/croppeds-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/croppeds-03.png",
+      "productCard": "public/assets/belle/products/packshots/croppeds-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CROPPEDS-04",
+    "slug": "croppeds-04",
+    "category": "croppeds",
+    "name": "Cropped verde oliva frente única",
+    "color": "Verde oliva",
+    "description": "Top verde de gola alta com volume franzido.",
+    "cutoutPng": "assets/products/cutouts/croppeds-04.png",
+    "cutoutWebp": "assets/products/cutouts/croppeds-04.webp",
+    "packshotWebp": "assets/products/packshots/croppeds-04.webp",
+    "sourceSheet": "assets/products/source_sheets/croppeds_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      410,
+      485
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4273,
+    "productPixelArea": 111583,
+    "productBBoxInSourceCell": [
+      93,
+      12,
+      443,
+      437
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1289,
+      0.1236,
+      0.87,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/croppeds-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/croppeds-04.png",
+      "productCard": "public/assets/belle/products/packshots/croppeds-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CROPPEDS-05",
+    "slug": "croppeds-05",
+    "category": "croppeds",
+    "name": "Cropped branco com mangas bufantes",
+    "color": "Off-white",
+    "description": "Top branco curto de mangas volumosas e decote quadrado.",
+    "cutoutPng": "assets/products/cutouts/croppeds-05.png",
+    "cutoutWebp": "assets/products/cutouts/croppeds-05.webp",
+    "packshotWebp": "assets/products/packshots/croppeds-05.webp",
+    "sourceSheet": "assets/products/source_sheets/croppeds_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      598,
+      445
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4661,
+    "productPixelArea": 121285,
+    "productBBoxInSourceCell": [
+      37,
+      38,
+      561,
+      409
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.09,
+      0.2356,
+      0.91,
+      0.7004
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/croppeds-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/croppeds-05.png",
+      "productCard": "public/assets/belle/products/packshots/croppeds-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CROPPEDS-06",
+    "slug": "croppeds-06",
+    "category": "croppeds",
+    "name": "Cropped champagne com nó",
+    "color": "Champagne",
+    "description": "Top acetinado com laço central e alças delicadas.",
+    "cutoutPng": "assets/products/cutouts/croppeds-06.png",
+    "cutoutWebp": "assets/products/cutouts/croppeds-06.webp",
+    "packshotWebp": "assets/products/packshots/croppeds-06.webp",
+    "sourceSheet": "assets/products/source_sheets/croppeds_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      436,
+      479
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3474,
+    "productPixelArea": 89883,
+    "productBBoxInSourceCell": [
+      79,
+      3,
+      457,
+      424
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.0956,
+      0.1236,
+      0.9033,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/croppeds-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/croppeds-06.png",
+      "productCard": "public/assets/belle/products/packshots/croppeds-06.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-VESTIDOS-01",
+    "slug": "vestidos-01",
+    "category": "vestidos",
+    "name": "Vestido champagne assimétrico",
+    "color": "Champagne",
+    "description": "Vestido longo drapeado com modelagem de um ombro.",
+    "cutoutPng": "assets/products/cutouts/vestidos-01.png",
+    "cutoutWebp": "assets/products/cutouts/vestidos-01.webp",
+    "packshotWebp": "assets/products/packshots/vestidos-01.webp",
+    "sourceSheet": "assets/products/source_sheets/vestidos_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      308,
+      489
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.221,
+    "productPixelArea": 57363,
+    "productBBoxInSourceCell": [
+      223,
+      24,
+      471,
+      453
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2,
+      0.0747,
+      0.8,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/vestidos-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/vestidos-01.png",
+      "productCard": "public/assets/belle/products/packshots/vestidos-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-VESTIDOS-02",
+    "slug": "vestidos-02",
+    "category": "vestidos",
+    "name": "Vestido vinho com laço no busto",
+    "color": "Vinho",
+    "description": "Vestido midi vinho de silhueta ajustada e detalhe estruturado no colo.",
+    "cutoutPng": "assets/products/cutouts/vestidos-02.png",
+    "cutoutWebp": "assets/products/cutouts/vestidos-02.webp",
+    "packshotWebp": "assets/products/packshots/vestidos-02.webp",
+    "sourceSheet": "assets/products/source_sheets/vestidos_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      207,
+      438
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.1548,
+    "productPixelArea": 40015,
+    "productBBoxInSourceCell": [
+      138,
+      54,
+      291,
+      438
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2933,
+      0.0747,
+      0.7067,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/vestidos-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/vestidos-02.png",
+      "productCard": "public/assets/belle/products/packshots/vestidos-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-VESTIDOS-03",
+    "slug": "vestidos-03",
+    "category": "vestidos",
+    "name": "Vestido renda off-white",
+    "color": "Off-white",
+    "description": "Vestido curto rendado, decote delicado e saia volumosa.",
+    "cutoutPng": "assets/products/cutouts/vestidos-03.png",
+    "cutoutWebp": "assets/products/cutouts/vestidos-03.webp",
+    "packshotWebp": "assets/products/packshots/vestidos-03.webp",
+    "sourceSheet": "assets/products/source_sheets/vestidos_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      340,
+      455
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2259,
+    "productPixelArea": 57813,
+    "productBBoxInSourceCell": [
+      203,
+      13,
+      487,
+      412
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.13,
+      0.0747,
+      0.8689,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/vestidos-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/vestidos-03.png",
+      "productCard": "public/assets/belle/products/packshots/vestidos-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-VESTIDOS-04",
+    "slug": "vestidos-04",
+    "category": "vestidos",
+    "name": "Vestido longo floral",
+    "color": "Rosa floral",
+    "description": "Vestido longo estampado, saia fluida e alças finas.",
+    "cutoutPng": "assets/products/cutouts/vestidos-04.png",
+    "cutoutWebp": "assets/products/cutouts/vestidos-04.webp",
+    "packshotWebp": "assets/products/packshots/vestidos-04.webp",
+    "sourceSheet": "assets/products/source_sheets/vestidos_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      377,
+      467
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2403,
+    "productPixelArea": 62179,
+    "productBBoxInSourceCell": [
+      58,
+      12,
+      377,
+      421
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.0956,
+      0.0747,
+      0.9044,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/vestidos-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/vestidos-04.png",
+      "productCard": "public/assets/belle/products/packshots/vestidos-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-VESTIDOS-05",
+    "slug": "vestidos-05",
+    "category": "vestidos",
+    "name": "Vestido azul fluido",
+    "color": "Azul claro",
+    "description": "Vestido longo azul de decote assimétrico e saia ampla.",
+    "cutoutPng": "assets/products/cutouts/vestidos-05.png",
+    "cutoutWebp": "assets/products/cutouts/vestidos-05.webp",
+    "packshotWebp": "assets/products/packshots/vestidos-05.webp",
+    "sourceSheet": "assets/products/source_sheets/vestidos_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      336,
+      517
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2518,
+    "productPixelArea": 65390,
+    "productBBoxInSourceCell": [
+      209,
+      0,
+      481,
+      453
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1878,
+      0.0747,
+      0.8111,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/vestidos-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/vestidos-05.png",
+      "productCard": "public/assets/belle/products/packshots/vestidos-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-VESTIDOS-06",
+    "slug": "vestidos-06",
+    "category": "vestidos",
+    "name": "Vestido preto com detalhe dourado",
+    "color": "Preto e dourado",
+    "description": "Vestido preto longo com drapeados e aplicação dourada lateral.",
+    "cutoutPng": "assets/products/cutouts/vestidos-06.png",
+    "cutoutWebp": "assets/products/cutouts/vestidos-06.webp",
+    "packshotWebp": "assets/products/packshots/vestidos-06.webp",
+    "sourceSheet": "assets/products/source_sheets/vestidos_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      827,
+      1629
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2033,
+    "productPixelArea": 52677,
+    "productBBoxInSourceCell": [
+      113,
+      0,
+      325,
+      449
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2822,
+      0.1236,
+      0.7178,
+      0.8436
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "visual_review_corrected_no_human_visible",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/vestidos-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/vestidos-06.png",
+      "productCard": "public/assets/belle/products/packshots/vestidos-06.webp"
+    },
+    "assetCorrection": {
+      "method": "imagegen edit + alpha-preserving format/framing normalization",
+      "reason": "Remove brown human-leg-like residue from front slit",
+      "generatedOriginalSHA256": "096f44409739d044979a8bb9a90f8a18529d837f0ddc34478beff423d56e9305",
+      "sourceRole": "synthetic_product_demo_not_official",
+      "requiresCustomerApproval": true
+    }
+  },
+  {
+    "id": "BELLE-DEMO-SAIAS-01",
+    "slug": "saias-01",
+    "category": "saias",
+    "name": "Saia acetinada pérola",
+    "color": "Pérola",
+    "description": "Saia midi acetinada com movimento suave na barra.",
+    "cutoutPng": "assets/products/cutouts/saias-01.png",
+    "cutoutWebp": "assets/products/cutouts/saias-01.webp",
+    "packshotWebp": "assets/products/packshots/saias-01.webp",
+    "sourceSheet": "assets/products/source_sheets/saias_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      287,
+      488
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2591,
+    "productPixelArea": 67328,
+    "productBBoxInSourceCell": [
+      185,
+      20,
+      412,
+      448
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2244,
+      0.0747,
+      0.7744,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/saias-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/saias-01.png",
+      "productCard": "public/assets/belle/products/packshots/saias-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-SAIAS-02",
+    "slug": "saias-02",
+    "category": "saias",
+    "name": "Saia plissada areia",
+    "color": "Areia",
+    "description": "Saia midi de pregas marcadas, em bege claro.",
+    "cutoutPng": "assets/products/cutouts/saias-02.png",
+    "cutoutWebp": "assets/products/cutouts/saias-02.webp",
+    "packshotWebp": "assets/products/packshots/saias-02.webp",
+    "sourceSheet": "assets/products/source_sheets/saias_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      391,
+      499
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3653,
+    "productPixelArea": 95113,
+    "productBBoxInSourceCell": [
+      90,
+      20,
+      419,
+      457
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1089,
+      0.0747,
+      0.89,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/saias-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/saias-02.png",
+      "productCard": "public/assets/belle/products/packshots/saias-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-SAIAS-03",
+    "slug": "saias-03",
+    "category": "saias",
+    "name": "Saia envelope off-white",
+    "color": "Off-white",
+    "description": "Saia midi clara de sobreposição assimétrica.",
+    "cutoutPng": "assets/products/cutouts/saias-03.png",
+    "cutoutWebp": "assets/products/cutouts/saias-03.webp",
+    "packshotWebp": "assets/products/packshots/saias-03.webp",
+    "sourceSheet": "assets/products/source_sheets/saias_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      347,
+      488
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3515,
+    "productPixelArea": 90878,
+    "productBBoxInSourceCell": [
+      151,
+      14,
+      438,
+      442
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1522,
+      0.0747,
+      0.8478,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/saias-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/saias-03.png",
+      "productCard": "public/assets/belle/products/packshots/saias-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-SAIAS-04",
+    "slug": "saias-04",
+    "category": "saias",
+    "name": "Saia curta tweed claro",
+    "color": "Creme",
+    "description": "Saia curta estruturada com bolsos e botões dourados.",
+    "cutoutPng": "assets/products/cutouts/saias-04.png",
+    "cutoutWebp": "assets/products/cutouts/saias-04.webp",
+    "packshotWebp": "assets/products/packshots/saias-04.webp",
+    "sourceSheet": "assets/products/source_sheets/saias_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      419,
+      352
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3367,
+    "productPixelArea": 86723,
+    "productBBoxInSourceCell": [
+      74,
+      72,
+      441,
+      372
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.0844,
+      0.2009,
+      0.9144,
+      0.744
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/saias-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/saias-04.png",
+      "productCard": "public/assets/belle/products/packshots/saias-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-SAIAS-05",
+    "slug": "saias-05",
+    "category": "saias",
+    "name": "Saia de camadas off-white",
+    "color": "Off-white",
+    "description": "Saia em camadas com volume suave e acabamento claro.",
+    "cutoutPng": "assets/products/cutouts/saias-05.png",
+    "cutoutWebp": "assets/products/cutouts/saias-05.webp",
+    "packshotWebp": "assets/products/packshots/saias-05.webp",
+    "sourceSheet": "assets/products/source_sheets/saias_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      363,
+      517
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.387,
+    "productPixelArea": 100901,
+    "productBBoxInSourceCell": [
+      138,
+      0,
+      437,
+      453
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1578,
+      0.0747,
+      0.8422,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/saias-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/saias-05.png",
+      "productCard": "public/assets/belle/products/packshots/saias-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-SAIAS-06",
+    "slug": "saias-06",
+    "category": "saias",
+    "name": "Saia chocolate drapeada",
+    "color": "Chocolate",
+    "description": "Saia midi marrom com drapeado lateral e aplicação dourada.",
+    "cutoutPng": "assets/products/cutouts/saias-06.png",
+    "cutoutWebp": "assets/products/cutouts/saias-06.webp",
+    "packshotWebp": "assets/products/packshots/saias-06.webp",
+    "sourceSheet": "assets/products/source_sheets/saias_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      308,
+      517
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.361,
+    "productPixelArea": 94115,
+    "productBBoxInSourceCell": [
+      148,
+      0,
+      392,
+      453
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.22,
+      0.0747,
+      0.7789,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/saias-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/saias-06.png",
+      "productCard": "public/assets/belle/products/packshots/saias-06.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CALCAS-01",
+    "slug": "calcas-01",
+    "category": "calcas",
+    "name": "Calça pantalona off-white",
+    "color": "Off-white",
+    "description": "Calça clara de cintura alta e pernas amplas.",
+    "cutoutPng": "assets/products/cutouts/calcas-01.png",
+    "cutoutWebp": "assets/products/cutouts/calcas-01.webp",
+    "packshotWebp": "assets/products/packshots/calcas-01.webp",
+    "sourceSheet": "assets/products/source_sheets/calcas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      292,
+      488
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2728,
+    "productPixelArea": 70652,
+    "productBBoxInSourceCell": [
+      240,
+      21,
+      472,
+      449
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2189,
+      0.0747,
+      0.7811,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/calcas-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/calcas-01.png",
+      "productCard": "public/assets/belle/products/packshots/calcas-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CALCAS-02",
+    "slug": "calcas-02",
+    "category": "calcas",
+    "name": "Calça chocolate de caimento amplo",
+    "color": "Chocolate",
+    "description": "Peça marrom ampla com cintura ajustada e caimento fluido. Revisar silhueta no controle visual.",
+    "cutoutPng": "assets/products/cutouts/calcas-02.png",
+    "cutoutWebp": "assets/products/cutouts/calcas-02.webp",
+    "packshotWebp": "assets/products/packshots/calcas-02.webp",
+    "sourceSheet": "assets/products/source_sheets/calcas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      316,
+      491
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2927,
+    "productPixelArea": 75974,
+    "productBBoxInSourceCell": [
+      79,
+      18,
+      335,
+      449
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1911,
+      0.0747,
+      0.8078,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/calcas-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/calcas-02.png",
+      "productCard": "public/assets/belle/products/packshots/calcas-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CALCAS-03",
+    "slug": "calcas-03",
+    "category": "calcas",
+    "name": "Calça alfaiataria areia",
+    "color": "Areia",
+    "description": "Calça bege com pregas frontais e corte de alfaiataria.",
+    "cutoutPng": "assets/products/cutouts/calcas-03.png",
+    "cutoutWebp": "assets/products/cutouts/calcas-03.webp",
+    "packshotWebp": "assets/products/packshots/calcas-03.webp",
+    "sourceSheet": "assets/products/source_sheets/calcas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      237,
+      490
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2525,
+    "productPixelArea": 65560,
+    "productBBoxInSourceCell": [
+      266,
+      14,
+      443,
+      444
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2867,
+      0.0747,
+      0.7133,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/calcas-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/calcas-03.png",
+      "productCard": "public/assets/belle/products/packshots/calcas-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CALCAS-04",
+    "slug": "calcas-04",
+    "category": "calcas",
+    "name": "Calça reta preta",
+    "color": "Preto",
+    "description": "Calça preta de cintura alta com corte reto.",
+    "cutoutPng": "assets/products/cutouts/calcas-04.png",
+    "cutoutWebp": "assets/products/cutouts/calcas-04.webp",
+    "packshotWebp": "assets/products/packshots/calcas-04.webp",
+    "sourceSheet": "assets/products/source_sheets/calcas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      217,
+      489
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.197,
+    "productPixelArea": 51010,
+    "productBBoxInSourceCell": [
+      126,
+      14,
+      283,
+      443
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.31,
+      0.0747,
+      0.69,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/calcas-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/calcas-04.png",
+      "productCard": "public/assets/belle/products/packshots/calcas-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CALCAS-05",
+    "slug": "calcas-05",
+    "category": "calcas",
+    "name": "Calça cargo oliva",
+    "color": "Verde oliva",
+    "description": "Calça de pernas amplas, bolsos laterais e acabamento utilitário.",
+    "cutoutPng": "assets/products/cutouts/calcas-05.png",
+    "cutoutWebp": "assets/products/cutouts/calcas-05.webp",
+    "packshotWebp": "assets/products/packshots/calcas-05.webp",
+    "sourceSheet": "assets/products/source_sheets/calcas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      251,
+      507
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2737,
+    "productPixelArea": 70860,
+    "productBBoxInSourceCell": [
+      256,
+      6,
+      445,
+      451
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.2789,
+      0.0747,
+      0.72,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/calcas-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/calcas-05.png",
+      "productCard": "public/assets/belle/products/packshots/calcas-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-CALCAS-06",
+    "slug": "calcas-06",
+    "category": "calcas",
+    "name": "Calça jeans flare azul",
+    "color": "Jeans azul",
+    "description": "Jeans azul de cintura alta com pernas que abrem na barra.",
+    "cutoutPng": "assets/products/cutouts/calcas-06.png",
+    "cutoutWebp": "assets/products/cutouts/calcas-06.webp",
+    "packshotWebp": "assets/products/packshots/calcas-06.webp",
+    "sourceSheet": "assets/products/source_sheets/calcas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      278,
+      510
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2454,
+    "productPixelArea": 63499,
+    "productBBoxInSourceCell": [
+      98,
+      3,
+      314,
+      451
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.25,
+      0.0747,
+      0.75,
+      0.9049
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/calcas-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/calcas-06.png",
+      "productCard": "public/assets/belle/products/packshots/calcas-06.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-BOLSAS-01",
+    "slug": "bolsas-01",
+    "category": "bolsas",
+    "name": "Bolsa shoulder marfim",
+    "color": "Marfim",
+    "description": "Bolsa pequena clara de alça superior e fecho dourado.",
+    "cutoutPng": "assets/products/cutouts/bolsas-01.png",
+    "cutoutWebp": "assets/products/cutouts/bolsas-01.webp",
+    "packshotWebp": "assets/products/packshots/bolsas-01.webp",
+    "sourceSheet": "assets/products/source_sheets/bolsas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      445,
+      500
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2869,
+    "productPixelArea": 74358,
+    "productBBoxInSourceCell": [
+      110,
+      20,
+      493,
+      458
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1556,
+      0.1849,
+      0.8444,
+      0.8151
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/bolsas-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/bolsas-01.png",
+      "productCard": "public/assets/belle/products/packshots/bolsas-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-BOLSAS-02",
+    "slug": "bolsas-02",
+    "category": "bolsas",
+    "name": "Bolsa de mão dourado champagne",
+    "color": "Dourado champagne",
+    "description": "Bolsa estruturada em tom dourado com alça superior.",
+    "cutoutPng": "assets/products/cutouts/bolsas-02.png",
+    "cutoutWebp": "assets/products/cutouts/bolsas-02.webp",
+    "packshotWebp": "assets/products/packshots/bolsas-02.webp",
+    "sourceSheet": "assets/products/source_sheets/bolsas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      404,
+      422
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.28,
+    "productPixelArea": 72686,
+    "productBBoxInSourceCell": [
+      89,
+      83,
+      441,
+      453
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1256,
+      0.1849,
+      0.8744,
+      0.8151
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/bolsas-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/bolsas-02.png",
+      "productCard": "public/assets/belle/products/packshots/bolsas-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-BOLSAS-03",
+    "slug": "bolsas-03",
+    "category": "bolsas",
+    "name": "Bolsa matelassê preta",
+    "color": "Preto",
+    "description": "Bolsa preta de textura matelassê e corrente dourada.",
+    "cutoutPng": "assets/products/cutouts/bolsas-03.png",
+    "cutoutWebp": "assets/products/cutouts/bolsas-03.webp",
+    "packshotWebp": "assets/products/packshots/bolsas-03.webp",
+    "sourceSheet": "assets/products/source_sheets/bolsas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      455,
+      335
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3901,
+    "productPixelArea": 101757,
+    "productBBoxInSourceCell": [
+      110,
+      130,
+      509,
+      409
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.0944,
+      0.2738,
+      0.9044,
+      0.7271
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/bolsas-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/bolsas-03.png",
+      "productCard": "public/assets/belle/products/packshots/bolsas-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-BOLSAS-04",
+    "slug": "bolsas-04",
+    "category": "bolsas",
+    "name": "Bolsa tote areia",
+    "color": "Areia",
+    "description": "Bolsa de formato amplo, alças curtas e acabamento macio.",
+    "cutoutPng": "assets/products/cutouts/bolsas-04.png",
+    "cutoutWebp": "assets/products/cutouts/bolsas-04.webp",
+    "packshotWebp": "assets/products/packshots/bolsas-04.webp",
+    "sourceSheet": "assets/products/source_sheets/bolsas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      456,
+      472
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4063,
+    "productPixelArea": 105792,
+    "productBBoxInSourceCell": [
+      69,
+      20,
+      467,
+      434
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1211,
+      0.1849,
+      0.8778,
+      0.8151
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/bolsas-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/bolsas-04.png",
+      "productCard": "public/assets/belle/products/packshots/bolsas-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-BOLSAS-05",
+    "slug": "bolsas-05",
+    "category": "bolsas",
+    "name": "Bolsa shoulder vinho",
+    "color": "Vinho",
+    "description": "Bolsa vinho de alça curta, aba frontal e fecho metálico.",
+    "cutoutPng": "assets/products/cutouts/bolsas-05.png",
+    "cutoutWebp": "assets/products/cutouts/bolsas-05.webp",
+    "packshotWebp": "assets/products/packshots/bolsas-05.webp",
+    "sourceSheet": "assets/products/source_sheets/bolsas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      523,
+      362
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4273,
+    "productPixelArea": 110932,
+    "productBBoxInSourceCell": [
+      70,
+      89,
+      529,
+      387
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.0944,
+      0.2898,
+      0.9044,
+      0.7102
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/bolsas-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/bolsas-05.png",
+      "productCard": "public/assets/belle/products/packshots/bolsas-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-BOLSAS-06",
+    "slug": "bolsas-06",
+    "category": "bolsas",
+    "name": "Bolsa champagne drapeada",
+    "color": "Champagne",
+    "description": "Bolsa clara estruturada com drapeados que formam laço frontal.",
+    "cutoutPng": "assets/products/cutouts/bolsas-06.png",
+    "cutoutWebp": "assets/products/cutouts/bolsas-06.webp",
+    "packshotWebp": "assets/products/packshots/bolsas-06.webp",
+    "sourceSheet": "assets/products/source_sheets/bolsas_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      458,
+      451
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3683,
+    "productPixelArea": 95758,
+    "productBBoxInSourceCell": [
+      54,
+      13,
+      456,
+      408
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.0989,
+      0.1849,
+      0.9,
+      0.8151
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/bolsas-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/bolsas-06.png",
+      "productCard": "public/assets/belle/products/packshots/bolsas-06.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-PULSEIRAS-01",
+    "slug": "pulseiras-01",
+    "category": "pulseiras",
+    "name": "Pulseira de elos dourados",
+    "color": "Dourado",
+    "description": "Pulseira de elos encorpados com brilho metálico.",
+    "cutoutPng": "assets/products/cutouts/pulseiras-01.png",
+    "cutoutWebp": "assets/products/cutouts/pulseiras-01.webp",
+    "packshotWebp": "assets/products/packshots/pulseiras-01.webp",
+    "sourceSheet": "assets/products/source_sheets/pulseiras_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      516,
+      354
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2441,
+    "productPixelArea": 62358,
+    "productBBoxInSourceCell": [
+      51,
+      117,
+      503,
+      407
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3004,
+      0.89,
+      0.7004
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/pulseiras-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/pulseiras-01.png",
+      "productCard": "public/assets/belle/products/packshots/pulseiras-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-PULSEIRAS-02",
+    "slug": "pulseiras-02",
+    "category": "pulseiras",
+    "name": "Pulseira riviera delicada",
+    "color": "Dourado e cristal",
+    "description": "Pulseira delicada com sequência de pedras claras.",
+    "cutoutPng": "assets/products/cutouts/pulseiras-02.png",
+    "cutoutWebp": "assets/products/cutouts/pulseiras-02.webp",
+    "packshotWebp": "assets/products/packshots/pulseiras-02.webp",
+    "sourceSheet": "assets/products/source_sheets/pulseiras_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      566,
+      284
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.1403,
+    "productPixelArea": 35239,
+    "productBBoxInSourceCell": [
+      16,
+      145,
+      512,
+      359
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3653,
+      0.89,
+      0.6347
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/pulseiras-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/pulseiras-02.png",
+      "productCard": "public/assets/belle/products/packshots/pulseiras-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-PULSEIRAS-03",
+    "slug": "pulseiras-03",
+    "category": "pulseiras",
+    "name": "Bracelete escultural dourado",
+    "color": "Dourado",
+    "description": "Bracelete aberto, forma torcida e superfície polida.",
+    "cutoutPng": "assets/products/cutouts/pulseiras-03.png",
+    "cutoutWebp": "assets/products/cutouts/pulseiras-03.webp",
+    "packshotWebp": "assets/products/packshots/pulseiras-03.webp",
+    "sourceSheet": "assets/products/source_sheets/pulseiras_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      535,
+      300
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2551,
+    "productPixelArea": 66210,
+    "productBBoxInSourceCell": [
+      40,
+      99,
+      509,
+      333
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3449,
+      0.89,
+      0.656
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/pulseiras-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/pulseiras-03.png",
+      "productCard": "public/assets/belle/products/packshots/pulseiras-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-PULSEIRAS-04",
+    "slug": "pulseiras-04",
+    "category": "pulseiras",
+    "name": "Pulseira de pérolas",
+    "color": "Pérola",
+    "description": "Pulseira com pérolas agrupadas em composição volumosa.",
+    "cutoutPng": "assets/products/cutouts/pulseiras-04.png",
+    "cutoutWebp": "assets/products/cutouts/pulseiras-04.webp",
+    "packshotWebp": "assets/products/packshots/pulseiras-04.webp",
+    "sourceSheet": "assets/products/source_sheets/pulseiras_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      555,
+      374
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.4038,
+    "productPixelArea": 104677,
+    "productBBoxInSourceCell": [
+      15,
+      56,
+      502,
+      362
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.304,
+      0.89,
+      0.696
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/pulseiras-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/pulseiras-04.png",
+      "productCard": "public/assets/belle/products/packshots/pulseiras-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-PULSEIRAS-05",
+    "slug": "pulseiras-05",
+    "category": "pulseiras",
+    "name": "Pulseira corda dourada",
+    "color": "Dourado",
+    "description": "Bracelete de textura torcida em metal dourado.",
+    "cutoutPng": "assets/products/cutouts/pulseiras-05.png",
+    "cutoutWebp": "assets/products/cutouts/pulseiras-05.webp",
+    "packshotWebp": "assets/products/packshots/pulseiras-05.webp",
+    "sourceSheet": "assets/products/source_sheets/pulseiras_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      541,
+      367
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.1715,
+    "productPixelArea": 43728,
+    "productBBoxInSourceCell": [
+      36,
+      50,
+      511,
+      351
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3022,
+      0.89,
+      0.6978
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/pulseiras-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/pulseiras-05.png",
+      "productCard": "public/assets/belle/products/packshots/pulseiras-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-PULSEIRAS-06",
+    "slug": "pulseiras-06",
+    "category": "pulseiras",
+    "name": "Pulseira com pingentes",
+    "color": "Dourado",
+    "description": "Corrente delicada com pingentes pendentes.",
+    "cutoutPng": "assets/products/cutouts/pulseiras-06.png",
+    "cutoutWebp": "assets/products/cutouts/pulseiras-06.webp",
+    "packshotWebp": "assets/products/packshots/pulseiras-06.webp",
+    "sourceSheet": "assets/products/source_sheets/pulseiras_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      558,
+      416
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.1099,
+    "productPixelArea": 25784,
+    "productBBoxInSourceCell": [
+      19,
+      15,
+      509,
+      363
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.2782,
+      0.89,
+      0.7218
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/pulseiras-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/pulseiras-06.png",
+      "productCard": "public/assets/belle/products/packshots/pulseiras-06.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-ANEIS-01",
+    "slug": "aneis-01",
+    "category": "aneis",
+    "name": "Anel solitário de cristal",
+    "color": "Dourado e cristal",
+    "description": "Anel dourado com pedra central transparente.",
+    "cutoutPng": "assets/products/cutouts/aneis-01.png",
+    "cutoutWebp": "assets/products/cutouts/aneis-01.webp",
+    "packshotWebp": "assets/products/packshots/aneis-01.webp",
+    "sourceSheet": "assets/products/source_sheets/aneis_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      507,
+      321
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2058,
+    "productPixelArea": 52981,
+    "productBBoxInSourceCell": [
+      73,
+      122,
+      518,
+      381
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3182,
+      0.89,
+      0.6818
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/aneis-01.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/aneis-01.png",
+      "productCard": "public/assets/belle/products/packshots/aneis-01.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-ANEIS-02",
+    "slug": "aneis-02",
+    "category": "aneis",
+    "name": "Anel de pedra rosé",
+    "color": "Rosé e dourado",
+    "description": "Anel dourado com pedra rosé e aro cravejado.",
+    "cutoutPng": "assets/products/cutouts/aneis-02.png",
+    "cutoutWebp": "assets/products/cutouts/aneis-02.webp",
+    "packshotWebp": "assets/products/packshots/aneis-02.webp",
+    "sourceSheet": "assets/products/source_sheets/aneis_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 0,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      515,
+      356
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2814,
+    "productPixelArea": 72937,
+    "productBBoxInSourceCell": [
+      41,
+      103,
+      492,
+      395
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.2978,
+      0.89,
+      0.7022
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/aneis-02.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/aneis-02.png",
+      "productCard": "public/assets/belle/products/packshots/aneis-02.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-ANEIS-03",
+    "slug": "aneis-03",
+    "category": "aneis",
+    "name": "Anel dourado de curvas",
+    "color": "Dourado",
+    "description": "Anel com superfície polida em forma de curvas cruzadas.",
+    "cutoutPng": "assets/products/cutouts/aneis-03.png",
+    "cutoutWebp": "assets/products/cutouts/aneis-03.webp",
+    "packshotWebp": "assets/products/packshots/aneis-03.webp",
+    "sourceSheet": "assets/products/source_sheets/aneis_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      473,
+      383
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3298,
+    "productPixelArea": 85728,
+    "productBBoxInSourceCell": [
+      89,
+      62,
+      504,
+      387
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.256,
+      0.89,
+      0.7449
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/aneis-03.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/aneis-03.png",
+      "productCard": "public/assets/belle/products/packshots/aneis-03.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-ANEIS-04",
+    "slug": "aneis-04",
+    "category": "aneis",
+    "name": "Anel cravejado de brilho fino",
+    "color": "Dourado e cristal",
+    "description": "Anel de faixa dourada cravejada de pequenas pedras claras.",
+    "cutoutPng": "assets/products/cutouts/aneis-04.png",
+    "cutoutWebp": "assets/products/cutouts/aneis-04.webp",
+    "packshotWebp": "assets/products/packshots/aneis-04.webp",
+    "sourceSheet": "assets/products/source_sheets/aneis_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 1,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      522,
+      288
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2783,
+    "productPixelArea": 71859,
+    "productBBoxInSourceCell": [
+      31,
+      123,
+      489,
+      347
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3476,
+      0.89,
+      0.6524
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/aneis-04.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/aneis-04.png",
+      "productCard": "public/assets/belle/products/packshots/aneis-04.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-ANEIS-05",
+    "slug": "aneis-05",
+    "category": "aneis",
+    "name": "Anel trançado dourado",
+    "color": "Dourado",
+    "description": "Anel entrelaçado em metal dourado com pontos de brilho.",
+    "cutoutPng": "assets/products/cutouts/aneis-05.png",
+    "cutoutWebp": "assets/products/cutouts/aneis-05.webp",
+    "packshotWebp": "assets/products/packshots/aneis-05.webp",
+    "sourceSheet": "assets/products/source_sheets/aneis_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 0
+    },
+    "cutoutDimensions": [
+      515,
+      261
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.2009,
+    "productPixelArea": 51777,
+    "productBBoxInSourceCell": [
+      73,
+      105,
+      524,
+      302
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.11,
+      0.3636,
+      0.89,
+      0.6364
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/aneis-05.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/aneis-05.png",
+      "productCard": "public/assets/belle/products/packshots/aneis-05.webp"
+    }
+  },
+  {
+    "id": "BELLE-DEMO-ANEIS-06",
+    "slug": "aneis-06",
+    "category": "aneis",
+    "name": "Anel statement de cristais",
+    "color": "Dourado e cristal",
+    "description": "Anel dourado de desenho central expressivo com pedras claras.",
+    "cutoutPng": "assets/products/cutouts/aneis-06.png",
+    "cutoutWebp": "assets/products/cutouts/aneis-06.webp",
+    "packshotWebp": "assets/products/packshots/aneis-06.webp",
+    "sourceSheet": "assets/products/source_sheets/aneis_source_6items.png",
+    "assetRole": "synthetic_editorial_demo",
+    "isDemo": true,
+    "price": null,
+    "inventoryConfirmed": false,
+    "sourceGridPosition": {
+      "row": 2,
+      "column": 1
+    },
+    "cutoutDimensions": [
+      510,
+      438
+    ],
+    "packshotDimensions": [
+      900,
+      1125
+    ],
+    "sourceAlphaCoverage": 0.3017,
+    "productPixelArea": 78185,
+    "productBBoxInSourceCell": [
+      34,
+      0,
+      482,
+      376
+    ],
+    "packshotOpticalBoundsNormalized": [
+      0.1278,
+      0.2507,
+      0.8722,
+      0.7502
+    ],
+    "sceneFit": {
+      "hangerTop": "topmost opaque pixel / 0.05 pad",
+      "dressPlane": "use tight cutout; preserve texture aspect",
+      "sceneScale": "calibrate to physical real-world dimensions before release"
+    },
+    "qc": {
+      "alphaChannel": true,
+      "modelOrBodyDetected": "unverified_needs_visual_review",
+      "source": "generated_synthetic_not_official"
+    },
+    "mediaSource": "generated_synthetic_study_from_alpha_source_sheet",
+    "status": "CANDIDATE_NOT_CUSTOMER_APPROVED",
+    "useInPublicProduction": false,
+    "officialBelleSKU": null,
+    "sizeAvailabilityByStore": null,
+    "editorialModelImage": null,
+    "tryOn3DModel": null,
+    "acceptanceChecks": [
+      "alpha real sem fundo",
+      "silhueta inteira",
+      "sem pessoa",
+      "sem texto/marca falsa",
+      "centralização",
+      "consistência por cena",
+      "aprovação comercial"
+    ],
+    "imagePathsForClaude": {
+      "sceneTexture": "public/assets/belle/products/cutouts/aneis-06.webp",
+      "fullResolutionPNG": "public/assets/belle/products/cutouts/aneis-06.png",
+      "productCard": "public/assets/belle/products/packshots/aneis-06.webp"
+    }
+  }
+]
