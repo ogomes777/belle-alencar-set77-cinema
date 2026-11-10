@@ -12,10 +12,12 @@ import { initHeader } from './shell/header';
 import { initDirector } from './shell/director';
 import { initCommerce } from './commerce';
 import { initFilm } from './film';
+import { initSections } from './sections';
 
 mountMonograms();
 initHeader();
 initCommerce();
+initSections();
 const director = initDirector();
 initFilm(director);
 initIntro();

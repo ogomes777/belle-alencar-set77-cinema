@@ -1,5 +1,22 @@
 # RELEASE REPORT | BELLE ALENCAR CINEMA V4 (PREVIEW)
 
+## Atualização V4.1 · seções de conversão (pedido do cliente)
+Depois do filme, a página volta a ter as seções que vendem, todas ligadas ao catálogo e à sacola:
+| Seção | Âncora | Função comercial |
+|---|---|---|
+| Manifesto + faixa de categorias | — | Pausa de marca (V3) com atalhos Vestidos/Conjuntos/Acessórios |
+| Compre por ocasião ("Qual é o seu plano?", V3) | `#ocasioes` | Dia a dia / Para sair / Para celebrar → filtra a coleção; contagem real da prévia |
+| Coleção | `#colecao` | Filtros, quick view com **zoom do detalhe**, favoritos, sacola |
+| Looks completos | `#looks` | Compre o look (vestido + acessório): abre cada peça; "ver no provador 3D" |
+| Como comprar | `#como-comprar` | 4 passos do fluxo real + garantias verdadeiras (sem cadastro, sem pagamento no site) |
+| Lojas | `#lojas` | 4 unidades; "Ver no mapa" para Araxá (único endereço confirmado) |
+| Atendimento de estilo | `#atendimento` | WhatsApp oficial e Instagram |
+| Dúvidas frequentes | `#duvidas` | Objeções de compra respondidas sem inventar política |
+| CTA flutuante "Falar com a Belle" | — | Sempre à mão fora do filme |
+Também: JSON-LD `ClothingStore` (Araxá), nav com Ocasiões/Looks, busca indexa as novas seções. E2E: **57/57**; Vitest 26/26.
+Nenhum depoimento, número de seguidores, preço ou política de troca foi inventado.
+
+
 Data: 10/11/2026 · Branch: `claude/bold-dijkstra-jyzqak` · Commit publicado: `64dfe1a` · Versão `4.0.0`
 
 ## 1. Publicação (somente PREVIEW)

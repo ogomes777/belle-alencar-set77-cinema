@@ -11,7 +11,7 @@ import { STORES } from './stores';
 import { parseUrl, setParam } from './url';
 import { plural } from './format';
 import { preferenceSync } from './checkout';
-import type { Category, StoreId } from './types';
+import type { Category, Occasion, StoreId } from './types';
 import type { Silhouette } from '../core/dress';
 import type { Ctx } from './ui/context';
 import { createStorePicker, createSwitchDialog } from './ui/storePicker';
@@ -87,8 +87,8 @@ export function initCommerce(): void {
   ctx.openBag = (t) => bag.open(t);
   ctx.openWishlist = (t) => wish.open(t);
   ctx.openSearch = (t) => search.open(t);
-  ctx.applyCategory = (category: Category | 'todas', silhouette: Silhouette | null = null, scroll = true) => {
-    catalog?.setCategory(category, silhouette);
+  ctx.applyCategory = (category: Category | 'todas', silhouette: Silhouette | null = null, scroll = true, occasion: Occasion | 'todas' = 'todas') => {
+    catalog?.setCategory(category, silhouette, occasion);
     setParam('categoria', category === 'todas' ? null : category);
     if (scroll) scrollTo('colecao');
   };
@@ -97,9 +97,25 @@ export function initCommerce(): void {
   catalog?.onFirstHover(() => {
     if (!reduced()) void loadGsap();
   });
-  bus.on('catalog:filter', ({ category, silhouette }) =>
-    ctx.applyCategory(category as Category, silhouette ?? null, true),
+  bus.on('catalog:filter', ({ category, silhouette, occasion }) =>
+    ctx.applyCategory(category as Category, silhouette ?? null, true, (occasion as Occasion) ?? 'todas'),
   );
+  // gatilhos das seções editoriais (ocasiões, looks): filtrar por ocasião e abrir peça
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('#overlays')) return;
+    const occ = t.closest<HTMLElement>('[data-filter-occasion]');
+    if (occ) {
+      e.preventDefault();
+      ctx.applyCategory('todas', null, true, occ.dataset.filterOccasion as Occasion);
+      return;
+    }
+    const op = t.closest<HTMLElement>('[data-open-product]');
+    if (op) {
+      const p = productBySlug(op.dataset.openProduct!);
+      if (p) { e.preventDefault(); ctx.openQuickView(p.id, op, null); }
+    }
+  });
 
   // Intenção da URL. Nunca abre o seletor de loja sozinho (AUDIT_V3 A2).
   const intent = parseUrl(location.search);

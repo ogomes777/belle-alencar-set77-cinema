@@ -1,5 +1,5 @@
 import type { Commerce } from '../state';
-import type { Category, StoreId } from '../types';
+import type { Category, Occasion, StoreId } from '../types';
 import type { Silhouette } from '../../core/dress';
 
 export interface Ctx {
@@ -11,6 +11,6 @@ export interface Ctx {
   openBag(trigger?: HTMLElement | null): void;
   openWishlist(trigger?: HTMLElement | null): void;
   openSearch(trigger?: HTMLElement | null): void;
-  applyCategory(category: Category | 'todas', silhouette?: Silhouette | null, scroll?: boolean): void;
+  applyCategory(category: Category | 'todas', silhouette?: Silhouette | null, scroll?: boolean, occasion?: Occasion | 'todas'): void;
   scrollTo(id: string): void;
 }

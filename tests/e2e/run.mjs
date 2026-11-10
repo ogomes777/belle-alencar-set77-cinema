@@ -52,16 +52,16 @@ for (const vp of viewports) {
   await page.waitForTimeout(400);
   let overflowOk = true;
   const stops = await page.evaluate(() => {
-    const ids = ['inicio', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador', 'colecao', 'lojas'];
+    const ids = ['inicio', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador', 'ocasioes', 'colecao', 'looks', 'como-comprar', 'lojas', 'atendimento', 'duvidas'];
     return ids.map((id) => { const el = document.getElementById(id); return el ? Math.round(el.getBoundingClientRect().top + scrollY + 40) : 0; });
   });
   for (const [i, y] of stops.entries()) {
     await page.evaluate((yy) => scrollTo(0, yy), y);
     await page.waitForTimeout(250);
     if (!(await noOverflow(page))) overflowOk = false;
-    if (SHOTS && [0, 2, 6, 7, 8].includes(i)) await page.screenshot({ path: `${OUT}/${vp.name}-${i}.png` });
+    if (SHOTS && [0, 2, 6, 7, 8, 9, 10, 12, 13].includes(i)) await page.screenshot({ path: `${OUT}/${vp.name}-${i}.png` });
   }
-  check(`[${vp.name}] sem overflow horizontal em 9 paradas`, overflowOk);
+  check(`[${vp.name}] sem overflow horizontal em ${stops.length} paradas`, overflowOk);
   check(`[${vp.name}] zero erros de console`, errors.length === 0, errors.slice(0, 2).join(' | '));
   check(`[${vp.name}] zero recursos 4xx/5xx`, failed.length === 0, failed.slice(0, 3).join(' | '));
   const headerOk = await page.evaluate(() => ['#storeButton', '#searchButton', '#bagButton'].every((s) => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && r.width >= 40 && r.height >= 40 && r.right <= innerWidth; }));
@@ -191,6 +191,38 @@ for (const vp of viewports) {
   await page.keyboard.press('Tab');
   const skip = await page.evaluate(() => document.activeElement?.classList.contains('skip-link'));
   check('1º Tab chega no "Pular para a coleção"', !!skip);
+  await ctx.close();
+}
+
+// 6b · Seções de conversão: ocasião filtra a coleção, look abre a peça, FAQ abre
+{
+  const { ctx, page, errors } = await newPage({ viewport: { width: 1440, height: 900 } });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static`, { waitUntil: 'load' });
+  await page.locator('[data-filter-occasion="noite"]').scrollIntoViewIfNeeded();
+  await page.click('[data-filter-occasion="noite"]');
+  await page.waitForTimeout(900);
+  const occPressed = await page.getAttribute('[data-occ="noite"]', 'aria-pressed');
+  const cards = await page.locator('.pgrid .pcard').count();
+  check('ocasião "Para sair" filtra a coleção', occPressed === 'true' && cards === 4, `pressed=${occPressed} cards=${cards}`);
+  const counts = await page.locator('[data-occ-count]').allTextContents();
+  check('contagem por ocasião vem do catálogo', counts.every((t) => /\d+ peças? na prévia/.test(t)), counts.join(' | '));
+  await page.locator('[data-open-product="bolsa-estruturada"]').scrollIntoViewIfNeeded();
+  await page.click('[data-open-product="bolsa-estruturada"]');
+  const qv = await page.waitForSelector('.qv', { state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
+  check('look completo abre a peça (quick view)', qv);
+  if (qv) {
+    await page.click('.qv__zoom');
+    check('zoom do detalhe liga', (await page.getAttribute('.qv__zoom', 'aria-pressed')) === 'true');
+    await page.keyboard.press('Escape');
+    await page.waitForSelector('.qv', { state: 'hidden', timeout: 3000 }).catch(() => undefined);
+  }
+  await page.locator('#duvidas summary').first().scrollIntoViewIfNeeded();
+  await page.click('#duvidas summary');
+  check('FAQ abre (details nativo)', await page.locator('#duvidas details').first().evaluate((d) => d.open));
+  const floatOk = await page.evaluate(() => getComputedStyle(document.getElementById('floatCta')).visibility === 'visible');
+  check('CTA flutuante visível fora do filme', floatOk);
+  check('seções de conversão sem erros', errors.length === 0, errors.join(' | '));
   await ctx.close();
 }
 

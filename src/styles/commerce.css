@@ -319,3 +319,12 @@ html.is-locked { overflow: hidden; }
 @media (max-width: 599px) {
   .pcard .badge { font-size: 0.55rem; letter-spacing: 0.1em; white-space: nowrap; max-width: calc(100% - 56px); overflow: hidden; text-overflow: ellipsis; }
 }
+
+/* zoom do detalhe no quick view */
+.qv__ill { transition: transform var(--t-ui) var(--ease-out); transform-origin: var(--zx, 50%) var(--zy, 50%); cursor: zoom-in; }
+.qv__media { overflow: hidden; }
+.qv__media.is-zoomed .qv__ill { transform: scale(2.1); cursor: zoom-out; }
+.qv__zoom {
+  position: absolute; right: 10px; bottom: 10px; z-index: 2; min-height: 36px; padding: 0 14px; border-radius: 999px;
+  background: rgba(253, 252, 248, 0.92); border: 1px solid var(--line-strong); font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+}

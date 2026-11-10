@@ -11,6 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Belle Alencar — Araxá","description":"Moda feminina e acessórios.","sameAs":["https://www.instagram.com/belle.alencar/"],"address":{"@type":"PostalAddress","streetAddress":"Av. Vereador João Sena, 103, Centro","addressLocality":"Araxá","addressRegion":"MG","addressCountry":"BR"}}</script>
 <link rel="preload" as="image" href="/posters/vitrine.jpg" fetchpriority="high">
 <script>
   /* Antes da pintura: marca a sessão para pular a intro e sinaliza JS. Sem dependências. */
@@ -39,7 +40,9 @@
   </a>
   <nav class="site-nav" aria-label="Principal">
     <a href="#inicio">A loja</a>
+    <a href="#ocasioes">Ocasiões</a>
     <a href="#colecao">Coleção</a>
+    <a href="#looks">Looks</a>
     <a href="#lojas">Lojas</a>
   </nav>
   <div class="site-actions">
@@ -177,6 +180,66 @@
     </div>
   </section>
 
+
+  <!-- PAUSA DE MARCA: manifesto + atalhos de categoria -->
+  <section class="manifesto" aria-label="Manifesto Belle Alencar">
+    <p class="eyebrow">Belle Alencar</p>
+    <p class="manifesto__quote" data-reveal>O momento é seu.<br><em>O jeito de chegar também.</em></p>
+    <nav class="manifesto__cats" aria-label="Atalhos de categoria">
+      <button type="button" data-filter-category="vestidos">Vestidos</button><span aria-hidden="true">✦</span>
+      <button type="button" data-filter-category="conjuntos">Conjuntos</button><span aria-hidden="true">✦</span>
+      <button type="button" data-filter-category="acessorios">Acessórios</button>
+    </nav>
+    <div class="band" aria-hidden="true"><div class="band__track"><span>VESTIDOS ✦ CONJUNTOS ✦ ACESSÓRIOS ✦ ARAXÁ ✦ FRUTAL ✦ CATALÃO ✦ MINEIROS ✦ </span><span>VESTIDOS ✦ CONJUNTOS ✦ ACESSÓRIOS ✦ ARAXÁ ✦ FRUTAL ✦ CATALÃO ✦ MINEIROS ✦ </span></div></div>
+  </section>
+
+  <!-- COMPRE POR OCASIÃO -->
+  <section class="occasions" id="ocasioes" aria-labelledby="ocasioesTitle">
+    <header class="sec-head">
+      <p class="eyebrow">Compre por ocasião</p>
+      <h2 class="display" id="ocasioesTitle" data-reveal>Qual é o <em>seu plano?</em></h2>
+      <p class="lede">Comece pelo momento. A gente mostra as peças que combinam com ele.</p>
+    </header>
+    <ul class="occ-grid">
+      <li class="occ-card occ-card--dia">
+        <div class="occ-card__art" aria-hidden="true">
+          <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"terracota","silhouette":"fluido","neckline":"manga","seed":4}'></span>
+          <span class="ill-slot ill-slot--side" data-ill='{"kind":"belt","tone":"noite"}'></span>
+        </div>
+        <div class="occ-card__body">
+          <p class="occ-card__n">01 · <span data-occ-count="dia"></span></p>
+          <h3>Dia a dia</h3>
+          <p>Conforto também tem presença.</p>
+          <a class="btn btn--solid" href="#colecao" data-filter-occasion="dia">Ver peças para o dia</a>
+        </div>
+      </li>
+      <li class="occ-card occ-card--noite">
+        <div class="occ-card__art" aria-hidden="true">
+          <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"noite","silhouette":"marcante","neckline":"tomara","seed":2}'></span>
+          <span class="ill-slot ill-slot--side" data-ill='{"kind":"bag","tone":"champagne"}'></span>
+        </div>
+        <div class="occ-card__body">
+          <p class="occ-card__n">02 · <span data-occ-count="noite"></span></p>
+          <h3>Para sair</h3>
+          <p>Do primeiro brinde ao último detalhe.</p>
+          <a class="btn btn--solid" href="#colecao" data-filter-occasion="noite">Ver peças para sair</a>
+        </div>
+      </li>
+      <li class="occ-card occ-card--celebrar">
+        <div class="occ-card__art" aria-hidden="true">
+          <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"perola","silhouette":"fluido","neckline":"alca","seed":7}'></span>
+          <span class="ill-slot ill-slot--side" data-ill='{"kind":"earring","tone":"perola"}'></span>
+        </div>
+        <div class="occ-card__body">
+          <p class="occ-card__n">03 · <span data-occ-count="celebrar"></span></p>
+          <h3>Para celebrar</h3>
+          <p>Tem ocasião que pede vestido.</p>
+          <a class="btn btn--solid" href="#colecao" data-filter-occasion="celebrar">Ver peças para celebrar</a>
+        </div>
+      </li>
+    </ul>
+  </section>
+
   <!-- 09 · COLEÇÃO (renderizada pelo módulo de comércio) -->
   <section class="collection" id="colecao" aria-labelledby="colecaoTitle">
     <header class="section-head">
@@ -186,6 +249,80 @@
     </header>
     <div id="catalogMount" class="catalog">
       <noscript><p class="notice">Ative o JavaScript para filtrar a coleção. Você também pode falar direto com a Belle pelo <a href="https://wa.me/message/YYDB5NC7JMUQP1" rel="noopener">WhatsApp</a>.</p></noscript>
+    </div>
+  </section>
+
+
+  <!-- LOOKS COMPLETOS (compre o look) -->
+  <section class="looks" id="looks" aria-labelledby="looksTitle">
+    <header class="sec-head">
+      <p class="eyebrow">Looks completos</p>
+      <h2 class="display" id="looksTitle" data-reveal>O vestido chega.<br><em>O acessório fecha.</em></h2>
+      <p class="lede">Combinações sugeridas para você levar o look inteiro. Ilustrações demonstrativas; a loja confirma as peças disponíveis.</p>
+    </header>
+    <div class="look-track" tabindex="0" aria-label="Looks completos, role na horizontal">
+      <article class="look" aria-labelledby="look1">
+        <div class="look__art" aria-hidden="true">
+          <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"perola","silhouette":"fluido","neckline":"alca","seed":7}'></span>
+          <span class="ill-slot ill-slot--side" data-ill='{"kind":"earring","tone":"perola"}'></span>
+        </div>
+        <p class="look__n">Look 01 · Para celebrar</p>
+        <h3 id="look1">Pérola e ouro</h3>
+        <ul class="look__items">
+          <li><button type="button" data-open-product="vestido-longo-fluido">Vestido longo fluido <span>Ver peça</span></button></li>
+          <li><button type="button" data-open-product="brincos-gota">Brincos gota <span>Ver peça</span></button></li>
+        </ul>
+        <button type="button" class="link-cta" data-try-look='{"silhouette":"fluido","tone":"perola","label":"Look 01"}'>Ver o vestido no provador 3D →</button>
+      </article>
+      <article class="look look--dark" aria-labelledby="look2">
+        <div class="look__art" aria-hidden="true">
+          <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"noite","silhouette":"marcante","neckline":"tomara","seed":2}'></span>
+          <span class="ill-slot ill-slot--side" data-ill='{"kind":"bag","tone":"champagne"}'></span>
+        </div>
+        <p class="look__n">Look 02 · Para sair</p>
+        <h3 id="look2">Noite com brilho</h3>
+        <ul class="look__items">
+          <li><button type="button" data-open-product="vestido-midi-ajustado">Vestido midi ajustado <span>Ver peça</span></button></li>
+          <li><button type="button" data-open-product="bolsa-estruturada">Bolsa estruturada <span>Ver peça</span></button></li>
+        </ul>
+        <button type="button" class="link-cta" data-try-look='{"silhouette":"marcante","tone":"noite","label":"Look 02"}'>Ver o vestido no provador 3D →</button>
+      </article>
+      <article class="look" aria-labelledby="look3">
+        <div class="look__art" aria-hidden="true">
+          <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"champagne","silhouette":"classico","neckline":"v","seed":5}'></span>
+          <span class="ill-slot ill-slot--side" data-ill='{"kind":"belt","tone":"noite"}'></span>
+        </div>
+        <p class="look__n">Look 03 · Dia a dia</p>
+        <h3 id="look3">Champagne leve</h3>
+        <ul class="look__items">
+          <li><button type="button" data-open-product="vestido-evase-joelho">Vestido evasê no joelho <span>Ver peça</span></button></li>
+          <li><button type="button" data-open-product="cinto-fivela">Cinto com fivela <span>Ver peça</span></button></li>
+        </ul>
+        <button type="button" class="link-cta" data-try-look='{"silhouette":"classico","tone":"champagne","label":"Look 03"}'>Ver o vestido no provador 3D →</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- COMO COMPRAR -->
+  <section class="how" id="como-comprar" aria-labelledby="howTitle">
+    <header class="sec-head">
+      <p class="eyebrow">Como comprar</p>
+      <h2 class="display" id="howTitle" data-reveal>Simples como<br><em>ir à loja.</em></h2>
+    </header>
+    <ol class="how__steps">
+      <li><span>01</span><h3>Escolha sua loja</h3><p>Araxá, Frutal, Catalão ou Mineiros. A sacola segue a unidade escolhida.</p></li>
+      <li><span>02</span><h3>Monte sua sacola</h3><p>Separe peças, tamanhos e favoritos. Tudo fica salvo neste navegador.</p></li>
+      <li><span>03</span><h3>Envie para a Belle</h3><p>Um toque abre o WhatsApp oficial com a sua lista pronta para colar.</p></li>
+      <li><span>04</span><h3>A loja confirma</h3><p>Tamanho, preço, disponibilidade e retirada são confirmados com você pela equipe.</p></li>
+    </ol>
+    <ul class="how__trust" aria-label="Garantias desta versão">
+      <li>Sem cadastro e sem senha</li>
+      <li>Nenhum pagamento pelo site</li>
+      <li>Preferências salvas só no seu navegador</li>
+    </ul>
+    <div class="cta-row cta-row--center">
+      <button type="button" class="btn btn--solid" data-open-store>Escolher minha loja</button>
+      <a class="btn btn--line" href="#colecao">Ver a coleção</a>
     </div>
   </section>
 
@@ -201,6 +338,7 @@
         <p class="store-card__uf">MG</p>
         <h3>Araxá</h3>
         <p class="store-card__addr">Av. Vereador João Sena, 103, Centro</p>
+        <a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Av.+Vereador+Jo%C3%A3o+Sena%2C+103%2C+Centro%2C+Arax%C3%A1+MG" target="_blank" rel="noopener noreferrer">Ver no mapa ↗</a>
         <button type="button" class="btn btn--line" data-select-store="araxa">Definir como minha loja</button>
       </li>
       <li class="store-card" data-store-card="frutal">
@@ -225,6 +363,38 @@
     <p class="stores__note">Atendimento por WhatsApp pelo canal oficial da Belle. Contatos individuais de cada unidade ainda estão sendo confirmados.</p>
   </section>
 
+
+  <!-- ATENDIMENTO DE ESTILO -->
+  <section class="concierge" id="atendimento" aria-labelledby="conciergeTitle">
+    <div class="concierge__media" aria-hidden="true"><img src="/posters/provador.jpg" alt="" loading="lazy" decoding="async" width="1600" height="1000"></div>
+    <div class="concierge__body">
+      <p class="eyebrow">Atendimento de estilo</p>
+      <h2 class="display" id="conciergeTitle" data-reveal>Ficou na dúvida?<br><em>Pergunte para a Belle.</em></h2>
+      <p class="lede">Tamanho, combinação, ocasião: mande uma mensagem e a equipe ajuda você a escolher.</p>
+      <div class="cta-row">
+        <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+        <a class="btn btn--line" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Novidades no Instagram</a>
+      </div>
+      <p class="fineprint">Canal oficial da Belle. Contatos individuais de cada unidade em confirmação.</p>
+    </div>
+  </section>
+
+  <!-- DÚVIDAS FREQUENTES -->
+  <section class="faq" id="duvidas" aria-labelledby="faqTitle">
+    <header class="sec-head">
+      <p class="eyebrow">Dúvidas frequentes</p>
+      <h2 class="display" id="faqTitle" data-reveal>Antes de <em>escolher.</em></h2>
+    </header>
+    <div class="faq__list">
+      <details><summary>Posso comprar direto pelo site?</summary><p>Ainda não há pagamento online. Você monta a sacola de interesse, envia para a loja pelo WhatsApp e a equipe confirma tudo com você.</p></details>
+      <details><summary>Por que não aparecem preços?</summary><p>Os valores dependem da peça e da unidade. Enquanto o catálogo oficial não é publicado, a loja informa o preço na conversa.</p></details>
+      <details><summary>As peças do site estão na loja?</summary><p>As peças desta prévia são ilustrações demonstrativas. A loja da sua cidade mostra o que está disponível de verdade.</p></details>
+      <details><summary>Como sei meu tamanho?</summary><p>Cada peça tem sua modelagem. Conte o tamanho que você costuma usar ou suas medidas e a equipe confirma a grade da peça.</p></details>
+      <details><summary>Posso retirar na loja ou receber em casa?</summary><p>Retirada, entrega e trocas seguem as regras de cada unidade. Confirme na conversa antes de fechar.</p></details>
+      <details><summary>Minha sacola some se eu trocar de cidade?</summary><p>Não. Cada loja tem sua própria sacola. Ao trocar, você escolhe levar as peças ou manter a sacola anterior salva.</p></details>
+    </div>
+  </section>
+
   <!-- 11 · ÚLTIMA PÁGINA -->
   <section class="finale" aria-labelledby="finaleTitle">
     <div class="finale__mark" data-monogram="finale" aria-hidden="true"></div>
@@ -245,6 +415,7 @@
   </button>
 </footer>
 
+<a class="float-cta" id="floatCta" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span>Falar com a Belle</span></a>
 <div id="overlays"></div>
 </body>
 </html>

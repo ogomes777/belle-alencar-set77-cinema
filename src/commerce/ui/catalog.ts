@@ -139,8 +139,8 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
   render();
 
   return {
-    setCategory(category: Category | 'todas', silhouette: Silhouette | null = null) {
-      filters = { ...DEFAULT_FILTERS, category, silhouette };
+    setCategory(category: Category | 'todas', silhouette: Silhouette | null = null, occasion: Occasion | 'todas' = 'todas') {
+      filters = { ...DEFAULT_FILTERS, category, silhouette, occasion };
       render();
     },
     onFirstHover(fn: () => void) {

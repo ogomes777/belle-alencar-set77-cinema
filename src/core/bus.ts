@@ -9,7 +9,7 @@ export interface BusEvents {
   /** Pedido de navegação para um capítulo do filme. */
   'film:goto': { id: string };
   /** Filtro de categoria vindo dos arcos do filme. */
-  'catalog:filter': { category: string; silhouette?: import('./dress').Silhouette };
+  'catalog:filter': { category: string; silhouette?: import('./dress').Silhouette; occasion?: string };
   /** Intensidade do motion mudou. */
   'motion:intensity': { intensity: 'cinema' | 'essential' };
 }

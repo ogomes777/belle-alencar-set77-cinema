@@ -122,6 +122,8 @@ export function initFilm(director: Director): void {
     requestAnimationFrame(() => {
       ticking = false;
       progress = clamp((scrollY - filmTop) / range, 0, 1);
+      // "dentro do filme" só enquanto o palco cobre a maior parte da tela
+      document.documentElement.classList.toggle('in-film', scrollY >= filmTop - innerHeight * 0.3 && scrollY <= filmTop + range + innerHeight * 0.15);
       debug.progress = progress;
       if (bar) bar.style.setProperty('--p', progress.toFixed(4));
       world?.setProgress(progress);
@@ -206,7 +208,6 @@ export function initFilm(director: Director): void {
   // visibilidade do palco → liga/desliga o render loop
   new IntersectionObserver((entries) => {
     const vis = entries.some((e) => e.isIntersecting);
-    document.documentElement.classList.toggle('in-film', vis);
     world?.setVisible(vis);
   }, { rootMargin: '0px' }).observe(film);
 

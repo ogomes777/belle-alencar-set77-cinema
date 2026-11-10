@@ -38,6 +38,21 @@ export function createQuickView(ctx: Ctx) {
     const media = h('div', { class: 'qv__media' });
     media.innerHTML = `<span class="qv__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
     media.append(h('span', { class: 'badge', text: 'Ilustração · demonstração' }));
+    // zoom do detalhe: botão acessível + lupa que acompanha ponteiro/dedo
+    const zoomBtn = h('button', { type: 'button', class: 'qv__zoom', 'aria-pressed': 'false', text: 'Ampliar' });
+    const setZoom = (on: boolean) => {
+      media.classList.toggle('is-zoomed', on);
+      zoomBtn.setAttribute('aria-pressed', String(on));
+      zoomBtn.textContent = on ? 'Reduzir' : 'Ampliar';
+    };
+    zoomBtn.addEventListener('click', () => setZoom(!media.classList.contains('is-zoomed')));
+    media.addEventListener('pointermove', (ev) => {
+      const r = media.getBoundingClientRect();
+      media.style.setProperty('--zx', `${(((ev.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
+      media.style.setProperty('--zy', `${(((ev.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+    });
+    media.querySelector('.qv__ill')?.addEventListener('click', () => setZoom(!media.classList.contains('is-zoomed')));
+    media.append(zoomBtn);
 
     const sizes = h('fieldset', { class: 'sizes' },
       h('legend', { text: single ? 'Tamanho único' : 'Tamanho' }),

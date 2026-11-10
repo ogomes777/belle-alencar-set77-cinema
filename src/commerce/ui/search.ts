@@ -16,8 +16,13 @@ const CHAPTERS = [
   { id: 'detalhe', label: 'Fio e caimento', k: 'detalhe tecido trama' },
   { id: 'categorias', label: 'Categorias', k: 'categorias vestidos conjuntos acessorios' },
   { id: 'provador', label: 'Provador', k: 'provador silhueta tom' },
+  { id: 'ocasioes', label: 'Compre por ocasião', k: 'ocasiao dia sair noite festa celebrar casamento formatura' },
   { id: 'colecao', label: 'Coleção', k: 'colecao catalogo pecas' },
-  { id: 'lojas', label: 'Lojas', k: 'lojas cidades endereco' },
+  { id: 'looks', label: 'Looks completos', k: 'look combinar acessorio bolsa brinco cinto' },
+  { id: 'como-comprar', label: 'Como comprar', k: 'como comprar reservar retirar whatsapp pedido' },
+  { id: 'lojas', label: 'Lojas', k: 'lojas cidades endereco mapa' },
+  { id: 'atendimento', label: 'Atendimento de estilo', k: 'atendimento consultoria estilo tamanho ajuda' },
+  { id: 'duvidas', label: 'Dúvidas frequentes', k: 'duvidas faq troca tamanho preco entrega retirada' },
 ];
 
 export function createSearch(ctx: Ctx) {
