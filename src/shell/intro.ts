@@ -6,7 +6,7 @@ import { readSession, writeSession } from '../core/storage';
 
 export function initIntro(): void {
   const root=document.documentElement;
-  const intro=document.getElementById('intro');
+  const intro=document.getElementById('intro')!; // Guard below still handles missing markup.
   if(!intro){root.classList.remove('intro-playing');return;}
   if(root.classList.contains('intro-done')||root.classList.contains('intro-seen')||readSession('intro')||matchMedia('(prefers-reduced-motion: reduce)').matches){
     intro.remove();root.classList.remove('intro-playing','intro-opening','intro-skipped');root.classList.add('intro-done');return;
