@@ -198,7 +198,7 @@ export function initFilm(director: Director): void {
       // opening curtain is on screen. Poster paints immediately without stalling.
       if (!posterMode) {
         await new Promise<void>(resolve => window.setTimeout(resolve, 1050));
-        if (tier === 'static') { stage!.classList.remove('is-loading'); return; }
+        if ((tier as Tier) === 'static') { stage!.classList.remove('is-loading'); return; }
       }
       const mod = await import('./experience');
       if ((tier as Tier) === 'static') return;
