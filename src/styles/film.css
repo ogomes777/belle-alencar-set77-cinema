@@ -139,3 +139,10 @@ html.poster-mode .film__veil, html.poster-mode .film__label, html.poster-mode .f
 html.poster-mode main > section:not(.film), html.poster-mode .site-footer, html.poster-mode #overlays { display: none !important; }
 html.poster-mode .film__canvas { opacity: 1; transition: none; }
 html.poster-mode .film__posters { display: none; }
+
+/* Eight Belle departments fit into a film chapter without scroll trapping. */
+.portal-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px;max-width:520px;margin-top:16px;max-height:min(55svh,390px);overflow-y:auto;}
+.portal-list button{font-size:clamp(1rem,1.3vw,1.35rem);min-height:43px;padding:0 10px;gap:9px;}
+.portal-list button:hover,.portal-list button:focus-visible{padding-left:17px;}
+.fitting__static .editorial-cutout{width:100%;height:auto;max-height:340px;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(54,32,19,.2));}
+@media(max-width:560px){.portal-list{gap:0 7px;max-height:39svh}.portal-list button{min-height:36px;font-size:1rem}.portal-list button span{min-width:1.25em}}

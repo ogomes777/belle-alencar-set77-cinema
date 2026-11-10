@@ -40,7 +40,8 @@ const MAG = 0.5; // ganho de escala da peça focada (referência ≈ 1,4–1,6×
 const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initRack(stage: HTMLElement, card: HTMLElement | null): RackController {
-  const products = DEMO_CATALOG.filter((p) => p.cutout && p.active);
+  // Hero rack curated to 20 pieces; all 48 remain discoverable in the catalog.
+  const products=DEMO_CATALOG.filter(p=>p.cutout&&p.active&&(p.category==='vestidos'||Number(p.slug.slice(-2))<=2));
   const layer = document.createElement('div');
   layer.className = 'rack';
   layer.id = 'arara-viva';
@@ -50,7 +51,7 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
     <div class="rack__room" aria-hidden="true"><div class="rack__track"></div></div>
     <div class="rack__frame" aria-hidden="true"><i class="rack__bar"></i><i class="rack__post rack__post--l"></i><i class="rack__post rack__post--r"></i><i class="rack__base"></i></div>
     <ul class="rack__items" role="list"></ul>
-    <p class="rack__label" aria-hidden="true"><b></b><span>Clique para ver · estudo 3D</span></p>
+    <p class="rack__label" aria-hidden="true"><b></b><span>Clique para explorar · editorial demonstrativo</span></p>
     <p class="rack__hint" aria-hidden="true"><i></i>Passe o cursor · arraste · clique</p>`;
   stage.appendChild(layer);
   const list = layer.querySelector('ul')!;

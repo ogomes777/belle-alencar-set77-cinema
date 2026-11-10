@@ -137,3 +137,7 @@ html.js.intro-done:not(.in-film):not(.is-locked) .float-cta, html:not(.js) .floa
   .float-cta span { display: none; }
   .float-cta { padding: 0; width: 52px; justify-content: center; }
 }
+
+/* Editorial product imagery replaces all ornamental vector stock in occasion and complete-look sections. */
+.ill-slot .editorial-cutout{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 15px 16px rgba(52,35,20,.22));}
+.ill-slot--side .editorial-cutout{filter:drop-shadow(0 5px 9px rgba(38,24,16,.17));}

@@ -6,19 +6,27 @@
 import './styles/sections.css';
 import { bus } from './core/bus';
 import { $$ } from './core/dom';
-import { illustrate, type IllustrationSpec } from './core/illustration';
+
 import { DEMO_CATALOG } from './commerce/catalog.demo';
 import type { DressParams } from './core/dress';
 
 export function initSections(): void {
-  // ilustrações vetoriais (mesma linguagem do catálogo)
-  $$<HTMLElement>('[data-ill]').forEach((el) => {
-    try {
-      const spec = JSON.parse(el.dataset.ill!) as IllustrationSpec;
-      el.innerHTML = illustrate(spec, 'Ilustração demonstrativa');
-    } catch {
-      /* slot decorativo: ignora spec inválida */
-    }
+  // Artigos reais do protótipo editorial: mesma imagem usada no catálogo, lookbook e rack.
+  // Imagens são sintéticas; não representam estoque ou SKUs oficiais da Belle.
+  const artSlugs = [
+    'camisas-01','bolsas-02', 'croppeds-03','bolsas-03', 'vestidos-01','aneis-02',
+    'vestidos-01','pulseiras-05', 'vestidos-05','bolsas-05', 'camisas-03','calcas-01',
+  ];
+  $$<HTMLElement>('[data-ill]').forEach((el, i) => {
+    const product=DEMO_CATALOG.find(p=>p.slug===artSlugs[i]);
+    if(!product?.cutout)return;
+    const img=document.createElement('img');
+    img.src=product.cutout;
+    img.alt='';
+    img.width=360;img.height=480;
+    img.decoding='async';img.loading='lazy';
+    img.className='editorial-cutout';
+    el.replaceChildren(img);
   });
 
   // contagem real de peças por ocasião (prévia)

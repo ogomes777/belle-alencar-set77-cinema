@@ -83,6 +83,11 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   disc.count = di;
   g.add(disc);
 
+  // Moda em transparência nas galerias internas, além dos tecidos 3D procedurais.
+  // Planos editoriais mantêm visual fiel aos assets; não são vestidos 3D escaneados.
+  const nicheEditorial=['saias-03','camisas-01','bolsas-02','calcas-01','croppeds-02','pulseiras-01'] as const;
+  const nicheTextures=new THREE.TextureLoader();
+  let nicheIndex=0;
   // nichos em arco nas laterais, atrás das araras
   const nicheMat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissiveMap: kit.glowTex, emissive: new THREE.Color('#f1dcb8'), emissiveIntensity: 0.22, roughness: 0.95 });
   for (const side of [-1, 1]) {
@@ -95,6 +100,19 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       panel.rotation.y = side * -Math.PI / 2;
       panel.position.set(side * (X - 0.012), 0, z);
       g.add(panel);
+      const slug=nicheEditorial[nicheIndex++]!;
+      const artMat=new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,alphaTest:.05,side:THREE.DoubleSide,toneMapped:false});
+      const isAccessory=slug.startsWith('bolsas')||slug.startsWith('pulseiras');
+      const art=new THREE.Mesh(new THREE.PlaneGeometry(isAccessory?1.08:1.34,isAccessory?1.18:1.72),artMat);
+      art.rotation.y=side * -Math.PI / 2;
+      art.position.set(side*(X-0.15),isAccessory?1.68:1.56,z);
+      art.visible=false;
+      art.userData.editorialSlug=slug;
+      g.add(art);
+      nicheTextures.load('/editorial/'+slug+'.webp',tx=>{
+        tx.colorSpace=THREE.SRGBColorSpace;tx.anisotropy=2;
+        artMat.map=tx;artMat.needsUpdate=true;art.visible=true;
+      },undefined,()=>{art.visible=false;});
     }
   }
 

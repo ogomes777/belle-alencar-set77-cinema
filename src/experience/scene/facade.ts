@@ -102,6 +102,8 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
 
   // vitrines: caixa rasa, fundo quente, plinto, manequins com vestidos-estudo
   const backMat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissive: new THREE.Color('#f3dfbd'), emissiveIntensity: 0.38, emissiveMap: kit.glowTex, roughness: 0.9 });
+  const editorialLoader = new THREE.TextureLoader();
+  const facadeEditorial = ['vestidos-01','camisas-03','vestidos-02','croppeds-03'] as const;
   const windows: { x: number; forms: [Silhouette, Tone, number, number][] }[] = [
     { x: -3.8, forms: [['fluido', 'champagne', -0.75, 3], ['classico', 'perola', 0.8, 5]] },
     { x: 3.8, forms: [['marcante', 'noite', -0.55, 2], ['fluido', 'terracota', 0.85, 8]] },
@@ -129,6 +131,22 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
       form.position.set(w.x + dx, 0.55, -0.75);
       form.rotation.y = -dx * 0.25;
       g.add(form);
+      // Graphic store display uses authorized synthetic editorial alpha, with true 3D mesh fallback.
+      // This is a textured flat photo plane, not a reconstructed cloth mesh.
+      const idx = (w.x<0?0:2)+(dx<0?0:1);
+      const slug = facadeEditorial[idx]!;
+      const planeMat = new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,alphaTest:.04,side:THREE.DoubleSide,toneMapped:false});
+      const photo = new THREE.Mesh(new THREE.PlaneGeometry(1.12,1.86),planeMat);
+      photo.position.set(w.x+dx,1.76,-0.65);
+      photo.visible=false;
+      photo.userData.editorialSlug=slug;
+      g.add(photo);
+      editorialLoader.load('/editorial/'+slug+'.webp',(tx)=>{
+        tx.colorSpace=THREE.SRGBColorSpace;
+        tx.anisotropy=2;
+        planeMat.map=tx;planeMat.needsUpdate=true;
+        photo.visible=true;form.visible=false;
+      },undefined,()=>{photo.visible=false;form.visible=true;});
       g.add(contact(kit, 0.9, 0.7, w.x + dx, -0.75, 0.556));
     }
     const glass = plane(3.6, 2.85, kit.glass);

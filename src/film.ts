@@ -9,7 +9,7 @@
 import { bus } from './core/bus';
 import { $, $$, clamp } from './core/dom';
 import { detectCapabilities, resolveTier, type Tier } from './core/tier';
-import { illustrate } from './core/illustration';
+
 import type { DressParams, Silhouette, Tone } from './core/dress';
 import type { Director } from './shell/director';
 import type { World } from './experience/world';
@@ -295,7 +295,14 @@ export function initFilm(director: Director): void {
   function syncFitting(): void {
     $$<HTMLButtonElement>('[data-silhouette]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.silhouette === dressParams.silhouette)));
     $$<HTMLButtonElement>('[data-tone]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tone === dressParams.tone)));
-    if (fittingStatic) fittingStatic.innerHTML = illustrate({ kind: 'dress', silhouette: dressParams.silhouette, tone: dressParams.tone, seed: 11 }, 'Ilustração do estudo de vestido');
+    if (fittingStatic) {
+      const productSlug = dressParams.tone==='noite'?'vestidos-05'
+        :dressParams.tone==='vinho'?'vestidos-02'
+        :dressParams.tone==='gelo'?'vestidos-04'
+        :dressParams.silhouette==='classico'?'vestidos-03'
+        :dressParams.silhouette==='marcante'?'vestidos-02':'vestidos-01';
+      fittingStatic.innerHTML = '<img class="editorial-cutout" src="/editorial/'+productSlug+'.webp" alt="Estudo editorial de vestido, sem prova real de caimento" width="360" height="480">';
+    }
     world?.setDress(dressParams);
   }
   $$<HTMLButtonElement>('[data-silhouette]').forEach((b) => b.addEventListener('click', () => {
