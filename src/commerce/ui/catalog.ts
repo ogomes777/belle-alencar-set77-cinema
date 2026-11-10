@@ -4,7 +4,7 @@ import { illustrate } from '../../core/illustration';
 import { SILHOUETTES, type Silhouette } from '../../core/dress';
 import { DEMO_CATALOG } from '../catalog.demo';
 import { applyFilters, DEFAULT_FILTERS, isFiltered, type Filters } from '../filters';
-import { CATEGORY_LABEL, OCCASION_LABEL, type Category, type Occasion, type Product, type Size } from '../types';
+import { CATEGORY_LABEL, OCCASION_LABEL, SHOP_CATEGORIES, type Category, type Occasion, type Product, type Size } from '../types';
 import { formatPrice, plural } from '../format';
 import { heart } from './icons';
 import type { Ctx } from './context';
@@ -20,9 +20,9 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
     'aria-hidden': 'true',
   });
   media.innerHTML = p.cutout
-    ? `<span class="pcard__ill pcard__ill--cutout" data-flip-id="ill-${p.id}"><img src="${p.cutout}" alt="Estudo 3D demonstrativo: ${p.title}" loading="lazy" decoding="async" width="720" height="1200"></span>`
+    ? `<span class="pcard__ill pcard__ill--cutout" data-flip-id="ill-${p.id}"><img src="${p.cutout}" alt="Imagem editorial demonstrativa: ${p.title}" loading="lazy" decoding="async" width="720" height="1200"></span>`
     : `<span class="pcard__ill" data-flip-id="ill-${p.id}">${illustrate(p.illustration, `Ilustração demonstrativa: ${p.title}`)}</span>`;
-  media.append(h('span', { class: 'badge', 'aria-hidden': 'true', text: p.cutout ? 'Estudo 3D · demonstração' : 'Ilustração · demonstração' }));
+  media.append(h('span', { class: 'badge', 'aria-hidden': 'true', text: p.cutout ? 'Editorial · demonstração' : 'Ilustração · demonstração' }));
   const wish = h('button', {
     type: 'button',
     class: 'pcard__wish wish-btn',
@@ -47,7 +47,7 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
 export function createCatalog(ctx: Ctx, mount: HTMLElement) {
   let filters: Filters = { ...DEFAULT_FILTERS };
 
-  const segButtons = (['todas', 'vestidos', 'conjuntos', 'acessorios'] as const).map((c) =>
+  const segButtons = (['todas', ...SHOP_CATEGORIES] as const).map((c) =>
     h('button', { type: 'button', class: 'seg__btn', 'data-cat': c, 'aria-pressed': String(c === 'todas'), text: c === 'todas' ? 'Todas' : CATEGORY_LABEL[c] }),
   );
   const ink = h('span', { class: 'seg__ink', 'aria-hidden': 'true' });

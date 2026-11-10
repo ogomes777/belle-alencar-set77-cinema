@@ -27,14 +27,14 @@ export interface Store {
   fulfillmentRules: string | null;
 }
 
-export type Category = 'vestidos' | 'conjuntos' | 'acessorios';
+export type Category = 'camisas' | 'croppeds' | 'vestidos' | 'saias' | 'calcas' | 'pulseiras' | 'bolsas' | 'aneis';
+export const SHOP_CATEGORIES = ['vestidos', 'camisas', 'croppeds', 'saias', 'calcas', 'bolsas', 'pulseiras', 'aneis'] as const satisfies readonly Category[];
 export type Occasion = 'dia' | 'noite' | 'celebrar';
 export type Size = 'PP' | 'P' | 'M' | 'G' | 'GG' | 'Único';
 
 export const CATEGORY_LABEL: Record<Category, string> = {
-  vestidos: 'Vestidos',
-  conjuntos: 'Conjuntos',
-  acessorios: 'Acessórios',
+  camisas: 'Camisas', croppeds: 'Croppeds', vestidos: 'Vestidos', saias: 'Saias',
+  calcas: 'Calças', pulseiras: 'Pulseiras', bolsas: 'Bolsas', aneis: 'Anéis',
 };
 export const OCCASION_LABEL: Record<Occasion, string> = {
   dia: 'Dia a dia',

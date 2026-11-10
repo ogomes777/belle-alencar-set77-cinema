@@ -1,8 +1,8 @@
 import '../styles/runway.css';
 import type { Ctx } from '../commerce/ui/context';
 import { heart } from '../commerce/ui/icons';
-import { MODEL_BOXES, MODEL_SHEET, FALLBACKS, RUNWAY_PRODUCTS } from './data';
-import { crop, mountEditorialMedia } from './media';
+import { MODEL_BOXES, FALLBACKS, RUNWAY_PRODUCTS } from './data';
+import { mountEditorialMedia } from './media';
 import { depthAt, railOffset, wrap } from './depth';
 
 export function initRunway(ctx: Ctx): () => void {
@@ -24,7 +24,7 @@ export function initRunway(ctx: Ctx): () => void {
   const people = MODEL_BOXES.map(([a,b], i) => {
     const el = document.createElement('div'); el.className = 'runway__model'; el.dataset.look = String(i);
     // Existing transparent garment renders are an explicit fallback, never fake model photos.
-    el.innerHTML = `<img src="/rack/${FALLBACKS[i]}.webp" alt="Estudo de silhueta do look ${15+i}" width="720" height="1200" draggable="false">`;
+    el.innerHTML = `<img src="/editorial/${FALLBACKS[i]}.webp" alt="Peça editorial conceitual do look ${15+i}" width="360" height="480" draggable="false">`;
     line.append(el);
     return { el, ratio: (b-a)/448 };
   });
@@ -130,14 +130,7 @@ export function initRunway(ctx: Ctx): () => void {
   window.addEventListener('resize',size,{signal});
   document.body.classList.add('is-runway-visible');
   const io=typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);document.body.classList.toggle('is-runway-visible',visible);if(visible)wake();else{cancelAnimationFrame(raf);raf=0;} }) : null; io?.observe(root);
-  if (MODEL_SHEET && Image.prototype.decode) {
-  const modelImage=new Image(); modelImage.src=MODEL_SHEET;
-  void modelImage.decode().then(()=>{
-    if(destroyed)return;
-    people.forEach((m,i)=>{const [a,b]=MODEL_BOXES[i]!;m.el.replaceChildren(crop(MODEL_SHEET,[a,48,b-a,448],[960,540]));});
-    root.dataset.media='reference'; dirty=true;wake();
-  }).catch(()=>{root.dataset.media='fallback';});
-  }
+  root.dataset.media='fallback'; // original reference sheet removed: all images from editorial category assets
   size(); paint();
   return () => {document.body.classList.remove('is-runway-visible');destroyed=true;abort.abort();unsub();ro?.disconnect();io?.disconnect();cancelAnimationFrame(raf);clearTimeout(wheelTimer);};
 }

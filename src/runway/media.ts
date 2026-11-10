@@ -15,6 +15,15 @@ export function crop(src: string, box: readonly number[], sheet: readonly number
 }
 // Render local artwork immediately. A failed reference request never hides the interface.
 export function mountEditorialMedia(host: HTMLElement, product: Product): void {
+  if (product.cutout) {
+    const img = document.createElement('img');
+    img.src = product.cutout;
+    img.alt = 'Referência editorial de '+product.title+', não é produto cadastrado da Belle';
+    img.loading = 'lazy'; img.decoding = 'async';
+    img.className = 'editorial-product-image';
+    host.replaceChildren(img);
+    return;
+  }
   host.innerHTML = illustrate(product.illustration, `Ilustração demonstrativa: ${product.title}`);
   const sprite = product.sprite;
   if (!sprite?.src || !Image.prototype.decode) return;
