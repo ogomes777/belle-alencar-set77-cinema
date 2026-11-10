@@ -1,0 +1,335 @@
+/**
+ * World · um renderer, uma cena, uma câmera.
+ * Lê o progresso do filme (não controla o scroll), suaviza, posiciona câmera e
+ * vestido, e renderiza somente quando o palco está visível e a aba ativa.
+ * Governador de FPS reduz DPR e efeitos antes de desistir para os pôsteres.
+ */
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { bakeStatic, createKit } from './scene/kit';
+import { buildMall } from './scene/mall';
+import { buildFacade } from './scene/facade';
+import { buildBoutique } from './scene/boutique';
+import { DressRig } from './cloth/dress';
+import { Story, type Span } from './story';
+import type { Tier } from '../core/tier';
+import type { DressParams } from '../core/dress';
+
+export interface WorldOptions {
+  container: HTMLElement;
+  tier: Exclude<Tier, 'static'>;
+  poster?: boolean;
+  /** false desativa o governador de FPS (somente QA). */
+  governor?: boolean;
+  onFirstFrame?: () => void;
+  onFail?: (reason: string) => void;
+}
+
+export interface WorldInfo {
+  tier: string;
+  dpr: number;
+  frames: number;
+  drawCalls: number;
+  triangles: number;
+  avgFrameMs: number;
+  running: boolean;
+  progress: number;
+  camera: number[];
+}
+
+export class World {
+  private renderer: THREE.WebGLRenderer;
+  private scene = new THREE.Scene();
+  private camera: THREE.PerspectiveCamera;
+  private story = new Story();
+  private dress: DressRig;
+  private facade;
+  private boutique;
+  private mall;
+  private target = 0;
+  private shown = 0;
+  private visible = true;
+  private raf = 0;
+  private last = 0;
+  private frames = 0;
+  private frameAvg = 16;
+  private slowFor = 0;
+  private dpr: number;
+  private pointer: THREE.Vector2 | null = null;
+  private pointerPrev = new THREE.Vector2();
+  private pointerVel = 0;
+  private camPos = new THREE.Vector3();
+  private camTgt = new THREE.Vector3();
+  private lookPos = new THREE.Vector3();
+  private lookTgt = new THREE.Vector3();
+  private prevCam = new THREE.Vector3();
+  private userYaw = 0;
+  private dressState = { pos: new THREE.Vector3(), yaw: 0, energy: 0, onRail: true, atFitting: false };
+  private scrollEnergy = 0;
+  private time = 0;
+  private firstFrameSent = false;
+  private failed = false;
+  private resizeObs: ResizeObserver;
+  private onVis = () => this.kick();
+
+  constructor(private opts: WorldOptions) {
+    const { tier, container } = opts;
+    this.dpr = Math.min(window.devicePixelRatio || 1, opts.poster ? 2 : tier === 'cinema' ? 1.75 : 1.25);
+    this.renderer = new THREE.WebGLRenderer({ antialias: tier === 'cinema' || !!opts.poster, powerPreference: 'high-performance', preserveDrawingBuffer: !!opts.poster });
+    this.renderer.setPixelRatio(this.dpr);
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 0.92;
+    this.renderer.shadowMap.enabled = tier === 'cinema';
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    container.appendChild(this.renderer.domElement);
+    this.renderer.domElement.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      this.fail('webgl-context-lost');
+    });
+
+    this.camera = new THREE.PerspectiveCamera(40, 1, 0.05, 90);
+    this.scene.background = new THREE.Color('#e7ddcd');
+    this.scene.fog = new THREE.Fog('#e7ddcd', 24, 64);
+    const pmrem = new THREE.PMREMGenerator(this.renderer);
+    this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    this.scene.environmentIntensity = 0.5;
+    pmrem.dispose();
+
+    const kit = createKit();
+    this.mall = buildMall(kit, tier, this.dpr);
+    this.facade = buildFacade(kit, tier);
+    this.boutique = buildBoutique(kit, tier, this.dpr);
+    this.scene.add(this.mall.group, this.facade.group, this.boutique.group);
+    bakeStatic(this.scene);
+
+    const q = tier === 'cinema' || opts.poster ? { cols: 40, rows: 26, iterations: 7 } : { cols: 28, rows: 17, iterations: 5 };
+    this.dress = new DressRig(q, kit.weave);
+    this.dress.addTo(this.scene);
+
+    this.resizeObs = new ResizeObserver(() => this.resize());
+    this.resizeObs.observe(container);
+    this.resize();
+    document.addEventListener('visibilitychange', this.onVis);
+  }
+
+  setSpans(spans: Span[]): void {
+    this.story.setSpans(spans);
+    this.kick();
+  }
+
+  setProgress(p: number, immediate = false): void {
+    this.target = THREE.MathUtils.clamp(p, 0, 1);
+    if (immediate) this.shown = this.target;
+    this.kick();
+  }
+
+  setDress(params: DressParams): void {
+    this.dress.setParams(params);
+    this.dress.energy = Math.max(this.dress.energy, 0.8);
+    this.kick();
+  }
+
+  /** ponteiro normalizado (-1..1) ou null quando sai. */
+  setPointer(x: number | null, y = 0): void {
+    if (x === null) { this.pointer = null; return; }
+    if (!this.pointer) { this.pointer = new THREE.Vector2(x, y); this.pointerPrev.set(x, y); }
+    this.pointer.set(x, y);
+  }
+
+  /** arraste horizontal no provador (pixels normalizados). */
+  drag(dx: number): void {
+    this.userYaw += dx * Math.PI * 1.6;
+    this.dress.spin += -dx * 30;
+    this.kick();
+  }
+
+  rotate(delta: number): void {
+    this.userYaw += delta;
+    this.dress.spin += -delta * 6;
+    this.kick();
+  }
+
+  setVisible(v: boolean): void {
+    this.visible = v;
+    this.kick();
+  }
+
+  /** Prepara um quadro estável para pôster (sem animação pendente). */
+  renderPoster(p: number): void {
+    this.setProgress(p, true);
+    this.step(0, true);
+    this.dress.settle(2.2);
+    for (let i = 0; i < 8; i++) this.step(1 / 60, true);
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  info(): WorldInfo {
+    const r = this.renderer.info.render;
+    const c = this.camera.position;
+    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100) };
+  }
+
+  private kick(): void {
+    if (this.failed || this.opts.poster) return;
+    if (this.raf || !this.visible || document.hidden) return;
+    this.last = performance.now();
+    this.raf = requestAnimationFrame(this.loop);
+  }
+
+  private loop = (now: number) => {
+    this.raf = 0;
+    if (!this.visible || document.hidden || this.failed) return;
+    // dt real (até 250 ms) para a suavização não "atrasar" em GPU lenta;
+    // a física usa passo fixo e as molas recebem dt limitado.
+    const dt = Math.min(0.25, (now - this.last) / 1000 || 1 / 60);
+    this.last = now;
+    this.step(dt, false);
+    this.renderer.render(this.scene, this.camera);
+    this.frames++;
+    if (!this.firstFrameSent) {
+      this.firstFrameSent = true;
+      this.opts.onFirstFrame?.();
+    }
+    this.govern(dt);
+    this.raf = requestAnimationFrame(this.loop);
+  };
+
+  private step(dt: number, exact: boolean): void {
+    this.time += dt;
+    // progresso suavizado (equivalente a um scrub com inércia)
+    const k = exact ? 1 : 1 - Math.exp(-dt * (this.opts.tier === 'cinema' ? 4.2 : 6));
+    const before = this.shown;
+    this.shown += (this.target - this.shown) * k;
+    if (Math.abs(this.target - this.shown) < 1e-5) this.shown = this.target;
+    const p = this.shown;
+    const scrollSpeed = dt > 0 ? Math.abs(this.shown - before) / dt : 0;
+    this.scrollEnergy += (Math.min(1, scrollSpeed * 18) - this.scrollEnergy) * Math.min(1, dt * 3);
+
+    // câmera
+    const fov = this.fitFov(this.story.camera(p, this.camPos, this.camTgt));
+    if (!exact && this.opts.tier === 'cinema') {
+      // câmera na mão, quase imperceptível (respiração do operador)
+      const t = this.time;
+      this.camPos.x += Math.sin(t * 0.63) * 0.006 + Math.sin(t * 1.7) * 0.002;
+      this.camPos.y += Math.sin(t * 0.9 + 1) * 0.005;
+      if (this.pointer) {
+        this.camTgt.x += this.pointer.x * 0.22;
+        this.camTgt.y += this.pointer.y * 0.12;
+      }
+    }
+    const ck = exact ? 1 : 1 - Math.exp(-dt * 10);
+    this.lookPos.lerp(this.camPos, ck);
+    this.lookTgt.lerp(this.camTgt, ck);
+    if (exact || this.frames === 0) { this.lookPos.copy(this.camPos); this.lookTgt.copy(this.camTgt); }
+    this.camera.position.copy(this.lookPos);
+    this.camera.lookAt(this.lookTgt);
+    if (Math.abs(this.camera.fov - fov) > 0.01) {
+      this.camera.fov = fov;
+      this.camera.updateProjectionMatrix();
+    }
+    const camVel = dt > 0 ? this.prevCam.distanceTo(this.camera.position) / dt : 0;
+    this.prevCam.copy(this.camera.position);
+
+    // portas e visibilidade de efeitos caros
+    this.facade.setDoors(this.story.doors(p));
+    if (this.mall.reflector) this.mall.reflector.visible = this.camera.position.z > -1.2;
+
+    // vestido
+    const d = this.dressState;
+    this.story.dress(p, d);
+    this.dress.group.position.copy(d.pos);
+    const bob = d.onRail ? 0 : Math.sin(this.time * 1.1) * 0.012 * (0.4 + d.energy);
+    this.dress.group.position.y += bob;
+    const yaw = d.yaw + (d.atFitting ? this.userYaw : 0) + (d.onRail ? 0 : Math.sin(this.time * 0.35) * 0.08);
+    this.dress.group.rotation.set(0, yaw, 0);
+    const targetEnergy = Math.min(1, d.energy + this.scrollEnergy * 0.35);
+    this.dress.energy += (targetEnergy - this.dress.energy) * Math.min(1, dt * 2.5);
+    if (exact) this.dress.energy = d.energy;
+    this.dress.update(exact ? 1 / 60 : dt);
+
+    // ponteiro
+    if (this.pointer) {
+      this.pointerVel = this.pointer.distanceTo(this.pointerPrev);
+      this.pointerPrev.copy(this.pointer);
+    } else this.pointerVel = 0;
+
+    this.boutique.update(Math.min(dt, 0.05), {
+      camera: this.camera,
+      camVel,
+      pointer: this.pointer,
+      pointerVel: this.pointerVel,
+      archFocus: this.story.archFocus(p, this.camera.position.x),
+      fittingActive: this.camera.position.z < -10.5 && this.camera.position.x > 1.5,
+      heroOnRail: d.onRail,
+    });
+  }
+
+  private govern(dt: number): void {
+    if (this.opts.governor === false) return;
+    this.frameAvg += (dt * 1000 - this.frameAvg) * 0.05;
+    if (this.frameAvg > 24) this.slowFor += dt;
+    else this.slowFor = Math.max(0, this.slowFor - dt * 0.5);
+    if (this.slowFor > 2) {
+      this.slowFor = 0;
+      if (this.dpr > 0.85) {
+        this.dpr = Math.max(0.75, this.dpr - 0.25);
+        this.renderer.setPixelRatio(this.dpr);
+        this.resize();
+      } else if (this.mall.reflector || this.boutique.mirror) {
+        if (this.mall.reflector) this.mall.reflector.removeFromParent();
+        if (this.boutique.mirror) this.boutique.mirror.removeFromParent();
+        this.mall.reflector = null;
+        this.boutique.mirror = null;
+      } else if (this.frameAvg > 45) {
+        this.fail('low-fps');
+      }
+    }
+  }
+
+  /** Em retrato, abre a lente para preservar o enquadramento horizontal da direção (base 1.35:1). */
+  private fitFov(f: number): number {
+    const a = this.camera.aspect;
+    if (a >= 1.35) return f;
+    const rad = THREE.MathUtils.degToRad(f);
+    const h = 2 * Math.atan(Math.tan(rad / 2) * 1.35);
+    const need = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(h / 2) / a));
+    return Math.min(f * 1.75, need);
+  }
+
+  private resize(): void {
+    const el = this.opts.container;
+    const w = el.clientWidth || innerWidth;
+    const h = el.clientHeight || innerHeight;
+    this.renderer.setSize(w, h, false);
+    this.camera.aspect = w / h;
+    this.camera.fov = this.fitFov(this.camera.fov);
+    this.camera.updateProjectionMatrix();
+    this.kick();
+  }
+
+  private fail(reason: string): void {
+    if (this.failed) return;
+    this.failed = true;
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = 0;
+    this.opts.onFail?.(reason);
+  }
+
+  destroy(): void {
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = 0;
+    this.failed = true;
+    document.removeEventListener('visibilitychange', this.onVis);
+    this.resizeObs.disconnect();
+    this.scene.traverse((o) => {
+      const m = o as THREE.Mesh;
+      m.geometry?.dispose?.();
+      const mat = m.material as THREE.Material | THREE.Material[] | undefined;
+      if (Array.isArray(mat)) mat.forEach((x) => x.dispose());
+      else mat?.dispose?.();
+    });
+    this.renderer.dispose();
+    this.renderer.domElement.remove();
+  }
+}

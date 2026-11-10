@@ -57,6 +57,7 @@ export class DressRig {
   private geo!: THREE.BufferGeometry;
   private local: Float32Array = new Float32Array(0); // posições de repouso locais
   private restR: Float32Array = new Float32Array(0);
+  private smooth: Float32Array = new Float32Array(0);
   private params: DressParams = { silhouette: 'fluido', tone: 'perola' };
   private acc = 0;
   private lastPin = new THREE.Vector3();
@@ -166,7 +167,7 @@ export class DressRig {
         if (row === 0) cloth.pinned[i] = 1;
       }
     }
-    const bend = 0.12 + spec.stiffness * 0.5;
+    const bend = 0.32 + spec.stiffness * 0.5;
     for (let row = 0; row <= R; row++) {
       for (let col = 0; col < C; col++) {
         const i = row * C + col;
@@ -183,7 +184,7 @@ export class DressRig {
       }
     }
     this.cloth = cloth;
-    this.memory = 0.6 + spec.stiffness * 3.2;
+    this.memory = 2.4 + spec.stiffness * 3.6;
     this.lastPin.set(this.cloth.pos[0]!, this.cloth.pos[1]!, this.cloth.pos[2]!);
     this.buildGeometry();
   }
@@ -232,6 +233,21 @@ export class DressRig {
         out[dst] = p[src]!;
         out[dst + 1] = p[src + 1]!;
         out[dst + 2] = p[src + 2]!;
+      }
+    }
+    // suavização laplaciana leve só na malha exibida (a simulação fica intacta)
+    const sm = this.smooth.length === out.length ? this.smooth : (this.smooth = new Float32Array(out.length));
+    sm.set(out);
+    for (let row = 1; row < R; row++) {
+      for (let col = 0; col <= C; col++) {
+        const k = (row * (C + 1) + col) * 3;
+        const l = (row * (C + 1) + (col === 0 ? C - 1 : col - 1)) * 3;
+        const r = (row * (C + 1) + (col === C ? 1 : col + 1)) * 3;
+        const u = k - (C + 1) * 3;
+        const d = k + (C + 1) * 3;
+        for (let c = 0; c < 3; c++) {
+          out[k + c] = sm[k + c]! * 0.5 + (sm[l + c]! + sm[r + c]! + sm[u + c]! + sm[d + c]!) * 0.125;
+        }
       }
     }
     attr.needsUpdate = true;
@@ -296,8 +312,8 @@ export class DressRig {
     if (jx * jx + jy * jy + jz * jz > 0.3 * 0.3) {
       for (let i = 0; i < cloth.count; i++) {
         const k = i * 3;
-        p[k] += jx; p[k + 1] += jy; p[k + 2] += jz;
-        cloth.prev[k] += jx; cloth.prev[k + 1] += jy; cloth.prev[k + 2] += jz;
+        p[k] = p[k]! + jx; p[k + 1] = p[k + 1]! + jy; p[k + 2] = p[k + 2]! + jz;
+        cloth.prev[k] = cloth.prev[k]! + jx; cloth.prev[k + 1] = cloth.prev[k + 1]! + jy; cloth.prev[k + 2] = cloth.prev[k + 2]! + jz;
       }
     }
 
@@ -351,6 +367,16 @@ export class DressRig {
     void oy;
 
     cloth.integrate(dt);
+    // restauração de forma (desfaz "nós" sem autocolisão): puxa cada ponto para a
+    // silhueta desenhada, mais forte em repouso, quase nula quando o vestido voa.
+    const restore = Math.min(0.2, (0.6 + 3.2 * (1 - e) * (1 - e)) * dt);
+    for (let i = C; i < cloth.count; i++) {
+      const k = i * 3;
+      v3.set(this.local[k]!, this.local[k + 1]!, this.local[k + 2]!).applyMatrix4(m);
+      p[k] = p[k]! + (v3.x - p[k]!) * restore;
+      p[k + 1] = p[k + 1]! + (v3.y - p[k + 1]!) * restore;
+      p[k + 2] = p[k + 2]! + (v3.z - p[k + 2]!) * restore;
+    }
     for (let it = 0; it < cloth.iterations; it++) {
       cloth.satisfy();
       if (it % 2 === 1 || it === cloth.iterations - 1) this.collide();
@@ -464,7 +490,7 @@ export function mergeSimple(geos: THREE.BufferGeometry[]): THREE.BufferGeometry 
     if (!gi.getAttribute('normal')) gi.computeVertexNormals();
     for (const a of attrs) {
       const at = gi.getAttribute(a);
-      if (at) data[a]!.push(...(at.array as ArrayLike<number>));
+      if (at) data[a]!.push(...Array.from(at.array as ArrayLike<number>));
     }
     const count = gi.getAttribute('position').count;
     for (let i = 0; i < count; i++) index.push(offset + i);

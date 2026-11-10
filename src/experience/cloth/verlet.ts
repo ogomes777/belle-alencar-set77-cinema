@@ -48,9 +48,9 @@ export class VerletCloth {
 
   addForce(i: number, fx: number, fy: number, fz: number): void {
     const k = i * 3;
-    this.acc[k] += fx;
-    this.acc[k + 1] += fy;
-    this.acc[k + 2] += fz;
+    this.acc[k] = this.acc[k]! + fx;
+    this.acc[k + 1] = this.acc[k + 1]! + fy;
+    this.acc[k + 2] = this.acc[k + 2]! + fz;
   }
 
   /** Move um ponto fixo para um alvo (mantendo-o ancorado). */
@@ -103,12 +103,12 @@ export class VerletCloth {
       if (!w) continue;
       const fa = (diff * wa) / w;
       const fb = (diff * wb) / w;
-      pos[pa] += dx * fa;
-      pos[pa + 1] += dy * fa;
-      pos[pa + 2] += dz * fa;
-      pos[pb] -= dx * fb;
-      pos[pb + 1] -= dy * fb;
-      pos[pb + 2] -= dz * fb;
+      pos[pa] = pos[pa]! + dx * fa;
+      pos[pa + 1] = pos[pa + 1]! + dy * fa;
+      pos[pa + 2] = pos[pa + 2]! + dz * fa;
+      pos[pb] = pos[pb]! - dx * fb;
+      pos[pb + 1] = pos[pb + 1]! - dy * fb;
+      pos[pb + 2] = pos[pb + 2]! - dz * fb;
     }
   }
 }

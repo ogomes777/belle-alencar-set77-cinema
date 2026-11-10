@@ -1,0 +1,240 @@
+/**
+ * E2E · Belle Alencar V4 (Playwright, Chromium).
+ * Pré-requisito: `npm run build && npm run preview` (porta 4173) ou BASE=<url>.
+ * Uso: npm run e2e   ·   SHOTS=1 npm run e2e (salva capturas em docs/qa/)
+ * Sai com código 1 se qualquer verificação falhar.
+ */
+import { createRequire } from 'node:module';
+import { mkdir } from 'node:fs/promises';
+
+const require = createRequire(import.meta.url);
+let chromium;
+try { ({ chromium } = require('playwright')); } catch { ({ chromium } = require('/opt/node-tools/node_modules/playwright')); }
+
+const BASE = process.env.BASE || 'http://localhost:4173';
+const SHOTS = !!process.env.SHOTS;
+const OUT = 'docs/qa';
+if (SHOTS) await mkdir(OUT, { recursive: true });
+
+const results = [];
+const check = (name, ok, detail = '') => {
+  results.push({ name, ok, detail });
+  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  · ' + detail : ''}`);
+};
+
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+
+async function newPage(opts = {}) {
+  const ctx = await browser.newContext({ deviceScaleFactor: 1, ...opts });
+  const page = await ctx.newPage();
+  const errors = [];
+  const failed = [];
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); });
+  page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+  page.on('response', (r) => { if (r.status() >= 400) failed.push(`${r.status()} ${r.url()}`); });
+  page.on('requestfailed', (r) => { if (!/posters\//.test(r.url())) failed.push('failed ' + r.url()); });
+  return { ctx, page, errors, failed };
+}
+const skipIntro = (page) => page.addInitScript(() => { try { sessionStorage.setItem('belle:v4:intro', '1'); } catch {} });
+const noOverflow = (page) => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
+
+// 1 · Carga, overflow e capturas nos 4 viewports (tier estático: rápido e determinístico)
+const viewports = [
+  { name: '360', width: 360, height: 800, isMobile: true, hasTouch: true },
+  { name: '390', width: 390, height: 844, isMobile: true, hasTouch: true },
+  { name: '768', width: 768, height: 1024, isMobile: true, hasTouch: true },
+  { name: '1440', width: 1440, height: 900 },
+];
+for (const vp of viewports) {
+  const { ctx, page, errors, failed } = await newPage({ viewport: { width: vp.width, height: vp.height }, isMobile: !!vp.isMobile, hasTouch: !!vp.hasTouch });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static`, { waitUntil: 'load' });
+  await page.waitForTimeout(400);
+  let overflowOk = true;
+  const stops = await page.evaluate(() => {
+    const ids = ['inicio', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador', 'colecao', 'lojas'];
+    return ids.map((id) => { const el = document.getElementById(id); return el ? Math.round(el.getBoundingClientRect().top + scrollY + 40) : 0; });
+  });
+  for (const [i, y] of stops.entries()) {
+    await page.evaluate((yy) => scrollTo(0, yy), y);
+    await page.waitForTimeout(250);
+    if (!(await noOverflow(page))) overflowOk = false;
+    if (SHOTS && [0, 2, 6, 7, 8].includes(i)) await page.screenshot({ path: `${OUT}/${vp.name}-${i}.png` });
+  }
+  check(`[${vp.name}] sem overflow horizontal em 9 paradas`, overflowOk);
+  check(`[${vp.name}] zero erros de console`, errors.length === 0, errors.slice(0, 2).join(' | '));
+  check(`[${vp.name}] zero recursos 4xx/5xx`, failed.length === 0, failed.slice(0, 3).join(' | '));
+  const headerOk = await page.evaluate(() => ['#storeButton', '#searchButton', '#bagButton'].every((s) => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && r.width >= 40 && r.height >= 40 && r.right <= innerWidth; }));
+  check(`[${vp.name}] loja, busca e sacola sempre visíveis (≥40px)`, headerOk);
+  await ctx.close();
+}
+
+// 2 · Intro: aparece, "Pular" encerra, não volta na sessão
+{
+  const { ctx, page } = await newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(`${BASE}/?tier=static`, { waitUntil: 'domcontentloaded' });
+  const visible = await page.locator('#intro').isVisible().catch(() => false);
+  if (SHOTS) { await page.waitForTimeout(900); await page.screenshot({ path: `${OUT}/intro-1440.png` }); }
+  await page.mouse.click(720, 450);
+  await page.waitForTimeout(500);
+  const gone = (await page.locator('#intro').count()) === 0;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(100);
+  const stillGone = (await page.locator('#intro').count()) === 0 || !(await page.locator('#intro').isVisible());
+  check('intro aparece na 1ª visita', visible);
+  check('intro encerra ao clicar/pular', gone);
+  check('intro não repete na mesma sessão', stillGone);
+  await ctx.close();
+}
+
+// 3 · Reduced motion → tier estático, sem canvas, pôster visível
+{
+  const { ctx, page, errors } = await newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+  await page.goto(`${BASE}/`, { waitUntil: 'load' });
+  await page.waitForTimeout(1500);
+  const st = await page.evaluate(() => ({ tier: document.documentElement.dataset.tier, canvas: !!document.querySelector('#filmCanvas canvas'), intro: !!document.getElementById('intro'), poster: !!document.querySelector('.film__poster.is-active img') }));
+  check('reduced-motion: tier estático', st.tier === 'static', JSON.stringify(st));
+  check('reduced-motion: nenhum canvas WebGL criado', !st.canvas);
+  check('reduced-motion: sem intro', !st.intro);
+  check('reduced-motion: pôster ativo', st.poster);
+  check('reduced-motion: zero erros', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
+// 4 · Cidade: escolher, persistir, ?loja= sobrescreve, nunca abre sozinho
+{
+  const { ctx, page } = await newPage({ viewport: { width: 1440, height: 900 } });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static`, { waitUntil: 'load' });
+  await page.waitForTimeout(2500);
+  const autoOpened = await page.locator('[role="dialog"]:visible').count();
+  check('seletor de loja NÃO abre sozinho (achado A2)', autoOpened === 0);
+  await page.click('#storeButton');
+  await page.click('[data-choose-store="frutal"]');
+  await page.waitForTimeout(300);
+  const label = await page.textContent('#storeButton [data-store-label]');
+  check('escolher Frutal atualiza o header', /Frutal/.test(label || ''), label || '');
+  await page.reload({ waitUntil: 'load' });
+  const label2 = await page.textContent('#storeButton [data-store-label]');
+  check('Frutal persiste após recarregar', /Frutal/.test(label2 || ''), label2 || '');
+  await page.goto(`${BASE}/?tier=static&loja=catalao`, { waitUntil: 'load' });
+  const label3 = await page.textContent('#storeButton [data-store-label]');
+  check('?loja=catalao sobrescreve a preferência', /Catal/.test(label3 || ''), label3 || '');
+  await page.goto(`${BASE}/?tier=static&cidade=mineiros`, { waitUntil: 'load' });
+  const label4 = await page.textContent('#storeButton [data-store-label]');
+  check('?cidade= legado continua funcionando', /Mineiros/.test(label4 || ''), label4 || '');
+  await ctx.close();
+}
+
+// 5 · Sacola por filial, persistência e troca de loja com decisão explícita
+{
+  const { ctx, page, errors } = await newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static&loja=araxa`, { waitUntil: 'load' });
+  await page.locator('#colecao').scrollIntoViewIfNeeded();
+  await page.locator('[data-qv]').first().click();
+  await page.waitForSelector('.qv', { state: 'visible' });
+  await page.click('[data-add]');
+  const err = await page.locator('.qv__error').isVisible();
+  check('adicionar sem tamanho mostra erro', err);
+  await page.locator('.qv .size').first().click();
+  await page.click('[data-add]');
+  await page.waitForTimeout(400);
+  const count = await page.textContent('[data-bag-count]');
+  check('sacola conta 1 peça', count?.trim() === '1', count || '');
+  if (SHOTS) await page.screenshot({ path: `${OUT}/390-quickview.png` });
+  await page.keyboard.press('Escape');
+  await page.reload({ waitUntil: 'load' });
+  const count2 = await page.textContent('[data-bag-count]');
+  check('sacola persiste após recarregar', count2?.trim() === '1', count2 || '');
+  await page.click('#storeButton');
+  await page.click('[data-choose-store="frutal"]');
+  await page.waitForTimeout(300);
+  const switchShown = await page.locator('[data-switch="keep"]').isVisible();
+  check('trocar loja com sacola exige decisão', switchShown);
+  if (SHOTS) await page.screenshot({ path: `${OUT}/390-switch.png` });
+  await page.click('[data-switch="keep"]');
+  await page.waitForTimeout(300);
+  const hidden = await page.locator('[data-bag-count]').isHidden();
+  check('nova loja começa com sacola própria (itens não migram sem escolha)', hidden);
+  await page.click('#bagButton');
+  await page.waitForTimeout(300);
+  const other = await page.locator('[data-goto-store="araxa"]').isVisible();
+  check('sacola de Araxá continua salva e acessível', other);
+  if (SHOTS) await page.screenshot({ path: `${OUT}/390-bag.png` });
+  check('fluxo de sacola sem erros', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
+// 6 · Deep link de peça e teclado (Esc fecha, foco volta)
+{
+  const { ctx, page } = await newPage({ viewport: { width: 1440, height: 900 } });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=static&peca=vestido-longo-fluido`, { waitUntil: 'load' });
+  await page.waitForTimeout(600);
+  check('?peca= abre o quick view', await page.locator('.qv').isVisible());
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check('Esc fecha o quick view', !(await page.locator('.qv').isVisible()));
+  await page.locator('#colecao').scrollIntoViewIfNeeded();
+  const trigger = page.locator('[data-qv]').nth(1);
+  await trigger.focus();
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('.qv', { state: 'visible' });
+  const inDialog = await page.evaluate(() => !!document.activeElement?.closest('[role="dialog"]'));
+  check('foco entra no diálogo ao abrir', inDialog);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  const back = await page.evaluate(() => document.activeElement?.hasAttribute('data-qv'));
+  check('foco volta ao gatilho ao fechar', !!back);
+  await page.goto(`${BASE}/?tier=static`, { waitUntil: 'load' });
+  await page.keyboard.press('Tab');
+  const skip = await page.evaluate(() => document.activeElement?.classList.contains('skip-link'));
+  check('1º Tab chega no "Pular para a coleção"', !!skip);
+  await ctx.close();
+}
+
+// 7 · WebGL: render ativo no filme, parado fora dele
+{
+  const { ctx, page, errors } = await newPage({ viewport: { width: 1280, height: 800 } });
+  await skipIntro(page);
+  await page.goto(`${BASE}/?tier=cinema`, { waitUntil: 'load' });
+  const live = await page.waitForSelector('.film__stage.is-live', { timeout: 60000 }).then(() => true).catch(() => false);
+  check('CINEMA: palco 3D ativo (1º frame)', live);
+  const f1 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
+  await page.waitForTimeout(1500);
+  const f2 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
+  check('CINEMA: render loop roda dentro do filme', f2 > f1, `${f1}→${f2}`);
+  const info = await page.evaluate(() => window.__belle?.world());
+  check('CINEMA: draw calls ≤ 120', (info?.drawCalls ?? 999) <= 120, JSON.stringify(info));
+  await page.evaluate(() => document.getElementById('lojas')?.scrollIntoView());
+  await page.waitForTimeout(800);
+  const g1 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
+  await page.waitForTimeout(1200);
+  const g2 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
+  check('CINEMA: render loop PARA fora do palco', g2 === g1, `${g1}→${g2}`);
+  check('CINEMA: zero erros', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
+// 8 · Métricas de laboratório (LCP / CLS) — não são dados de campo
+for (const vp of [{ width: 390, height: 844, isMobile: true, hasTouch: true, n: '390' }, { width: 1440, height: 900, n: '1440' }]) {
+  const { ctx, page } = await newPage({ viewport: { width: vp.width, height: vp.height }, isMobile: !!vp.isMobile, hasTouch: !!vp.hasTouch });
+  await page.addInitScript(() => {
+    window.__cls = 0; window.__lcp = 0;
+    new PerformanceObserver((l) => l.getEntries().forEach((e) => { if (!e.hadRecentInput) window.__cls += e.value; })).observe({ type: 'layout-shift', buffered: true });
+    new PerformanceObserver((l) => { const e = l.getEntries(); window.__lcp = e[e.length - 1].startTime; }).observe({ type: 'largest-contentful-paint', buffered: true });
+  });
+  await skipIntro(page);
+  await page.goto(`${BASE}/`, { waitUntil: 'load' });
+  await page.waitForTimeout(3000);
+  const m = await page.evaluate(() => ({ lcp: Math.round(window.__lcp), cls: Math.round(window.__cls * 1000) / 1000 }));
+  check(`[${vp.n}] LCP lab ≤ 2500 ms`, m.lcp > 0 && m.lcp <= 2500, `${m.lcp} ms`);
+  check(`[${vp.n}] CLS lab ≤ 0.1`, m.cls <= 0.1, String(m.cls));
+  await ctx.close();
+}
+
+await browser.close();
+const failedCount = results.filter((r) => !r.ok).length;
+console.log(`\n${results.length - failedCount}/${results.length} verificações passaram`);
+process.exit(failedCount ? 1 : 0);

@@ -95,7 +95,8 @@ function dress(spec: IllustrationSpec, id: string): string {
     <path d="${bodice}" fill="url(#g${id})"/>
     <path d="${skirt}" fill="url(#g${id})"/>
     <path d="${skirt}" fill="url(#v${id})"/>
-    ${folds}
+    <clipPath id="c${id}"><path d="${skirt}"/></clipPath>
+    <g clip-path="url(#c${id})">${folds}</g>
     <path d="M79 ${waistY} Q100 ${waistY + 4} 121 ${waistY}" stroke="${TONES[spec.tone].shade}" stroke-width="1.4" fill="none"/>`;
 }
 

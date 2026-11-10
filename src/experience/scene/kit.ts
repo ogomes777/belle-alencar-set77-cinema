@@ -167,3 +167,85 @@ export function spot(
   s.target.position.set(...to);
   return s;
 }
+
+/**
+ * Funde malhas estáticas que compartilham material (1 draw call por material).
+ * Ignora objetos marcados com userData.dynamic, instâncias e refletores.
+ */
+export function bakeStatic(root: THREE.Object3D): number {
+  root.updateMatrixWorld(true);
+  const groups = new Map<THREE.Material, THREE.Mesh[]>();
+  const skip = (o: THREE.Object3D): boolean => {
+    for (let p: THREE.Object3D | null = o; p && p !== root.parent; p = p.parent) if (p.userData.dynamic) return true;
+    return false;
+  };
+  root.traverse((o) => {
+    const m = o as THREE.Mesh;
+    if (!m.isMesh || (m as unknown as THREE.InstancedMesh).isInstancedMesh || Array.isArray(m.material)) return;
+    if ((m as unknown as { isReflector?: boolean }).isReflector || m.constructor.name === 'Reflector') return;
+    if (skip(m)) return;
+    const list = groups.get(m.material) ?? [];
+    list.push(m);
+    groups.set(m.material, list);
+  });
+  let removed = 0;
+  groups.forEach((meshes, material) => {
+    if (meshes.length < 2) return;
+    const geos: THREE.BufferGeometry[] = [];
+    let cast = false;
+    let receive = false;
+    let order = 0;
+    for (const m of meshes) {
+      let g = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone();
+      g.applyMatrix4(m.matrixWorld);
+      const clean = new THREE.BufferGeometry();
+      clean.setAttribute('position', g.getAttribute('position'));
+      if (!g.getAttribute('normal')) g.computeVertexNormals();
+      clean.setAttribute('normal', g.getAttribute('normal'));
+      const uv = g.getAttribute('uv') ?? new THREE.Float32BufferAttribute(new Float32Array(g.getAttribute('position').count * 2), 2);
+      clean.setAttribute('uv', uv);
+      geos.push(clean);
+      g = clean;
+      cast ||= m.castShadow;
+      receive ||= m.receiveShadow;
+      order = Math.max(order, m.renderOrder);
+      m.removeFromParent();
+      removed++;
+    }
+    const merged = mergeAll(geos);
+    const mesh = new THREE.Mesh(merged, material);
+    mesh.castShadow = cast;
+    mesh.receiveShadow = receive;
+    mesh.renderOrder = order;
+    mesh.matrixAutoUpdate = false;
+    root.add(mesh);
+    root.updateMatrixWorld(true);
+    // root pode ter transform: compensar
+    mesh.matrix.copy(root.matrixWorld).invert();
+    mesh.matrixWorldNeedsUpdate = true;
+    removed--;
+  });
+  return removed;
+}
+
+function mergeAll(geos: THREE.BufferGeometry[]): THREE.BufferGeometry {
+  let count = 0;
+  geos.forEach((g) => (count += g.getAttribute('position').count));
+  const pos = new Float32Array(count * 3);
+  const nor = new Float32Array(count * 3);
+  const uv = new Float32Array(count * 2);
+  let o = 0;
+  for (const g of geos) {
+    const n = g.getAttribute('position').count;
+    pos.set(g.getAttribute('position').array as Float32Array, o * 3);
+    nor.set(g.getAttribute('normal').array as Float32Array, o * 3);
+    uv.set(g.getAttribute('uv').array as Float32Array, o * 2);
+    o += n;
+  }
+  const out = new THREE.BufferGeometry();
+  out.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  out.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  out.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  out.computeBoundingSphere();
+  return out;
+}

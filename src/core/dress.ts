@@ -40,7 +40,7 @@ export interface SilhouetteSpec {
 }
 
 export const SILHOUETTES: Record<Silhouette, SilhouetteSpec> = {
-  fluido: { name: 'Fluido', length: 1.02, hem: 0.62, stiffness: 0.25, description: 'Longo, leve, com movimento.' },
+  fluido: { name: 'Fluido', length: 1.02, hem: 0.5, stiffness: 0.25, description: 'Longo, leve, com movimento.' },
   marcante: { name: 'Marcante', length: 0.78, hem: 0.36, stiffness: 0.55, description: 'Midi, ajustado, presença.' },
   classico: { name: 'Clássico', length: 0.6, hem: 0.46, stiffness: 0.45, description: 'Na altura do joelho, evasê.' },
 };
