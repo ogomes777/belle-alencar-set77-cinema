@@ -1,0 +1,21 @@
+
+> belle-alencar-cinema@4.0.0 check
+> node scripts/doctor.mjs
+
+OK   index.html
+OK   src/main.ts
+OK   src/film.ts
+OK   src/experience/world.ts
+OK   src/experience/cloth/dress.ts
+OK   src/commerce/index.ts
+OK   src/commerce/catalog.demo.ts
+OK   src/commerce/stores.ts
+OK   CLAUDE.md
+OK   AGENTS.md
+OK   docs/STORYBOARD.md
+OK   docs/IMPLEMENTATION_PLAN.md
+OK   docs/ASSETS_MISSING.md
+OK   docs/QA_PLAN.md
+OK   knowledge/MOTION_ATLAS_371.md
+OK   legacy/v3/index.html
+Estrutura OK. Rode também: npm test, npm run build, npm run e2e.

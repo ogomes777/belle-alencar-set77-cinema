@@ -1,0 +1,52 @@
+PASS 360: contact CTA does not obscure product rail
+PASS 360: six depth layers
+PASS 360: no horizontal overflow
+PASS 360: store/search/bag usable
+PASS 360: next look and live announcement synchronized
+PASS 360: product rail synchronized
+PASS 360: reverse loop
+PASS 360: real commerce wishlist
+PASS 360: wishlist persists
+PASS 360: correct editorial product detail
+PASS 360: chosen variant enters store bag
+PASS 360: zero console errors ()
+PASS 390: contact CTA does not obscure product rail
+PASS 390: six depth layers
+PASS 390: no horizontal overflow
+PASS 390: store/search/bag usable
+PASS 390: next look and live announcement synchronized
+PASS 390: product rail synchronized
+PASS 390: reverse loop
+PASS 390: real commerce wishlist
+PASS 390: wishlist persists
+PASS 390: correct editorial product detail
+PASS 390: chosen variant enters store bag
+PASS 390: zero console errors ()
+PASS 768: contact CTA does not obscure product rail
+PASS 768: six depth layers
+PASS 768: no horizontal overflow
+PASS 768: store/search/bag usable
+PASS 768: next look and live announcement synchronized
+PASS 768: product rail synchronized
+PASS 768: reverse loop
+PASS 768: real commerce wishlist
+PASS 768: wishlist persists
+PASS 768: correct editorial product detail
+PASS 768: chosen variant enters store bag
+PASS 768: zero console errors ()
+PASS 1440: contact CTA does not obscure product rail
+PASS 1440: six depth layers
+PASS 1440: no horizontal overflow
+PASS 1440: store/search/bag usable
+PASS 1440: next look and live announcement synchronized
+PASS 1440: product rail synchronized
+PASS 1440: reverse loop
+PASS 1440: real commerce wishlist
+PASS 1440: wishlist persists
+PASS 1440: correct editorial product detail
+PASS 1440: chosen variant enters store bag
+PASS 1440: zero console errors ()
+PASS pointer drag eases and snaps to next look
+PASS vertical wheel keeps native landing scroll
+PASS mobile touch gesture changes look and snaps
+51 runway checks passed

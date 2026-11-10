@@ -1,0 +1,128 @@
+PASS 96 local WebPs return200, decode and retain transparent corners
+PASS camisas: exactly six products
+PASS camisas-01: correct complete packshot/detail identity
+PASS camisas-02: correct complete packshot/detail identity
+PASS camisas-03: correct complete packshot/detail identity
+PASS camisas-04: correct complete packshot/detail identity
+PASS camisas-05: correct complete packshot/detail identity
+PASS camisas-06: correct complete packshot/detail identity
+PASS croppeds: exactly six products
+PASS croppeds-01: correct complete packshot/detail identity
+PASS croppeds-02: correct complete packshot/detail identity
+PASS croppeds-03: correct complete packshot/detail identity
+PASS croppeds-04: correct complete packshot/detail identity
+PASS croppeds-05: correct complete packshot/detail identity
+PASS croppeds-06: correct complete packshot/detail identity
+PASS vestidos: exactly six products
+PASS vestidos-01: correct complete packshot/detail identity
+PASS vestidos-02: correct complete packshot/detail identity
+PASS vestidos-03: correct complete packshot/detail identity
+PASS vestidos-04: correct complete packshot/detail identity
+PASS vestidos-05: correct complete packshot/detail identity
+PASS vestidos-06: correct complete packshot/detail identity
+PASS saias: exactly six products
+PASS saias-01: correct complete packshot/detail identity
+PASS saias-02: correct complete packshot/detail identity
+PASS saias-03: correct complete packshot/detail identity
+PASS saias-04: correct complete packshot/detail identity
+PASS saias-05: correct complete packshot/detail identity
+PASS saias-06: correct complete packshot/detail identity
+PASS calcas: exactly six products
+PASS calcas-01: correct complete packshot/detail identity
+PASS calcas-02: correct complete packshot/detail identity
+PASS calcas-03: correct complete packshot/detail identity
+PASS calcas-04: correct complete packshot/detail identity
+PASS calcas-05: correct complete packshot/detail identity
+PASS calcas-06: correct complete packshot/detail identity
+PASS bolsas: exactly six products
+PASS bolsas-01: correct complete packshot/detail identity
+PASS bolsas-02: correct complete packshot/detail identity
+PASS bolsas-03: correct complete packshot/detail identity
+PASS bolsas-04: correct complete packshot/detail identity
+PASS bolsas-05: correct complete packshot/detail identity
+PASS bolsas-06: correct complete packshot/detail identity
+PASS pulseiras: exactly six products
+PASS pulseiras-01: correct complete packshot/detail identity
+PASS pulseiras-02: correct complete packshot/detail identity
+PASS pulseiras-03: correct complete packshot/detail identity
+PASS pulseiras-04: correct complete packshot/detail identity
+PASS pulseiras-05: correct complete packshot/detail identity
+PASS pulseiras-06: correct complete packshot/detail identity
+PASS aneis: exactly six products
+PASS aneis-01: correct complete packshot/detail identity
+PASS aneis-02: correct complete packshot/detail identity
+PASS aneis-03: correct complete packshot/detail identity
+PASS aneis-04: correct complete packshot/detail identity
+PASS aneis-05: correct complete packshot/detail identity
+PASS aneis-06: correct complete packshot/detail identity
+PASS 360/inicio: no document overflow
+PASS 360/sala: no document overflow
+PASS 360/passarela: no document overflow
+PASS 360/provador: no document overflow
+PASS 360/looks: no document overflow
+PASS 360/colecao: no document overflow
+PASS 360: thirty garments only, no jewelry on hangers
+PASS 360: viewer returns focus to same garment
+PASS 360: foreground product is not clipped
+PASS 390/inicio: no document overflow
+PASS 390/sala: no document overflow
+PASS 390/passarela: no document overflow
+PASS 390/provador: no document overflow
+PASS 390/looks: no document overflow
+PASS 390/colecao: no document overflow
+PASS 390: thirty garments only, no jewelry on hangers
+PASS 390: viewer returns focus to same garment
+PASS 390: foreground product is not clipped
+PASS 768/inicio: no document overflow
+PASS 768/sala: no document overflow
+PASS 768/passarela: no document overflow
+PASS 768/provador: no document overflow
+PASS 768/looks: no document overflow
+PASS 768/colecao: no document overflow
+PASS 768: thirty garments only, no jewelry on hangers
+PASS 768: viewer returns focus to same garment
+PASS 768: foreground product is not clipped
+PASS 1440/inicio: no document overflow
+PASS 1440/sala: no document overflow
+PASS 1440/passarela: no document overflow
+PASS 1440/provador: no document overflow
+PASS 1440/looks: no document overflow
+PASS 1440/colecao: no document overflow
+PASS 1440: thirty garments only, no jewelry on hangers
+PASS 1440: viewer returns focus to same garment
+PASS 1440: foreground product is not clipped
+PASS flight1: same product ID
+PASS flight1: counter waits for occlusion/impact
+PASS flight1: one addition, zero ghosts
+PASS flight2: same product ID
+PASS flight2: counter waits for occlusion/impact
+PASS flight2: one addition, zero ghosts
+PASS flight3: same product ID
+PASS flight3: counter waits for occlusion/impact
+PASS flight3: one addition, zero ghosts
+PASS flight4: same product ID
+PASS flight4: counter waits for occlusion/impact
+PASS flight4: one addition, zero ghosts
+PASS flight5: same product ID
+PASS flight5: counter waits for occlusion/impact
+PASS flight5: one addition, zero ghosts
+PASS flight6: same product ID
+PASS flight6: counter waits for occlusion/impact
+PASS flight6: one addition, zero ghosts
+PASS flight7: same product ID
+PASS flight7: counter waits for occlusion/impact
+PASS flight7: one addition, zero ghosts
+PASS flight8: same product ID
+PASS flight8: counter waits for occlusion/impact
+PASS flight8: one addition, zero ghosts
+PASS flight9: same product ID
+PASS flight9: counter waits for occlusion/impact
+PASS flight9: one addition, zero ghosts
+PASS flight10: same product ID
+PASS flight10: counter waits for occlusion/impact
+PASS flight10: one addition, zero ghosts
+PASS keyboard reaches the first of all thirty garments
+PASS keyboard reaches the last garment without scrolling the page
+PASS bag thumbnail preserves the exact product
+PASS zero browser/HTTP errors: 
+127 product integration checks passed

@@ -1,0 +1,84 @@
+
+> belle-alencar-cinema@4.0.0 e2e
+> node tests/e2e/run.mjs
+
+PASS  [360] sem overflow horizontal em 14 paradas
+PASS  [360] zero erros de console
+PASS  [360] zero recursos 4xx/5xx
+PASS  [360] loja, busca e sacola sempre visíveis (≥40px)
+PASS  [390] sem overflow horizontal em 14 paradas
+PASS  [390] zero erros de console
+PASS  [390] zero recursos 4xx/5xx
+PASS  [390] loja, busca e sacola sempre visíveis (≥40px)
+PASS  [768] sem overflow horizontal em 14 paradas
+PASS  [768] zero erros de console
+PASS  [768] zero recursos 4xx/5xx
+PASS  [768] loja, busca e sacola sempre visíveis (≥40px)
+PASS  [1440] sem overflow horizontal em 14 paradas
+PASS  [1440] zero erros de console
+PASS  [1440] zero recursos 4xx/5xx
+PASS  [1440] loja, busca e sacola sempre visíveis (≥40px)
+PASS  intro aparece na 1ª visita
+PASS  intro encerra ao clicar/pular
+PASS  intro não repete na mesma sessão
+PASS  reduced-motion: tier estático  · {"tier":"static","canvas":false,"intro":false,"poster":true}
+PASS  reduced-motion: nenhum canvas WebGL criado
+PASS  reduced-motion: sem intro
+PASS  reduced-motion: pôster ativo
+PASS  reduced-motion: zero erros
+PASS  seletor de loja NÃO abre sozinho (achado A2)
+PASS  escolher Frutal atualiza o header  · Frutal
+PASS  Frutal persiste após recarregar  · Frutal
+PASS  ?loja=catalao sobrescreve a preferência  · Catalão
+PASS  ?cidade= legado continua funcionando  · Mineiros
+PASS  adicionar sem tamanho mostra erro
+PASS  sacola conta 1 peça  · 1
+PASS  sacola persiste após recarregar  · 1
+PASS  trocar loja com sacola exige decisão
+PASS  nova loja começa com sacola própria (itens não migram sem escolha)
+PASS  sacola de Araxá continua salva e acessível
+PASS  fluxo de sacola sem erros
+PASS  ?peca= abre o quick view
+PASS  Esc fecha o quick view
+PASS  foco entra no diálogo ao abrir
+PASS  foco volta ao gatilho ao fechar
+PASS  1º Tab chega no "Pular para a coleção"
+PASS  ocasião "Para sair" filtra a coleção  · pressed=true cards=19
+PASS  contagem por ocasião vem do catálogo  · 17 peças na prévia | 19 peças na prévia | 12 peças na prévia
+PASS  look completo abre a peça (quick view)
+PASS  zoom do detalhe liga
+PASS  FAQ abre (details nativo)
+PASS  CTA flutuante visível fora do filme
+PASS  seções de conversão sem erros
+PASS  arara: 30 roupas independentes em cabides  · 30
+PASS  arara: foco tipo dock (escala máx ≥ 1,4 e só uma peça em foco)  · 1,1,1,1,1,1,1,1,1,1,1,1,1.03,1.25,1.48,1.18,1.01,1,1,1,1,1,1,1,1,1,1,1,1,1
+PASS  arara: trackpad horizontal desliza a arara  · 893→1238
+PASS  arara: rolagem vertical NÃO é sequestrada  · 3600→3900
+PASS  arara: seta move o foco entre peças  · belle-demo-vestidos-04
+PASS  arara: Enter abre a ficha editorial da MESMA peça
+PASS  arara: Esc fecha e devolve o foco à peça de origem
+PASS  voo: 10 adições consecutivas, contador exato e zero fantasmas
+PASS  voo: contador do header sincronizado com a bolsa  · 10
+PASS  voo: sacola persistida após recarregar
+PASS  arara + voo sem erros de console
+PASS  voo: Esc no meio do voo conclui sem fantasma e conta 1
+PASS  reduced-motion: adiciona sem voo (nenhum fantasma) e atualiza a bolsa
+PASS  toque: abre a ficha da peça tocada
+PASS  toque: voo até a bolsa e contador 1
+PASS  toque: sem erros
+PASS  CINEMA: palco 3D ativo (1º frame)
+PASS  CINEMA: render loop roda dentro do filme  · 5→6
+PASS  CINEMA: draw calls ≤ 120  · {"tier":"cinema","dpr":1,"frames":6,"drawCalls":79,"triangles":44694,"avgFrameMs":62.1,"running":true,"products":{"total":45,"ready":45,"failed":0},"progress":0,"camera":[0.91,1.62,13.6]}
+PASS  CINEMA: render loop PARA fora do palco  · 7→7
+PASS  CINEMA: zero erros
+PASS  [390] LCP lab ≤ 2500 ms  · 1160 ms
+PASS  [390] CLS lab ≤ 0.1  · 0
+PASS  [1440] LCP lab ≤ 2500 ms  · 728 ms
+PASS  [1440] CLS lab ≤ 0.1  · 0.001
+
+73/73 verificações passaram
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

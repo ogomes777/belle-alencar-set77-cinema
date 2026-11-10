@@ -1,0 +1,39 @@
+
+> belle-alencar-cinema@4.0.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.7 building client environment for production...
+transforming...
+✓ 84 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2         18.22 kB
+dist/assets/cormorant-garamond-latin-300-normal-Cw-E_7L1.woff2   21.90 kB
+dist/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2   22.87 kB
+dist/assets/cormorant-garamond-latin-500-normal-BsRWmXhO.woff2   23.31 kB
+dist/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2   23.66 kB
+dist/assets/cormorant-garamond-latin-500-italic-Y14P-dkT.woff2   23.92 kB
+dist/assets/cormorant-garamond-latin-300-normal-BuXLI6C0.woff    29.96 kB
+dist/index.html                                                  30.13 kB │ gzip:   7.95 kB
+dist/assets/cormorant-garamond-latin-400-normal-B7YtguxJ.woff    30.98 kB
+dist/assets/cormorant-garamond-latin-500-normal-zIXX3Q-H.woff    31.37 kB
+dist/assets/cormorant-garamond-latin-400-italic-BLh7T8o8.woff    32.88 kB
+dist/assets/cormorant-garamond-latin-500-italic-DhNIfkTX.woff    33.17 kB
+dist/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2             36.93 kB
+dist/assets/rack-BsQwTcSX.css                                    11.20 kB │ gzip:   3.45 kB
+dist/assets/index-DVrGJs8S.css                                   57.91 kB │ gzip:  13.36 kB
+dist/assets/rolldown-runtime-DK3Fl9T5.js                          0.15 kB │ gzip:   0.15 kB
+dist/assets/bag-CMl1lj-2.js                                       3.14 kB │ gzip:   1.28 kB │ map:     6.43 kB
+dist/assets/flight-DGVCnXFU.js                                    3.46 kB │ gzip:   1.67 kB │ map:    13.12 kB
+dist/assets/rack-BvmL46gr.js                                     16.80 kB │ gzip:   7.06 kB │ map:    54.75 kB
+dist/assets/experience-DMova0iU.js                               46.69 kB │ gzip:  18.02 kB │ map:   182.97 kB
+dist/assets/index-6xoD57kd.js                                   131.44 kB │ gzip:  47.86 kB │ map:   300.09 kB
+dist/assets/gsap-DgU8uMSR.js                                    137.90 kB │ gzip:  53.47 kB │ map:   696.60 kB
+dist/assets/three-D621WNx8.js                                   588.51 kB │ gzip: 147.91 kB │ map: 2,944.12 kB
+
+✓ built in 1.53s
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
