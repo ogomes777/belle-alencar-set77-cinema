@@ -1,6 +1,7 @@
 # RELEASE REPORT | BELLE ALENCAR CINEMA V4 (PREVIEW)
 
 ## Atualização V4.2 · Living Palace: arara viva + voo até a bolsa
+**Produção (10/11/2026, a pedido do cliente):** deployment `dpl_kZY1Hq95mMKzPTtDj5w9fuSBxUut` (commit `f67b422`) no domínio `belle-alencar-set77.vercel.app`. **Rollback:** promover de volta a V3 `dpl_2hH6ucpRuhgzjoAg4BGDsR3ZmgzE` (Vercel → Deployments → Promote to Production).
 - **Logo oficial** do kit vetorizado e aplicado (header, intro com máscara e brilho, rodapé, letreiro 3D da fachada).
 - **Arara viva** no capítulo 03 do filme: foco tipo dock, vizinhas abrem espaço, pêndulo físico por peça, vento, entrada em cascata, drag/inércia/snap, trackpad horizontal, teclado, toque e vitrine automática. Palácio 3D desfocado atrás (rack focus).
 - **Ficha editorial** com FLIP da mesma imagem e retorno com balanço amortecido.
