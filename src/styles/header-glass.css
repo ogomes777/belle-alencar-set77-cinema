@@ -402,3 +402,110 @@
  * sticky filter bar remains below the capsule, not behind its icons. */
 html {scroll-padding-top:calc(var(--header-h) + 23px);}
 #colecao .cat-bar {top:calc(var(--header-h) + 16px);}
+
+/* V15 · GLASS THAT REALLY CHANGES COLOR
+ * V14 changed a custom property inside a background shorthand. The browser
+ * applied it in steps, so color often looked static. A real background-color
+ * transition is interpolatable, while translucent sheen layers stay fixed.
+ */
+.site-header,.site-header.is-compact {
+  background-color:var(--ba-nav-bg);
+  background-image:
+    linear-gradient(125deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,.035) 24%,transparent 52%,rgba(255,255,255,.13) 100%),
+    radial-gradient(ellipse 60% 175% at 12% -40%,rgba(255,255,255,.34),transparent 74%),
+    radial-gradient(ellipse 55% 140% at 90% 110%,var(--ba-nav-glow),transparent 72%);
+  -webkit-backdrop-filter:blur(25px) saturate(1.65) contrast(1.04);
+  backdrop-filter:blur(25px) saturate(1.65) contrast(1.04);
+  box-shadow:
+    0 21px 54px -25px rgba(30,23,17,.31),
+    0 4px 15px -5px rgba(39,25,13,.11),
+    inset 0 1px 0 rgba(255,255,255,.72),
+    inset 0 0 0 1px rgba(255,255,255,.11),
+    inset 0 -1px 0 rgba(255,255,255,.13);
+  transition:background-color .78s cubic-bezier(.2,.8,.2,1),
+    border-color .72s ease,color .72s ease,box-shadow .55s ease,
+    top .45s cubic-bezier(.22,1,.36,1),
+    width .45s cubic-bezier(.22,1,.36,1),
+    height .45s cubic-bezier(.22,1,.36,1);
+}
+.site-header[data-atmosphere='pearl']{--ba-nav-bg:rgba(251,248,242,.70);}
+.site-header[data-atmosphere='champagne']{--ba-nav-bg:rgba(232,206,165,.73);}
+.site-header[data-atmosphere='sand']{--ba-nav-bg:rgba(217,193,159,.71);}
+.site-header[data-atmosphere='olive']{--ba-nav-bg:rgba(81,91,63,.79);}
+.site-header[data-atmosphere='wine']{--ba-nav-bg:rgba(81,35,50,.82);}
+.site-header[data-atmosphere='sky']{--ba-nav-bg:rgba(183,212,226,.73);}
+.site-header[data-atmosphere='noir']{--ba-nav-bg:rgba(30,25,25,.82);}
+.site-header::before {
+  top:0;left:7%;right:7%;height:49%;
+  border-radius:40px 40px 60% 60%;
+  background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.025) 27%,transparent);
+  pointer-events:none;
+}
+.site-header .brand,.site-header .brand__mark,
+.site-header .brand__word,.site-header .brand__word small,
+.site-header .site-nav a,.site-header .store-pill,
+.site-header .icon-btn,.site-header .belle-menu-toggle{
+  transition:color .65s ease,background-color .3s ease,transform .35s ease,filter .4s ease;
+}
+/* Official BA path stays intact: only a breathing scale and specular glow. */
+.site-header .brand__mark{
+  position:relative;isolation:isolate;
+  display:grid;place-items:center;
+  transform-origin:50% 50%;
+}
+.site-header .brand__mark::before{
+  content:'';
+  position:absolute;inset:-4px;
+  z-index:-1;
+  border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--ba-nav-accent) 45%,transparent);
+  background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.29),transparent 65%);
+  opacity:.27;
+  transform:scale(.77);
+  animation:belleBrandHalo 5.6s ease-in-out infinite;
+  pointer-events:none;
+}
+.site-header .brand__mark .mono {
+  display:block;
+  width:100%;
+  height:auto;
+  transform-origin:center;
+  animation:belleBrandBreathe 5.6s cubic-bezier(.45,0,.55,1) infinite;
+  filter:drop-shadow(0 0 1px transparent);
+}
+.site-header .brand:hover .brand__mark .mono,
+.site-header .brand:focus-visible .brand__mark .mono {
+  animation-play-state:paused;
+  transform:scale(1.105) rotate(-3deg);
+  filter:drop-shadow(0 0 8px var(--ba-nav-glow));
+}
+.site-header .brand:hover .brand__mark::before,
+.site-header .brand:focus-visible .brand__mark::before {
+  animation-play-state:paused;
+  opacity:.75;transform:scale(1.10);
+}
+.site-header .brand:active .brand__mark .mono{transform:scale(.91) rotate(0deg);}
+@keyframes belleBrandBreathe{
+  0%,100%{transform:scale(1);}
+  43%{transform:scale(1.055);}
+  55%{transform:scale(1.025);}
+  66%{transform:scale(1.06);}
+}
+@keyframes belleBrandHalo{
+  0%,100%{opacity:.18;transform:scale(.76);}
+  50%{opacity:.44;transform:scale(1.02);}
+}
+@media(max-width:860px){
+  .site-header,.site-header.is-compact{
+    -webkit-backdrop-filter:blur(15px) saturate(1.5);
+    backdrop-filter:blur(15px) saturate(1.5);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header .brand__mark::before,
+  .site-header .brand__mark .mono{animation:none!important;}
+  .site-header .brand__mark::before{opacity:.25;transform:scale(.94);}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  .site-header,.site-header.is-compact{background-color:var(--ba-nav-solid);}
+}
