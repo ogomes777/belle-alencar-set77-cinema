@@ -38,6 +38,7 @@ export interface WorldInfo {
   products: { total: number; ready: number; failed: number };
   progress: number;
   camera: number[];
+  rail: {index:number;total:number};
 }
 
 export class World {
@@ -71,6 +72,9 @@ export class World {
   private dressState = { pos: new THREE.Vector3(), yaw: 0, energy: 0, onRail: true, atFitting: false };
   private scrollEnergy = 0;
   private railEngaged = false;
+  private railPan = 0;
+  private railPanGoal = 0;
+  private railRested = false;
   private time = 0;
   private firstFrameSent = false;
   private failed = false;
@@ -143,7 +147,9 @@ export class World {
     this.kick();
   }
 
-  setRailEngaged(on:boolean):void{this.railEngaged=on;}
+  setRailEngaged(on:boolean):void{this.railEngaged=on;if(!on)this.railPanGoal=0;}
+  setRailPointer(normalizedX:number|null):void{this.railPanGoal=THREE.MathUtils.clamp(normalizedX??0,-1,1);this.kick();}
+  railPosition(){return this.boutique.railPosition();}
 
   /** Produtos sempre pertencem à arara interna, nunca a uma interface 2D separada. */
   browseRack(direction:number):Product|null {
@@ -153,6 +159,11 @@ export class World {
   pickRack(clientX:number,clientY:number):Product|null {
     this.toRay(clientX,clientY);
     const p=this.boutique.pick(this.pickPoint,this.camera);
+    this.kick();return p;
+  }
+  hoverRack(clientX:number,clientY:number):Product|null{
+    this.toRay(clientX,clientY);
+    const p=this.boutique.hover(this.pickPoint,this.camera);
     this.kick();return p;
   }
   bagHit(clientX:number,clientY:number):boolean {
@@ -221,7 +232,7 @@ export class World {
   info(): WorldInfo {
     const r = this.renderer.info.render;
     const c = this.camera.position;
-    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100) };
+    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100), rail: this.boutique.railPosition() };
   }
 
   private kick(): void {
@@ -262,11 +273,18 @@ export class World {
 
     // câmera
     const fov=this.fitFov(this.story.camera(p,this.camPos,this.camTgt));
-    // The camera remains in the same boutique while panning subtly along the rail.
+    // In-room first-person orbit: horizontal gestures explore the garments,
+    // while vertical progress still owns the chapter transition.
     const sala=this.story.span('sala');
-    if(sala&&p>=sala.s-.02&&p<=sala.e+.02){
-      const shift=this.boutique.cameraShift();
-      this.camPos.z+=shift*.25;this.camTgt.z+=shift;
+    const railStep = exact ? 1 : Math.min(1, dt * 6);
+    this.railPan+=(this.railPanGoal-this.railPan)*railStep;
+    if(this.railEngaged && sala && p>=sala.s-.02 && p<=sala.e+.02){
+      const point=this.boutique.focusPoint();
+      this.camPos.x=THREE.MathUtils.lerp(this.camPos.x,point.x>0?-.6:.6,.36);
+      this.camPos.z=THREE.MathUtils.lerp(this.camPos.z,THREE.MathUtils.clamp(point.z+3.2,-7.8,-3.0),.58);
+      this.camTgt.x=THREE.MathUtils.lerp(this.camTgt.x,point.x,.73)+this.railPan*1.30;
+      this.camTgt.y=THREE.MathUtils.lerp(this.camTgt.y,1.38,.58);
+      this.camTgt.z=THREE.MathUtils.lerp(this.camTgt.z,point.z,.73)-this.railPan*1.45*(point.x>0?1:-1);
     }
     if (!exact && this.opts.tier === 'cinema') {
       // câmera na mão, quase imperceptível (respiração do operador)
@@ -309,8 +327,16 @@ export class World {
     const targetEnergy = Math.min(1, d.energy + this.scrollEnergy * 0.35);
     this.dress.energy += (targetEnergy - this.dress.energy) * Math.min(1, dt * 2.5);
     if (exact) this.dress.energy = d.energy;
-    // No full Verlet cloth integration during the calm storefront / rail chapters.
-    if(!d.onRail || exact)this.dress.update(exact ? 1/60 : dt);
+    // A simulated skirt stores vertices in WORLD coordinates, separately from
+    // the bodice group. A frozen skirt at an old position causes the broken,
+    // folded white dress on re-entry. Snap cleanly while hung, simulate only in flight.
+    if(d.onRail){
+      if(!this.railRested||exact)this.dress.restPose();
+      this.railRested=true;
+    } else {
+      this.railRested=false;
+      this.dress.update(exact ? 1/60 : dt);
+    }
 
     // ponteiro
     if (this.pointer) {

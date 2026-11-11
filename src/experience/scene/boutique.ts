@@ -27,6 +27,7 @@ export interface BoutiqueHandle {
   browse(dir:number):Product|null;
   activeProduct():Product|null;
   pick(ndc:THREE.Vector2,camera:THREE.Camera):Product|null;
+  hover(ndc:THREE.Vector2,camera:THREE.Camera):Product|null;
   select(id:string|null):void;
   hideProduct(id:string,hide:boolean):void;
   productPosition(id:string):{position:THREE.Vector3;width:number;height:number}|null;
@@ -389,6 +390,11 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       return railSwings[focusIndex]?.product??null;
     },
     activeProduct(){return railSwings[focusIndex]?.product??null;},
+    hover(ndc,camera){
+      const hit=hitRail(ndc,camera);
+      hoverId=hit?.product.id??null;
+      return hit?.product??null;
+    },
     pick(ndc,camera){
       const hit=hitRail(ndc,camera);
       if(hit){hoverId=hit.product.id;focusIndex=railSwings.indexOf(hit);}
