@@ -164,3 +164,13 @@ html.js.intro-done:not(.in-film):not(.is-locked) .float-cta, html:not(.js) .floa
   .manifesto__quote{margin-bottom:68px}
 }
 @media(prefers-reduced-motion:reduce){#filme::after{transition:none}}
+
+
+/* The existing category ticker now bridges the boutique film and three-piece runway.
+   Generic manifesto text deliberately removed, with one uninterrupted motion line. */
+.manifesto--ticker {padding:0;margin:-1px 0 0;background:var(--ivory);overflow:hidden;}
+.manifesto--ticker::before {display:none;}
+.manifesto--ticker .band {margin:0;border-top:1px solid rgba(158,127,83,.2);border-bottom:1px solid rgba(158,127,83,.2);padding:13px 0;background:#f5eee2;}
+.manifesto--ticker .band__track span {font-size:clamp(1rem,.7rem + 1.1vw,1.7rem);color:#82694a;letter-spacing:.18em;}
+@media(max-width:899px) { .manifesto--ticker {padding:0;margin:-1px 0 0;} }
+@media(prefers-reduced-motion:reduce) { .manifesto--ticker .band__track {animation:none;} }
