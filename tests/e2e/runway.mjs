@@ -17,6 +17,7 @@ for(const width of [360,390,768,1440]) {
  await page.goto(`${base}/?tier=static&loja=araxa`);
  await page.locator('#passarela').scrollIntoViewIfNeeded();
  await page.waitForSelector('.runway__model');
+ check(await page.locator('.runway__card').count()===18,`${width}: six curated looks with three pieces each`);
  await page.waitForFunction(()=>document.body.classList.contains('is-runway-visible'));
  check(await page.locator('#floatCta').isHidden(),`${width}: contact CTA does not obscure product rail`);
  check(await page.locator('.runway__model').count()===6,`${width}: six depth layers`);
@@ -25,8 +26,9 @@ for(const width of [360,390,768,1440]) {
  await page.click('[data-runway-next]');
  await page.waitForFunction(()=>document.getElementById('passarela').dataset.position==='1.0000');
  check((await page.locator('.runway__status').textContent()).includes('16'),`${width}: next look and live announcement synchronized`);
- const second=await page.locator('.runway__card').nth(2).boundingBox(), rail=await page.locator('.runway__rail').boundingBox();
- check(Math.abs((width<=820?second.x-rail.x:second.y-rail.y))<2,`${width}: product rail synchronized`);
+ const second=await page.locator('.runway__card').nth(3).boundingBox(), rail=await page.locator('.runway__rail').boundingBox();
+ check(Math.abs((width<=820?second.x-rail.x:second.y-rail.y))<2,`${width}: three-piece outfit rail synchronized`);
+ check((await page.locator('.runway__card').nth(3).getAttribute('data-look-key'))==='vinho',`${width}: grouped editorial metadata travels with the rail`);
  await page.click('[data-runway-prev]');
  await page.waitForFunction(()=>document.getElementById('passarela').dataset.position==='0.0000');
  await page.locator('.runway__stage').focus();await page.keyboard.press('ArrowLeft');
