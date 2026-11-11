@@ -20,7 +20,7 @@ for(const width of [320,360,390,768,1024,1440]){
   await page.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
   const header=page.locator('#siteHeader');
   const rect=await header.boundingBox();
-  ok(rect&&rect.left>=-2&&rect.right<=width+2,width+': floating glass fits viewport');
+  ok(rect&&rect.x>=-2&&rect.x+rect.width<=width+2,width+': floating glass fits viewport');
   ok(await page.locator('#siteHeader .brand__mark svg.mono').count()===1,width+': original monogram preserved');
   ok(await page.locator('#siteHeader .brand__mark .mono').evaluate(el=>getComputedStyle(el).animationName.includes('belleBrandBreathe')),width+': monogram pulses');
   await page.locator('#colecao').scrollIntoViewIfNeeded();
@@ -38,7 +38,7 @@ for(const width of [320,360,390,768,1024,1440]){
   ok(await page.locator('#searchDialog .ba-search-title').textContent()==='Encontre o seu look.',width+': editorial search renders');
   ok(await page.locator('#searchDialog .search-group--products .search-hit--product').count()>0,width+': default discovery shows actual product assets');
   const searchBox=await page.locator('#searchDialog .ov__panel').boundingBox();
-  ok(searchBox&&searchBox.left>=-2&&searchBox.right<=width+2,width+': fullscreen search stays inside viewport');
+  ok(searchBox&&searchBox.x>=-2&&searchBox.x+searchBox.width<=width+2,width+': fullscreen search stays inside viewport');
   await page.locator('#searchDialog [data-search-term="Bolsas"]').click();
   const query=await page.locator('#searchInput').inputValue();
   ok(query==='Bolsas',width+': category chip fills and triggers search');
