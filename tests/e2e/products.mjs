@@ -11,7 +11,7 @@ let count=0;const check=(ok,msg)=>{if(!ok)throw new Error(msg);console.log('PASS
 const errors=[];
 function watch(page){page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`)});}
 async function goto(page,url='?tier=static&loja=araxa'){await page.goto(base+'/'+url);await page.evaluate(()=>document.fonts.ready);await page.waitForSelector('.pcard');}
-async function chapter(page,id){await page.evaluate(id=>{const e=document.getElementById(id);scrollTo(0,e.getBoundingClientRect().top+scrollY+(id==='sala'?e.offsetHeight*.3:0)-68)},id);if(id==='sala')await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala'&&document.getElementById('arara-viva')?.classList.contains('is-on'));await page.waitForTimeout(350);}
+async function chapter(page,id){await page.evaluate(id=>{const e=document.getElementById(id);scrollTo(0,e.getBoundingClientRect().top+scrollY+(id==='sala'?e.offsetHeight*.3:0)-68)},id);if(id==='sala')await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala');await page.waitForTimeout(350);}
 try{
 const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
 const page=await context.newPage();watch(page);await goto(page);
@@ -47,51 +47,30 @@ for(const width of [360,390,768,1440]){
   if(width===390||width===1440)await page.screenshot({path:`${out}/${id}-${width}.png`});
  }
  await chapter(page,'sala');
- check(await page.locator('.rack__piece').count()===30,`${width}: thirty garments only, no jewelry on hangers`);
- const piece=page.locator('.rack__piece').nth(15);
- await piece.waitFor({state:'visible'});
- await piece.evaluate(e=>e.focus({preventScroll:true}));
- await page.waitForFunction(()=>document.activeElement?.dataset.id===document.querySelectorAll('.rack__piece')[15]?.dataset.id);
- await page.keyboard.press('Enter');
- await page.waitForSelector('.pv:not([hidden])').catch(async e=>{console.log('KEYBOARD DEBUG',await page.evaluate(()=>({y:scrollY,active:document.activeElement?.outerHTML.slice(0,400),chapter:window.__belle?.chapter,phase:window.__rack?.debug(),pv:document.querySelector('.pv')?.hidden,errors:document.documentElement.className})));await page.screenshot({path:out+'/failed-keyboard.png'});throw e;});
- const expected=await page.locator('.pv').getAttribute('data-product-id');
- await page.keyboard.press('Escape');await page.waitForSelector('.pv',{state:'hidden'});
- check(await page.evaluate(()=>document.activeElement?.dataset.id)===expected,`${width}: viewer returns focus to same garment`);
+ check(await page.locator('.rack__piece').count()===0,width+': no duplicate rack HTML');
  await chapter(page,'passarela');
  const image=page.locator('.runway__model').first().locator('img');const box=await image.boundingBox(),stage=await page.locator('.runway__stage').boundingBox();
  // Full canvas remains inside stage at settled foreground; alpha only reduces its footprint further.
  check(box.x>=stage.x-1&&box.x+box.width<=stage.x+stage.width+1,`${width}: foreground product is not clipped`);
 }
 await context.close();
-// Real motion capture: ten consecutive same-product flights, no double-add or orphan nodes.
-const motion=await browser.newContext({viewport:{width:1440,height:900},recordVideo:{dir:process.env.VIDEO_DIR||out,size:{width:1440,height:900}}});
-const mp=await motion.newPage();watch(mp);await mp.addInitScript(()=>sessionStorage.setItem('belle:v4:intro','1'));await goto(mp);
-await chapter(mp,'sala');await mp.waitForTimeout(1200);await mp.locator('.rack__piece').nth(15).focus();await mp.keyboard.press('Enter');await mp.waitForSelector('.pv:not([hidden])');await mp.waitForTimeout(850);
-const id=await mp.locator('.pv').getAttribute('data-product-id');let added=0;
-for(let i=0;i<10;i++){
- await mp.locator('.pv__size').nth(i%5).click();await mp.click('.pv__add');
- await mp.waitForSelector('.dress-ghost');
- const ghost=mp.locator('.dress-ghost');
- check(await ghost.getAttribute('data-product-id')===id,`flight${i+1}: same product ID`);
- check((await mp.locator('[data-bag-count]').first().textContent()).trim()===String(added),`flight${i+1}: counter waits for occlusion/impact`);
- await mp.locator('.pv__add').click({force:true,timeout:150}).catch(()=>{});
- if(i===0){await mp.screenshot({path:`${out}/flight-launch.png`});await mp.waitForTimeout(330);await mp.screenshot({path:`${out}/flight-mid.png`});}
- await mp.waitForFunction(()=>!document.querySelector('.dress-ghost')&&!document.querySelector('.pv__add[aria-busy]'));
- added++;
- check((await mp.locator('[data-bag-count]').first().textContent()).trim()===String(added),`flight${i+1}: one addition, zero ghosts`);
-}
-await mp.screenshot({path:`${out}/flight-complete.png`});
-await mp.keyboard.press('Escape');await mp.waitForSelector('.pv',{state:'hidden'});
-await mp.keyboard.press('Home');
-await mp.waitForFunction(()=>document.activeElement?.dataset.id===document.querySelectorAll('.rack__piece')[0]?.dataset.id);
-check(true,'keyboard reaches the first of all thirty garments');
-await mp.keyboard.press('End');
-await mp.waitForFunction(()=>document.activeElement?.dataset.id===document.querySelectorAll('.rack__piece')[29]?.dataset.id);
-check(true,'keyboard reaches the last garment without scrolling the page');
-await mp.click('#bagButton');await mp.waitForSelector('#bagDrawer.is-open');
-check(await mp.locator('#bagDrawer img').first().getAttribute('src')===`/assets/belle/products/packshots/${id.replace('belle-demo-','')}.webp`,'bag thumbnail preserves the exact product');
-await mp.screenshot({path:`${out}/bag-after-ten.png`});
-const video=mp.video();await motion.close();if(video)await rename(await video.path(),`${out}/same-product-flight.webm`);
+// Integrated rail product identity gate: one scene, no duplicate DOM rack.
+const motion=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+const mp=await motion.newPage();watch(mp);
+await mp.goto(base+'/?tier=touch&loja=araxa');
+await chapter(mp,'sala');
+await mp.waitForFunction(()=>document.querySelector('.roomrail.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:30000});
+check(await mp.locator('.rack__piece').count()===0,'3D rail without duplicate HTML objects');
+const initial=await mp.locator('.roomrail__product').textContent();
+await mp.locator('.roomrail__next').click();
+check((await mp.locator('.roomrail__product').textContent())!==initial,'next control selects an in-room product');
+await mp.locator('.roomrail__inspect').click();
+await mp.waitForSelector('.roomrail__detail:not([hidden])');
+await mp.locator('.roomrail__size').selectOption({index:1});
+await mp.locator('.roomrail__add').click();
+await mp.waitForFunction(()=>document.querySelector('.roomrail__bag b')?.textContent==='1',null,{timeout:14000});
+check(await mp.locator('.dress-ghost').count()===0,'reduced-motion cart without ghost overlay');
+await motion.close();
 check(errors.length===0,`zero browser/HTTP errors: ${errors.join(' | ')}`);
 console.log(`${count} product integration checks passed`);
 }finally{await browser.close();}
