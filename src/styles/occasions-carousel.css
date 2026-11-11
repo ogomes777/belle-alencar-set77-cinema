@@ -587,14 +587,24 @@ html.md-motion #colecao.md-scene::before {display:none;}
   animation:occShadowBreath 6.8s ease-in-out infinite alternate;
   animation-play-state:paused;
 }
-.occ-round.is-round[data-auto-orbit="running"] .occ-card__world-depth,
-.occ-round.is-round[data-auto-orbit="running"] .occ-card__world-glow,
-.occ-round.is-round[data-auto-orbit="running"] .occ-card__world-ground,
-.occ-round.is-round[data-auto-orbit="paused"] .occ-card__world-depth,
-.occ-round.is-round[data-auto-orbit="paused"] .occ-card__world-glow,
-.occ-round.is-round[data-auto-orbit="paused"] .occ-card__world-ground {
-  /* The world remains alive during a short user snap/pause; all keyframes
-     stop when the section is offscreen and the ticker detaches. */
+.occ-round.is-round .occ-card.is-active .occ-card__world-glow {
+  /* Override the old active-card shorthand which otherwise restarted the
+     white wash at full intensity even after leaving the viewport. */
+  animation:occLightTravel 10s ease-in-out infinite alternate;
+  animation-play-state:paused;
+}
+.occ-round.is-round .occ-card__model,
+.occ-round.is-round .occ-card.is-active .occ-card__model,
+.occ-round.is-round .occ-card:not(.is-active) .occ-card__model {
+  animation-play-state:paused;
+}
+.occ-round.is-round[data-ambient="running"] .occ-card__world-depth,
+.occ-round.is-round[data-ambient="running"] .occ-card__world-glow,
+.occ-round.is-round[data-ambient="running"] .occ-card.is-active .occ-card__world-glow,
+.occ-round.is-round[data-ambient="running"] .occ-card__world-ground,
+.occ-round.is-round[data-ambient="running"] .occ-card__model,
+.occ-round.is-round[data-ambient="running"] .occ-card.is-active .occ-card__model,
+.occ-round.is-round[data-ambient="running"] .occ-card:not(.is-active) .occ-card__model {
   animation-play-state:running;
 }
 .occ-round.is-round .occ-card--dia .occ-card__world-glow {
