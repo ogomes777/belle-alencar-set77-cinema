@@ -11,6 +11,7 @@ on:
       - fix/belle-orbit-resilience-v11
       - fix/belle-portrait-alpha-v12
       - feat/belle-collection-scroll-cinema-v13
+      - feat/belle-adaptive-glass-header-v14
   workflow_dispatch:
 permissions:
   contents: read
@@ -45,3 +46,4 @@ jobs:
           node tests/e2e/intro-calligraphy.mjs
           node tests/e2e/motion-director.mjs
           node tests/e2e/collection-scroll.mjs
+          node tests/e2e/header-glass.mjs
