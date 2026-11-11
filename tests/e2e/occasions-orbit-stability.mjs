@@ -30,6 +30,11 @@ try{
       index:Number(el.querySelector('.occ-round__stage')?.dataset.activeIndex),
       status:el.dataset.autoOrbit,
       alpha:cards.map(card=>Number.parseFloat(getComputedStyle(card).opacity)),
+      portraitAlpha:cards.map(card=>({
+        arrival:Number.parseFloat(getComputedStyle(card.querySelector('.occ-card__arrival')).opacity),
+        layer:Number.parseFloat(getComputedStyle(card.querySelector('.occ-card__portrait')).opacity),
+        image:Number.parseFloat(getComputedStyle(card.querySelector('.occ-card__model')).opacity)
+      })),
       transforms:cards.map(card=>getComputedStyle(card).transform),
       backgrounds:[...el.querySelectorAll('.occ-card__world-depth')].map(layer=>getComputedStyle(layer).animationPlayState),
       ambient:el.dataset.ambient
@@ -37,12 +42,20 @@ try{
   });
   const samples=[];
   for(let i=0;i<6;i++){
-    await page.waitForTimeout(11000);
-    const state=await sample();
-    samples.push(state);
-    check(state.status==='running','orbit still running after '+((i+1)*11)+' seconds');
-    check(state.alpha.every(a=>a>=.99),'card colors never fade after '+((i+1)*11)+' seconds');
-    check(state.backgrounds.every(s=>s==='running'),'all three scene backgrounds animate in view');
+    // Check every half-second, not only once each 11 seconds: the regression
+    // was a short .22-opacity flash on the arrival wrapper at active crossings.
+    for(let frame=0;frame<22;frame++){
+      await page.waitForTimeout(500);
+      const moment=await sample();
+      check(moment.alpha.every(a=>a>=.99),'all cards solid at t='+((i*22+frame+1)*.5)+'s');
+      check(moment.portraitAlpha.every(p=>p.arrival>=.99&&p.layer>=.99&&p.image>=.99),
+        'all three portrait layers solid at t='+((i*22+frame+1)*.5)+'s');
+      if(frame===21){
+        samples.push(moment);
+        check(moment.status==='running','orbit still running after '+((i+1)*11)+' seconds');
+        check(moment.backgrounds.every(s=>s==='running'),'all three scene backgrounds animate in view');
+      }
+    }
   }
   const seen=new Set(samples.map(s=>s.index));
   check(seen.size===3,'all three occasions orbit through the central position');
