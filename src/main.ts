@@ -14,11 +14,13 @@ import { initDirector } from './shell/director';
 import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
+import { initMotionDirector } from './motion/director';
 
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
 initHeader();
 initCommerce();
 initSections();
+initMotionDirector();
 const director = initDirector();
 initFilm(director);
