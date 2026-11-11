@@ -11,7 +11,7 @@ describe('hero skirt returns to a stable rest pose',()=>{
     dress.group.rotation.y=Math.PI/2;
     dress.restPose();
     expect(Number.isFinite(p.getX(0))).toBe(true);
-    const first=[p.getX(0),p.getY(0),p.getZ(0)];
+    const first=[p.getX(0),p.getY(0),p.getZ(0)] as const;
     expect(first[0]).toBeGreaterThan(4.4);
     expect(first[2]).toBeLessThan(-6);
     dress.group.position.set(0,1.34,-8);
