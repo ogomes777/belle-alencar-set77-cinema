@@ -28,8 +28,10 @@ try{
   });
   ok(chrome.radius>=12&&chrome.shadow!=='none'&&!!chrome.category,width+': bespoke premium card skin and category');
   ok(await page.locator('#colecao .pcard__microcta').count()===48,width+': each card gets unobtrusive detail cue');
-  await page.locator('#colecao .collection__handoff').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(180);
+  await page.locator('#colecao .collection__handoff').evaluate(el=>
+    el.scrollIntoView({block:'center',behavior:'instant'})
+  );
+  await page.waitForTimeout(260);
   const seam=await page.evaluate(()=>{
     const a=document.querySelector('#colecao').getBoundingClientRect();
     const b=document.querySelector('#como-comprar').getBoundingClientRect();
@@ -40,7 +42,7 @@ try{
   });
   ok(Math.abs(seam.gap)<=3,width+': no visible geometric gap between catalog and next video '+seam.gap);
   ok(seam.scrollWidth<=seam.width+1,width+': no horizontal overflow in chapter handoff');
-  ok(Number(seam.story)>=.1,width+': handoff has scroll-driven reveal progress');
+  ok(Number(seam.story)>=.1,width+': handoff has scroll-driven reveal progress ('+seam.story+')');
   await page.locator('#catalogMount [data-occ="noite"]').click();
   const filtered=await page.locator('#colecao .pcard').count();
   ok(filtered>0&&filtered<48,width+': commerce filters remain live');
