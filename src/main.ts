@@ -15,7 +15,7 @@ import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
 import { initMotionDirector } from './motion/director';
-import { initOccasionsCarousel } from './occasions/carousel';
+
 
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
@@ -24,5 +24,27 @@ initCommerce();
 initSections();
 initMotionDirector();
 const director = initDirector();
-initOccasionsCarousel(director);
+// Load the editorial 3D carousel only as its section approaches the viewport.
+// GSAP/ScrollTrigger stay out of the initial hero's critical JavaScript path.
+const occasionSection = document.getElementById('ocasioes');
+const bootOccasionCarousel = () => {
+  void import('./occasions/carousel').then(({ initOccasionsCarousel }) => {
+    initOccasionsCarousel(director);
+  }).catch(() => {
+    // Graceful degradation: the three original commercial cards are readable
+    // and their filters work even if the enhancement bundle cannot load.
+  });
+};
+if (occasionSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if ('IntersectionObserver' in window) {
+    const prewarm = new IntersectionObserver((entries) => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      prewarm.disconnect();
+      bootOccasionCarousel();
+    }, { rootMargin: '620px 0px' });
+    prewarm.observe(occasionSection);
+  } else {
+    bootOccasionCarousel();
+  }
+}
 initFilm(director);
