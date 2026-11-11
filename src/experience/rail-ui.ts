@@ -22,7 +22,7 @@ export function initRoomRail(stage: HTMLElement, getWorld: () => World | null): 
   ui.className = 'roomrail';
   ui.setAttribute('role', 'group');
   ui.setAttribute('aria-label', 'Explorar a arara dentro da boutique');
-  ui.innerHTML = \`
+  ui.innerHTML = `
     <div class="roomrail__hint">ARRASTE PARA OS LADOS · A ARARA ESTÁ DENTRO DA LOJA</div>
     <div class="roomrail__controls">
       <button type="button" class="roomrail__prev" aria-label="Peça anterior">←</button>
@@ -30,7 +30,7 @@ export function initRoomRail(stage: HTMLElement, getWorld: () => World | null): 
       <button type="button" class="roomrail__next" aria-label="Próxima peça">→</button>
       <button type="button" class="roomrail__inspect">Explorar peça ↗</button>
       <button type="button" class="roomrail__bag" aria-label="Abrir sacola de interesse">Sacola <b>0</b></button>
-    </div>\`;
+    </div>`;
   stage.appendChild(ui);
   const name = ui.querySelector<HTMLElement>('.roomrail__product')!;
   const count = ui.querySelector<HTMLElement>('.roomrail__bag b')!;
@@ -87,7 +87,7 @@ export function initRoomRail(stage: HTMLElement, getWorld: () => World | null): 
     source.src=item.cutout??'';
     source.alt='';
     source.className='roomrail__source';
-    source.style.cssText=\`position:fixed;left:\${box.x}px;top:\${box.y}px;width:\${box.w}px;height:\${box.h}px;opacity:0;pointer-events:none;z-index:0;object-fit:contain\`;
+    source.style.cssText=`position:fixed;left:${box.x}px;top:${box.y}px;width:${box.w}px;height:${box.h}px;opacity:0;pointer-events:none;z-index:0;object-fit:contain`;
     document.body.appendChild(source);
     document.documentElement.classList.add('scene-rail-viewer');
     viewer.open(item,source,()=>w.hideRackProduct(item.id,true));
