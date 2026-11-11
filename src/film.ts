@@ -181,11 +181,18 @@ export function initFilm(director: Director): void {
     glint.className='chapter__glint';
     glint.setAttribute('aria-hidden','true');
     card.prepend(glint);
-    if(matchMedia('(pointer:fine)').matches){
+    if(matchMedia('(pointer:fine)').matches && !reducedGlass.matches){
+      let raf=0,lastX=0,lastY=0;
       card.addEventListener('pointermove',event=>{
-        const r=card.getBoundingClientRect();
-        card.style.setProperty('--glass-x',((event.clientX-r.left)/Math.max(1,r.width)*100).toFixed(1)+'%');
-        card.style.setProperty('--glass-y',((event.clientY-r.top)/Math.max(1,r.height)*100).toFixed(1)+'%');
+        lastX=event.clientX;lastY=event.clientY;
+        if(raf)return;
+        raf=requestAnimationFrame(()=>{
+          raf=0;
+          // At most one CSS style update per painted frame.
+          const r=card.getBoundingClientRect();
+          card.style.setProperty('--glass-x',((lastX-r.left)/Math.max(1,r.width)*100).toFixed(1)+'%');
+          card.style.setProperty('--glass-y',((lastY-r.top)/Math.max(1,r.height)*100).toFixed(1)+'%');
+        });
       },{passive:true});
     }
   });

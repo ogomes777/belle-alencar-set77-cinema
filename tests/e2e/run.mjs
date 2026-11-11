@@ -240,6 +240,18 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
   const start=await page.evaluate(()=>({ready:window.__belle?.world()?.products.ready,canvas:!!document.querySelector('#filmCanvas canvas'),oldRack:document.querySelectorAll('.rack').length,oldBag:document.querySelectorAll('.bagw').length}));
   check('boutique '+width+': assets 3D prontos',start.canvas&&start.ready>40);
   check('boutique '+width+': sem arara/bolsa HTML duplicadas',start.oldRack===0&&start.oldBag===0);
+  const initialOrbit=await page.evaluate(()=>window.__belle.world().orbit);
+  await page.locator('.roomrail__switch').click({timeout:12000});
+  await page.waitForFunction(()=>window.__belle.world().orbit.current < -.45,null,{timeout:18000});
+  const leftOrbit=await page.evaluate(()=>window.__belle.world().orbit);
+  check('boutique '+width+': câmera olha para a parede oposta sem sair do cômodo',
+    initialOrbit.current>.45 && leftOrbit.current<-.45 && leftOrbit.free);
+  await page.locator('.roomrail__switch').click({timeout:12000});
+  await page.waitForFunction(()=>window.__belle.world().orbit.current > .45,null,{timeout:18000});
+  check('boutique '+width+': câmera retorna à parede direita sem reset',
+    (await page.evaluate(()=>window.__belle.world().orbit.current))>.45);
+  check('boutique '+width+': cards têm reflexo de vidro editorial',
+    await page.locator('#sala .chapter__card .chapter__glint').count()===1);
   const prior=await page.locator('.roomrail__product').textContent();
   await page.locator('.roomrail__next').click({timeout:12000});
   check('boutique '+width+': muda a peça',await page.locator('.roomrail__product').textContent()!==prior);
