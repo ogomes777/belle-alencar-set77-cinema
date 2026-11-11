@@ -52,7 +52,7 @@ for (const vp of viewports) {
   await page.waitForTimeout(400);
   let overflowOk = true;
   const stops = await page.evaluate(() => {
-    const ids = ['inicio', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador', 'ocasioes', 'colecao', 'looks', 'como-comprar', 'lojas', 'atendimento', 'duvidas'];
+    const ids = ['inicio', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador', 'ocasioes', 'colecao', 'como-comprar', 'lojas', 'atendimento', 'duvidas'];
     return ids.map((id) => { const el = document.getElementById(id); return el ? Math.round(el.getBoundingClientRect().top + scrollY + 40) : 0; });
   });
   for (const [i, y] of stops.entries()) {
@@ -194,7 +194,7 @@ for (const vp of viewports) {
   await ctx.close();
 }
 
-// 6b · Seções de conversão: ocasião filtra a coleção, look abre a peça, FAQ abre
+// 6b · Seções de conversão: ocasião filtra a coleção, peça abre detalhes, FAQ abre
 {
   const { ctx, page, errors } = await newPage({ viewport: { width: 1440, height: 900 } });
   await skipIntro(page);
@@ -207,10 +207,13 @@ for (const vp of viewports) {
   check('ocasião "Para sair" filtra a coleção', occPressed === 'true' && cards > 0 && cards < 48, `pressed=${occPressed} cards=${cards}`);
   const counts = await page.locator('[data-occ-count]').allTextContents();
   check('contagem por ocasião vem do catálogo', counts.every((t) => /\d+ peças? na prévia/.test(t)), counts.join(' | '));
-  await page.locator('[data-open-product="bolsas-03"]').scrollIntoViewIfNeeded();
-  await page.click('[data-open-product="bolsas-03"]');
+  // The discontinued Looks section no longer drives quick view; the real
+  // product grid retains this behavior under an active occasion filter.
+  const product = page.locator('.pgrid .pcard__title [data-qv]').first();
+  await product.scrollIntoViewIfNeeded();
+  await product.click();
   const qv = await page.waitForSelector('.qv', { state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
-  check('look completo abre a peça (quick view)', qv);
+  check('produto filtrado abre seus detalhes (quick view)', qv);
   if (qv) {
     await page.click('.qv__zoom');
     check('zoom do detalhe liga', (await page.getAttribute('.qv__zoom', 'aria-pressed')) === 'true');
