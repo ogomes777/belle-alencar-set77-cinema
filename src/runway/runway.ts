@@ -1,7 +1,8 @@
 import '../styles/runway.css';
 import type { Ctx } from '../commerce/ui/context';
 import { heart } from '../commerce/ui/icons';
-import { RUNWAY_PRODUCTS } from './data';
+import { RUNWAY_LOOKS, RUNWAY_PRODUCTS, RUNWAY_CARDS_PER_LOOK } from './data';
+import { BELLE_APPROVED_LOOK_IMAGES } from './belle-portraits';
 import { mountEditorialMedia } from './media';
 import { depthAt, railOffset, wrap } from './depth';
 
@@ -13,6 +14,7 @@ export function initRunway(ctx: Ctx): () => void {
   const rail = root.querySelector<HTMLElement>('.runway__rail')!;
   const roll = root.querySelector<HTMLElement>('.runway__roll')!;
   const status = root.querySelector<HTMLElement>('.runway__status')!;
+  const styling = root.querySelector<HTMLElement>('.runway__styleline')!;
   const ring = root.querySelector<HTMLElement>('.runway__ring')!;
   const abort = new AbortController(), { signal } = abort;
   const calm = matchMedia('(prefers-reduced-motion: reduce)');
@@ -21,16 +23,36 @@ export function initRunway(ctx: Ctx): () => void {
   let down = false, startX = 0, startY = 0, start = 0, moved = 0, pointer = -1, hitIndex: number | null = null;
   let wheelTimer = 0, mx = 0, my = 0, cx = 0, cy = 0, cursor = false, announced = -1;
 
-  const people = Array.from({length:6}, (_,i) => {
-    const product=RUNWAY_PRODUCTS[i*2]!;
+  const people = RUNWAY_LOOKS.map((look,i) => {
+    const product=look.hero;
     const el=document.createElement('div');el.className='runway__model';el.dataset.look=String(i);el.dataset.productId=product.id;
     const [w,h]=product.cutoutSize ?? [600,900];
-    el.innerHTML=`<img src="${product.cutout}" alt="${product.title}, estudo sintético" width="${w}" height="${h}" draggable="false">`;
+    const approvedPortrait=BELLE_APPROVED_LOOK_IMAGES[look.key];
+    const pair=product.category==='croppeds' && look.pieces[1].category==='saias';
+    if (approvedPortrait) {
+      // Real identity-approved editorial photos are supplied per look; never infer the owner's face.
+      el.classList.add('runway__model--portrait');
+      el.innerHTML=`<img src="${approvedPortrait}" alt="Belle em look ${look.name}" draggable="false">`;
+    } else if(pair) {
+      // Two genuine demo product cutouts, not a fake model or a simulated try-on photo.
+      const bottom=look.pieces[1];
+      el.classList.add('runway__model--pair');
+      el.innerHTML=`<div class="runway__pair" aria-label="${product.title} e ${bottom.title}, composição demonstrativa">
+        <img class="runway__pair-top" src="${product.cutout}" alt="" draggable="false">
+        <img class="runway__pair-bottom" src="${bottom.cutout}" alt="" draggable="false">
+      </div>`;
+    } else {
+      el.innerHTML=`<img src="${product.cutout}" alt="${product.title}, recorte demonstrativo" width="${w}" height="${h}" draggable="false">`;
+    }
     line.append(el);
-    return {el,ratio:w/h,product};
+    return {el,ratio:(approvedPortrait||pair)?0.67:w/h,product,pair:!!(pair&&!approvedPortrait),portrait:!!approvedPortrait};
   });
   const cards = RUNWAY_PRODUCTS.map((product, i) => {
     const el = document.createElement('article'); el.className = 'runway__card'; el.dataset.product = product.id;
+    const look=RUNWAY_LOOKS[Math.floor(i/RUNWAY_CARDS_PER_LOOK)]!;
+    const order=i%RUNWAY_CARDS_PER_LOOK+1;
+    el.dataset.lookKey=look.key;
+    el.setAttribute('aria-label',`Conjunto ${look.name}, peça ${order} de ${RUNWAY_CARDS_PER_LOOK}: ${product.title}`);
     el.innerHTML = `<button class="runway__fav" type="button" aria-label="Favoritar ${product.title}" aria-pressed="false">${heart}</button><button class="runway__shot" type="button" aria-label="Ver ${product.title}"></button><div class="runway__meta"><h3>${product.title}</h3><span>Preço sob consulta</span><button class="runway__add" type="button" aria-label="Escolher tamanho de ${product.title}">+</button></div>`;
     mountEditorialMedia(el.querySelector<HTMLElement>('.runway__shot')!, product);
     el.querySelector('.runway__shot')!.addEventListener('click', () => ctx.openQuickView(product.id, el.querySelector('button.runway__shot')), { signal });
@@ -47,7 +69,7 @@ export function initRunway(ctx: Ctx): () => void {
   function wake() { if (!raf && visible && !document.hidden && !destroyed) { last=performance.now(); raf=requestAnimationFrame(frame); } }
   function size() {
     width=stage.clientWidth; height=stage.clientHeight; base=height*1.2; mobile=innerWidth<=820;
-    cardSize=mobile ? 160 : rail.clientHeight/3;
+    cardSize=mobile ? Math.max(136,Math.min(160,rail.clientWidth/2.45)) : rail.clientHeight/RUNWAY_CARDS_PER_LOOK;
     people.forEach(m => { m.el.style.width=`${base*m.ratio}px`; m.el.style.height=`${base}px`; });
     cards.forEach(c => { c.style.height=mobile?'100%':`${cardSize}px`; });
     dirty=true; wake();
@@ -56,7 +78,7 @@ export function initRunway(ctx: Ctx): () => void {
     people.forEach((model,i) => {
       const d=depthAt(i,p), category=model.product.category;
       const relative: Record<string,number>={vestidos:1,camisas:.57,croppeds:.35,saias:.58,calcas:.85};
-      const h=d.height*height*(relative[category] ?? .65), scale=h/base;
+      const h=d.height*height*(model.pair||model.portrait ? 1 : (relative[category] ?? .65)), scale=h/base;
       const modelWidth=h*model.ratio;
       const fitCenter=Math.max(modelWidth/2+12,Math.min(width-modelWidth/2-12,d.x*width));
       const fitWeight=d.depth<0?1-Math.min(1,-d.depth):1;
@@ -74,9 +96,12 @@ export function initRunway(ctx: Ctx): () => void {
     });
     roll.style.transform=`translate3d(0,${-wrap(p,6)*roll.firstElementChild!.getBoundingClientRect().height}px,0)`;
     root!.dataset.position=p.toFixed(4);
-    const index=wrap(Math.round(p),6);
+    const index=wrap(Math.round(p),RUNWAY_LOOKS.length);
+    const currentLook=RUNWAY_LOOKS[index]!;
+    styling.textContent=currentLook.styling;
+    root!.dataset.currentLook=currentLook.key;
     if (index!==announced && Math.abs(p-target)<.01) {
-      announced=index; status.textContent=`Look ${15+index}. Proposta ${index+1} de 6. ${RUNWAY_PRODUCTS[index*2]!.title}.`;
+      announced=index; status.textContent=`Look ${15+index}. ${currentLook.name}, ${currentLook.styling}. Três peças disponíveis para visualizar individualmente.`;
     }
   }
   function frame(now: number) {
@@ -93,7 +118,7 @@ export function initRunway(ctx: Ctx): () => void {
   function step(amount: number) { clearTimeout(wheelTimer); target=Math.round(target)+amount; wake(); }
   root.querySelector('[data-runway-prev]')!.addEventListener('click',()=>step(-1),{signal});
   root.querySelector('[data-runway-next]')!.addEventListener('click',()=>step(1),{signal});
-  root.querySelector('.runway__shop')!.addEventListener('click',e => ctx.openQuickView(RUNWAY_PRODUCTS[wrap(Math.round(p),6)*2]!.id,e.currentTarget as HTMLElement),{signal});
+  root.querySelector('.runway__shop')!.addEventListener('click',e => ctx.openQuickView(RUNWAY_LOOKS[wrap(Math.round(p),RUNWAY_LOOKS.length)]!.hero.id,e.currentTarget as HTMLElement),{signal});
   stage.addEventListener('keydown',e => {
     if (e.target !== stage) return;
     if (['ArrowRight','ArrowDown','ArrowLeft','ArrowUp'].includes(e.key)) { e.preventDefault(); step(['ArrowRight','ArrowDown'].includes(e.key)?1:-1); }
@@ -137,7 +162,7 @@ export function initRunway(ctx: Ctx): () => void {
   window.addEventListener('resize',size,{signal});
   document.body.classList.add('is-runway-visible');
   const io=typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);document.body.classList.toggle('is-runway-visible',visible);if(visible)wake();else{cancelAnimationFrame(raf);raf=0;} }) : null; io?.observe(root);
-  root.dataset.media='products'; // Only approved-for-demo isolated garment assets, never people/sprites.
+  root.dataset.media='products'; // Garments remain demos until Belle identity-approved photo frames exist.
   size(); paint();
   return () => {document.body.classList.remove('is-runway-visible');destroyed=true;abort.abort();unsub();ro?.disconnect();io?.disconnect();cancelAnimationFrame(raf);clearTimeout(wheelTimer);};
 }
