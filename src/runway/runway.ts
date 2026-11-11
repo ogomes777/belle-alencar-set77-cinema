@@ -27,7 +27,6 @@ export function initRunway(ctx: Ctx): () => void {
   const people = RUNWAY_LOOKS.map((look,i) => {
     const product=look.hero;
     const el=document.createElement('div');el.className='runway__model';el.dataset.look=String(i);el.dataset.productId=product.id;
-    const [w,h]=product.cutoutSize ?? [600,900];
     const approvedPortrait=BELLE_APPROVED_LOOK_IMAGES[look.key];
     // Visual contract: the stage preview and the right-hand cards are built from
     // the SAME canonical Product objects. Never use an unrelated generated outfit.
