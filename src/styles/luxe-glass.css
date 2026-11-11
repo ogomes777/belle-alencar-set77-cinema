@@ -368,3 +368,40 @@ html .film__stage.is-room-rail{touch-action:pan-y}
 @media (pointer:coarse) {
   html .film__chapters .chapter__card { touch-action: pan-y; }
 }
+
+
+/* V6 · seleção editorial real de cinco recortes disponíveis no catálogo demo. */
+.fitting__group--products{display:block}
+.fitting__choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%}
+.fitting__choices .fitting__choice{
+  min-height:55px;padding:9px 10px;display:flex;align-items:flex-start;gap:10px;
+  text-align:left;border:1px solid rgba(156,119,64,.40);
+  background:linear-gradient(145deg,rgba(255,255,255,.57),rgba(246,234,212,.42));
+  border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+  transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+}
+.fitting__number{font-size:9px;font-weight:700;line-height:1.7;letter-spacing:.09em;color:#94713e}
+.fitting__model{font-family:var(--serif);font-size:clamp(.82rem,.9vw,1rem);line-height:1.2;font-weight:500;color:#423121}
+.fitting__choices .fitting__choice:hover{transform:translateY(-1px);border-color:#b08d55}
+.fitting__choices .fitting__choice[aria-pressed=true]{
+  background:linear-gradient(135deg,#fefcf8,#e8d8bd);
+  border-color:#967242;box-shadow:0 5px 16px rgba(111,79,36,.13),inset 0 0 0 1px rgba(225,195,142,.45);
+}
+.fitting__tones{display:flex;flex-wrap:wrap;gap:6px}
+.fitting__tones .fitting__tone{min-height:38px;border:1px solid rgba(158,121,67,.4);padding:5px 10px 5px 6px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,253,.57);font-size:11px;color:#59432e}
+.fitting__tones .fitting__tone[aria-pressed=true]{background:#433227;color:#fffaf0;border-color:#a88b5d}
+.fitting__swatch{display:block;flex:none;width:20px;height:20px;border-radius:50%;background:var(--sw);box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.fitting__selection{margin:9px 0 5px;font-family:var(--serif);font-size:1.06rem;color:#74512e}
+.fitting .fitting__hint{font-size:.74rem;line-height:1.48;max-width:47ch}
+.fitting button:focus-visible{outline:2px solid #987245;outline-offset:3px}
+@media(max-width:899px){
+  .chapter--fitting .chapter__card{max-height:calc(100svh - var(--header-h) - 40px);overflow-y:auto;overscroll-behavior:contain;padding:18px 16px}
+  .chapter--fitting .display{font-size:clamp(1.75rem,5.7vw,2.45rem)}
+  .fitting__choices{gap:5px}
+  .fitting__choices .fitting__choice{min-height:48px;padding:7px}
+  .fitting__model{font-size:.85rem}
+  .fitting__group--tones span{display:inline}
+  .fitting__tones .fitting__tone{font-size:10px;min-height:35px;padding-right:7px}
+  .fitting__swatch{width:17px;height:17px}
+}
+@media(prefers-reduced-motion:reduce){.fitting__choice{transition:none!important;transform:none!important}}

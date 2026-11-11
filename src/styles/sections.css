@@ -141,3 +141,26 @@ html.js.intro-done:not(.in-film):not(.is-locked) .float-cta, html:not(.js) .floa
 /* Editorial product imagery replaces all ornamental vector stock in occasion and complete-look sections. */
 .ill-slot .editorial-cutout{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 15px 16px rgba(52,35,20,.22));}
 .ill-slot--side .editorial-cutout{filter:drop-shadow(0 5px 9px rgba(38,24,16,.17));}
+
+
+/* Final do filme → assinatura Belle: continuidade de luz e não um corte seco.
+   A faixa infinita continua intocada. */
+#filme::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;
+  height:clamp(100px,16vw,230px);pointer-events:none;
+  background:linear-gradient(180deg,rgba(250,247,240,0),rgba(250,247,240,.38) 40%,var(--paper) 100%);
+  z-index:var(--z-content);
+}
+.manifesto{margin-top:-1px;padding-top:clamp(90px,12vw,174px)}
+.manifesto__quote{margin-bottom:clamp(66px,9vw,126px)}
+.manifesto .band{position:relative;margin-top:0}
+.manifesto::before{
+  content:'';position:absolute;top:0;left:17%;right:17%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(178,139,79,.34),transparent);
+}
+@media(max-width:899px){
+  #filme::after{height:clamp(90px,17vw,150px)}
+  .manifesto{padding-top:76px}
+  .manifesto__quote{margin-bottom:68px}
+}
+@media(prefers-reduced-motion:reduce){#filme::after{transition:none}}

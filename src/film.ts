@@ -7,7 +7,7 @@
  * Nunca intercepta a rolagem (sem scroll hijack).
  */
 import { bus } from './core/bus';
-import { productById } from './commerce/catalog.demo';
+import { productById, productBySlug } from './commerce/catalog.demo';
 import { $, $$, clamp } from './core/dom';
 import { detectCapabilities, resolveTier, type Tier } from './core/tier';
 
@@ -337,29 +337,94 @@ export function initFilm(director: Director): void {
   addEventListener('pointerup', () => (drag = null));
   addEventListener('pointercancel', () => (drag = null));
 
-  // ---------- provador ----------
+  // ---------- provador · catálogo demonstrativo com cinco vestidos ----------
+  // Os recortes são distintos e suas cores pertencem a cada peça.
+  // Não inventar tonalidades/variantes que não existam no manifesto.
   const fitting = $('#fitting');
   const fittingStatic = $('#fittingStatic');
+  const choices = $<HTMLElement>('#fittingChoices');
+  const tones = $<HTMLElement>('#fittingTones');
+  const fittingSelection = $<HTMLElement>('#fittingSelection');
+  const selectedSlugs = ['vestidos-01','vestidos-02','vestidos-03','vestidos-05','vestidos-06'] as const;
+  const selectedDresses = selectedSlugs.map(slug => productBySlug(slug)).filter((p): p is NonNullable<typeof p> => !!p);
+  const colorMap: Record<string,string> = {
+    'vestidos-01':'#ceb38b','vestidos-02':'#722b3c','vestidos-03':'#f0e6d3',
+    'vestidos-05':'#abc5dc','vestidos-06':'#272326',
+  };
+  function selectDress(id: string): void {
+    const selected = selectedDresses.find(p => p.id === id);
+    if(!selected) return;
+    dressParams.productId = selected.id;
+    dressParams.silhouette = selected.silhouette ?? 'fluido';
+    dressParams.tone = selected.tone;
+    dressParams.label = selected.title;
+    syncFitting();
+  }
+  function buildFittingControls(): void {
+    if(!choices || !tones) return;
+    choices.replaceChildren(...selectedDresses.map((p, i)=>{
+      const button=document.createElement('button');
+      button.type='button';
+      button.className='fitting__choice';
+      button.dataset.dressId=p.id;
+      button.setAttribute('aria-pressed','false');
+      const number=document.createElement('span');
+      number.className='fitting__number';
+      number.textContent=String(i+1).padStart(2,'0');
+      const title=document.createElement('span');
+      title.className='fitting__model';
+      title.textContent=p.title;
+      button.append(number,title);
+      return button;
+    }));
+    tones.replaceChildren(...selectedDresses.map(p=>{
+      const button=document.createElement('button');
+      button.type='button';
+      button.className='fitting__tone';
+      button.dataset.dressId=p.id;
+      button.setAttribute('aria-pressed','false');
+      button.setAttribute('aria-label',p.color+' · '+p.title);
+      const sw=document.createElement('i');
+      sw.className='fitting__swatch';
+      sw.style.setProperty('--sw',colorMap[p.slug] ?? '#ceb38b');
+      const name=document.createElement('span');
+      name.textContent=p.color;
+      button.append(sw,name);
+      return button;
+    }));
+  }
   function syncFitting(): void {
-    $$<HTMLButtonElement>('[data-silhouette]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.silhouette === dressParams.silhouette)));
-    $$<HTMLButtonElement>('[data-tone]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tone === dressParams.tone)));
-    if (fittingStatic) {
-      const selected = productById(dressParams.productId ?? 'belle-demo-vestidos-01');
-      if (selected?.cutout) {
-        fittingStatic.dataset.productId = selected.id;
-        fittingStatic.innerHTML = `<img class="editorial-cutout" src="${selected.cutout}" alt="${selected.title}, estudo sintético em vista frontal" width="${selected.cutoutSize?.[0] ?? 600}" height="${selected.cutoutSize?.[1] ?? 900}"><p class="fineprint">${selected.title} · vista frontal demonstrativa, sem simulação de prova.</p>`;
-      }
+    const selected = productById(dressParams.productId ?? '') ?? selectedDresses[0];
+    if(!selected) return;
+    choices?.querySelectorAll<HTMLButtonElement>('[data-dress-id]').forEach(btn=>
+      btn.setAttribute('aria-pressed',String(btn.dataset.dressId===selected.id)));
+    tones?.querySelectorAll<HTMLButtonElement>('[data-dress-id]').forEach(btn=>
+      btn.setAttribute('aria-pressed',String(btn.dataset.dressId===selected.id)));
+    if(fittingSelection) fittingSelection.textContent=selected.title+' · '+selected.color;
+    if (fittingStatic && selected.cutout) {
+      // Reuse the exact same image loaded by the WebGL fitting display.
+      // Keep this as an accessible/fallback rendering; no made-up 360-degree garment.
+      fittingStatic.dataset.productId=selected.id;
+      fittingStatic.replaceChildren();
+      const image=document.createElement('img');
+      image.className='editorial-cutout';
+      image.src=selected.cutout;
+      image.alt=selected.title+' · vista frontal demonstrativa';
+      image.width=selected.cutoutSize?.[0] ?? 600;
+      image.height=selected.cutoutSize?.[1] ?? 900;
+      const caption=document.createElement('p');
+      caption.className='fineprint';
+      caption.textContent=selected.title+' · produto demonstrativo, estoque sob consulta';
+      fittingStatic.append(image,caption);
     }
     world?.setDress(dressParams);
   }
-  $$<HTMLButtonElement>('[data-silhouette]').forEach((b) => b.addEventListener('click', () => {
-    dressParams.silhouette = b.dataset.silhouette as Silhouette;
-    syncFitting();
-  }));
-  $$<HTMLButtonElement>('[data-tone]').forEach((b) => b.addEventListener('click', () => {
-    dressParams.tone = b.dataset.tone as Tone;
-    syncFitting();
-  }));
+  buildFittingControls();
+  fitting?.addEventListener('click',(event)=>{
+    const button=(event.target as HTMLElement).closest<HTMLButtonElement>('[data-dress-id]');
+    if(!button || !fitting.contains(button))return;
+    selectDress(button.dataset.dressId ?? '');
+  });
   fitting?.addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     if ((e.target as HTMLElement).closest('fieldset')) return; // não rouba setas dos grupos
@@ -370,10 +435,10 @@ export function initFilm(director: Director): void {
     bus.emit('catalog:filter', { category: 'vestidos', silhouette: dressParams.silhouette });
   });
   bus.on('dress:try', (p) => {
-    dressParams.silhouette = p.silhouette;
-    dressParams.tone = p.tone;
-    dressParams.productId = p.productId ?? dressParams.productId;
-    syncFitting();
+    const requested=selectedDresses.find(d=>d.id===p.productId)
+      ??selectedDresses.find(d=>d.tone===p.tone)
+      ??selectedDresses[0];
+    if(requested)selectDress(requested.id);
     const sp = spans.find((s) => s.id === 'provador');
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (sp) scrollTo({ top: filmTop + (sp.s + (sp.e - sp.s) * 0.3) * range, behavior: reduce ? 'auto' : 'smooth' });

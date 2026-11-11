@@ -334,24 +334,37 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   const mirrorFrame = archFrame(1.2, 2.5, 0.07, 0.05, kit.brass);
   mirrorFrame.position.set(FITTING.x, 0.25, zBack + 0.02);
   g.add(mirrorFrame);
-  let mirror: Reflector | null = null;
-  if (tier === 'cinema') {
-    const shape = new THREE.Shape();
-    shape.moveTo(-0.6, 0); shape.lineTo(-0.6, 1.9); shape.absarc(0, 1.9, 0.6, Math.PI, 0, true); shape.lineTo(0.6, 0); shape.lineTo(-0.6, 0);
-    mirror = new Reflector(new THREE.ShapeGeometry(shape, 32), {
-      clipBias: 0.003,
-      textureWidth: Math.round(innerWidth * dpr * 0.45),
-      textureHeight: Math.round(innerHeight * dpr * 0.45),
-      color: 0xd9d2c6,
-    });
-    mirror.position.set(FITTING.x, 0.25, zBack + 0.03);
-    mirror.visible = false;
-    g.add(mirror);
-  } else {
-    const fake = archPanel(1.2, 2.5, new THREE.MeshStandardMaterial({ color: '#cfd3cf', roughness: 0.08, metalness: 0.9, envMapIntensity: 1.4 }));
-    fake.position.set(FITTING.x, 0.25, zBack + 0.03);
-    g.add(fake);
-  }
+  // Espelho estável: reflexo editorial sincronizado, sem Reflector em tempo real.
+  // O Reflector reproduzia recortes 2.5D por uma câmera virtual e causava
+  // clipping/ghosting, além de duplicar passes no celular.
+  // A imagem refletida usa o MESMO recorte selecionado e apenas um plano alpha;
+  // a superfície permanece um espelho cenográfico, não uma simulação física.
+  const archShape = new THREE.Shape();
+  archShape.moveTo(-.6,0);archShape.lineTo(-.6,1.9);
+  archShape.absarc(0,1.9,.6,Math.PI,0,true);
+  archShape.lineTo(.6,0);archShape.lineTo(-.6,0);
+  const mirrorSurface = new THREE.Mesh(new THREE.ShapeGeometry(archShape,32),
+    new THREE.MeshPhysicalMaterial({
+      color:'#c1bbb0',metalness:.69,roughness:.19,
+      envMapIntensity:.75,side:THREE.DoubleSide
+    }));
+  mirrorSurface.name='espelho-estavel-sem-reflector';
+  mirrorSurface.position.set(FITTING.x,.25,zBack+.036);
+  g.add(mirrorSurface);
+  const mirrorLook = new THREE.Group();
+  mirrorLook.name='vestido-refletido-sincronizado';
+  mirrorLook.position.set(FITTING.x,.54,zBack+.086);
+  mirrorLook.scale.x=-1;
+  mirrorLook.visible=false;
+  g.add(mirrorLook);
+  // Reflexo de luminosidade na lâmina sem aumentar as renderizações da cena.
+  const glassGlare=new THREE.Mesh(new THREE.PlaneGeometry(1.02,2.02),
+    new THREE.MeshBasicMaterial({color:'#fdf9e9',transparent:true,opacity:.075,
+      depthWrite:false,depthTest:true,side:THREE.DoubleSide}));
+  glassGlare.position.set(FITTING.x,.25+1.08,zBack+.095);
+  glassGlare.renderOrder=2;
+  g.add(glassGlare);
+  const mirror: Reflector | null = null;
   const pouf = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.42, 32), kit.velvet);
   pouf.position.set(4.75, 0.21, -16.4);
   g.add(pouf);
@@ -369,11 +382,15 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     if(id===fittingProductId)return;
     fittingProductId=id;
     [...fittingDisplay.children].forEach(disposeProductDisplay);
-    if(!id){fittingDisplay.visible=false;return;}
+    [...mirrorLook.children].forEach(disposeProductDisplay);
+    if(!id){fittingDisplay.visible=false;mirrorLook.visible=false;return;}
     const product=productById(id);
     if(!product){fittingProductId=null;return;}
     const height=DISPLAY_HEIGHT[product.category];
     fittingDisplay.add(supportedProduct(kit,product.slug,height,.065));
+    // Recorte espelhado na própria moldura: um só produto, mesma cor e textura.
+    const reflection=productDisplay(product,Math.min(1.36,height*.86),'bottom');
+    mirrorLook.add(reflection);
   };
 
   // luz
@@ -445,6 +462,8 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     setProduct,
     update(dt, ctx) {
       fittingDisplay.visible=!!fittingProductId&&ctx.fittingActive;
+      mirrorLook.visible=!!fittingProductId&&ctx.fittingActive;
+      glassGlare.visible=ctx.fittingActive;
       t+=dt;
       if(bagPulse>0){bagPulse=Math.max(0,bagPulse-dt*1.8);bag.rotation.z=Math.sin((1-bagPulse)*20)*.055*bagPulse;bag.scale.y=1+Math.sin((1-bagPulse)*22)*.04*bagPulse;}
       const k=34; // reactive but stable spring
@@ -516,7 +535,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         const target = 0.25 + Math.max(0, 1 - Math.abs(ctx.archFocus - i)) * 0.55;
         m.emissiveIntensity += (target - m.emissiveIntensity) * Math.min(1, dt * 5);
       });
-      if (mirror) mirror.visible = ctx.fittingActive;
+      // Reflector intentionally absent: mirror and reflection stay deterministic.
       if (ctx.sweep >= 0) {
         const sx = -0.9 + ctx.sweep * 1.8;
         sweep.target.position.set(sx, 1.2 - ctx.sweep * 0.5, PODIUM.z);

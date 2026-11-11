@@ -171,26 +171,21 @@
           <p class="eyebrow">07 · Provador</p>
           <h2 class="display" data-split>O próximo favorito<br><em>pode estar aqui.</em></h2>
           <div class="fitting" id="fitting">
-            <fieldset class="fitting__group">
-              <legend>Silhueta</legend>
-              <button type="button" data-silhouette="fluido" aria-pressed="true">Fluido</button>
-              <button type="button" data-silhouette="marcante" aria-pressed="false">Marcante</button>
-              <button type="button" data-silhouette="classico" aria-pressed="false">Clássico</button>
+            <fieldset class="fitting__group fitting__group--products">
+              <legend>Escolha um vestido</legend>
+              <div class="fitting__choices" id="fittingChoices" role="group" aria-label="Modelos do catálogo demonstrativo"></div>
             </fieldset>
             <fieldset class="fitting__group fitting__group--tones">
-              <legend>Tom</legend>
-              <button type="button" data-tone="perola" aria-pressed="true" aria-label="Pérola"><i style="--sw:#e9dfcf"></i><span>Pérola</span></button>
-              <button type="button" data-tone="champagne" aria-pressed="false" aria-label="Champagne"><i style="--sw:#c9a77c"></i><span>Champagne</span></button>
-              <button type="button" data-tone="noite" aria-pressed="false" aria-label="Noite"><i style="--sw:#2b2629"></i><span>Noite</span></button>
-              <button type="button" data-tone="terracota" aria-pressed="false" aria-label="Terracota"><i style="--sw:#b8735a"></i><span>Terracota</span></button>
-              <button type="button" data-tone="salvia" aria-pressed="false" aria-label="Sálvia"><i style="--sw:#a9b19a"></i><span>Sálvia</span></button>
+              <legend>Cor da peça</legend>
+              <div class="fitting__tones" id="fittingTones" role="group" aria-label="Selecionar vestido pela cor"></div>
             </fieldset>
-            <p class="fitting__hint" id="fittingHint">Produto em vista frontal. Os controles exploram um estudo separado de tecido; não simulam prova real.</p>
+            <p class="fitting__selection" id="fittingSelection" aria-live="polite" aria-atomic="true"></p>
+            <p class="fitting__hint" id="fittingHint">Cada cor identifica um vestido específico do catálogo demonstrativo. Estoque e variações devem ser confirmados com a loja.</p>
             <div class="fitting__static" id="fittingStatic" aria-hidden="true"></div>
             <div class="cta-row">
               <button type="button" class="btn btn--solid" id="fittingToCatalog">Ver peças nesta linha</button>
             </div>
-            <p class="fineprint">Provador conceitual: o vestido é um estudo 3D, não uma peça real nem uma prova virtual no corpo.</p>
+            <p class="fineprint">Vitrine cenográfica, não prova virtual. Imagens demonstrativas; disponibilidade e cores oficiais sob consulta.</p>
           </div>
         </div>
       </article>
@@ -198,20 +193,10 @@
   </section>
 
 
-  <!-- PAUSA DE MARCA: manifesto + atalhos de categoria -->
+  <!-- TRANSIÇÃO DA EXPERIÊNCIA: manifesto sem linha estática de categorias; faixa contínua preservada -->
   <section class="manifesto" aria-label="Manifesto Belle Alencar">
     <p class="eyebrow">Belle Alencar</p>
     <p class="manifesto__quote" data-reveal>O momento é seu.<br><em>O jeito de chegar também.</em></p>
-    <nav class="manifesto__cats" aria-label="Atalhos de categoria">
-      <button type="button" data-filter-category="vestidos">Vestidos</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="camisas">Camisas</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="croppeds">Croppeds</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="saias">Saias</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="calcas">Calças</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="bolsas">Bolsas</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="pulseiras">Pulseiras</button><span aria-hidden="true">✦</span>
-      <button type="button" data-filter-category="aneis">Anéis</button>
-    </nav>
     <div class="band" aria-hidden="true"><div class="band__track"><span>VESTIDOS ✦ CAMISAS ✦ CROPPEDS ✦ SAIAS ✦ CALÇAS ✦ BOLSAS ✦ PULSEIRAS ✦ ANÉIS ✦  </span><span>VESTIDOS ✦ CAMISAS ✦ CROPPEDS ✦ SAIAS ✦ CALÇAS ✦ BOLSAS ✦ PULSEIRAS ✦ ANÉIS ✦  </span></div></div>
   </section>
 
