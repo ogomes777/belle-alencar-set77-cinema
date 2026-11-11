@@ -653,3 +653,26 @@ html.md-motion #colecao.md-scene::before {display:none;}
   .occ-round .occ-card__world-ground,
   .occ-round .occ-card__model {animation:none!important;}
 }
+
+/* V11 FINAL CASCADE GUARD
+ * .occ-card.is-active and :not(.is-active) each define a later animation
+ * shorthand. Explicit pause must override BOTH shorthands for WCAG 2.2.2.
+ * These declarations intentionally live after every portrait keyframe. */
+.occ-round.is-round .occ-card__model,
+.occ-round.is-round .occ-card.is-active .occ-card__model,
+.occ-round.is-round .occ-card:not(.is-active) .occ-card__model,
+.occ-round.is-round .occ-card__world-glow,
+.occ-round.is-round .occ-card.is-active .occ-card__world-glow,
+.occ-round.is-round .occ-card__world-depth,
+.occ-round.is-round .occ-card__world-ground {
+  animation-play-state:paused!important;
+}
+.occ-round.is-round[data-ambient="running"] .occ-card__model,
+.occ-round.is-round[data-ambient="running"] .occ-card.is-active .occ-card__model,
+.occ-round.is-round[data-ambient="running"] .occ-card:not(.is-active) .occ-card__model,
+.occ-round.is-round[data-ambient="running"] .occ-card__world-glow,
+.occ-round.is-round[data-ambient="running"] .occ-card.is-active .occ-card__world-glow,
+.occ-round.is-round[data-ambient="running"] .occ-card__world-depth,
+.occ-round.is-round[data-ambient="running"] .occ-card__world-ground {
+  animation-play-state:running!important;
+}
