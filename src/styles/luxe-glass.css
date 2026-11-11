@@ -227,3 +227,29 @@ html .roomrail__size-label:focus-within .roomrail__size-options{border-radius:12
 @media(prefers-reduced-motion:reduce){
   html .roomrail__size-choice{animation:none!important;transition:none!important}
 }
+
+
+/* Input belongs to the film stage, not to its painted canvas. Pointer events
+   bubble to stage where raycast and touch gestures are already registered.
+   This also prevents a transparent WebGL canvas intercepting HUD buttons. */
+.film__canvas,
+.film__canvas canvas,
+.film__posters {pointer-events:none!important}
+@media(max-width:899px){
+  /* Keep the detail sheet and compact controls below the sticky story copy.
+     Otherwise a narrative card/canvas can cover the HUD on a 390px phone. */
+  html .roomrail{
+    top:auto!important;
+    bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;
+    z-index:35;
+  }
+  html .roomrail__detail{
+    top:auto!important;
+    bottom:calc(100% + 12px)!important;
+    max-height:min(58svh,460px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  html .roomrail__hint{font-size:8px}
+  html .roomrail__gesture{font-size:7px}
+}
