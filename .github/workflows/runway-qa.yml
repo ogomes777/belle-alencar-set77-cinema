@@ -12,6 +12,7 @@ on:
       - fix/belle-portrait-alpha-v12
       - feat/belle-collection-scroll-cinema-v13
       - feat/belle-adaptive-glass-header-v14
+      - feat/belle-glass-living-search-v15
   workflow_dispatch:
 permissions:
   contents: read
@@ -47,3 +48,4 @@ jobs:
           node tests/e2e/motion-director.mjs
           node tests/e2e/collection-scroll.mjs
           node tests/e2e/header-glass.mjs
+          node tests/e2e/living-glass-search.mjs
