@@ -84,14 +84,18 @@ export function initOccasionsCarousel(director:Director):()=>void {
   function entrance(index:number){
     const target=arrivals[index];
     if(!target)return;
+    // Root cause of washed-out portraits: the old entrance repeatedly
+    // animated the PARENT from opacity .22 to 1 at every carousel crossing.
+    // With a transparent WebP this made the entire person disappear,
+    // although the card itself correctly stayed at opacity 1.
+    // Keep 100% ink density; convey approach ONLY through spatial motion.
     gsap.killTweensOf(target);
-    // Brief editorial "step out of the card": approach the lens, rise a little
-    // past the resting plane, then settle under gentle simulated gravity.
+    gsap.set(target,{opacity:1,visibility:'visible'});
     gsap.timeline({defaults:{overwrite:true}})
       .fromTo(target,
-        {y:66,z:-32,opacity:.22,scale:.84},
-        {y:-12,z:36,opacity:1,scale:1.045,duration:.91,ease:'power3.out'})
-      .to(target,{y:0,z:0,scale:1,duration:.47,ease:'sine.inOut'});
+        {y:57,z:-24,scale:.91},
+        {y:-10,z:30,scale:1.035,duration:.78,ease:'power3.out'})
+      .to(target,{y:0,z:0,scale:1,duration:.43,ease:'sine.inOut'});
   }
 
   function render(){
