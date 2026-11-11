@@ -19,8 +19,9 @@ const OCCASION_TONES:Record<string,Atmosphere>={
 };
 
 export function initHeader():void {
-  const header=document.getElementById('siteHeader');
-  if(!header)return;
+  const headerNode=document.getElementById('siteHeader');
+  if(!headerNode)return;
+  const header:HTMLElement=headerNode;
 
   const menuButton=header.querySelector<HTMLButtonElement>('#belleMenuButton');
   const panel=header.querySelector<HTMLElement>('#belleMenuPanel');
@@ -28,7 +29,7 @@ export function initHeader():void {
   const navLinks=Array.from(header.querySelectorAll<HTMLAnchorElement>('.site-nav a'));
   const mobileLinks=Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-mobile-nav]'));
   const mq=matchMedia('(max-width:1020px)');
-  const scenes:Scene[]=[
+  const scenes:Scene[]=([
     {id:'filme',element:document.getElementById('filme')!,tint:'pearl',nav:'#inicio'},
     {id:'passarela',element:document.getElementById('passarela')!,tint:'champagne',nav:'#passarela'},
     {id:'ocasioes',element:document.getElementById('ocasioes')!,tint:'sand',nav:'#ocasioes'},
@@ -37,7 +38,7 @@ export function initHeader():void {
     {id:'lojas',element:document.getElementById('lojas')!,tint:'noir',nav:'#lojas'},
     {id:'atendimento',element:document.getElementById('atendimento')!,tint:'sand',nav:'#atendimento'},
     {id:'duvidas',element:document.getElementById('duvidas')!,tint:'pearl',nav:null},
-  ].filter(scene=>!!scene.element);
+  ] as Scene[]).filter(scene=>!!scene.element);
   const finale=document.querySelector<HTMLElement>('.finale');
   if(finale)scenes.push({id:'finale',element:finale,tint:'noir',nav:null});
 
@@ -73,7 +74,7 @@ export function initHeader():void {
     header.classList.toggle('is-menu-open',next);
     if(!next&&restoreFocus)menuButton.focus({preventScroll:true});
   }
-  menuButton?.addEventListener('click',()=>toggleMenu(panel?.hidden??true));
+  menuButton?.addEventListener('click',()=>toggleMenu(panel?.hasAttribute('hidden')??true));
   mobileLinks.forEach(link=>link.addEventListener('click',()=>toggleMenu(false)));
   document.addEventListener('pointerdown',event=>{
     if(!header.contains(event.target as Node))toggleMenu(false);
