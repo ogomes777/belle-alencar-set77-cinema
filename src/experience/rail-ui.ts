@@ -20,7 +20,10 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       <button type="button" class="roomrail__inspect">Explorar peça ↗</button>
       <button type="button" class="roomrail__bag" aria-label="Abrir sacola de interesse">Sacola <b>0</b></button>
     </div>
-    <div class="roomrail__gesture">MOVA O CURSOR PARA EXPLORAR <span aria-hidden="true">·</span> ARRASTE PARA PERCORRER AS PEÇAS</div>
+    <div class="roomrail__gesture">
+      <span>ARRASTE NA LOJA PARA OLHAR AO REDOR <span aria-hidden="true">·</span> NAS ROUPAS PARA PERCORRER</span>
+      <button type="button" class="roomrail__switch" aria-label="Olhar para a outra parede da boutique">OUTRA PAREDE ↔</button>
+    </div>
     <section class="roomrail__detail" hidden aria-label="Peça selecionada na arara">
       <p class="roomrail__eyebrow">BELLE ALENCAR · REFERÊNCIA EDITORIAL</p>
       <h3 class="roomrail__title"></h3>
@@ -51,7 +54,7 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   const addBtn=$<HTMLButtonElement>('.roomrail__add');
   const error=$<HTMLElement>('.roomrail__error');
   let active=false,selected:Product|null=null,flight=false,hoverRAF=0,hx=0,hy=0;
-  let gesture:{x:number;y:number;last:number;id:number;moving:boolean}|null=null;
+  let gesture:{x:number;y:number;last:number;id:number;moving:boolean;mode:'rail'|'orbit'}|null=null;
   const motion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
   function syncSizeChoices():void{
     sizes.querySelectorAll<HTMLButtonElement>('button[data-size]').forEach(b=>{
@@ -166,12 +169,19 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   $('.roomrail__close').addEventListener('click',close);
   addBtn.addEventListener('click',()=>void add());
   bagBtn.addEventListener('click',()=>commerceApi()?.openBag(bagBtn));
+  $('.roomrail__switch').addEventListener('click',()=>{
+    if(!active)return;
+    getWorld()?.lookAcrossRail();
+    announce('Vista da parede oposta. Arraste no cômodo para continuar explorando.');
+  });
   commerceApi()?.onChange(()=>count.textContent=String(commerceApi()?.count()??0));
 
   const inUi=(e:Event)=>e.target instanceof Element&&!!e.target.closest('.roomrail');
   stage.addEventListener('pointerdown',e=>{
     if(!active||!getWorld()||inUi(e)||(e.pointerType==='mouse'&&e.button!==0)||flight)return;
-    gesture={x:e.clientX,y:e.clientY,last:e.clientX,id:e.pointerId,moving:false};
+    const hit=getWorld()?.hoverRack(e.clientX,e.clientY);
+    gesture={x:e.clientX,y:e.clientY,last:e.clientX,id:e.pointerId,
+      moving:false,mode:hit?'rail':'orbit'};
   });
   stage.addEventListener('pointermove',e=>{
     const w=getWorld();if(!active||!w)return;
@@ -186,10 +196,15 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       }
       if(gesture.moving){
         const travelled=e.clientX-gesture.last;
-        const steps=Math.min(4,Math.floor(Math.abs(travelled)/32));
-        if(steps>0){
-          for(let i=0;i<steps;i++)browse(travelled<0?1:-1);
-          gesture.last+=Math.sign(travelled)*steps*32;
+        if(gesture.mode==='orbit'){
+          w.orbitRail(travelled/Math.max(320,r.width));
+          gesture.last=e.clientX;
+        } else {
+          const steps=Math.min(4,Math.floor(Math.abs(travelled)/34));
+          if(steps>0){
+            for(let i=0;i<steps;i++)browse(travelled<0?1:-1);
+            gesture.last+=Math.sign(travelled)*steps*34;
+          }
         }
       }
     } else if(e.pointerType==='mouse'&&!selected&&!flight){

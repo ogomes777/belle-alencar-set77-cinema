@@ -183,6 +183,12 @@ export class World {
     this.roomOrbitGoal=THREE.MathUtils.clamp(this.roomOrbitGoal+deltaNormalized*2.65,-1,1);
     this.kick();
   }
+  /** A discreet, accessible companion to the first-person drag on touch. */
+  lookAcrossRail():void {
+    this.roomOrbitGoal=this.roomOrbitGoal>=0?-1:1;
+    this.roomOrbitManual=true;
+    this.kick();
+  }
   /** Explicit selection hands control back to the physical hanger focus. */
   private followRailSelection():void{
     this.roomOrbitGoal=this.boutique.focusPoint().x>=0?1:-1;
