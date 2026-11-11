@@ -88,16 +88,18 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     if(!active)return;
     const gridRect=grid!.getBoundingClientRect();
     const cards=Array.from(grid!.querySelectorAll<HTMLElement>('.pcard'));
+    // Cache rectangles ONCE per filter/resize, never inside scroll callbacks.
+    const rects=cards.map(element=>element.getBoundingClientRect());
     // Each card enters once. The initial row already on screen stays fully
     // visible (especially important for deep links and filter updates).
     entries=cards.map((element,index)=>{
-      const r=element.getBoundingClientRect();
+      const r=rects[index]!;
       const top=r.top-gridRect.top;
-      const rowSibling=cards.filter((_,otherIndex)=>{
-        if(otherIndex>=index)return false;
-        const prior=cards[otherIndex]!.getBoundingClientRect();
-        return Math.abs(prior.top-r.top)<6;
-      }).length;
+      let rowSibling=0;
+      for(let i=index-1;i>=0;i--){
+        if(Math.abs(rects[i]!.top-r.top)>6)break;
+        rowSibling++;
+      }
       const direction=(rowSibling%2===0)?-1:1;
       const entry:Entry={element,top,offset:rowSibling*(window.innerWidth<=820?9:21),
         direction,progress:0,finished:false};
