@@ -80,8 +80,8 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
     const size=sizeEl.value as Size;
     if(!size){error.hidden=false;sizeEl.focus();return;}
     error.hidden=true;
-    const city=api.storeCity();
     const start=async()=>{
+      const city=api.storeCity();
       const bounds=w.projectRackProduct(p.id);
       if(!bounds||!p.cutout){announce('Esta peça está fora do campo de visão. Selecione outra.');return;}
       flight=true;addBtn.disabled=true;addBtn.setAttribute('aria-busy','true');
