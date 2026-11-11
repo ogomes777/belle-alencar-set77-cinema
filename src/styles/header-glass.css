@@ -170,6 +170,7 @@
   color:var(--ba-nav-muted);
 }
 .site-header .site-nav {
+  position:relative;
   display:flex;
   align-items:center;
   gap:0;
@@ -362,7 +363,7 @@
   .site-header .site-actions{margin-left:auto;}
 }
 @media(max-width:860px) {
-  .site-header {top:10px;height:60px;width:calc(100% - 20px);padding:0 10px;border-radius:20px;gap:3px;}
+  .site-header {top:10px;height:60px;width:calc(100% - 20px);padding:0 10px;border-radius:20px;gap:3px;backdrop-filter:blur(12px) saturate(1.15);-webkit-backdrop-filter:blur(12px) saturate(1.15);}
   .site-header.is-compact {top:7px;height:56px;width:calc(100% - 20px);border-radius:19px;}
   .site-header .brand{min-width:36px;min-height:44px;gap:0;}
   .site-header .brand__word{display:none;}
@@ -370,7 +371,7 @@
   .site-header .site-actions{gap:1px;margin-left:auto;}
   .site-header .store-pill{max-width:118px;min-width:75px;min-height:42px;padding:0 9px;margin-right:1px;gap:5px;font-size:10px;letter-spacing:.035em;}
   .site-header .icon-btn,.site-header .belle-menu-toggle{width:44px;height:44px;flex-basis:44px;border-radius:12px;}
-  .site-header .belle-menu-panel{width:min(354px,calc(100vw - 20px));}
+  .site-header .belle-menu-panel{width:min(354px,calc(100vw - 20px));backdrop-filter:blur(14px) saturate(1.15);-webkit-backdrop-filter:blur(14px) saturate(1.15);}
 }
 @media(max-width:390px) {
   .site-header{width:calc(100% - 14px);padding:0 7px;gap:1px;}
