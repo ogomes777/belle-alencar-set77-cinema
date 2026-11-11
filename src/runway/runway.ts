@@ -33,7 +33,9 @@ export function initRunway(ctx: Ctx): () => void {
     if (approvedPortrait) {
       // Real identity-approved editorial photos are supplied per look; never infer the owner's face.
       el.classList.add('runway__model--portrait');
-      el.innerHTML=`<img src="${approvedPortrait}" alt="Belle em look ${look.name}" draggable="false">`;
+      el.innerHTML=`<img src="${approvedPortrait.src}" width="${approvedPortrait.width}" height="${approvedPortrait.height}" decoding="async" alt="Billie em estudo editorial do look ${look.name}" draggable="false">`;
+      const image=el.querySelector<HTMLImageElement>('img')!;
+      image.addEventListener('error', () => { if (product.cutout) image.src=product.cutout; image.alt=`${product.title}, recorte demonstrativo`; }, { once:true, signal });
     } else if(pair) {
       // Two genuine demo product cutouts, not a fake model or a simulated try-on photo.
       const bottom=look.pieces[1];
@@ -46,7 +48,7 @@ export function initRunway(ctx: Ctx): () => void {
       el.innerHTML=`<img src="${product.cutout}" alt="${product.title}, recorte demonstrativo" width="${w}" height="${h}" draggable="false">`;
     }
     line.append(el);
-    return {el,ratio:(approvedPortrait||pair)?0.67:w/h,product,pair:!!(pair&&!approvedPortrait),portrait:!!approvedPortrait};
+    return {el,ratio:approvedPortrait ? approvedPortrait.width/approvedPortrait.height : pair ? 0.67 : w/h,product,pair:!!(pair&&!approvedPortrait),portrait:!!approvedPortrait};
   });
   const cards = RUNWAY_PRODUCTS.map((product, i) => {
     const el = document.createElement('article'); el.className = 'runway__card'; el.dataset.product = product.id;
@@ -170,7 +172,7 @@ export function initRunway(ctx: Ctx): () => void {
   window.addEventListener('resize',size,{signal});
   document.body.classList.add('is-runway-visible');
   const io=typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);document.body.classList.toggle('is-runway-visible',visible);if(visible)wake();else{cancelAnimationFrame(raf);raf=0;} }) : null; io?.observe(root);
-  root.dataset.media='products'; // Garments remain demos until Belle identity-approved photo frames exist.
+  root.dataset.media='portraits';
   size(); paint();
   return () => {document.body.classList.remove('is-runway-visible');destroyed=true;abort.abort();unsub();ro?.disconnect();io?.disconnect();cancelAnimationFrame(raf);clearTimeout(wheelTimer);};
 }

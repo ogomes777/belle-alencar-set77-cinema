@@ -1,20 +1,10 @@
-/**
- * Real, explicit Belle portrait slots.
- *
- * Add an authorized transparent portrait for EACH outfit in
- * public/assets/belle/portraits/, then fill its path below only after:
- * 1. confirming the owner identity and usage rights;
- * 2. confirming the outfit matches the exact three catalog references;
- * 3. validating transparency, mobile crop and color.
- *
- * No stranger, synthetic guess, or placeholder should be presented as Belle.
- * The empty mapping safely keeps the existing isolated-garment study active.
- */
-export const BELLE_APPROVED_LOOK_IMAGES: Readonly<Record<string,string | undefined>> = Object.freeze({
-  // champagne: '/assets/belle/portraits/champagne.webp',
-  // vinho: '/assets/belle/portraits/vinho.webp',
-  // azul: '/assets/belle/portraits/azul.webp',
-  // noite: '/assets/belle/portraits/noite.webp',
-  // oliva: '/assets/belle/portraits/oliva.webp',
-  // 'azul-claro': '/assets/belle/portraits/azul-claro.webp',
+/** User-supplied editorial studies of Billie. The catalog remains demonstrative. */
+export interface BilliePortrait { src: string; width: number; height: number }
+export const BELLE_APPROVED_LOOK_IMAGES: Readonly<Record<string, BilliePortrait>> = Object.freeze({
+  champagne: { src:'/assets/belle/billie/billie-look-01.webp', width:941, height:1672 },
+  vinho: { src:'/assets/belle/billie/billie-look-02.webp', width:941, height:1672 },
+  azul: { src:'/assets/belle/billie/billie-look-03.webp', width:941, height:1672 },
+  noite: { src:'/assets/belle/billie/billie-look-04.webp', width:941, height:1672 },
+  oliva: { src:'/assets/belle/billie/billie-look-05.webp', width:941, height:1672 },
+  'azul-claro': { src:'/assets/belle/billie/billie-look-06.webp', width:941, height:1672 },
 });
