@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - claude/bold-dijkstra-jyzqak
+      - feat/billie-runway-v6
   workflow_dispatch:
 permissions:
   contents: read
