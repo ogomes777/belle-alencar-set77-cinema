@@ -490,7 +490,7 @@
   height:clamp(650px,55vw,745px);
   overflow:hidden;
 }
-.occ-round.is-round .occ-card {height:calc(100% - 135px);}
+.occ-round.is-round .occ-card {height:calc(100% - 160px);}
 .occ-round.is-round .occ-round__footer {
   border-top:0;
   padding-top:0;
@@ -501,11 +501,11 @@ html.md-motion #colecao.md-scene::before {display:none;}
    touch scrolling. The carousel remains a progressive enhancement. */
 @media(max-width:899px){
   .occ-round.is-round .occ-round__stage {height:650px;}
-  .occ-round.is-round .occ-card {height:calc(100% - 112px);--occ-art:57%;}
+  .occ-round.is-round .occ-card {height:calc(100% - 140px);--occ-art:57%;}
   .occ-round.is-round .occ-card__portrait {height:calc(var(--occ-art) + 48px);}
 }
 @media(max-width:560px){
-  .occ-round.is-round .occ-round__stage {height:560px;}
+  .occ-round.is-round .occ-round__stage {height:578px;}
   .occ-round.is-round .occ-card {height:448px;--occ-art:56%;}
   .occ-round.is-round .occ-card__art {border-radius:17px 17px 0 0;}
   .occ-round.is-round .occ-card__body {border-radius:0 0 17px 17px;}
@@ -516,7 +516,7 @@ html.md-motion #colecao.md-scene::before {display:none;}
   .occ-round.is-round .occ-round__footer {margin-top:0;}
 }
 @media(max-width:375px){
-  .occ-round.is-round .occ-round__stage {height:539px;}
+  .occ-round.is-round .occ-round__stage {height:560px;}
   .occ-round.is-round .occ-card {height:430px;--occ-art:54%;}
   .occ-round.is-round .occ-card__portrait {height:calc(var(--occ-art) + 43px);}
 }
