@@ -58,7 +58,9 @@ await page.addInitScript(()=>sessionStorage.setItem('belle:v4:intro','1'));
 await page.goto(`${base}/?tier=static`);await page.locator('#passarela').scrollIntoViewIfNeeded();await page.waitForSelector('.runway__model');
 const bounds=await page.locator('.runway__stage').boundingBox();
 await page.mouse.move(bounds.x+200,bounds.y+bounds.height*.65);await page.mouse.down();
-await page.mouse.move(bounds.x+200+bounds.width*.21,bounds.y+bounds.height*.65,{steps:10});await page.mouse.up();
+await page.mouse.move(bounds.x+200+bounds.width*.21,bounds.y+bounds.height*.65,{steps:10});
+// Deliberate held drag tests one-look snap. A quick release legitimately adds kinetic momentum.
+await page.waitForTimeout(180);await page.mouse.up();
 await page.waitForFunction(()=>document.getElementById('passarela').dataset.position==='1.0000');
 check(true,'pointer drag eases and snaps to next look');
 const beforeY=await page.evaluate(()=>scrollY);await page.mouse.wheel(0,600);await page.waitForFunction(y=>scrollY>y+100,beforeY);
