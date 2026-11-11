@@ -15,6 +15,7 @@ import { DressRig } from './cloth/dress';
 import { Story, type Span } from './story';
 import type { Tier } from '../core/tier';
 import type { DressParams } from '../core/dress';
+import type { Product } from '../commerce/types';
 
 export interface WorldOptions {
   container: HTMLElement;
@@ -74,6 +75,8 @@ export class World {
   private failed = false;
   private resizeObs: ResizeObserver;
   private onVis = () => this.kick();
+  private readonly pickPoint = new THREE.Vector2();
+  private readonly projectPt = new THREE.Vector3();
 
   constructor(private opts: WorldOptions) {
     const { tier, container } = opts;
@@ -137,6 +140,45 @@ export class World {
     this.dress.setParams(params);
     this.dress.energy = Math.max(this.dress.energy, 0.8);
     this.kick();
+  }
+
+  /** Produtos sempre pertencem à arara interna, nunca a uma interface 2D separada. */
+  browseRack(direction:number):Product|null {
+    const product=this.boutique.browse(direction);this.kick();return product;
+  }
+  activeRackProduct():Product|null{return this.boutique.activeProduct();}
+  pickRack(clientX:number,clientY:number):Product|null {
+    this.toRay(clientX,clientY);
+    const p=this.boutique.pick(this.pickPoint,this.camera);
+    this.kick();return p;
+  }
+  bagHit(clientX:number,clientY:number):boolean {
+    this.toRay(clientX,clientY);return this.boutique.bagHit(this.pickPoint,this.camera);
+  }
+  selectRack(id:string|null):void{this.boutique.select(id);this.kick();}
+  hideRackProduct(id:string,hide:boolean):void{this.boutique.hideProduct(id,hide);this.kick();}
+  impactBag():void{this.boutique.impactBag();this.kick();}
+  private toRay(x:number,y:number):void {
+    const r=this.opts.container.getBoundingClientRect();
+    this.pickPoint.set((x-r.left)/Math.max(1,r.width)*2-1,-((y-r.top)/Math.max(1,r.height)*2-1));
+  }
+  private projectPoint(p:THREE.Vector3):{x:number;y:number;z:number} {
+    this.projectPt.copy(p).project(this.camera);
+    const r=this.opts.container.getBoundingClientRect();
+    return {x:r.left+(this.projectPt.x+1)*r.width/2,y:r.top+(1-this.projectPt.y)*r.height/2,z:this.projectPt.z};
+  }
+  projectRackProduct(id:string):{x:number;y:number;w:number;h:number}|null {
+    const item=this.boutique.productPosition(id);if(!item)return null;
+    const a=this.projectPoint(item.position),b=this.projectPoint(item.position.clone().add(new THREE.Vector3(0,-item.height,0)));
+    if(a.z>=1||a.z<=-1)return null;
+    const h=Math.max(42,Math.abs(b.y-a.y));
+    const w=Math.max(28,h*item.width/Math.max(.1,item.height));
+    return {x:a.x-w/2,y:a.y,w,h};
+  }
+  projectBagMouth():{x:number;y:number;w:number} {
+    const point=this.boutique.bagPosition(),center=this.projectPoint(point);
+    const edge=this.projectPoint(point.clone().add(new THREE.Vector3(this.boutique.bagWidth()/2,0,0)));
+    return {x:center.x,y:center.y,w:Math.max(22,Math.abs(edge.x-center.x)*2)};
   }
 
   /** ponteiro normalizado (-1..1) ou null quando sai. */
@@ -216,7 +258,13 @@ export class World {
     this.scrollEnergy += (Math.min(1, scrollSpeed * 18) - this.scrollEnergy) * Math.min(1, dt * 3);
 
     // câmera
-    const fov = this.fitFov(this.story.camera(p, this.camPos, this.camTgt));
+    const fov=this.fitFov(this.story.camera(p,this.camPos,this.camTgt));
+    // The camera remains in the same boutique while panning subtly along the rail.
+    const sala=this.story.span('sala');
+    if(sala&&p>=sala.s-.02&&p<=sala.e+.02){
+      const shift=this.boutique.cameraShift();
+      this.camPos.z+=shift*.25;this.camTgt.z+=shift;
+    }
     if (!exact && this.opts.tier === 'cinema') {
       // câmera na mão, quase imperceptível (respiração do operador)
       const t = this.time;
