@@ -41,11 +41,12 @@ jobs:
         run: |
           npm run preview > /tmp/belle-preview.log 2>&1 &
           node -e "let n=0;const t=setInterval(async()=>{try{const r=await fetch('http://127.0.0.1:4173');if(r.ok){clearInterval(t);process.exit(0)}}catch{}if(++n>45){clearInterval(t);process.exit(1)}},500)"
+          node tests/e2e/header-glass.mjs
+          node tests/e2e/living-glass-search.mjs
           node tests/e2e/occasions-round.mjs
           node tests/e2e/occasions-orbit-stability.mjs
           node tests/e2e/runway.mjs
           node tests/e2e/intro-calligraphy.mjs
           node tests/e2e/motion-director.mjs
           node tests/e2e/collection-scroll.mjs
-          node tests/e2e/header-glass.mjs
-          node tests/e2e/living-glass-search.mjs
+
