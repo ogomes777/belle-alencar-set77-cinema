@@ -1,0 +1,82 @@
+/* SET77 | Passarela Belle. A camada estática é sempre utilizável sem JS. */
+.how.how--couture{--how-ink:#2b241d;--how-surface:#faf7f1;--how-edge:rgba(116,91,56,.22);padding:0;background:var(--how-surface);text-align:left;isolation:isolate}
+.how--couture .how__stage{position:relative;min-height:clamp(610px,80svh,920px);padding:clamp(80px,10vw,128px) var(--gutter) clamp(44px,5vw,72px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;isolation:isolate}
+.how--couture .how__visual{position:absolute;inset:0;z-index:-2;pointer-events:none;background:var(--how-surface)}
+.how--couture .how__visual::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,247,241,.94),rgba(250,247,241,.34) 46%,rgba(250,247,241,.30));pointer-events:none}
+.how--couture .how__poster,.how--couture .how__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.how--couture .how__video{opacity:0;will-change:opacity;transition:opacity .2s ease;pointer-events:none}
+.how--couture.how--video-ready .how__video{opacity:1}
+.how--couture .how__gold-veil{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(140deg,rgba(250,247,241,.9),rgba(248,234,208,.85) 60%,rgba(238,218,184,.9));opacity:0}
+.how--couture .how__intro{position:relative;max-width:560px;margin:0 0 clamp(70px,11vw,170px);color:var(--how-ink)}
+.how--couture .how__intro .eyebrow{color:#8b7048;letter-spacing:.27em}
+.how--couture .how__intro .display{font-size:clamp(2.9rem,4.8vw,6.5rem);line-height:.95;max-width:12ch}
+.how--couture .how__intro .lede{font-size:clamp(.9rem,1.05vw,1.08rem);max-width:38ch;line-height:1.6}
+.how--couture .how__intro .display em{color:#997547}
+.how--couture .how__bottom{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto}
+.how--couture .how__steps{list-style:none;max-width:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.1vw,16px);border:0;padding:0;margin:0;text-align:left}
+.how--couture .how__steps li{display:flex;flex-direction:column;min-width:0;padding:clamp(16px,2vw,25px);background:rgba(250,247,241,.96);border:1px solid var(--how-edge);box-shadow:0 14px 32px -28px rgba(65,42,16,.25);border-radius:3px}
+.how--couture .how__steps li:last-child{border-right:1px solid var(--how-edge)}
+.how--couture .how__steps span{font:400 clamp(1.7rem,2.7vw,2.7rem)/1 var(--serif);color:#a77c44;margin:0 0 12px;letter-spacing:-.02em}
+.how--couture .how__steps h3{margin:0 0 8px;font-weight:650;font-size:clamp(.92rem,1.05vw,1.08rem);line-height:1.2;letter-spacing:-.012em}
+.how--couture .how__steps p{margin:0;color:#5c5045;font-size:clamp(.73rem,.86vw,.91rem);line-height:1.5}
+.how--couture .how__foot{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;margin-top:18px}
+.how--couture .how__foot p{margin:0;font-size:.74rem;letter-spacing:.015em;color:#564536;max-width:61ch}
+.how--couture .cta-row{margin:0;gap:10px}
+.how--couture .btn{background:rgba(250,247,241,.94);min-height:44px;padding:0 19px;font-size:.7rem;letter-spacing:.08em;white-space:nowrap}
+.how--couture .btn--solid{background:#2b241d;color:#fff;border-color:#2b241d}
+.how--couture .btn--line{border-color:rgba(56,42,30,.55)}
+/* Progressive enhancement. Nenhum conteúdo é oculto antes do vídeo estar pronto. */
+.how--couture.how--enhanced{height:260svh;min-height:1300px}
+.how--couture.how--enhanced .how__stage{position:sticky;top:0;height:100svh;min-height:0;padding:0;display:block}
+.how--couture.how--enhanced .how__visual::after{background:linear-gradient(90deg,rgba(250,247,241,.5) 0%,transparent 45%)}
+.how--couture.how--enhanced .how__gold-veil{opacity:var(--how-wash,0)}
+.how--couture.how--enhanced .how__intro{position:absolute;top:clamp(92px,16svh,180px);left:clamp(28px,6vw,120px);max-width:490px;margin:0;opacity:var(--how-intro,1);transform:translate3d(0,calc((1 - var(--how-intro,1))*-18px),0);pointer-events:none}
+.how--couture.how--enhanced .how__bottom{position:absolute;left:50%;bottom:clamp(20px,5svh,64px);width:calc(100% - clamp(28px,7vw,108px));max-width:1320px;transform:translate3d(-50%,calc((1 - var(--how-bottom,0))*32px),0);opacity:var(--how-bottom,0);pointer-events:none}
+.how--couture.how--enhanced.how--interactive .how__bottom{pointer-events:auto}
+.how--couture.how--enhanced .how__steps li{opacity:var(--how-card,0);transform:translate3d(0,calc((1 - var(--how-card,0))*22px),0)}
+@media(max-width:900px){
+ .how--couture .how__stage{padding-top:100px}
+ .how--couture .how__steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .how--couture .how__steps li:nth-child(2){border-right:1px solid var(--how-edge)}
+ .how--couture .how__steps li:nth-child(-n+2){border-bottom:1px solid var(--how-edge)}
+ .how--couture.how--enhanced .how__intro{left:6vw;top:14svh}
+ .how--couture.how--enhanced .how__bottom{bottom:clamp(14px,3svh,28px)}
+}
+@media(max-width:600px){
+ .how--couture .how__stage{min-height:0;padding:80px var(--gutter) 48px}
+ .how--couture .how__visual::after{background:linear-gradient(180deg,rgba(250,247,241,.6),rgba(250,247,241,.7))}
+ .how--couture .how__intro{margin-bottom:86px}
+ .how--couture .how__intro .display{font-size:clamp(2.35rem,10.3vw,3.8rem)}
+ .how--couture .how__steps{grid-template-columns:1fr;gap:8px}
+ .how--couture .how__steps li{padding:15px 18px}
+ .how--couture .how__foot{display:block}
+ .how--couture .cta-row{margin-top:16px}
+ .how--couture.how--enhanced{height:225svh;min-height:1000px}
+ .how--couture.how--enhanced .how__visual::after{background:linear-gradient(180deg,rgba(250,247,241,.53),transparent 26%,rgba(250,247,241,.1) 56%,rgba(250,247,241,.18))}
+ .how--couture.how--enhanced .how__poster,.how--couture.how--enhanced .how__video{object-position:50% 50%}
+ .how--couture.how--enhanced .how__intro{left:5vw;right:5vw;top:clamp(76px,11svh,110px);max-width:390px}
+ .how--couture.how--enhanced .how__intro .display{font-size:clamp(2.1rem,8.3vw,3.1rem)}
+ .how--couture.how--enhanced .how__intro .lede{font-size:.82rem;max-width:31ch}
+ .how--couture.how--enhanced .how__bottom{bottom:max(8px,env(safe-area-inset-bottom));width:calc(100% - 20px)}
+ .how--couture.how--enhanced .how__steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .how--couture.how--enhanced .how__steps li{padding:10px 11px;min-height:96px}
+ .how--couture.how--enhanced .how__steps span{font-size:1.33rem;margin:0 0 4px}
+ .how--couture.how--enhanced .how__steps h3{font-size:.76rem;line-height:1.12;margin:0 0 4px}
+ .how--couture.how--enhanced .how__steps p{font-size:.66rem;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+ .how--couture.how--enhanced .how__foot{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+ .how--couture.how--enhanced .how__foot p{display:none}
+ .how--couture.how--enhanced .cta-row{width:100%;margin:0;flex-wrap:nowrap;gap:6px}
+ .how--couture.how--enhanced .btn{min-height:42px;padding:0 9px;font-size:.61rem;flex:1}
+}
+@media(max-height:680px) and (max-width:600px){
+ .how--couture.how--enhanced .how__intro{top:65px}
+ .how--couture.how--enhanced .how__intro .lede{display:none}
+ .how--couture.how--enhanced .how__steps span{font-size:1.1rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .how--couture .how__video{display:none}
+ .how--couture .how__steps li{transform:none!important;opacity:1!important}
+}
+
+/* The section exposes its own CTAs; keep them clear of the floating contact bubble. */
+body.is-how-visible #floatCta{visibility:hidden!important;opacity:0;pointer-events:none}

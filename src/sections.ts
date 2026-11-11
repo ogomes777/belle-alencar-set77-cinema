@@ -4,6 +4,7 @@
  * e contagens por ocasião do catálogo demonstrativo.
  */
 import './styles/sections.css';
+import './styles/how-film.css';
 import { $$ } from './core/dom';
 
 import { DEMO_CATALOG } from './commerce/catalog.demo';

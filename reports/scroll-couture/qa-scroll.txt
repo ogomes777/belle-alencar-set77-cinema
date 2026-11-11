@@ -1,0 +1,6 @@
+360 forward/back 0.24537 3.640365 0.659195 {"overflow":false,"interactive":true,"cards":4,"src":"http://127.0.0.1:5199/media/belle-scroll-mobile.mp4"}
+390 forward/back 0.244184 3.639268 0.655124 {"overflow":false,"interactive":true,"cards":4,"src":"http://127.0.0.1:5199/media/belle-scroll-mobile.mp4"}
+768 forward/back 0.244906 3.640181 0.658507 {"overflow":false,"interactive":true,"cards":4,"src":"http://127.0.0.1:5199/media/belle-scroll-desktop.mp4"}
+1024 forward/back 0.243374 3.639569 0.656231 {"overflow":false,"interactive":true,"cards":4,"src":"http://127.0.0.1:5199/media/belle-scroll-desktop.mp4"}
+1440 forward/back 0.244977 3.640209 0.658613 {"overflow":false,"interactive":true,"cards":4,"src":"http://127.0.0.1:5199/media/belle-scroll-desktop.mp4"}
+reduced-motion fallback PASS
