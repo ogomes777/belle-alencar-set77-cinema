@@ -34,6 +34,9 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   let active=false;
   let disposed=false;
   let entries:Entry[]=[];
+  const shown=new WeakSet<HTMLElement>();
+  const handoff=section.querySelector<HTMLElement>('.collection__handoff');
+  let storyTrigger:ScrollTrigger|null=null;
   let trigger:ScrollTrigger|null=null;
   let mutation:MutationObserver|null=null;
   let resize:ResizeObserver|null=null;
@@ -44,6 +47,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     if(entry.finished)return;
     entry.finished=true;
     entry.progress=1;
+    shown.add(entry.element);
     entry.element.classList.remove('is-collection-staged');
     entry.element.classList.add('is-collection-revealed');
     entry.element.style.setProperty('--cr-veil','0');
@@ -103,7 +107,8 @@ export function initCatalogScrollReveal(director:Director):()=>void {
       const direction=(rowSibling%2===0)?-1:1;
       const entry:Entry={element,top,offset:rowSibling*(window.innerWidth<=820?9:21),
         direction,progress:0,finished:false};
-      if(r.top<=window.innerHeight*.73||element.contains(document.activeElement)){
+      if(shown.has(element)||r.top<=window.innerHeight*.73||element.contains(document.activeElement)){
+        shown.add(element);
         entry.finished=true;entry.progress=1;
         element.classList.add('is-collection-revealed');
         element.style.setProperty('--cr-veil','0');
@@ -118,6 +123,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
       return entry;
     });
     update();
+    updateStory();
   }
 
   function scheduleMeasure(){
@@ -140,9 +146,33 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     }
   }
 
+  function updateStory(){
+    if(!active || document.hidden)return;
+    const h=window.innerHeight;
+    const rect=section!.getBoundingClientRect();
+    const head=clamp((h*.94-rect.top)/Math.max(190,h*.48));
+    const handoffRect=handoff?.getBoundingClientRect();
+    const bridge=handoffRect
+      ? clamp((h*.88-handoffRect.top)/Math.max(180,h*.57))
+      : 1;
+    section!.style.setProperty('--collection-copy',head.toFixed(4));
+    section!.style.setProperty('--collection-bridge',bridge.toFixed(4));
+  }
+
   function setup(){
     if(active||disposed||reduced.matches||director.get()==='essential')return;
     active=true;
+    updateStory();
+    section!.classList.add('is-cine-story');
+    storyTrigger=ScrollTrigger.create({
+      trigger:section!,
+      start:'top bottom',
+      end:'bottom top',
+      onUpdate:updateStory,
+      onEnter:updateStory,
+      onEnterBack:updateStory,
+      onRefresh:updateStory,
+    });
     grid!.classList.add('is-cine-scroll');
     measure();
     trigger=ScrollTrigger.create({
@@ -174,8 +204,8 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     const entry=entries.find(item=>item.element===card);
     if(entry)finish(entry);
   }
-  function onVisibility(){if(!document.hidden){rescueVisible();update();}}
-  function onPageShow(e:PageTransitionEvent){if(e.persisted){rescueVisible();update();}}
+  function onVisibility(){if(!document.hidden){rescueVisible();update();updateStory();}}
+  function onPageShow(e:PageTransitionEvent){if(e.persisted){rescueVisible();update();updateStory();}}
 
   function teardown(){
     if(!active)return;
@@ -184,6 +214,10 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     if(visibleRescue)window.clearTimeout(visibleRescue);
     pending=0;
     trigger?.kill();trigger=null;
+    storyTrigger?.kill();storyTrigger=null;
+    section!.classList.remove('is-cine-story');
+    section!.style.removeProperty('--collection-copy');
+    section!.style.removeProperty('--collection-bridge');
     mutation?.disconnect();mutation=null;
     resize?.disconnect();resize=null;
     grid!.removeEventListener('focusin',onFocus);

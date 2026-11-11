@@ -9,6 +9,7 @@ import './styles/film.css';
 import './styles/luxe-glass.css';
 import './styles/header-glass.css';
 import './styles/search-atelier.css';
+import './styles/catalog-couture-v17.css';
 import { mountMonograms } from './shell/monogram';
 import { initIntro } from './shell/intro';
 import { initHeader } from './shell/header';

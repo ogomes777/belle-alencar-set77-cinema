@@ -80,3 +80,85 @@
 
 /* The section exposes its own CTAs; keep them clear of the floating contact bubble. */
 body.is-how-visible #floatCta{visibility:hidden!important;opacity:0;pointer-events:none}
+
+/* V17 · MASTER-FAITHFUL VIDEO PRESENTATION
+ * Existing MP4 sources are 1.7 MB desktop / 616 KB mobile. Styling cannot
+ * synthesize detail absent in the original encode. Avoid washing out pixels.
+ */
+.how--couture.how--enhanced .how__poster,
+.how--couture.how--enhanced .how__video {
+  filter:contrast(1.065) saturate(1.055);
+  image-rendering:auto;
+}
+.how--couture.how--enhanced .how__visual::after {
+  background:linear-gradient(90deg,
+    rgba(249,246,240,.70) 0%,
+    rgba(249,246,240,.35) 23%,
+    rgba(249,246,240,.065) 54%,
+    rgba(249,246,240,.025) 100%);
+}
+.how--couture.how--enhanced .how__intro .eyebrow,
+.how--couture.how--enhanced .how__intro .display,
+.how--couture.how--enhanced .how__intro .lede {
+  opacity:calc(.15 + var(--how-title,1) * .85);
+  transform:translate3d(0,calc((1 - var(--how-title,1))*22px),0);
+  clip-path:inset(0 calc((1 - var(--how-title,1))*28%) 0 0);
+}
+.how--couture.how--enhanced .how__intro .display {
+  transform:translate3d(calc((1 - var(--how-title,1))*-18px),calc((1 - var(--how-title,1))*15px),0);
+}
+/* The four service cards are editorial glass, not generic rectangles. */
+.how--couture .how__steps li {
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+  padding:clamp(17px,2vw,26px);
+  border:1px solid rgba(174,139,96,.32);
+  background:linear-gradient(143deg,rgba(255,252,245,.90),rgba(249,242,230,.77) 58%,rgba(243,230,211,.76));
+  box-shadow:0 24px 42px -31px rgba(62,43,23,.29),inset 0 1px 0 rgba(255,255,255,.85);
+  -webkit-backdrop-filter:blur(9px) saturate(1.2);
+  backdrop-filter:blur(9px) saturate(1.2);
+  isolation:isolate;
+}
+.how--couture .how__steps li::before {
+  content:"";position:absolute;left:17px;right:17px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(194,148,81,.85),transparent);
+  pointer-events:none;
+}
+.how--couture .how__steps li::after {
+  content:"";position:absolute;width:140px;height:140px;right:-69px;top:-76px;
+  border:1px solid rgba(175,137,93,.17);border-radius:50%;pointer-events:none;
+  box-shadow:0 0 0 21px rgba(205,168,114,.035),0 0 0 50px rgba(205,168,114,.022);
+}
+.how--couture .how__steps li span {
+  font-style:italic;letter-spacing:-.045em;color:#937043;
+}
+.how--couture .how__steps li h3 {color:#302720;letter-spacing:-.025em;line-height:1.2;}
+.how--couture .how__steps li p {color:#655648;}
+@media(hover:hover) and (pointer:fine){
+  .how--couture .how__steps li{transition:background-color .35s ease,box-shadow .35s ease,border-color .35s ease;}
+  .how--couture .how__steps li:hover{
+    border-color:rgba(175,130,72,.65);
+    box-shadow:0 30px 55px -32px rgba(62,43,23,.35),inset 0 1px 0 rgba(255,255,255,.92);
+  }
+}
+@media(max-width:600px){
+  .how--couture .how__steps li{border-radius:12px;}
+  .how--couture.how--enhanced .how__steps li{padding:11px 12px;}
+  .how--couture.how--enhanced .how__visual::after{
+    background:linear-gradient(180deg,rgba(249,246,240,.30) 0%,rgba(249,246,240,.11) 43%,rgba(249,246,240,.04) 100%);
+  }
+  .how--couture.how--enhanced .how__intro{
+    border-radius:16px;
+    padding:8px 10px 10px;
+    background:linear-gradient(90deg,rgba(249,246,240,.40),rgba(249,246,240,0));
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .how--couture .how__steps li{backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .how--couture .how__intro .display,
+  .how--couture .how__intro .eyebrow,
+  .how--couture .how__intro .lede{
+    opacity:1!important;clip-path:none!important;transform:none!important;
+  }
+}

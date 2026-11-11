@@ -14,7 +14,9 @@ type Scene = { selector:string; motif:Motif; targets:string[]; };
 export const BELLE_MOTION_SCENES: readonly Scene[] = [
   {selector:'#passarela', motif:'curtain', targets:['.runway__intro','.runway__tag','.runway__controls']},
   {selector:'#ocasioes', motif:'columns', targets:['.sec-head']},
-  {selector:'#colecao', motif:'sweep', targets:['.section-head','.catalog']},
+  // Collection V17 owns a continuous, scroll-synchronized editorial entrance.
+  // Do not put a second one-shot opacity transition over live commerce cards.
+
   {selector:'#como-comprar', motif:'typing', targets:['.sec-head','.how__steps li','.how__trust','.cta-row']},
   {selector:'#lojas', motif:'iris', targets:['.section-head','.store-card']},
   {selector:'#atendimento', motif:'split', targets:['.concierge__media','.concierge__body']},

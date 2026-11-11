@@ -40,6 +40,9 @@ export function initHowFilm(director: Director): () => void {
   const loadMedia = () => {
     if (observed || !canScrub() || director.get() === 'essential') return;
     observed = true;
+    // A video under 2 MB can buffer when the chapter approaches; do not
+    // aggressively fetch it during the first hero's LCP.
+    video.preload = 'auto';
     video.src = matchMedia('(max-width: 699px)').matches
       ? '/media/belle-scroll-mobile.mp4'
       : '/media/belle-scroll-desktop.mp4';
@@ -67,6 +70,8 @@ export function initHowFilm(director: Director): () => void {
     lastProgress = progress;
 
     // A passarela tem primazia até o tecido encostar na câmera.
+    // Word-mask / editorial reveal follows the same scroll progress as video.
+    section.style.setProperty('--how-title',String(smooth(0.0,0.19,progress)));
     section.style.setProperty('--how-intro', String(1 - smooth(0.24, 0.50, progress)));
     section.style.setProperty('--how-wash', String(smooth(0.75, 0.94, progress)));
     section.style.setProperty('--how-bottom', String(smooth(0.72, 0.86, progress)));
@@ -105,7 +110,7 @@ export function initHowFilm(director: Director): () => void {
     enhanced = false;
     bottom.inert = false;
     section.classList.remove('how--enhanced', 'how--interactive', 'how--video-ready');
-    for (const key of ['--how-intro', '--how-wash', '--how-bottom']) section.style.removeProperty(key);
+    for (const key of ['--how-title', '--how-intro', '--how-wash', '--how-bottom']) section.style.removeProperty(key);
     cards.forEach(card => card.style.removeProperty('--how-card'));
     lastProgress = -1;
     seeking = false;
