@@ -64,6 +64,15 @@ try{
     await round.locator('[data-occ-next]').click();
     await page.waitForFunction(()=>document.querySelector('.occ-round__stage')?.dataset.activeIndex==='1',null,{timeout:6000});
     check((await round.locator('.occ-card.is-active').getAttribute('data-occasion'))==='noite',width+': next arrow selects evening');
+    // Old V11 failure: .occ-card__arrival was faded to .22 for ~0.9s
+    // whenever a new active model stepped forward. Sample during that step.
+    check(await round.locator('.occ-card').evaluateAll(cards=>cards.every(card=>{
+      const selectors=['.occ-card__arrival','.occ-card__portrait','.occ-card__model'];
+      return selectors.every(selector=>{
+        const el=card.querySelector(selector);
+        return !!el && Number.parseFloat(getComputedStyle(el).opacity)>=.99;
+      });
+    })),width+': model + arrival always retain full opacity during active transition');
     await page.waitForFunction(()=>document.querySelector('[data-occ-counter]')?.textContent?.trim()==='02 / 03',null,{timeout:6000});
     check(await round.locator('.occ-card a[data-filter-occasion][tabindex="0"]').count()===1,width+': only active CTA is in keyboard sequence');
     await round.locator('[data-occ-prev]').click();
