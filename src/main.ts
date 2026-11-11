@@ -16,6 +16,7 @@ import { initDirector } from './shell/director';
 import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
+import { initHowFilm } from './how-film';
 import { initMotionDirector } from './motion/director';
 
 
@@ -26,6 +27,7 @@ initCommerce();
 initSections();
 initMotionDirector();
 const director = initDirector();
+initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
 // A coleção contém peças renderizadas dinamicamente. O módulo de movimento
 // só carrega quando o catálogo se aproxima, evitando custo no hero e na
 // passarela. Sem GSAP, o catálogo continua funcional e totalmente visível.
