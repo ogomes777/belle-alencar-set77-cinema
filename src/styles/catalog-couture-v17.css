@@ -119,7 +119,7 @@
    without clipping the sticky filters or inserting an empty beige block. */
 #colecao .collection__handoff{
   --handoff-base:#e8f0f1;
-  width:calc(100% + var(--gutter)*2);
+  width:calc(100% + var(--gutter) + var(--gutter));
   margin:clamp(20px,3vw,44px) calc(-1 * var(--gutter)) 0;
   position:relative;
   z-index:1;
@@ -189,7 +189,7 @@
   #colecao .pcard__media{border-radius:12px;}
   #colecao .pcard__info{padding:12px 11px 14px;}
   #colecao .pcard__title{font-size:1.28rem;}
-  #colecao .pcard__badge{font-size:.52rem;}
+  #colecao .pcard .badge{font-size:.52rem;}
   #colecao .collection__handoff{padding-top:26px;padding-bottom:54px;min-height:225px;}
   #colecao .collection__handoff h2{font-size:clamp(2.1rem,7.7vw,3.85rem);}
 }
