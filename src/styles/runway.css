@@ -91,3 +91,53 @@ body.is-runway-visible #floatCta {visibility:hidden;opacity:0;pointer-events:non
 
 .runway[data-media=products] .runway__fallback-note{display:inline;}
 .runway[data-media=products] .runway__reference-note{display:none;}
+
+
+/* SET77 · Belle | Six coordinated looks, three product cards per look.
+   Style the original depth-stage, never replace its measured camera motion. */
+.runway {
+  background:#fcfaf6;
+  color:#29241f;
+}
+.runway__stage {
+  background:
+    radial-gradient(ellipse 58% 68% at 65% 43%,rgba(251,247,238,.92),transparent 85%),
+    linear-gradient(110deg,#ece4d7 0%,#f5f0e7 48%,#ede5d9 100%);
+}
+.runway__stage::after {
+  content:"";position:absolute;z-index:0;inset:auto 0 0;
+  height:17%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(198,177,145,.09));
+}
+.runway__rail,.runway__card { background:#f7f2e9; }
+.runway__card:nth-child(even) { background:#fdfaf5; }
+.runway__card {border-left:1px solid rgba(159,133,94,.12);border-bottom:1px solid rgba(159,133,94,.16);}
+.runway__card h3 { color:#29241f; }
+.runway__card>span,.runway__meta>span,.runway__hint,.runway__eyebrow,.runway__media-note { color:#736859; }
+.runway__intro h2 {font-family:var(--serif);font-size:clamp(23px,2.35vw,36px);font-weight:400;letter-spacing:-.025em;text-transform:none;white-space:normal;}
+.runway__intro {max-width:310px;}
+.runway__styleline {margin:8px 0 4px;color:#6c604f;font-size:10px;letter-spacing:.1em;text-transform:uppercase;}
+.runway__shop { color:#342a21;border-color:#a3885c;min-height:44px; }
+.runway__controls button { border-color:#b9a37f; }
+.runway__controls button:hover { background:#f9f3e8; }
+.runway__model--pair .runway__pair {position:relative;display:block;width:100%;height:100%;}
+.runway__pair img {position:absolute;left:50%;transform:translateX(-50%);object-fit:contain;max-width:none;filter:drop-shadow(0 16px 18px rgba(60,45,30,.13));pointer-events:none;}
+.runway__pair-top {top:17%;width:83%;height:34%;}
+.runway__pair-bottom {top:42%;width:91%;height:51%;}
+.runway__model--portrait>img {object-fit:contain;width:100%;height:100%;}
+.runway__model--pair::before {bottom:1%;}
+.runway__fav[aria-pressed=true] svg {fill:#c7a477;stroke:#9c7953;}
+.runway__model {backface-visibility:hidden;}
+@media(max-width:820px){
+ .runway__intro h2 {font-size:24px;}
+ .runway__styleline {font-size:9px;margin-top:3px;max-width:170px;line-height:1.35;}
+ .runway__tag {bottom:45px;}
+ .runway__card {padding:10px 9px;}
+ .runway__meta h3 {font-size:9px;letter-spacing:.035em;line-height:1.4;}
+ .runway__meta>span {font-size:9px;}
+ .runway__shop {min-height:42px;}
+ .runway__media-note {top:68px;}
+}
+@media(prefers-reduced-motion:reduce){
+ .runway__model,.runway__card,.runway__pair img {transition:none!important;}
+}
