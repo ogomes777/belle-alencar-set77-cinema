@@ -27,7 +27,7 @@ try{
   // CSS-loaded and initial width transition must have settled before testing geometry.
   await page.waitForTimeout(800);
   const rect=await header.boundingBox();
-  if(!rect||rect.left < -1||rect.right > width+1) {
+  if(!rect||rect.x < -1||rect.x + rect.width > width+1) {
     console.log('HEADER GEOMETRY DIAGNOSTIC',JSON.stringify(await header.evaluate(el=>{
       const cs=getComputedStyle(el),r=el.getBoundingClientRect();
       return {rect:{left:r.left,right:r.right,width:r.width},viewport:innerWidth,
@@ -35,7 +35,7 @@ try{
         transform:cs.transform,minWidth:cs.minWidth,overflow:cs.overflow};
     })));
   }
-  check(rect&&rect.left>=-1&&rect.right<=width+1,width+': floating header fits the viewport');
+  check(rect&&rect.x>=-1&&rect.x+rect.width<=width+1,width+': floating header fits the viewport');
   check(await header.evaluate(h=>getComputedStyle(h).borderRadius!=='0px'),width+': glass capsule has rounded corners');
   check(await header.evaluate(h=>getComputedStyle(h).position==='fixed'),width+': app-like header stays fixed');
   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),width+': no horizontal overflow at start');
@@ -51,7 +51,7 @@ try{
     await toggle.click();
     check(await toggle.getAttribute('aria-expanded')==='true'&&await page.locator('#belleMenuPanel').isVisible(),width+': glass navigation opens');
     const panel=await page.locator('#belleMenuPanel').boundingBox();
-    check(panel&&panel.left>=-1&&panel.right<=width+1,width+': mobile menu stays within safe viewport');
+    check(panel&&panel.x>=-1&&panel.x+panel.width<=width+1,width+': mobile menu stays within safe viewport');
     await page.keyboard.press('Escape');
     check(await toggle.getAttribute('aria-expanded')==='false'&&await page.locator('#belleMenuPanel').isHidden(),width+': Escape closes menu');
     await toggle.click();
