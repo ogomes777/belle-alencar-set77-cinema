@@ -21,6 +21,15 @@ for(const width of [360,390,768,1440]) {
  await page.waitForFunction(()=>document.body.classList.contains('is-runway-visible'));
  check(await page.locator('#floatCta').isHidden(),`${width}: contact CTA does not obscure product rail`);
  check(await page.locator('.runway__model').count()===6,`${width}: six depth layers`);
+ check(await page.evaluate(()=>
+   [...document.querySelectorAll('.runway__model')].every((model,index)=>{
+     if(model.classList.contains('runway__model--portrait'))return true;
+     const stageProducts=[...model.querySelectorAll('.runway__ensemble-piece')].map(img=>img.dataset.productId);
+     const cardProducts=[...document.querySelectorAll('.runway__card')].slice(index*3,index*3+3).map(card=>card.dataset.product);
+     return stageProducts.length===3 &&
+       stageProducts.every((id,slot)=>id===cardProducts[slot]);
+   })
+ ),`${width}: each stage preview uses the exact same three catalog IDs as its rail cards`);
  check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${width}: no horizontal overflow`);
  check(await page.evaluate(()=>['storeButton','searchButton','bagButton'].every(id=>{const r=document.getElementById(id).getBoundingClientRect();return r.width>=40&&r.right<=innerWidth})),`${width}: store/search/bag usable`);
  await page.click('[data-runway-next]');
