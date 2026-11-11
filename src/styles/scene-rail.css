@@ -22,3 +22,18 @@ html.scene-rail-viewer .pv__backdrop{background:rgba(242,236,226,.2);backdrop-fi
  .roomrail__prev,.roomrail__next{min-width:31px;font-size:18px!important}
 }
 @media(prefers-reduced-motion:reduce){.roomrail,.roomrail__controls button{transition:none!important;animation:none!important}}
+
+.roomrail__detail{position:absolute;right:0;bottom:calc(100% + 12px);width:min(340px,calc(100vw - 28px));padding:21px 22px;background:rgba(250,247,239,.94);border:1px solid #ceb892;box-shadow:0 24px 50px rgba(45,30,15,.16);backdrop-filter:blur(14px);color:#403127}
+.roomrail__detail[hidden]{display:none!important}
+.roomrail__eyebrow{font-size:8px;letter-spacing:.17em;color:#9b7d4a;font-weight:700;margin:0 0 10px}
+.roomrail__title{font:400 35px/1 var(--serif);margin:0 0 10px}
+.roomrail__description{font-size:11px;line-height:1.65;color:#756956;margin:0 0 17px}
+.roomrail__size-label{display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
+.roomrail__size{display:block;width:100%;margin:7px 0 15px;border:1px solid #cbb89b;padding:10px 12px;background:#fffcf5;color:#453526;font-size:13px;min-height:42px}
+.roomrail__actions{display:flex;gap:7px}
+.roomrail__actions button{flex:1 1 0;border:1px solid #392d22;min-height:45px;padding:10px;font-size:11px;background:#392d22;color:#fff}
+.roomrail__actions .roomrail__close{background:transparent;border-color:#baa485;color:#473529}
+.roomrail__actions .roomrail__add[disabled]{opacity:.6;cursor:wait}
+.roomrail__error{font-size:11px;color:#9d372e;margin:10px 0 0}
+.roomrail__origin{pointer-events:none}
+@media(max-width:899px){.roomrail__detail{right:0;bottom:auto;top:calc(100% + 10px);width:min(350px,100%);padding:15px}.roomrail__title{font-size:28px}.roomrail__controls{max-width:100%}}
