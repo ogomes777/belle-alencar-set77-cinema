@@ -397,3 +397,8 @@
   .site-header .belle-menu-panel,.site-header .belle-menu-panel__links a,
   .site-header .belle-menu-line {animation:none!important;transition:none!important;}
 }
+
+/* Floating geometry needs a little extra anchor clearance. The native
+ * sticky filter bar remains below the capsule, not behind its icons. */
+html {scroll-padding-top:calc(var(--header-h) + 23px);}
+#colecao .cat-bar {top:calc(var(--header-h) + 16px);}
