@@ -8,6 +8,7 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { archFrame, archPanel, box, contact, plane, spot, type Kit } from './kit';
 import { labelTexture } from '../textures';
 import { DEMO_CATALOG, productById } from '../../commerce/catalog.demo';
+import type { Product } from '../../commerce/types';
 import { DISPLAY_HEIGHT, disposeProductDisplay, productDisplay, sceneProduct, supportedProduct } from './product';
 import type { Tier } from '../../core/tier';
 
@@ -23,11 +24,23 @@ export interface BoutiqueHandle {
   update(dt: number, ctx: { camera: THREE.Camera; camVel: number; pointer: THREE.Vector2 | null; pointerVel: number; archFocus: number; fittingActive: boolean; heroOnRail: boolean; sweep: number }): void;
   mirror: Reflector | null;
   setProduct(productId: string | null): void;
+  browse(dir:number):Product|null;
+  activeProduct():Product|null;
+  pick(ndc:THREE.Vector2,camera:THREE.Camera):Product|null;
+  select(id:string|null):void;
+  hideProduct(id:string,hide:boolean):void;
+  productPosition(id:string):{position:THREE.Vector3;width:number;height:number}|null;
+  cameraShift():number;
+  bagPosition():THREE.Vector3;
+  bagWidth():number;
+  impactBag():void;
+  bagHit(ndc:THREE.Vector2,camera:THREE.Camera):boolean;
 }
 
 interface Swing {
   ax: number; az: number; vx: number; vz: number;
-  hook: THREE.Vector3; yaw: number; mesh: THREE.Object3D; clipped: boolean;
+  hook:THREE.Vector3; yaw:number; mesh:THREE.Object3D; clipped:boolean;
+  product:Product;side:number;baseZ:number;focus:number;focusV:number;slide:number;
 }
 
 export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle {
@@ -123,7 +136,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
 
   // Canonical garments only. Jewelry and bags remain on their own displays.
   const clothing=DEMO_CATALOG.filter(product=>!['bolsas','pulseiras','aneis'].includes(product.category));
-  const perRail = tier === 'cinema' ? 15 : 9;
+  const perRail = 16;
   const hangerGeo = new THREE.TorusGeometry(0.17, 0.006, 5, 24, Math.PI * 0.62);
   hangerGeo.rotateZ(Math.PI * 0.19);
   const hookGeo = new THREE.TorusGeometry(0.025, 0.004, 5, 12, Math.PI * 1.3);
@@ -136,8 +149,11 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   const hidden=new THREE.Matrix4().makeScale(0,0,0);
   for(let i=0;i<perRail*2+1;i++){clipBars.setMatrixAt(i,hidden);clipPins.setMatrixAt(i*2,hidden);clipPins.setMatrixAt(i*2+1,hidden);}
   g.add(clipBars,clipPins);
-  const swings: Swing[] = [];
-  let hi = 0;
+  const swings:Swing[]=[];
+  const rightSwings:Swing[]=[];
+  let focusIndex=4,hoverId:string|null=null,selectedId:string|null=null;
+  const raycaster=new THREE.Raycaster();
+  let hi=0;
   for (const side of [-1, 1]) {
     for (let k = 0; k < perRail; k++) {
       const z = RAIL.z0 - 0.25 - (k / (perRail - 1)) * (RAIL.z0 - RAIL.z1 - 0.5);
@@ -147,8 +163,8 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       const display=productDisplay(product,DISPLAY_HEIGHT[product.category],'top');
       display.position.y=-.22; pivot.add(display); g.add(pivot);
       const clipped=product.category==='saias'||product.category==='calcas';
-      swings.push({ ax:0,az:0,vx:0,vz:0,hook:new THREE.Vector3(side*RAIL.x,RAIL.y,z),yaw:side*-Math.PI/2,mesh:pivot,clipped });
-      hi++;
+      const swing:Swing={ax:0,az:0,vx:0,vz:0,hook:new THREE.Vector3(side*RAIL.x,RAIL.y,z),yaw:side*-Math.PI/2,mesh:pivot,clipped,product,side,baseZ:z,focus:0,focusV:0,slide:0};
+      swings.push(swing);if(side===1)rightSwings.push(swing);hi++;
     }
   }
   hangers.count = hooks.count = clipBars.count = hi + 1;
@@ -192,6 +208,30 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     hooks.setMatrixAt(heroHangerIndex, out);
   };
   writeHero();
+
+
+  // Loja única: saco de couro geométrico 3D no piso (não overlay duplicado).
+  const bag=new THREE.Group();bag.name='sacola-no-piso';bag.userData.dynamic=true;bag.position.set(2.05,0,-6.05);
+  const leather=new THREE.MeshStandardMaterial({color:'#e8ddc9',roughness:.53,metalness:.04,side:THREE.DoubleSide});
+  const dark=new THREE.MeshStandardMaterial({color:'#493b2d',roughness:.94});
+  const body=new THREE.Mesh(new THREE.BoxGeometry(.49,.51,.25),leather);body.position.y=.31;body.castShadow=true;bag.add(body);
+  const mouth=new THREE.Mesh(new THREE.PlaneGeometry(.42,.18),dark);mouth.rotation.x=-Math.PI/2;mouth.position.y=.571;bag.add(mouth);
+  const rim=new THREE.Mesh(new THREE.TorusGeometry(.243,.013,8,36,Math.PI),kit.brass);rim.rotation.x=Math.PI/2;rim.scale.y=.47;rim.position.set(0,.572,.015);bag.add(rim);
+  for(const side of [-1,1]){
+    const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.17,.55,side*.078),new THREE.Vector3(-.13,.80,side*.078),new THREE.Vector3(.13,.80,side*.078),new THREE.Vector3(.17,.55,side*.078)]);
+    bag.add(new THREE.Mesh(new THREE.TubeGeometry(curve,20,.012,7,false),leather));
+  }
+  bag.add(box(.075,.055,.015,kit.brass,0,.44,.135));g.add(bag);g.add(contact(kit,.8,.48,2.05,-6.05));
+  let bagPulse=0;
+  function swingFor(id:string){return rightSwings.find(s=>s.product.id===id)||null;}
+  function hitRight(ndc:THREE.Vector2,camera:THREE.Camera):Swing|null{
+    raycaster.setFromCamera(ndc,camera);
+    for(const hit of raycaster.intersectObjects(rightSwings.map(s=>s.mesh),true)){
+      let node:THREE.Object3D|null=hit.object;
+      while(node&&node!==g){const found=rightSwings.find(s=>s.mesh===node);if(found)return found;node=node.parent;}
+    }
+    return null;
+  }
 
   // pódio central
   const podium = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.1, 0.2, 64), kit.travertine);
@@ -321,19 +361,39 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   // atualização: molas dos cabides + foco dos arcos + espelho
   const proj = new THREE.Vector3();
   let t = 0;
-  let heroKicked = false;
+  let heroKicked=false;
   return {
+    browse(dir){focusIndex=THREE.MathUtils.clamp(focusIndex+Math.sign(dir),0,rightSwings.length-1);hoverId=rightSwings[focusIndex]?.product.id??null;return rightSwings[focusIndex]?.product??null;},
+    activeProduct(){return rightSwings[focusIndex]?.product??null;},
+    pick(ndc,camera){const hit=hitRight(ndc,camera);hoverId=hit?.product.id??null;if(hit)focusIndex=rightSwings.indexOf(hit);return hit?.product??null;},
+    select(id){selectedId=id;},
+    hideProduct(id,hide){const s=swingFor(id);if(s)s.mesh.visible=!hide;},
+    productPosition(id){const s=swingFor(id);if(!s)return null;const p=s.mesh.getWorldPosition(new THREE.Vector3());p.y-=.22;return {position:p,width:(s.mesh.children[0]?.userData.displayWidth as number)||.65,height:DISPLAY_HEIGHT[s.product.category]};},
+    cameraShift(){return (focusIndex-(rightSwings.length-1)/2)*.16;},
+    bagPosition(){bag.updateWorldMatrix(true,false);return bag.localToWorld(new THREE.Vector3(0,.58,.02));},
+    bagWidth(){return .35;},
+    impactBag(){bagPulse=1;},
+    bagHit(ndc,camera){raycaster.setFromCamera(ndc,camera);return raycaster.intersectObject(bag,true).length>0;},
     group: g,
     mirror,
     setProduct,
     update(dt, ctx) {
       fittingDisplay.visible=!!fittingProductId&&ctx.fittingActive;
-      t += dt;
-      const k = 26; // rigidez da mola
+      t+=dt;
+      if(bagPulse>0){bagPulse=Math.max(0,bagPulse-dt*1.8);bag.rotation.z=Math.sin((1-bagPulse)*20)*.055*bagPulse;bag.scale.y=1+Math.sin((1-bagPulse)*22)*.04*bagPulse;}
+      const k=26; // rigidez da mola
       const c = 2.6; // amortecimento
       const camPos = (ctx.camera as THREE.PerspectiveCamera).position;
-      swings.forEach((s, i) => {
-        const dx = camPos.x - s.hook.x;
+      swings.forEach((s,i)=>{
+        const right=s.side===1;
+        const goal=right&&s.product.id===selectedId?1:right&&s.product.id===hoverId?.25:right&&s===rightSwings[focusIndex]?.13:0;
+        s.focusV+=(goal-s.focus)*38*dt;s.focusV*=Math.exp(-12*dt);s.focus=THREE.MathUtils.clamp(s.focus+s.focusV*dt,0,1.04);
+        const slideGoal=right?THREE.MathUtils.clamp(((rightSwings.length-1)/2-focusIndex)*.035,-.28,.28):0;
+        s.slide+=(slideGoal-s.slide)*Math.min(1,dt*6);
+        s.hook.set(s.side*RAIL.x-(right?.9*s.focus:0),RAIL.y+s.focus*.1,THREE.MathUtils.clamp(s.baseZ+s.slide,RAIL.z1+.09,RAIL.z0-.08));
+        const face=right?Math.atan2(camPos.x-s.hook.x,camPos.z-s.hook.z):s.side*-Math.PI/2;
+        s.yaw+=((s.side*-Math.PI/2)*(1-s.focus)+face*s.focus-s.yaw)*Math.min(1,dt*8);
+        const dx=camPos.x-s.hook.x;
         const dz = camPos.z - s.hook.z;
         const d2 = dx * dx + dz * dz;
         if (d2 < 9 && ctx.camVel > 0.02) {
@@ -350,7 +410,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
           }
         }
         // ar ambiente (respiração quase imperceptível)
-        s.vx += Math.sin(t * 0.7 + i) * 0.002;
+        s.vx+=Math.sin(t*.7+i)*.002;if(right&&s===rightSwings[focusIndex])s.vz+=Math.sin(t*1.1+i)*.008*dt;
         s.vx += (-k * s.ax - c * s.vx) * dt;
         s.vz += (-k * s.az - c * s.vz) * dt;
         s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -0.12, 0.12);
