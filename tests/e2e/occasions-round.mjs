@@ -74,7 +74,9 @@ try{
   const ep=await ess.newPage();
   await ep.addInitScript(()=>sessionStorage.setItem('belle:v4:intro','1'));
   await ep.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
-  await ep.waitForFunction(()=>document.querySelector('[data-occ-round]')?.classList.contains('is-round'));
+  // The carousel is intentionally code-split and mounts only near the section.
+  await ep.locator('#ocasioes').scrollIntoViewIfNeeded();
+  await ep.waitForFunction(()=>document.querySelector('[data-occ-round]')?.classList.contains('is-round'),null,{timeout:10000});
   await ep.evaluate(()=>document.getElementById('directorToggle')?.click());
   await ep.waitForFunction(()=>!document.querySelector('[data-occ-round]')?.classList.contains('is-round'));
   check(await ep.locator('.occ-card [data-filter-occasion]').count()===3,'essential mode restores static accessible occasion cards');
