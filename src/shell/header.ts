@@ -138,7 +138,7 @@ export function initHeader():void {
         else link.removeAttribute('aria-current');
       }
     }
-    const progress=(Math.max(0,Math.min(1,scrollY/maxScroll))*100).toFixed(2)+'%';
+    const progress=Math.max(0,Math.min(1,scrollY/maxScroll)).toFixed(4);
     if(progress!==lastProgress){
       header.style.setProperty('--ba-nav-progress',progress);
       lastProgress=progress;
