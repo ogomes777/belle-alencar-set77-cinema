@@ -6,7 +6,7 @@ try { ({chromium}=require('playwright')); }
 catch { ({chromium}=require('/opt/node-tools/node_modules/playwright')); }
 const browser=await chromium.launch({args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const base=process.env.BASE||'http://127.0.0.1:4173';
-const sceneIds=['passarela','ocasioes','colecao','como-comprar','lojas','atendimento','duvidas'];
+const sceneIds=['passarela','ocasioes','lojas','atendimento','duvidas'];
 let checks=0;
 function check(value,label) {
   if(!value)throw new Error('FAIL '+label);
@@ -22,7 +22,7 @@ try {
     page.on('pageerror',e=>errors.push(e.message));
     await page.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.classList.contains('md-motion'));
-    check(await page.locator('[data-md-scene]').count()===8,width+': eight motion scenes mounted after Looks removal');
+    check(await page.locator('[data-md-scene]').count()===6,width+': six non-scrubbed editorial motion scenes remain');
     const seam=await page.evaluate(()=>{
       const ticker=document.querySelector('.manifesto--ticker .band');
       const runway=document.querySelector('#passarela');
