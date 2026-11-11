@@ -8,14 +8,13 @@
  */
 import '../styles/motion-director.css';
 
-type Motif = 'curtain'|'columns'|'sweep'|'stack'|'typing'|'iris'|'split'|'fold'|'velvet';
+type Motif = 'curtain'|'columns'|'sweep'|'typing'|'iris'|'split'|'fold'|'velvet';
 type Scene = { selector:string; motif:Motif; targets:string[]; };
 
 export const BELLE_MOTION_SCENES: readonly Scene[] = [
   {selector:'#passarela', motif:'curtain', targets:['.runway__intro','.runway__tag','.runway__controls']},
   {selector:'#ocasioes', motif:'columns', targets:['.sec-head']},
   {selector:'#colecao', motif:'sweep', targets:['.section-head','.catalog']},
-  {selector:'#looks', motif:'stack', targets:['.sec-head','.look']},
   {selector:'#como-comprar', motif:'typing', targets:['.sec-head','.how__steps li','.how__trust','.cta-row']},
   {selector:'#lojas', motif:'iris', targets:['.section-head','.store-card']},
   {selector:'#atendimento', motif:'split', targets:['.concierge__media','.concierge__body']},
