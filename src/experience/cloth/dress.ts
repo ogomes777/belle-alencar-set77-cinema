@@ -284,6 +284,26 @@ export class DressRig {
     return this.params;
   }
 
+  /**
+   * Parked garment: reset the world-space cloth vertices AND their previous
+   * Verlet positions to the same clean silhouette as the bodice.
+   * This is essential when the hero returns to the hanger or a deep scroll
+   * jump changes its transform: an old world-space skirt must never remain
+   * at the previous camera location or fold onto itself.
+   */
+  restPose(): void {
+    this.group.updateMatrixWorld(true);
+    const m = this.group.matrixWorld;
+    for (let i = 0; i < this.cloth.count; i++) {
+      const k = i * 3;
+      this.v3.set(this.local[k]!, this.local[k+1]!, this.local[k+2]!).applyMatrix4(m);
+      this.cloth.set(i, this.v3.x, this.v3.y, this.v3.z);
+    }
+    this.acc = 0;
+    this.spin = 0;
+    this.upload();
+  }
+
   /** Avança a simulação. dt em segundos (real). */
   update(dt: number): void {
     this.time += dt;

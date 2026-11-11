@@ -31,6 +31,8 @@ export interface BoutiqueHandle {
   hideProduct(id:string,hide:boolean):void;
   productPosition(id:string):{position:THREE.Vector3;width:number;height:number}|null;
   cameraShift():number;
+  focusPoint():THREE.Vector3;
+  railPosition():{index:number;total:number};
   bagPosition():THREE.Vector3;
   bagWidth():number;
   impactBag():void;
@@ -136,7 +138,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
 
   // Canonical garments only. Jewelry and bags remain on their own displays.
   const clothing=DEMO_CATALOG.filter(product=>!['bolsas','pulseiras','aneis'].includes(product.category));
-  const perRail = 16;
+  const perRail = 16; // 15 roupas por parede + espaço para o vestido protagonista.
   const hangerGeo = new THREE.TorusGeometry(0.17, 0.006, 5, 24, Math.PI * 0.62);
   hangerGeo.rotateZ(Math.PI * 0.19);
   const hookGeo = new THREE.TorusGeometry(0.025, 0.004, 5, 12, Math.PI * 1.3);
@@ -151,22 +153,29 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   g.add(clipBars,clipPins);
   const swings:Swing[]=[];
   const rightSwings:Swing[]=[];
+  const leftSwings:Swing[]=[];
   let focusIndex=4,hoverId:string|null=null,selectedId:string|null=null;
   const raycaster=new THREE.Raycaster();
   let hi=0;
   for (const side of [-1, 1]) {
     for (let k = 0; k < perRail; k++) {
       const z = RAIL.z0 - 0.25 - (k / (perRail - 1)) * (RAIL.z0 - RAIL.z1 - 0.5);
-      if (side === 1 && Math.abs(z - HERO_HANGER.z) < 0.55) continue; // vaga do protagonista
-      const product=clothing[(side<0?k:k+perRail)%clothing.length]!;
+      if (side === -1 && k === perRail-1) continue;
+      if (side === 1 && k === 6) continue; // um único cabide reservado ao protagonista
+      // Order is stable: 15 left + 15 right, every one of the 30 outfits once.
+      const product=clothing[hi]!;
       const pivot=new THREE.Group(); pivot.userData.dynamic=true;
       const display=productDisplay(product,DISPLAY_HEIGHT[product.category],'top');
       display.position.y=-.22; pivot.add(display); g.add(pivot);
       const clipped=product.category==='saias'||product.category==='calcas';
       const swing:Swing={ax:0,az:0,vx:0,vz:0,hook:new THREE.Vector3(side*RAIL.x,RAIL.y,z),yaw:side*-Math.PI/2,mesh:pivot,clipped,product,side,baseZ:z,focus:0,focusV:0,slide:0};
-      swings.push(swing);if(side===1)rightSwings.push(swing);hi++;
+      swings.push(swing);
+      if(side===1)rightSwings.push(swing); else leftSwings.push(swing);
+      hi++;
     }
   }
+  // Start on the right wall. Continuing left enters the other rail in the SAME room.
+  const railSwings=[...rightSwings,...leftSwings];
   hangers.count = hooks.count = clipBars.count = hi + 1;
   clipPins.count=(hi+1)*2;
   // cabide vazio do protagonista (fica na arara quando o vestido sai)
@@ -223,14 +232,25 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   }
   bag.add(box(.075,.055,.015,kit.brass,0,.44,.135));g.add(bag);g.add(contact(kit,.8,.48,2.05,-6.05));
   let bagPulse=0;
-  function swingFor(id:string){return rightSwings.find(s=>s.product.id===id)||null;}
-  function hitRight(ndc:THREE.Vector2,camera:THREE.Camera):Swing|null{
+  function swingFor(id:string){return railSwings.find(s=>s.product.id===id)||null;}
+  function hitRail(ndc:THREE.Vector2,camera:THREE.Camera):Swing|null{
     raycaster.setFromCamera(ndc,camera);
-    for(const hit of raycaster.intersectObjects(rightSwings.map(s=>s.mesh),true)){
+    for(const hit of raycaster.intersectObjects(railSwings.filter(s=>s.mesh.visible).map(s=>s.mesh),true)){
       let node:THREE.Object3D|null=hit.object;
-      while(node&&node!==g){const found=rightSwings.find(s=>s.mesh===node);if(found)return found;node=node.parent;}
+      while(node&&node!==g){const found=railSwings.find(s=>s.mesh===node);if(found)return found;node=node.parent;}
     }
-    return null;
+    // Raycast can miss a very thin 2.5D garment seen at an oblique angle.
+    // Fallback uses the actual projected center and a tight click radius.
+    let best:Swing|null=null,dist=.11;
+    const projected=new THREE.Vector3();
+    for(const swing of railSwings){
+      if(!swing.mesh.visible)continue;
+      swing.mesh.getWorldPosition(projected).project(camera);
+      if(projected.z<0||projected.z>=1)continue;
+      const d=Math.hypot(projected.x-ndc.x,(projected.y-.10)-ndc.y);
+      if(d<dist){best=swing;dist=d;}
+    }
+    return best;
   }
 
   // pódio central
@@ -363,13 +383,30 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   let t = 0;
   let heroKicked=false;
   return {
-    browse(dir){focusIndex=THREE.MathUtils.clamp(focusIndex+Math.sign(dir),0,rightSwings.length-1);hoverId=rightSwings[focusIndex]?.product.id??null;return rightSwings[focusIndex]?.product??null;},
-    activeProduct(){return rightSwings[focusIndex]?.product??null;},
-    pick(ndc,camera){const hit=hitRight(ndc,camera);hoverId=hit?.product.id??null;if(hit)focusIndex=rightSwings.indexOf(hit);return hit?.product??null;},
+    browse(dir){
+      focusIndex=THREE.MathUtils.clamp(focusIndex+Math.sign(dir),0,railSwings.length-1);
+      hoverId=railSwings[focusIndex]?.product.id??null;
+      return railSwings[focusIndex]?.product??null;
+    },
+    activeProduct(){return railSwings[focusIndex]?.product??null;},
+    pick(ndc,camera){
+      const hit=hitRail(ndc,camera);
+      if(hit){hoverId=hit.product.id;focusIndex=railSwings.indexOf(hit);}
+      else hoverId=null;
+      return hit?.product??null;
+    },
+    railPosition(){return {index:focusIndex+1,total:railSwings.length};},
+    focusPoint(){
+      const s=railSwings[focusIndex];
+      return new THREE.Vector3(s?.hook.x??RAIL.x,1.32,s?.hook.z??-6.4);
+    },
     select(id){selectedId=id;},
     hideProduct(id,hide){const s=swingFor(id);if(s)s.mesh.visible=!hide;},
     productPosition(id){const s=swingFor(id);if(!s)return null;const p=s.mesh.getWorldPosition(new THREE.Vector3());p.y-=.22;return {position:p,width:(s.mesh.children[0]?.userData.displayWidth as number)||.65,height:DISPLAY_HEIGHT[s.product.category]};},
-    cameraShift(){return (focusIndex-(rightSwings.length-1)/2)*.16;},
+    cameraShift(){
+      const swing=railSwings[focusIndex];
+      return swing ? THREE.MathUtils.clamp(swing.baseZ+6.4,-3.2,3.2) : 0;
+    },
     bagPosition(){bag.updateWorldMatrix(true,false);return bag.localToWorld(new THREE.Vector3(0,.58,.02));},
     bagWidth(){return .35;},
     impactBag(){bagPulse=1;},
@@ -381,18 +418,26 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       fittingDisplay.visible=!!fittingProductId&&ctx.fittingActive;
       t+=dt;
       if(bagPulse>0){bagPulse=Math.max(0,bagPulse-dt*1.8);bag.rotation.z=Math.sin((1-bagPulse)*20)*.055*bagPulse;bag.scale.y=1+Math.sin((1-bagPulse)*22)*.04*bagPulse;}
-      const k=26; // rigidez da mola
-      const c = 2.6; // amortecimento
+      const k=34; // reactive but stable spring
+      const c = 7.2; // physical damping prevents jitter and stuck twisting
       const camPos = (ctx.camera as THREE.PerspectiveCamera).position;
       swings.forEach((s,i)=>{
-        const right=s.side===1;
-        const goal=right&&s.product.id===selectedId?1:right&&s.product.id===hoverId?.25:right&&s===rightSwings[focusIndex]?.13:0;
-        s.focusV+=(goal-s.focus)*38*dt;s.focusV*=Math.exp(-12*dt);s.focus=THREE.MathUtils.clamp(s.focus+s.focusV*dt,0,1.04);
-        const slideGoal=right?THREE.MathUtils.clamp(((rightSwings.length-1)/2-focusIndex)*.035,-.28,.28):0;
-        s.slide+=(slideGoal-s.slide)*Math.min(1,dt*6);
-        s.hook.set(s.side*RAIL.x-(right?.9*s.focus:0),RAIL.y+s.focus*.1,THREE.MathUtils.clamp(s.baseZ+s.slide,RAIL.z1+.09,RAIL.z0-.08));
-        const face=right?Math.atan2(camPos.x-s.hook.x,camPos.z-s.hook.z):s.side*-Math.PI/2;
-        s.yaw+=((s.side*-Math.PI/2)*(1-s.focus)+face*s.focus-s.yaw)*Math.min(1,dt*8);
+        const isSelected=s.product.id===selectedId;
+        const isHovered=s.product.id===hoverId;
+        const isFocused=s===railSwings[focusIndex];
+        const goal=isSelected?.86:isHovered?.28:isFocused?.17:0;
+        s.focusV+=(goal-s.focus)*46*dt;
+        s.focusV*=Math.exp(-13*dt);
+        s.focus=THREE.MathUtils.clamp(s.focus+s.focusV*dt,0,.88);
+        const active=railSwings[focusIndex];
+        const slideGoal=active?.side===s.side
+          ? THREE.MathUtils.clamp((active.baseZ-s.baseZ)*.035,-.20,.20):0;
+        s.slide+=(slideGoal-s.slide)*Math.min(1,dt*7);
+        s.hook.set(s.side*(RAIL.x-.78*s.focus),RAIL.y+s.focus*.09,
+          THREE.MathUtils.clamp(s.baseZ+s.slide,RAIL.z1+.10,RAIL.z0-.08));
+        const face=Math.atan2(camPos.x-s.hook.x,camPos.z-s.hook.z);
+        const natural=s.side*-Math.PI/2;
+        s.yaw+=(natural*(1-s.focus)+face*s.focus-s.yaw)*Math.min(1,dt*9);
         const dx=camPos.x-s.hook.x;
         const dz = camPos.z - s.hook.z;
         const d2 = dx * dx + dz * dz;
@@ -410,11 +455,15 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
           }
         }
         // ar ambiente (respiração quase imperceptível)
-        s.vx+=Math.sin(t*.7+i)*.002;if(right&&s===rightSwings[focusIndex])s.vz+=Math.sin(t*1.1+i)*.008*dt;
+        // Soft real-room airflow and a stronger but bounded gesture response.
+        s.vx+=Math.sin(t*.88+i*.67)*.018*dt;
+        s.vz+=Math.sin(t*.73+i*.91)*.022*dt;
+        if(isFocused){s.vz+=Math.sin(t*1.9+i)*.09*dt;}
+        if(isHovered){s.vx+=Math.sin(t*2.4+i)*.12*dt;}
         s.vx += (-k * s.ax - c * s.vx) * dt;
         s.vz += (-k * s.az - c * s.vz) * dt;
-        s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -0.12, 0.12);
-        s.az = THREE.MathUtils.clamp(s.az + s.vz * dt, -0.12, 0.12);
+        s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -.19, .19);
+        s.az = THREE.MathUtils.clamp(s.az + s.vz * dt, -.19, .19);
         writeSwing(s, i);
       });
       // cabide vazio balança quando o vestido sai
