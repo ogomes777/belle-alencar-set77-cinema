@@ -12,7 +12,7 @@ export interface MallHandle {
   reflector: Reflector | null;
 }
 
-export function buildMall(kit: Kit, tier: Tier, dpr: number): MallHandle {
+export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = false): MallHandle {
   const g = new THREE.Group();
   g.name = 'mall';
   const W = 16;
@@ -28,7 +28,7 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number): MallHandle {
   g.add(floor);
 
   let reflector: Reflector | null = null;
-  if (tier === 'cinema') {
+  if (tier === 'cinema' && capturePoster) {
     // reflexo planar real sob o piso semitransparente (só no tier CINEMA)
     reflector = new Reflector(new THREE.PlaneGeometry(W, L), {
       clipBias: 0.003,
@@ -41,6 +41,13 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number): MallHandle {
     g.add(reflector);
     floorMat.transparent = true;
     floorMat.opacity = 0.8;
+  }
+
+  if (!reflector) {
+    // Refletores em tempo real duplicam draw calls; piso especular mantém a estética com um passe.
+    floorMat.roughness = 0.17;
+    floorMat.metalness = 0.19;
+    floorMat.envMapIntensity = 1.35;
   }
 
   // teto e sancas de luz

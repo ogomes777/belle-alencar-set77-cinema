@@ -104,7 +104,7 @@ export class World {
     pmrem.dispose();
 
     const kit = createKit();
-    this.mall = buildMall(kit, tier, this.dpr);
+    this.mall = buildMall(kit, tier, this.dpr, !!opts.poster);
     this.facade = buildFacade(kit, tier);
     this.boutique = buildBoutique(kit, tier, this.dpr);
     this.scene.add(this.mall.group, this.facade.group, this.boutique.group);

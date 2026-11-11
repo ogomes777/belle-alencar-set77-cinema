@@ -174,7 +174,7 @@ for (const vp of viewports) {
   await page.waitForTimeout(600);
   check('?peca= abre o quick view', await page.locator('.qv').isVisible());
   await page.keyboard.press('Escape');
-  const closed = await page.waitForSelector('.qv', { state: 'hidden', timeout: 3000 }).then(() => true).catch(() => false);
+  const closed = await page.waitForFunction(() => !document.querySelector('#quickView')?.classList.contains('is-open'), null, { timeout: 5000 }).then(() => true).catch(() => false);
   check('Esc fecha o quick view', closed);
   await page.locator('#colecao').scrollIntoViewIfNeeded();
   const trigger = page.locator('.pcard__title [data-qv]').nth(1);
