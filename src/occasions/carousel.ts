@@ -268,7 +268,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
     enabled=false;
     stopAuto();pointer=null;onscreen=false;
     gsap.killTweensOf(state);
-    gsap.killTweensOf(shell);
+    gsap.killTweensOf(shell!);
     trigger?.kill();trigger=null;
     ro?.disconnect();ro=null;
     local?.abort();local=null;
