@@ -46,7 +46,6 @@ export function initOccasionsCarousel(director:Director):()=>void {
   let lastIndex=-1, timer=0, pauseUntil=0, stageWidth=1, pointer:PointerState|null=null;
   let blockClickUntil=0;
   const state={position:0};
-  let io:IntersectionObserver|null=null;
   let trigger:ScrollTrigger|null=null;
   let local:AbortController|null=null;
   let ro:ResizeObserver|null=null;
@@ -300,6 +299,5 @@ export function initOccasionsCarousel(director:Director):()=>void {
     disposed=true;
     media.removeEventListener('change',onReduce);
     teardown();
-    io?.disconnect();
   };
 }
