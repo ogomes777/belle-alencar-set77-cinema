@@ -1,0 +1,285 @@
+/**
+ * SET77 LABS · BELLE ALENCAR · Round Occasion Carousel V9
+ *
+ * Opt-in enhancement: .occ-grid remains the original usable three-card list
+ * if JavaScript, GSAP, WebGL, reduced-motion, or the cinematic tier is off.
+ * The rotation uses CSS GPU perspective; Three.js keeps the *existing film*.
+ */
+.occ-round {max-width:1320px;margin:0 auto;position:relative;}
+.occ-round__aura {display:none;}
+.occ-round__stage {position:relative;outline-offset:4px;}
+.occ-round__footer {display:none;}
+.occ-card__foil {position:absolute;inset:0;pointer-events:none;z-index:2;}
+
+/* Enhanced carousel: classic editorial card surfaces on a real circular arc. */
+.occ-round.is-round {isolation:isolate;}
+.occ-round.is-round .occ-round__aura {
+  display:block;
+  position:absolute;
+  inset:4% 3% 9%;
+  z-index:-1;
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse 49% 35% at 50% 53%,rgba(176,133,74,.13),transparent 90%),
+    radial-gradient(ellipse 65% 48% at 50% 60%,rgba(225,205,169,.11),transparent 80%);
+  pointer-events:none;
+}
+.occ-round.is-round .occ-round__stage {
+  height:clamp(550px,48vw,665px);
+  perspective:1800px;
+  perspective-origin:50% 45%;
+  overflow:hidden;
+  isolation:isolate;
+  cursor:grab;
+  touch-action:pan-y;
+  user-select:none;
+}
+.occ-round.is-round .occ-round__stage.is-dragging {cursor:grabbing;}
+.occ-round.is-round .occ-grid {
+  position:relative;
+  width:100%;
+  height:100%;
+  max-width:none;
+  display:block;
+  margin:0;
+  padding:0;
+  transform-style:preserve-3d;
+}
+.occ-round.is-round .occ-card {
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:clamp(285px,27vw,358px);
+  height:calc(100% - 62px);
+  min-height:0;
+  margin:0;
+  padding:0;
+  border:1px solid rgba(160,131,91,.18);
+  border-radius:clamp(14px,1.7vw,24px);
+  overflow:hidden;
+  background:#fffdf9;
+  box-shadow:0 18px 55px rgba(67,47,28,.105);
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+  will-change:transform,opacity;
+  transition:box-shadow .45s cubic-bezier(.2,.8,.2,1),border-color .4s;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.occ-round.is-round .occ-card:hover {box-shadow:0 24px 68px rgba(65,45,25,.18);}
+.occ-round.is-round .occ-card.is-active {
+  border-color:rgba(166,129,70,.43);
+  box-shadow:
+    0 28px 78px rgba(64,44,25,.16),
+    0 1px 0 rgba(255,255,255,.65) inset;
+  cursor:grab;
+}
+.occ-round.is-round .occ-card.is-active:hover {box-shadow:0 33px 87px rgba(64,44,25,.18);}
+.occ-round.is-round .occ-card:focus-within {outline:2px solid var(--gold-deep);outline-offset:3px;}
+.occ-round.is-round .occ-card:not(.is-active) a {pointer-events:none;}
+.occ-round.is-round .occ-card__art {
+  position:relative;
+  height:60%;
+  min-height:0;
+  flex:none;
+  aspect-ratio:auto;
+  isolation:isolate;
+  border-radius:0;
+}
+.occ-round.is-round .occ-card--dia .occ-card__art {
+  background:radial-gradient(ellipse 65% 65% at 50% 44%,#f6f1e9,#e7dac8 81%);
+}
+.occ-round.is-round .occ-card--noite .occ-card__art {
+  background:radial-gradient(ellipse 72% 74% at 50% 42%,#584b40,#28221e 82%);
+}
+.occ-round.is-round .occ-card--celebrar .occ-card__art {
+  background:radial-gradient(ellipse 68% 71% at 50% 40%,#f6ebd8,#ddc5a0 91%);
+}
+.occ-round.is-round .occ-card__art::before {
+  content:'';
+  position:absolute;
+  z-index:0;
+  inset:0;
+  background:linear-gradient(136deg,rgba(255,255,255,.27),transparent 40%,rgba(64,44,25,.045));
+  pointer-events:none;
+}
+.occ-round.is-round .occ-card__art::after {
+  content:'';
+  position:absolute;
+  z-index:4;
+  inset:-1px;
+  background:linear-gradient(110deg,transparent 34%,rgba(255,255,255,.22) 48%,transparent 62%);
+  transform:translate3d(-120%,0,0);
+  pointer-events:none;
+  transition:transform 1050ms cubic-bezier(.2,.8,.2,1);
+}
+.occ-round.is-round .occ-card.is-active .occ-card__art::after {
+  transform:translate3d(120%,0,0);
+  transition-delay:160ms;
+}
+.occ-round.is-round .occ-card__foil {
+  background:radial-gradient(ellipse 40% 50% at 73% 18%,rgba(253,235,198,.14),transparent);
+  opacity:.85;
+}
+.occ-round.is-round .ill-slot--main {z-index:1;inset:5% 17% 1% 9%;}
+.occ-round.is-round .ill-slot--side {z-index:3;width:32%;height:43%;right:5%;bottom:5%;}
+.occ-round.is-round .ill-slot .editorial-cutout {
+  filter:drop-shadow(0 15px 14px rgba(51,33,19,.17));
+  transition:transform 820ms cubic-bezier(.16,1,.3,1);
+}
+.occ-round.is-round .occ-card.is-active .ill-slot--main .editorial-cutout {
+  transform:translate3d(0,-7px,0) scale(1.035);
+}
+.occ-round.is-round .occ-card--noite .editorial-cutout {
+  filter:drop-shadow(0 14px 16px rgba(0,0,0,.25));
+}
+.occ-round.is-round .occ-card__body {
+  flex:1;
+  min-height:0;
+  padding:clamp(15px,1.65vw,23px) clamp(17px,1.9vw,26px) clamp(17px,1.8vw,24px);
+  gap:6px;
+  justify-content:flex-start;
+  background:linear-gradient(180deg,#fffdfa,#fbf8f2);
+}
+.occ-round.is-round .occ-card__n {
+  font-size:10px;
+  letter-spacing:.18em;
+  font-weight:600;
+  margin:0 0 2px;
+}
+.occ-round.is-round .occ-card h3 {
+  font-size:clamp(30px,2.7vw,39px);
+  line-height:.98;
+  font-weight:400;
+  letter-spacing:-.018em;
+  color:#2b2119;
+}
+.occ-round.is-round .occ-card__body>p:not(.occ-card__n) {
+  font-size:12px;
+  line-height:1.5;
+  color:#665b50;
+  margin:4px 0 10px;
+  max-width:32ch;
+}
+.occ-round.is-round .occ-card .btn {
+  align-self:flex-start;
+  margin-top:auto;
+  padding:0 19px;
+  min-height:44px;
+  border-radius:999px;
+  font-size:10px;
+  letter-spacing:.075em;
+  background:#2b241e;
+  border-color:#2b241e;
+  color:#fffaf0;
+  text-decoration:none;
+  transition:
+    background .2s ease,border-color .2s ease,color .2s ease,
+    transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.occ-round.is-round .occ-card.is-active .btn:hover {
+  background:#876b43;border-color:#876b43;transform:translate3d(0,-2px,0);
+}
+.occ-round.is-round .occ-card:not(.is-active) .occ-card__body {
+  background:linear-gradient(180deg,#f9f4eb,#f0e8dc);
+}
+.occ-round.is-round .occ-round__footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  max-width:1090px;
+  margin:7px auto 0;
+  padding:7px clamp(16px,2vw,24px) 0;
+  border-top:1px solid rgba(160,131,91,.23);
+}
+.occ-round__hint {
+  margin:0;
+  max-width:55ch;
+  font-size:clamp(10px,.9vw,12px);
+  color:var(--muted);
+  letter-spacing:.045em;
+}
+.occ-round__navigation {display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.occ-round__arrow {
+  display:grid;place-items:center;
+  width:47px;height:47px;
+  border:1px solid rgba(141,112,72,.5);
+  border-radius:50%;
+  color:#372c22;
+  background:rgba(255,252,246,.75);
+  font-size:21px;
+  transition:background .25s,transform .25s,border-color .25s;
+}
+.occ-round__arrow:hover {background:#e6d7bd;border-color:#9b7742;transform:scale(1.05);}
+.occ-round__arrow:focus-visible {outline:2px solid var(--gold-deep);outline-offset:3px;}
+.occ-round__counter {
+  display:inline-block;
+  min-width:58px;
+  font-size:11px;
+  letter-spacing:.17em;
+  font-variant-numeric:tabular-nums;
+  color:#75644e;
+  text-align:center;
+}
+.occ-round.is-round .occ-card:not(.is-active) {outline:none;}
+.occ-round.is-round .occ-round__stage:focus-visible {
+  outline:2px solid var(--gold-deep);
+  outline-offset:-4px;
+}
+
+/* Tablet keeps the depth and card readability without side clipping. */
+@media(max-width:899px){
+  .occ-round.is-round .occ-round__stage{height:clamp(510px,72vw,590px);perspective:1300px;}
+  .occ-round.is-round .occ-card{width:clamp(275px,45vw,330px);height:calc(100% - 35px);}
+  .occ-round.is-round .occ-card__art{height:57%;}
+  .occ-round.is-round .occ-card__body{padding:18px 19px 20px;}
+  .occ-round.is-round .occ-card h3{font-size:32px;}
+  .occ-round.is-round .occ-round__footer{padding-inline:5px;}
+}
+@media(max-width:560px){
+  #ocasioes.occasions {padding-inline:0;}
+  #ocasioes .sec-head {padding-inline:var(--gutter);}
+  .occ-round.is-round .occ-round__stage{height:520px;perspective:1050px;}
+  .occ-round.is-round .occ-card{
+    width:min(76vw,310px);
+    height:474px;
+    border-radius:18px;
+    box-shadow:0 17px 38px rgba(56,41,25,.11);
+  }
+  .occ-round.is-round .occ-card__art{height:56%;}
+  .occ-round.is-round .occ-card__body{padding:15px 17px 20px;gap:4px;}
+  .occ-round.is-round .occ-card h3{font-size:31px;}
+  .occ-round.is-round .occ-card__n{font-size:9px;}
+  .occ-round.is-round .occ-card__body>p:not(.occ-card__n){font-size:11px;line-height:1.38;margin:3px 0 7px;}
+  .occ-round.is-round .occ-card .btn{min-height:44px;padding:0 16px;font-size:9px;}
+  .occ-round.is-round .occ-round__footer{margin-inline:var(--gutter);padding:8px 0 0;gap:8px;}
+  .occ-round__hint{max-width:21ch;font-size:10px;line-height:1.45;}
+  .occ-round__navigation{gap:6px;}
+  .occ-round__arrow{width:44px;height:44px;}
+  .occ-round__counter{min-width:50px;font-size:10px;}
+}
+@media(max-width:375px){
+  .occ-round.is-round .occ-round__stage{height:493px;}
+  .occ-round.is-round .occ-card{height:451px;width:79vw;}
+  .occ-round.is-round .occ-card__art{height:54%;}
+  .occ-round__hint{max-width:18ch;}
+}
+@media(hover:none){
+  .occ-round.is-round .occ-card.is-active .ill-slot--main .editorial-cutout {transform:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  .occ-round.is-round .occ-grid{position:static;display:grid;}
+  .occ-round.is-round .occ-card{transform:none!important;opacity:1!important;}
+  .occ-round__aura,.occ-round__foil{display:none!important;}
+}
+@media(forced-colors:active){
+  .occ-round.is-round .occ-card,.occ-round__arrow{border:1px solid ButtonText;}
+  .occ-round.is-round .occ-card .btn{border:1px solid ButtonText;}
+}
+@media print{
+  .occ-round__stage{height:auto!important;}
+  .occ-round .occ-grid{position:static!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;}
+  .occ-round .occ-card{position:static!important;transform:none!important;opacity:1!important;}
+  .occ-round__footer,.occ-round__aura{display:none!important;}
+}
