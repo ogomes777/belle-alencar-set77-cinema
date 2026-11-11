@@ -39,6 +39,7 @@ export interface WorldInfo {
   progress: number;
   camera: number[];
   rail: {index:number;total:number};
+  lookTarget: number[];
 }
 
 export class World {
@@ -232,7 +233,7 @@ export class World {
   info(): WorldInfo {
     const r = this.renderer.info.render;
     const c = this.camera.position;
-    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100), rail: this.boutique.railPosition() };
+    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100), rail: this.boutique.railPosition(), lookTarget: [this.lookTgt.x,this.lookTgt.y,this.lookTgt.z].map(v=>Math.round(v*100)/100) };
   }
 
   private kick(): void {

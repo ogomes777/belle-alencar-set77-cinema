@@ -300,6 +300,7 @@ export class DressRig {
       this.cloth.set(i, this.v3.x, this.v3.y, this.v3.z);
     }
     this.acc = 0;
+    this.cloth.acc.fill(0);
     this.spin = 0;
     this.upload();
   }
