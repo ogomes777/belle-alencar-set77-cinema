@@ -21,6 +21,7 @@ export function initRunway(ctx: Ctx): () => void {
   let p = 0, target = 0, raf = 0, last = 0, dirty = true, visible = true, destroyed = false;
   let width = 1, height = 1, base = 1, cardSize = 1, mobile = false;
   let down = false, startX = 0, startY = 0, start = 0, moved = 0, pointer = -1, hitIndex: number | null = null;
+  let lastDragX = 0, lastDragTime = 0, dragVelocity = 0;
   let wheelTimer = 0, mx = 0, my = 0, cx = 0, cy = 0, cursor = false, announced = -1;
 
   const people = RUNWAY_LOOKS.map((look,i) => {
@@ -132,6 +133,7 @@ export function initRunway(ctx: Ctx): () => void {
   stage.addEventListener('pointerdown',e => {
     if (e.button!==0 || (e.target as HTMLElement).closest('button,a')) return;
     clearTimeout(wheelTimer); down=true; pointer=e.pointerId; startX=e.clientX; startY=e.clientY; start=target; moved=0;
+    lastDragX=e.clientX; lastDragTime=performance.now(); dragVelocity=0;
     hitIndex=Number((e.target as HTMLElement).closest<HTMLElement>('[data-look]')?.dataset.look ?? NaN);
     stage.setPointerCapture(pointer); ring.classList.add('is-dragging');
   },{signal});
@@ -139,6 +141,8 @@ export function initRunway(ctx: Ctx): () => void {
     const box=stage.getBoundingClientRect(); mx=e.clientX-box.left; my=e.clientY-box.top;
     if (e.pointerType==='mouse') { cursor=true; ring.classList.add('is-visible'); }
     if (down && e.pointerId===pointer) {
+      const now=performance.now(), dt=Math.max(1,now-lastDragTime);
+      dragVelocity=(e.clientX-lastDragX)/dt; lastDragX=e.clientX; lastDragTime=now;
       const dx=e.clientX-startX; moved=Math.max(moved,Math.hypot(dx,e.clientY-startY));
       target=start+dx/Math.max(150,width*.2);
     }
@@ -149,7 +153,11 @@ export function initRunway(ctx: Ctx): () => void {
     down=false; ring.classList.remove('is-dragging');
     if (e.type!=='pointercancel' && moved<6 && hitIndex!==null && Number.isFinite(hitIndex)) {
       target=Math.round(target)+wrap(hitIndex-Math.round(target),6);
-    } else target=Math.round(target);
+    } else {
+      const recent=performance.now()-lastDragTime<100;
+      const momentum=!calm.matches && recent ? Math.max(-.8,Math.min(.8,dragVelocity*160/Math.max(150,width*.2))) : 0;
+      target=Math.round(target+momentum);
+    }
     if(stage.hasPointerCapture(pointer))stage.releasePointerCapture(pointer);
     pointer=-1; wake();
   }
