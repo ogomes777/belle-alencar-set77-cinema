@@ -40,6 +40,7 @@ export interface WorldInfo {
   camera: number[];
   rail: {index:number;total:number};
   lookTarget: number[];
+  orbit: {current:number;target:number;free:boolean};
 }
 
 export class World {
@@ -75,6 +76,9 @@ export class World {
   private railEngaged = false;
   private railPan = 0;
   private railPanGoal = 0;
+  private roomOrbit = 1;
+  private roomOrbitGoal = 1;
+  private roomOrbitManual = false;
   // Suaviza a troca entre a parede direita e esquerda sem teletransportar
   // a câmera ou perder o ponto de vista da boutique.
   private roomFocus = new THREE.Vector3();
@@ -153,11 +157,38 @@ export class World {
   }
 
   setRailEngaged(on:boolean):void{
-    if(this.railEngaged!==on)this.roomFocusReady=false;
+    if(this.railEngaged!==on){
+      this.roomFocusReady=false;
+      this.roomOrbitManual=false;
+      this.roomOrbitGoal=this.boutique.focusPoint().x>=0?1:-1;
+      this.roomOrbit=this.roomOrbitGoal;
+    }
     this.railEngaged=on;
     if(!on)this.railPanGoal=0;
   }
-  setRailPointer(normalizedX:number|null):void{this.railPanGoal=THREE.MathUtils.clamp(normalizedX??0,-1,1);this.kick();}
+  setRailPointer(normalizedX:number|null):void{
+    this.railPanGoal=THREE.MathUtils.clamp(normalizedX??0,-1,1);
+    this.kick();
+  }
+  /** Drag on EMPTY floor/space is a first-person view rotation, independent
+   * from the selected product. This is how visitors can reach the opposite wall.
+   * Horizontal gestures do not change native vertical scroll progression. */
+  orbitRail(deltaNormalized:number):void{
+    if(!this.railEngaged)return;
+    if(!this.roomOrbitManual){
+      this.roomOrbitGoal=this.roomFocusReady?THREE.MathUtils.clamp(this.roomFocus.x/4.72,-1,1):
+        (this.boutique.focusPoint().x>=0?1:-1);
+      this.roomOrbitManual=true;
+    }
+    this.roomOrbitGoal=THREE.MathUtils.clamp(this.roomOrbitGoal+deltaNormalized*2.65,-1,1);
+    this.kick();
+  }
+  /** Explicit selection hands control back to the physical hanger focus. */
+  private followRailSelection():void{
+    this.roomOrbitGoal=this.boutique.focusPoint().x>=0?1:-1;
+    this.roomOrbitManual=false;
+    this.kick();
+  }
   railPosition(){return this.boutique.railPosition();}
   /** Smoothly prepare the physical rack for a purchase when the customer
    * navigates a long distance faster than the camera can travel.
@@ -166,18 +197,22 @@ export class World {
     this.boutique.select(id);
     this.roomFocus.copy(this.boutique.focusPoint());
     this.roomFocusReady=true;
+    this.followRailSelection();
     this.railPanGoal=0;
     this.kick();
   }
 
   /** Produtos sempre pertencem à arara interna, nunca a uma interface 2D separada. */
   browseRack(direction:number):Product|null {
-    const product=this.boutique.browse(direction);this.kick();return product;
+    const product=this.boutique.browse(direction);
+    this.followRailSelection();
+    return product;
   }
   activeRackProduct():Product|null{return this.boutique.activeProduct();}
   pickRack(clientX:number,clientY:number):Product|null {
     this.toRay(clientX,clientY);
     const p=this.boutique.pick(this.pickPoint,this.camera);
+    if(p)this.followRailSelection();
     this.kick();return p;
   }
   hoverRack(clientX:number,clientY:number):Product|null{
@@ -251,7 +286,8 @@ export class World {
   info(): WorldInfo {
     const r = this.renderer.info.render;
     const c = this.camera.position;
-    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100), rail: this.boutique.railPosition(), lookTarget: [this.lookTgt.x,this.lookTgt.y,this.lookTgt.z].map(v=>Math.round(v*100)/100) };
+    return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100), rail: this.boutique.railPosition(), lookTarget: [this.lookTgt.x,this.lookTgt.y,this.lookTgt.z].map(v=>Math.round(v*100)/100),
+      orbit: {current:+this.roomOrbit.toFixed(3),target:+this.roomOrbitGoal.toFixed(3),free:this.roomOrbitManual} };
   }
 
   private kick(): void {
@@ -297,6 +333,8 @@ export class World {
     const sala=this.story.span('sala');
     const railStep = exact ? 1 : Math.min(1, dt * 6);
     this.railPan+=(this.railPanGoal-this.railPan)*railStep;
+    const orbitStep=exact?1:1-Math.exp(-dt*3.65);
+    this.roomOrbit+=(this.roomOrbitGoal-this.roomOrbit)*orbitStep;
     if(this.railEngaged && sala && p>=sala.s-.02 && p<=sala.e+.02){
       const point=this.boutique.focusPoint();
       if(!this.roomFocusReady){this.roomFocus.copy(this.camTgt);this.roomFocusReady=true;}
@@ -308,15 +346,20 @@ export class World {
       const inWeight=THREE.MathUtils.smoothstep(p,sala.s,sala.s+length*.17);
       const outWeight=1-THREE.MathUtils.smoothstep(p,sala.e-length*.17,sala.e);
       const blend=THREE.MathUtils.clamp(inWeight*outWeight,0,1);
-      const side=this.roomFocus.x>=0?1:-1;
-      const camX=side>0?-.65:.65;
-      const camZ=THREE.MathUtils.clamp(this.roomFocus.z+3.1,-7.8,-3.0);
-      this.camPos.x=THREE.MathUtils.lerp(this.camPos.x,camX,.32*blend);
-      this.camPos.z=THREE.MathUtils.lerp(this.camPos.z,camZ,.50*blend);
-      this.camTgt.x=THREE.MathUtils.lerp(this.camTgt.x,this.roomFocus.x+this.railPan*1.14,.75*blend);
-      this.camTgt.y=THREE.MathUtils.lerp(this.camTgt.y,1.38,.53*blend);
+      // The panoramic look can be independent of selection while dragging.
+      // Keep the eye near the CENTRAL aisle. Never teleport to a separate rail.
+      const aimX=this.roomOrbitManual
+        ?THREE.MathUtils.lerp(this.roomFocus.x,this.roomOrbit*4.72,.95)
+        :this.roomFocus.x;
+      const side=aimX>=0?1:-1;
+      const camX=this.roomOrbitManual?-.32*this.roomOrbit:(side>0?-.65:.65);
+      const camZ=THREE.MathUtils.clamp(this.roomFocus.z+3.25,-8.2,-2.9);
+      this.camPos.x=THREE.MathUtils.lerp(this.camPos.x,camX,.34*blend);
+      this.camPos.z=THREE.MathUtils.lerp(this.camPos.z,camZ,.54*blend);
+      this.camTgt.x=THREE.MathUtils.lerp(this.camTgt.x,aimX+this.railPan*1.34,.78*blend);
+      this.camTgt.y=THREE.MathUtils.lerp(this.camTgt.y,1.38,.54*blend);
       this.camTgt.z=THREE.MathUtils.lerp(this.camTgt.z,
-        this.roomFocus.z-this.railPan*.92*side,.70*blend);
+        this.roomFocus.z-this.railPan*.75*side,.72*blend);
     } else this.roomFocusReady=false;
     if (!exact && this.opts.tier === 'cinema') {
       // câmera na mão, quase imperceptível (respiração do operador)
