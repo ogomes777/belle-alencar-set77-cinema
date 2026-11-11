@@ -676,3 +676,20 @@ html.md-motion #colecao.md-scene::before {display:none;}
 .occ-round.is-round[data-ambient="running"] .occ-card__world-ground {
   animation-play-state:running!important;
 }
+
+/* V12 PORTRAIT CHROMA LOCK
+ * The three source WebPs are transparent by design. The surrounding PNG/WebP
+ * alpha is not the model's alpha: the animation parent must be 100% opaque.
+ * A previous GSAP .fromTo(opacity:.22) on .occ-card__arrival caused the
+ * periodic ghosting seen in live screenshots as each card became active.
+ * Leave deliberate light/glow transparency alone; never bleach the model.
+ */
+.occ-round.is-round .occ-card__arrival,
+.occ-round.is-round .occ-card__portrait,
+.occ-round.is-round .occ-card__model {
+  opacity:1!important;
+  visibility:visible!important;
+}
+.occ-round.is-round .occ-card__arrival {
+  backface-visibility:visible;
+}
