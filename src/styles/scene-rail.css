@@ -1,0 +1,24 @@
+/* 3D boutique rail interaction. No second product rack rendered in DOM. */
+.roomrail{position:absolute;z-index:8;right:clamp(18px,7vw,115px);bottom:26px;max-width:min(600px,72vw);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(9px);transition:opacity .28s,transform .28s,visibility .28s;font-family:var(--sans);color:#34291d}
+.roomrail.is-on{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.roomrail__hint{text-align:right;color:#725a37;font-size:9px;font-weight:650;letter-spacing:.15em;margin-bottom:8px;text-shadow:0 1px #fff8}
+.roomrail__controls{display:flex;gap:6px;align-items:center;background:rgba(250,246,238,.85);border:1px solid rgba(179,147,91,.48);box-shadow:0 8px 30px rgba(44,30,14,.12);backdrop-filter:blur(10px);padding:8px}
+.roomrail__controls button{min-height:42px;border:1px solid #d3b98b;background:#fcf9f3;color:#463324;padding:0 11px;font-size:12px;cursor:pointer;white-space:nowrap}
+.roomrail__prev,.roomrail__next{min-width:43px;font-size:20px!important;font-weight:300}
+.roomrail__product{font-family:var(--serif);font-size:18px;line-height:1.1;min-width:130px;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+.roomrail__inspect{background:#352a20!important;color:#fff!important;border-color:#352a20!important}
+.roomrail__bag b{font-weight:600;color:#af8551;padding-left:5px}
+.roomrail__controls button:focus-visible{outline:2px solid #8c652e;outline-offset:2px}
+.roomrail.is-impact .roomrail__bag{animation:roomBagImpact .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes roomBagImpact{50%{transform:translateY(-5px) rotate(-3deg)}}
+html[data-tier=static] .roomrail,html.poster-mode .roomrail{display:none!important}
+html.scene-rail-viewer .pv__backdrop{background:rgba(242,236,226,.2);backdrop-filter:blur(5px)}
+@media(max-width:899px){
+ .roomrail{bottom:auto;top:calc(var(--header-h) + 46px);right:12px;left:12px;max-width:none}
+ .roomrail__hint{font-size:7px}
+ .roomrail__controls{padding:6px;gap:3px;justify-content:space-between}
+ .roomrail__controls button{min-height:38px;padding:0 7px;font-size:10px}
+ .roomrail__product{font-size:15px;min-width:70px;flex:1;max-width:none}
+ .roomrail__prev,.roomrail__next{min-width:31px;font-size:18px!important}
+}
+@media(prefers-reduced-motion:reduce){.roomrail,.roomrail__controls button{transition:none!important;animation:none!important}}
