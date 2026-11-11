@@ -24,6 +24,29 @@ initCommerce();
 initSections();
 initMotionDirector();
 const director = initDirector();
+// A coleção contém peças renderizadas dinamicamente. O módulo de movimento
+// só carrega quando o catálogo se aproxima, evitando custo no hero e na
+// passarela. Sem GSAP, o catálogo continua funcional e totalmente visível.
+const catalogSection = document.getElementById('colecao');
+const bootCatalogScroll = () => {
+  void import('./commerce/collection-reveal').then(({ initCatalogScrollReveal }) => {
+    initCatalogScrollReveal(director);
+  }).catch(() => {
+    // Graceful degradation: normal CSS grid, filtros e carrinho intactos.
+  });
+};
+if (catalogSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if ('IntersectionObserver' in window) {
+    const catalogPrewarm = new IntersectionObserver((entries) => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      catalogPrewarm.disconnect();
+      bootCatalogScroll();
+    }, {rootMargin:'1100px 0px'});
+    catalogPrewarm.observe(catalogSection);
+  } else {
+    bootCatalogScroll();
+  }
+}
 // Load the editorial 3D carousel only as its section approaches the viewport.
 // GSAP/ScrollTrigger stay out of the initial hero's critical JavaScript path.
 const occasionSection = document.getElementById('ocasioes');
