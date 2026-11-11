@@ -141,3 +141,5 @@ body.is-runway-visible #floatCta {visibility:hidden;opacity:0;pointer-events:non
 @media(prefers-reduced-motion:reduce){
  .runway__model,.runway__card,.runway__pair img {transition:none!important;}
 }
+
+.runway__intro>.runway__eyebrow {font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:0 0 12px;line-height:1.5;}
