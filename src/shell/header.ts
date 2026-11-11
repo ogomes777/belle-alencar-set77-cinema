@@ -39,6 +39,8 @@ export function initHeader():void {
     {id:'atendimento',element:document.getElementById('atendimento')!,tint:'sand',nav:'#atendimento'},
     {id:'duvidas',element:document.getElementById('duvidas')!,tint:'pearl',nav:null},
   ] as Scene[]).filter(scene=>!!scene.element);
+  const manifesto=document.querySelector<HTMLElement>('.manifesto--ticker');
+  if(manifesto)scenes.splice(1,0,{id:'manifesto',element:manifesto,tint:'pearl',nav:null});
   const finale=document.querySelector<HTMLElement>('.finale');
   if(finale)scenes.push({id:'finale',element:finale,tint:'noir',nav:null});
 
