@@ -15,7 +15,7 @@ import type { DressParams, Silhouette, Tone } from './core/dress';
 import type { Director } from './shell/director';
 import type { World } from './experience/world';
 import type { ChapterId, Span } from './experience/story';
-import type { RackController } from './rack/rack';
+import { initRoomRail } from './experience/rail-ui';
 
 const CHAPTERS: ChapterId[] = ['vitrine', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador'];
 const LABELED: ChapterId[] = ['vestido', 'detalhe', 'provador'];
@@ -58,6 +58,7 @@ export function initFilm(director: Director): void {
   document.documentElement.dataset.tier = tier;
   const debug: FilmDebug = { tier, progress: 0, chapter: active, world: () => world?.info() ?? null };
   window.__belle = debug;
+  const roomRail = initRoomRail(stage!, () => world);
 
   // ---------- medição ----------
   const articles = CHAPTERS.map((id) => $(`[data-chapter="${id}"]`, film)).filter(Boolean) as HTMLElement[];
@@ -116,22 +117,8 @@ export function initFilm(director: Director): void {
     void el;
   }
 
-  // ---------- arara viva (independente do WebGL: funciona em todos os tiers) ----------
-  let rack: RackController | null = null;
-  let rackLoading: Promise<RackController | null> | null = null;
-  function ensureRack(): Promise<RackController | null> {
-    if (rack) return Promise.resolve(rack);
-    if (!rackLoading) {
-      rackLoading = import('./rack/rack')
-        .then((m) => {
-          rack = m.initRack(stage!, $('[data-chapter="sala"] .chapter__card', film!));
-          (window as Window & { __rack?: RackController }).__rack = rack;
-          return rack;
-        })
-        .catch((e) => { console.warn('[belle] arara indisponível', e); return null; });
-    }
-    return rackLoading;
-  }
+  // Arara física: integrada exclusivamente ao renderer Three.js.
+  // Não existe uma segunda arara HTML sobreposta ao filme.
 
   // ---------- scroll → progresso ----------
   let ticking = false;
@@ -161,11 +148,10 @@ export function initFilm(director: Director): void {
       if (on) a.setAttribute('aria-current', 'step');
     });
     if (label) label.hidden = !LABELED.includes(id);
-    // arara viva: assume o palco quando a câmera chega à arara
-    const onRack = id === 'sala' && !posterMode;
-    stage!.classList.toggle('is-rack', onRack);
-    if (onRack) void ensureRack().then((r) => r?.setActive(active === 'sala'));
-    else rack?.setActive(false);
+    // A câmera continua no cômodo enquanto exploramos a arara física.
+    const onRoomRail = id === 'sala' && !posterMode && tier !== 'static';
+    stage!.classList.toggle('is-room-rail', onRoomRail);
+    roomRail.setActive(onRoomRail);
     if (!stage!.classList.contains('is-live')) showPoster(id);
     bus.emit('film:chapter', { id, index: CHAPTERS.indexOf(id) });
   }
@@ -182,11 +168,6 @@ export function initFilm(director: Director): void {
   }
   measure();
   setActive('vitrine');
-  // pré-carrega a arara em idle para a chegada ser instantânea
-  if (!posterMode) {
-    const pre = () => setTimeout(() => void ensureRack(), 1200);
-    if (document.readyState === 'complete') pre(); else addEventListener('load', pre, { once: true });
-  }
 
   // ---------- 3D sob demanda ----------
   async function startWorld(): Promise<void> {
@@ -229,6 +210,7 @@ export function initFilm(director: Director): void {
       world.setDress(dressParams);
       await world.readyMedia();
       world.setProgress(progress, true);
+      roomRail.refresh();
       mod.initReveals(film!);
       if (posterMode) {
         const sp = spans.find((s) => s.id === posterMode);
@@ -242,6 +224,7 @@ export function initFilm(director: Director): void {
       stage!.classList.remove('is-loading');
       tier = 'static';
       document.documentElement.dataset.tier = tier;
+      roomRail.setActive(false);
     } finally {
       loading = false;
     }
@@ -249,6 +232,7 @@ export function initFilm(director: Director): void {
   function stopWorld(): void {
     world?.destroy();
     world = null;
+    roomRail.refresh();
     stage!.classList.remove('is-live', 'is-loading');
     showPoster(active);
   }
