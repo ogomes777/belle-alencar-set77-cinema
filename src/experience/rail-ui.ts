@@ -35,7 +35,10 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       </div>
       <p class="roomrail__error" role="alert" hidden>Selecione o tamanho primeiro.</p>
     </section>`;
-  stage.appendChild(ui);
+  // Portal: the narration is painted above the WebGL stage. Mounting this HUD
+  // on the document layer prevents chapter cards from stealing touch/clicks.
+  // Stage pointer handlers remain on the original canvas container.
+  document.body.appendChild(ui);
   const $=<T extends HTMLElement>(q:string)=>ui.querySelector<T>(q)!;
   const name=$<HTMLElement>('.roomrail__product'),count=$<HTMLElement>('.roomrail__bag b');
   const posLabel=$<HTMLElement>('.roomrail__counter');

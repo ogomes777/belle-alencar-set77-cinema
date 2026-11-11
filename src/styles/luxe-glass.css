@@ -253,3 +253,12 @@ html .roomrail__size-label:focus-within .roomrail__size-options{border-radius:12
   html .roomrail__hint{font-size:8px}
   html .roomrail__gesture{font-size:7px}
 }
+
+
+/* V4.1 portal: keep the rail control HUD above film narrative cards,
+   but below true commerce drawers (z-overlay:60). */
+html .roomrail{
+  position:fixed!important;
+  z-index:45!important;
+}
+html .roomrail:not(.is-on){pointer-events:none!important}
