@@ -12,7 +12,7 @@ Origem: o vídeo original do ZIP tem SHA-256 `61bb8b423072d1e0d3f21df9f61dc32106
 - Chromium em 360×640, 390×844, 768×900, 1024×900 e 1440×900: sem overflow; vídeo avançou aproximadamente 0,24→3,64 s e voltou a 0,66 s; quatro cards e CTAs ativos ao fim. Capturas nesta pasta.
 - Movimento reduzido e falha simulada do MP4: fallback legível e interativo. Seletor de loja abriu pelo CTA; link para coleção funcionou.
 - Inspeção visual detectou e corrigiu sobreposição do botão flutuante sobre o CTA. Os momentos de entrada dos cards foram ajustados ao avanço do tecido.
-- A regressão ampla detectou falhas de rede para `fonts.googleapis.com` (CONNECT bloqueado pelo ambiente) e requisições de vídeo canceladas durante navegação; não se deve tratar a suíte geral como aprovada até repetir em ambiente com rede e revisar seus resultados completos.
+- A regressão ampla detectou falhas de rede para `fonts.googleapis.com` (CONNECT bloqueado pelo ambiente) e requisições de vídeo canceladas durante navegação; também falharam duas verificações de foco do quick view e ocorreu timeout no clique da ocasião (tests/e2e/run.mjs:203). A suíte geral terminou incompleta; essas falhas precisam ser investigadas antes de produção.
 - Safari/iOS, Android físico, touch físico, medição real de INP/CLS/LCP e Preview público não foram validados. O comportamento de seek depende do decoder do aparelho.
 
 ## Publicação
