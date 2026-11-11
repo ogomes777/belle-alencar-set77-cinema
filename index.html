@@ -238,20 +238,23 @@
       <h2 class="display" id="ocasioesTitle" data-reveal>Qual é o <em>seu plano?</em></h2>
       <p class="lede">Comece pelo momento. A gente mostra as peças que combinam com ele.</p>
     </header>
-    <ul class="occ-grid">
-      <li class="occ-card occ-card--dia">
-        <div class="occ-card__art" aria-hidden="true">
+    <div class="occ-round" data-occ-round>
+      <div class="occ-round__aura" aria-hidden="true"></div>
+      <div class="occ-round__stage" tabindex="0" role="region" aria-roledescription="carrossel" aria-label="Explore as ocasiões da Belle Alencar" aria-describedby="occRoundHint">
+        <ul class="occ-grid">
+      <li class="occ-card occ-card--dia" data-occasion="dia">
+        <div class="occ-card__art" aria-hidden="true"><span class="occ-card__foil"></span>
           <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"terracota","silhouette":"fluido","neckline":"manga","seed":4}'></span>
           <span class="ill-slot ill-slot--side" data-ill='{"kind":"belt","tone":"noite"}'></span>
         </div>
         <div class="occ-card__body">
           <p class="occ-card__n">01 · <span data-occ-count="dia"></span></p>
           <h3>Dia a dia</h3>
-          <p>Conforto também tem presença.</p>
+          <p>Leveza para viver o agora. Presença em cada detalhe.</p>
           <a class="btn btn--solid" href="#colecao" data-filter-occasion="dia">Ver peças para o dia</a>
         </div>
       </li>
-      <li class="occ-card occ-card--noite">
+      <li class="occ-card occ-card--noite" data-occasion="noite">
         <div class="occ-card__art" aria-hidden="true">
           <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"noite","silhouette":"marcante","neckline":"tomara","seed":2}'></span>
           <span class="ill-slot ill-slot--side" data-ill='{"kind":"bag","tone":"champagne"}'></span>
@@ -259,11 +262,11 @@
         <div class="occ-card__body">
           <p class="occ-card__n">02 · <span data-occ-count="noite"></span></p>
           <h3>Para sair</h3>
-          <p>Do primeiro brinde ao último detalhe.</p>
+          <p>Quando a noite começa, seu estilo conta a história.</p>
           <a class="btn btn--solid" href="#colecao" data-filter-occasion="noite">Ver peças para sair</a>
         </div>
       </li>
-      <li class="occ-card occ-card--celebrar">
+      <li class="occ-card occ-card--celebrar" data-occasion="celebrar">
         <div class="occ-card__art" aria-hidden="true">
           <span class="ill-slot ill-slot--main" data-ill='{"kind":"dress","tone":"perola","silhouette":"fluido","neckline":"alca","seed":7}'></span>
           <span class="ill-slot ill-slot--side" data-ill='{"kind":"earring","tone":"perola"}'></span>
@@ -271,11 +274,21 @@
         <div class="occ-card__body">
           <p class="occ-card__n">03 · <span data-occ-count="celebrar"></span></p>
           <h3>Para celebrar</h3>
-          <p>Tem ocasião que pede vestido.</p>
+          <p>Os momentos que ficam merecem um look à altura.</p>
           <a class="btn btn--solid" href="#colecao" data-filter-occasion="celebrar">Ver peças para celebrar</a>
         </div>
       </li>
-    </ul>
+        </ul>
+      </div>
+      <div class="occ-round__footer">
+        <p id="occRoundHint" class="occ-round__hint">Três momentos. Três maneiras de se expressar. Arraste ou use as setas.</p>
+        <div class="occ-round__navigation">
+          <button type="button" class="occ-round__arrow" data-occ-prev aria-label="Ocasião anterior">←</button>
+          <span class="occ-round__counter" data-occ-counter aria-live="polite" aria-atomic="true">01 / 03</span>
+          <button type="button" class="occ-round__arrow" data-occ-next aria-label="Próxima ocasião">→</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- 09 · COLEÇÃO (renderizada pelo módulo de comércio) -->
