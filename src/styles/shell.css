@@ -1,42 +1,182 @@
-/* ============ INTRO · selo BA ============ */
-.intro { display: none; }
+/* ============ BELLE INTRO · assinatura manuscrita ============ */
+/* Choreography adapted from the user's 2 handwriting references:
+   1. signature paints left to right; 2. champagne swash finishes the word;
+   3. short still hold; 4. two dark panels reveal the existing film.
+   Allura is SIL OFL (Google Fonts). No unlicensed Allesya/Savage Roses files. */
+.intro { display:none; }
 html.js:not(.intro-seen) .intro {
-  position: fixed; inset: 0; z-index: var(--z-intro);
-  display: grid; place-content: center; justify-items: center; gap: 18px;
-  color: var(--gold); pointer-events: auto;
+  --intro-deep:#191511;
+  --intro-ink:#f6ebd8;
+  --intro-gold:#c9a576;
+  position:fixed;
+  inset:0;
+  z-index:var(--z-intro);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  isolation:isolate;
+  color:var(--intro-ink);
+  pointer-events:auto;
 }
-.intro__panel { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--ivory); transition: transform .28s cubic-bezier(.22,.7,.18,1); will-change: transform; }
-.intro__panel--top { top: 0; }
-.intro__panel--bottom { bottom: 0; }
-.intro__mark { position: relative; width: min(340px, 72vw); color: var(--gold); }
-.intro__mark .mono { width: 100%; height: auto; overflow: visible; }
-.intro .mono__arch { stroke-dasharray: 400; stroke-dashoffset: 400; animation: introDraw .48s var(--ease-out) 0s forwards; }
-.intro .mono__arch--inner { animation-delay: .05s; }
-.intro .mono__shape { clip-path: inset(0 0 100% 0); animation: introMask .42s var(--ease-out) .02s forwards; }
-.intro__mark::after {
-  content: ''; position: absolute; inset: -10% -20%; pointer-events: none; mix-blend-mode: screen;
-  background: linear-gradient(105deg, transparent 40%, rgba(255, 244, 214, 0.95) 50%, transparent 60%);
-  transform: translateX(-120%); animation: introGlint .56s var(--ease-in-out) .06s forwards;
+.intro__panel {
+  position:absolute;
+  left:0;
+  right:0;
+  height:50.5%;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 75% 110% at 50% 100%,rgba(82,60,40,.28),transparent 90%),
+    var(--intro-deep);
+  transition:transform .55s cubic-bezier(.74,0,.18,1);
+  will-change:transform;
 }
-@keyframes introGlint { to { transform: translateX(120%); } }
-.intro__word { position: relative; margin: 0; text-align: center; font-size: 0.8rem; letter-spacing: 0.5em; color: var(--gold-deep); font-weight: 600; opacity: 0; animation: introWord .3s var(--ease-out) .14s forwards; }
-.intro__word small { display: block; margin-top: 6px; font-size: 0.62rem; letter-spacing: 0.42em; color: var(--muted); }
+.intro__panel--top {top:0;}
+.intro__panel--bottom {bottom:0;transform:rotate(180deg);}
+/* The bottom panel has its own inverted gradient; use y-translation
+   while keeping the orientation on open so the two halves separate. */
+.intro__stage {
+  position:relative;
+  z-index:1;
+  width:min(94vw,960px);
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transform:translateY(-1vh);
+  text-align:center;
+  pointer-events:none;
+}
+.intro__eyebrow {
+  display:block;
+  font-family:var(--sans);
+  font-size:clamp(8px,.74vw,10px);
+  font-weight:500;
+  letter-spacing:.33em;
+  text-transform:uppercase;
+  color:rgba(232,210,182,.7);
+  opacity:0;
+  transform:translateY(7px);
+  animation:introMeta .38s ease-out .1s forwards;
+}
+.intro__signature {
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:100%;
+  min-height:clamp(128px,17vw,235px);
+  margin:0 auto;
+  padding:5px 0 10px;
+}
+.intro__signature-ink {
+  display:inline-block;
+  position:relative;
+  z-index:1;
+  width:max-content;
+  max-width:none;
+  font-family:'Allura','Snell Roundhand','Brush Script MT',cursive;
+  font-size:clamp(60px,10.2vw,148px);
+  font-style:normal;
+  font-weight:400;
+  letter-spacing:-.025em;
+  line-height:1.2;
+  color:var(--intro-ink);
+  text-shadow:0 0 32px rgba(246,235,216,.08);
+  white-space:nowrap;
+  clip-path:inset(-15% 101% -20% 0);
+  animation:introWrite 1.56s cubic-bezier(.54,0,.27,1) .16s forwards;
+  will-change:clip-path;
+}
+.intro__flourish {
+  position:absolute;
+  z-index:2;
+  pointer-events:none;
+  bottom:-10%;
+  left:50%;
+  width:min(93%,745px);
+  height:auto;
+  overflow:visible;
+  transform:translateX(-50%);
+  fill:none;
+  stroke:var(--intro-gold);
+  stroke-width:2.45;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.intro__flourish-main {
+  stroke-dasharray:735;
+  stroke-dashoffset:735;
+  animation:introFlourish .68s cubic-bezier(.36,.03,.17,1) 1.06s forwards;
+}
+.intro__flourish-tail {
+  stroke-width:1.55;
+  stroke-dasharray:130;
+  stroke-dashoffset:130;
+  opacity:.75;
+  animation:introFlourishTail .45s ease-out 1.48s forwards;
+}
+.intro__descriptor {
+  position:relative;
+  margin-top:16px;
+  font-family:var(--sans);
+  font-size:clamp(9px,.79vw,12px);
+  letter-spacing:clamp(.25em,.48vw,.48em);
+  font-weight:500;
+  color:rgba(235,218,194,.82);
+  opacity:0;
+  transform:translateY(8px);
+  animation:introMeta .42s ease-out 1.64s forwards;
+}
 .intro__skip {
-  position: absolute; right: var(--gutter); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 2;
-  min-height: 44px; padding: 0 18px; border: 1px solid var(--line-strong); color: var(--ink-soft);
-  font-size: var(--fs-micro); letter-spacing: 0.18em; text-transform: uppercase; background: rgba(253, 252, 248, 0.6);
-  opacity: 0; animation: introWord .25s var(--ease-out) .08s forwards;
+  position:absolute;
+  right:max(18px,var(--gutter));
+  bottom:max(22px,env(safe-area-inset-bottom));
+  z-index:3;
+  min-height:44px;
+  padding:0 14px;
+  border:1px solid rgba(233,212,180,.27);
+  border-radius:999px;
+  color:rgba(248,236,218,.78);
+  background:rgba(255,255,255,.025);
+  font-size:var(--fs-micro);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  opacity:0;
+  animation:introMeta .3s ease-out .4s forwards;
+  transition:border-color .2s,color .2s;
 }
-html.intro-opening .intro__panel--top { transform: translateY(-101%); }
-html.intro-opening .intro__panel--bottom { transform: translateY(101%); }
-html.intro-opening .intro__mark, html.intro-opening .intro__skip { opacity: 0; transform: scale(0.96); transition: opacity .17s, transform .22s var(--ease-out); }
-html.intro-opening .intro { pointer-events: none; }
-html.intro-skipped .intro { opacity: 0; transition: opacity .12s; pointer-events: none; }
-/* Do not lock scroll while shaders and product textures load. */
-html.intro-playing body { overflow: auto; }
-@keyframes introDraw { to { stroke-dashoffset: 0; } }
-@keyframes introMask { to { clip-path: inset(0 0 0 0); } }
-@keyframes introWord { to { opacity: 1; } }
+.intro__skip:hover {border-color:var(--intro-gold);color:#fff;}
+.intro__skip:focus-visible {outline:2px solid var(--intro-gold);outline-offset:4px;}
+@keyframes introWrite {
+  from {clip-path:inset(-15% 101% -20% 0);}
+  to {clip-path:inset(-15% -5% -20% -5%);}
+}
+@keyframes introFlourish {to {stroke-dashoffset:0;}}
+@keyframes introFlourishTail {to {stroke-dashoffset:0;}}
+@keyframes introMeta {to {opacity:1;transform:translateY(0);}}
+html.intro-opening .intro__panel--top {transform:translate3d(0,-101%,0);}
+html.intro-opening .intro__panel--bottom {transform:rotate(180deg) translate3d(0,-101%,0);}
+html.intro-opening .intro__stage,
+html.intro-opening .intro__skip {
+  opacity:0;
+  transform:translateY(-12px) scale(.985);
+  transition:opacity .18s ease-out,transform .32s ease-out;
+  animation:none;
+}
+html.intro-opening .intro {pointer-events:none;}
+html.intro-skipped .intro {opacity:0;pointer-events:none;transition:opacity .12s;}
+html.intro-playing body {overflow:auto;}
+@media(max-width:600px) {
+  .intro__stage {width:min(96vw,420px);min-height:200px;transform:translateY(-2vh);}
+  .intro__signature {min-height:130px;}
+  .intro__signature-ink {font-size:clamp(52px,13.5vw,85px);letter-spacing:-.04em;}
+  .intro__flourish {bottom:-14%;width:98%;}
+  .intro__descriptor {margin-top:12px;}
+  .intro__eyebrow {letter-spacing:.22em;}
+}
+@media(prefers-reduced-motion:reduce) {
+  html.js .intro {display:none!important;}
+}
 
 /* ============ HEADER ============ */
 .site-header {
