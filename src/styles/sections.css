@@ -27,6 +27,11 @@
 @keyframes band { to { transform: translateX(-50%); } }
 html[data-intensity='essential'] .band__track { animation: none; }
 
+/* Breakout figures and ambient scenes are progressive enhancements.
+ * Hide them in the base stylesheet BEFORE lazy-loaded carousel code mounts,
+ * including no-JS and reduced-motion visitors. */
+.occ-card__portrait,.occ-card__world{display:none;pointer-events:none;}
+
 /* ocasiões */
 .occasions { background: var(--ivory); }
 .occ-grid { list-style: none; margin: 0 auto; padding: 0; max-width: 1280px; display: grid; gap: clamp(14px, 2vw, 24px); grid-template-columns: repeat(3, 1fr); }
