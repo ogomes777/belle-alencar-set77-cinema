@@ -227,6 +227,42 @@ for (const vp of viewports) {
 }
 
 
+// 6b · PROVADOR EDITORIAL: cinco produtos do manifesto, tons sem invenção
+for(const [label,width,height] of [['mobile',390,844],['desktop',1440,900]]){
+  const {ctx,page,errors,failed}=await newPage({
+    viewport:{width,height},isMobile:label==='mobile',hasTouch:label==='mobile'
+  });
+  await skipIntro(page);
+  await page.goto(BASE+'/?tier=static',{waitUntil:'domcontentloaded'});
+  const state=await page.evaluate(()=>({
+    options:document.querySelectorAll('#fittingChoices button[data-dress-id]').length,
+    tones:document.querySelectorAll('#fittingTones button[data-dress-id]').length,
+    line:!!document.querySelector('.manifesto__cats'),
+    band:!!document.querySelector('.band__track'),
+    filmFade:getComputedStyle(document.querySelector('#filme'),'::after').backgroundImage,
+  }));
+  check('provador '+label+': 5 vestidos e 5 cores do catálogo',state.options===5&&state.tones===5);
+  check('manifesto '+label+': sem categorias estáticas, faixa preservada',!state.line&&state.band);
+  check('transição '+label+': luz entre o filme e o manifesto',state.filmFade.includes('gradient'));
+  await page.locator('#fittingChoices button').nth(1).click({timeout:12000});
+  check('provador '+label+': vestido vinho muda o recorte real',
+    await page.locator('#fittingStatic').getAttribute('data-product-id')==='belle-demo-vestidos-02');
+  await page.locator('#fittingTones button').nth(4).click({timeout:12000});
+  const black=await page.evaluate(()=>({
+    id:document.querySelector('#fittingStatic')?.dataset.productId,
+    label:document.querySelector('#fittingSelection')?.textContent,
+    source:document.querySelector('#fittingStatic img')?.getAttribute('src'),
+    pressed:document.querySelectorAll('#fittingChoices button[aria-pressed=true]').length,
+    activeTone:document.querySelectorAll('#fittingTones button[aria-pressed=true]').length
+  }));
+  check('provador '+label+': cor troca também o tecido e a peça',
+    black.id==='belle-demo-vestidos-06'&&black.source?.endsWith('/vestidos-06.webp')
+      &&black.label?.includes('Preto e dourado')&&black.pressed===1&&black.activeTone===1);
+  check('provador '+label+': sem exceções e arquivos quebrados',errors.length===0&&failed.length===0,
+    [...errors,...failed].slice(0,2).join(' | '));
+  await ctx.close();
+}
+
 // 6c · WEBGL: UMA ARARA E BOLSA NO MESMO CÔMODO, COM INTERAÇÕES DESKTOP/MOBILE
 const gotoRoomRail=async(page)=>{
   await page.evaluate(()=>document.querySelector('#sala')?.scrollIntoView({block:'center'}));
