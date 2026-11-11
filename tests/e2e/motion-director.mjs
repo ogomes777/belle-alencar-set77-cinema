@@ -35,7 +35,16 @@ try {
     await page.waitForFunction(()=>document.querySelector('.finale')?.classList.contains('md-in'));
     check(await page.locator('.finale .md-reveal').count()===3,width+': ceremonial closing stage');
     check(await page.locator('.runway__card').count()===18,width+': all 18 runway cards preserved');
-    check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),width+': no horizontal overflow');
+    const overflowInfo=await page.evaluate(()=>{
+      const vw=innerWidth,doc=document.documentElement.scrollWidth;
+      const offenders=Array.from(document.querySelectorAll('body *')).map(el=>{
+        const r=el.getBoundingClientRect();
+        return {id:el.id,cl:typeof el.className==='string'?el.className.slice(0,90):'',left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom)};
+      }).filter(x=>x.right>vw+1 && x.left<vw && x.bottom>0 && x.top<document.documentElement.scrollHeight).slice(0,12);
+      return {vw,doc,offenders};
+    });
+    if(overflowInfo.doc>overflowInfo.vw+1)console.log('OVERFLOW_DIAG '+width+' '+JSON.stringify(overflowInfo));
+    check(overflowInfo.doc<=overflowInfo.vw+1,width+': no horizontal overflow');
     check(await page.evaluate(()=>{
       const veil=document.querySelector('.md-runway-veil');
       return !!veil && getComputedStyle(veil).pointerEvents==='none';
