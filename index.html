@@ -11,6 +11,11 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!-- Allura (SIL OFL 1.1): handwriting style for the loader only, not a brand-logo replacement. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Belle Alencar — Araxá","description":"Moda feminina e acessórios.","sameAs":["https://www.instagram.com/belle.alencar/"],"address":{"@type":"PostalAddress","streetAddress":"Av. Vereador João Sena, 103, Centro","addressLocality":"Araxá","addressRegion":"MG","addressCountry":"BR"}}</script>
 <link rel="preload" as="image" href="/posters/vitrine.jpg" fetchpriority="high">
 <link rel="preload" as="image" href="/assets/belle/products/cutouts/vestidos-01.webp">
@@ -26,7 +31,7 @@
     var intro=document.getElementById('intro');if(intro)intro.remove();
     document.documentElement.classList.remove('intro-playing','intro-opening','intro-skipped');
     document.documentElement.classList.add('intro-done');
-  },1500);
+  },3400);
 </script>
 <script type="module" src="/src/main.ts"></script>
 </head>
@@ -38,7 +43,17 @@
 <div class="intro" id="intro" aria-hidden="true">
   <div class="intro__panel intro__panel--top"></div>
   <div class="intro__panel intro__panel--bottom"></div>
-  <div class="intro__mark" data-monogram="intro"></div>
+  <div class="intro__stage" aria-label="Belle Alencar, assinatura caligráfica">
+    <span class="intro__eyebrow">Uma assinatura. Uma presença.</span>
+    <div class="intro__signature">
+      <span class="intro__signature-ink" aria-hidden="true">Belle Alencar</span>
+      <svg class="intro__flourish" viewBox="0 0 720 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path class="intro__flourish-main" d="M 70 91 C 190 91 318 86 444 77 S 627 45 671 30" />
+        <path class="intro__flourish-tail" d="M 558 37 Q 588 7 617 13 C 594 19 591 35 611 45" />
+      </svg>
+    </div>
+    <span class="intro__descriptor">MODA &amp; ACESSÓRIOS</span>
+  </div>
   <button type="button" class="intro__skip" id="introSkip" tabindex="-1">Pular intro</button>
 </div>
 
