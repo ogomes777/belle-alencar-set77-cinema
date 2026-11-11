@@ -56,8 +56,10 @@ try{
 
     // The commercial action must still filter/navigate rather than rotating.
     await round.locator('.occ-card.is-active [data-filter-occasion]').click();
-    await page.waitForFunction(()=>location.hash==='#colecao',null,{timeout:6000});
-    check(await page.evaluate(()=>location.hash==='#colecao'),width+': active shopping CTA navigates to collection');
+    // The commerce module intentionally prevents the native hash jump and
+    // applies the catalog occasion filter while scrolling to its section.
+    await page.waitForFunction(()=>document.querySelector('#catalogMount [data-occ="dia"]')?.getAttribute('aria-pressed')==='true',null,{timeout:6000});
+    check(await page.locator('#catalogMount [data-occ="dia"]').getAttribute('aria-pressed')==='true',width+': active shopping CTA applies the original catalog filter');
     check(errors.length===0,width+': no JavaScript runtime errors '+errors.join(';'));
     await context.close();
   }
