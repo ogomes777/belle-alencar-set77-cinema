@@ -7,6 +7,7 @@ on:
       - feat/belle-motion-storytelling-v8
       - fix/belle-ticker-runway-flush
       - feat/belle-occasions-round-carousel-v9
+      - feat/belle-occasions-living-portraits-v10
   workflow_dispatch:
 permissions:
   contents: read
