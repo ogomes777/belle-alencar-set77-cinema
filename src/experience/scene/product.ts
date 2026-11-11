@@ -34,7 +34,11 @@ export function productDisplay(product: Product, height: number, anchor: 'top' |
   const canvasHeight = height / Math.max(.01, b - t);
   const canvasWidth = canvasHeight * dimensions[0] / dimensions[1];
   const material = new THREE.MeshStandardMaterial({
-    transparent: true, alphaTest: .10, depthWrite: true, side: THREE.FrontSide,
+    // Cutout photos are opaque pixels + alpha discard, NOT blended transparent
+    // sheets. A transparent render pass sorts intersecting dresses by object
+    // center, causing front/back popping as the camera moves between walls.
+    transparent: false, alphaTest: .22, alphaToCoverage: true,
+    depthWrite: true, depthTest: true, side: THREE.DoubleSide,
     roughness: .82, metalness: 0, envMapIntensity: .18,
   });
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(canvasWidth, canvasHeight), material);

@@ -459,14 +459,20 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         s.focusV*=Math.exp(-13*dt);
         s.focus=THREE.MathUtils.clamp(s.focus+s.focusV*dt,0,.88);
         const active=railSwings[focusIndex];
-        const slideGoal=active?.side===s.side
-          ? THREE.MathUtils.clamp((active.baseZ-s.baseZ)*.035,-.20,.20):0;
-        s.slide+=(slideGoal-s.slide)*Math.min(1,dt*7);
-        s.hook.set(s.side*(RAIL.x-.78*s.focus),RAIL.y+s.focus*.09,
-          THREE.MathUtils.clamp(s.baseZ+s.slide,RAIL.z1+.10,RAIL.z0-.08));
+        // A peça fica no seu próprio cabide: não deslize a arara inteira para
+        // frente/trás com cada seleção. Isso fazia planos fotográficos se cruzarem.
+        const slideGoal=0;
+        s.slide+=(slideGoal-s.slide)*(1-Math.exp(-dt*10));
+        s.hook.set(s.side*(RAIL.x-.55*s.focus),RAIL.y+s.focus*.07,
+          s.baseZ+s.slide);
         const face=Math.atan2(camPos.x-s.hook.x,camPos.z-s.hook.z);
         const natural=s.side*-Math.PI/2;
-        s.yaw+=(natural*(1-s.focus)+face*s.focus-s.yaw)*Math.min(1,dt*9);
+        // Shortest-angle interpolation: atan2 never jumps from +PI to -PI.
+        // Limit the facing angle as if a real hanger twists on the rail.
+        const delta=Math.atan2(Math.sin(face-natural),Math.cos(face-natural));
+        const goalYaw=natural+THREE.MathUtils.clamp(delta,-1.05,1.05)*s.focus;
+        const deltaYaw=Math.atan2(Math.sin(goalYaw-s.yaw),Math.cos(goalYaw-s.yaw));
+        s.yaw+=deltaYaw*(1-Math.exp(-dt*9));
         const dx=camPos.x-s.hook.x;
         const dz = camPos.z - s.hook.z;
         const d2 = dx * dx + dz * dz;
@@ -491,8 +497,8 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         if(isHovered){s.vx+=Math.sin(t*2.4+i)*.12*dt;}
         s.vx += (-k * s.ax - c * s.vx) * dt;
         s.vz += (-k * s.az - c * s.vz) * dt;
-        s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -.19, .19);
-        s.az = THREE.MathUtils.clamp(s.az + s.vz * dt, -.19, .19);
+        s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -.12, .12);
+        s.az = THREE.MathUtils.clamp(s.az + s.vz * dt, -.12, .12);
         writeSwing(s, i);
       });
       // cabide vazio balança quando o vestido sai
