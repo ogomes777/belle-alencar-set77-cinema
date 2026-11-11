@@ -1,7 +1,5 @@
 /* Belle's runway: measured reference depths, local fonts and native landing scroll. */
-.runway { isolation:isolate; --ru:min(calc(100vw / 1600),calc(100svh / 900)); height:100svh; min-height:620px; padding-top:var(--header-h); background:#fff; color:#16191f; display:grid; grid-template-rows:42px minmax(0,1fr); }
-.runway__departments { display:flex;align-items:center;justify-content:center;gap:clamp(18px,3.7vw,60px);font-size:10px;text-transform:uppercase;letter-spacing:.14em; }
-.runway__departments a {text-decoration:none;}
+.runway { isolation:isolate; --ru:min(calc(100vw / 1600),calc(100svh / 900)); height:100svh; min-height:620px; padding-top:var(--header-h); background:#fff; color:#16191f; display:grid; grid-template-rows:minmax(0,1fr); }
 .runway__layout {min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,23.25vw,372px);}
 .runway__stage {position:relative;overflow:hidden;min-width:0;touch-action:pan-y;user-select:none;background:linear-gradient(transparent 60%,rgba(255,255,255,.72)),linear-gradient(90deg,#f1f5fa,#e7eff6 38%,#eef4f9 62%,#f6f9fc);}
 .runway__line {position:absolute;inset:0;}
@@ -49,7 +47,6 @@ body:has(.runway) .site-header .site-nav a {font-weight:400;font-size:10px;lette
 @media(max-width:1100px) and (min-width:821px) {.runway__intro {width:70%;}.runway__intro>p:last-child {max-width:260px;}.runway__intro h2 {font-size:17px;}.runway__hint {max-width:210px;left:24px;}.runway__media-note {top:auto;bottom:8px;right:10px;font-size:8px;}}
 @media(max-width:820px) {
  .runway {--ru:1px;min-height:600px;grid-template-rows:minmax(0,1fr);}
- .runway__departments {display:none;}
  .runway__layout {grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 190px;}
  .runway__intro {left:16px;top:18px;width:calc(100% - 32px);}
  .runway__intro h2 {font-size:17px;letter-spacing:.1em;}
