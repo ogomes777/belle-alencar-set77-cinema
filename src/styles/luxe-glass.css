@@ -362,3 +362,9 @@ html .film__stage.is-room-rail{touch-action:pan-y}
   html .chapter__card.is-glass-appeared .chapter__glint{animation:none!important}
   html .roomrail__switch{transition:none!important}
 }
+
+/* Horizontal look gestures can start on the large narrative glass cards.
+   Keep native vertical page scroll and all buttons clickable. */
+@media (pointer:coarse) {
+  html .film__chapters .chapter__card { touch-action: pan-y; }
+}

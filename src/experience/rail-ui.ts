@@ -216,6 +216,37 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       });
     }
   },{passive:true});
+
+  // Narrative cards sit over the canvas. Horizontal drags beginning on their
+  // non-interactive typography must still rotate the camera. We listen in
+  // capture phase rather than changing the card's pointer-events or trapping
+  // the browser's normal VERTICAL scrolling.
+  let overCard:{id:number;startX:number;startY:number;lastX:number;moving:boolean}|null=null;
+  const filmRoot=stage.closest('#filme');
+  document.addEventListener('pointerdown',e=>{
+    if(!active||flight||!getWorld()||!filmRoot)return;
+    if(!(e.target instanceof Element)||!filmRoot.contains(e.target)||stage.contains(e.target))return;
+    if(e.target.closest('.roomrail,a,button,input,select,textarea,[role="button"]'))return;
+    const rect=stage.getBoundingClientRect();
+    if(e.clientY<rect.top||e.clientY>rect.bottom)return;
+    overCard={id:e.pointerId,startX:e.clientX,startY:e.clientY,lastX:e.clientX,moving:false};
+  },{capture:true,passive:true});
+  document.addEventListener('pointermove',e=>{
+    const g=overCard;if(!g||g.id!==e.pointerId||!active)return;
+    const dx=e.clientX-g.startX,dy=e.clientY-g.startY;
+    if(!g.moving&&Math.abs(dx)>11&&Math.abs(dx)>Math.abs(dy)*1.2)g.moving=true;
+    if(!g.moving)return;
+    const step=e.clientX-g.lastX;
+    if(Math.abs(step)>0)getWorld()?.orbitRail(step/Math.max(320,stage.getBoundingClientRect().width));
+    g.lastX=e.clientX;
+  },{passive:true});
+  document.addEventListener('pointerup',e=>{
+    if(overCard?.id===e.pointerId)overCard=null;
+  },{passive:true});
+  document.addEventListener('pointercancel',e=>{
+    if(overCard?.id===e.pointerId)overCard=null;
+  },{passive:true});
+
   stage.addEventListener('pointerleave',()=>{getWorld()?.setRailPointer(null);stage.style.cursor='';});
   const end=(e:PointerEvent)=>{
     const g=gesture;if(!g||g.id!==e.pointerId)return;gesture=null;
