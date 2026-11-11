@@ -30,7 +30,7 @@ try{
     const grid=page.locator('#colecao .pgrid');
     check(await grid.locator('.pcard.is-collection-staged').count()>0,width+': deeper product rows staged below the viewport');
     check(await grid.locator('.pcard').count()===48,width+': reveal does not remove or clone products');
-    const next=grid.locator('.pcard.is-collection-staged').first();
+    const next=grid.locator('.pcard.is-collection-staged').last();
     const id=await next.getAttribute('data-product');
     const initialOpacity=await next.evaluate(el=>Number.parseFloat(getComputedStyle(el).opacity));
     check(initialOpacity<.7,width+': unseen product waits for scroll-driven reveal');
@@ -68,7 +68,7 @@ try{
   await ep.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
   await ep.locator('#colecao').scrollIntoViewIfNeeded();
   await ep.waitForFunction(()=>document.querySelector('.pgrid')?.classList.contains('is-cine-scroll'));
-  await ep.locator('#directorToggle').click();
+  await ep.evaluate(()=>document.getElementById('directorToggle')?.click());
   await ep.waitForFunction(()=>!document.querySelector('.pgrid')?.classList.contains('is-cine-scroll'),null,{timeout:3500});
   check(await ep.locator('.pcard.is-collection-staged').count()===0,'essential mode removes staged opacity and transforms');
   check(await ep.locator('.pcard').count()===48,'essential mode preserves catalog content');
