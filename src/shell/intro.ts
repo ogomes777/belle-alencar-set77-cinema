@@ -1,6 +1,7 @@
 /**
- * Belle intro: short, fullscreen and fail-open. No WebGL dependency.
- * The HTML head also includes an independent 1.5-second safety timeout.
+ * Belle intro: signature-style lettering, champagne flourish and split reveal.
+ * Short, once per session, skippable, reduced-motion safe and fail-open.
+ * The HTML head also includes an independent 3.4-second safety timeout.
  */
 import { readSession, writeSession } from '../core/storage';
 
@@ -30,7 +31,7 @@ export function initIntro(): void {
     if(done)return;done=true;window.clearTimeout(opening);root.classList.remove('intro-playing');
     if(fast){cleanup();return;}
     root.classList.add('intro-opening');
-    removal=window.setTimeout(cleanup,320);
+    removal=window.setTimeout(cleanup,600);
   }
   function skip(){finish(true);}
   function onVisibility(){if(document.hidden)skip();}
@@ -39,5 +40,5 @@ export function initIntro(): void {
   document.getElementById('introSkip')?.addEventListener('click',skip);
   document.addEventListener('visibilitychange',onVisibility);
   window.addEventListener('pagehide',skip);
-  opening=window.setTimeout(()=>finish(false),620);
+  opening=window.setTimeout(()=>finish(false),2200);
 }
