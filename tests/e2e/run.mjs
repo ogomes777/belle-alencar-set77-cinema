@@ -246,7 +246,17 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
   await page.locator('.roomrail__inspect').click({timeout:12000});
   await page.waitForSelector('.roomrail__detail:not([hidden])',{timeout:12000});
   check('boutique '+width+': ficha na cena',await page.locator('.roomrail__detail:not([hidden])').count()===1);
-  await page.locator('.roomrail__size').selectOption({index:1});
+  // Boutique size is now a real, accessible ivory/gold choice button.
+  await page.locator('.roomrail__size-choice').first().click();
+  check('boutique '+width+': tamanho chip sincronizado',await page.locator('.roomrail__size').inputValue()!=='');
+  const luxe=await page.evaluate(()=>({
+    glass:getComputedStyle(document.querySelector('.chapter__card')).backdropFilter,
+    radius:parseFloat(getComputedStyle(document.querySelector('.chapter__card')).borderRadius),
+    size:parseFloat(getComputedStyle(document.querySelector('.roomrail__size-choice')).borderRadius)
+  }));
+  check('boutique '+width+': vidro champagne e bordas premium',
+    luxe.glass.includes('blur(')&&luxe.radius>=15&&luxe.size>=9);
+
   await page.locator('.roomrail__add').click({timeout:12000});
   await page.waitForFunction(()=>document.querySelector('.roomrail__bag b')?.textContent==='1',null,{timeout:25000});
   await page.waitForFunction(()=>!document.querySelector('.dress-ghost'),null,{timeout:25000});

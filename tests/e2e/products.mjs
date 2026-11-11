@@ -66,7 +66,7 @@ await mp.locator('.roomrail__next').click();
 check((await mp.locator('.roomrail__product').textContent())!==initial,'next control selects an in-room product');
 await mp.locator('.roomrail__inspect').click();
 await mp.waitForSelector('.roomrail__detail:not([hidden])');
-await mp.locator('.roomrail__size').selectOption({index:1});
+await mp.locator('.roomrail__size-choice').first().click();
 await mp.locator('.roomrail__add').click();
 await mp.waitForFunction(()=>document.querySelector('.roomrail__bag b')?.textContent==='1',null,{timeout:14000});
 check(await mp.locator('.dress-ghost').count()===0,'reduced-motion cart without ghost overlay');
