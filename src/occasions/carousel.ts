@@ -46,10 +46,11 @@ export function initOccasionsCarousel(director:Director):()=>void {
   if(portraits.some(p=>!p)||arrivals.some(a=>!a))return ()=>{};
   const media=matchMedia('(prefers-reduced-motion: reduce)');
   const desktop=matchMedia('(min-width: 900px)');
-  let disposed=false, enabled=false, onscreen=false, hovered=false, focused=false;
-  let lastIndex=-1, timer=0, pauseUntil=0, stageWidth=1, pointer:PointerState|null=null;
+  let disposed=false, enabled=false, onscreen=false, orbitRunning=false;
+  let userPaused=false,tickerAttached=false;
+  let lastIndex=-1, pauseUntil=0, stageWidth=1, pointer:PointerState|null=null;
   let blockClickUntil=0,lastRender=0;
-  let orbit:ReturnType<typeof gsap.to>|null=null;
+  const pauseButton=shell.querySelector<HTMLButtonElement>('[data-occ-pause]');
   const state={position:0};
   let trigger:ScrollTrigger|null=null;
   let local:AbortController|null=null;
@@ -97,7 +98,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
     if(!enabled)return;
     const isMobile=!desktop.matches;
     const now=performance.now();
-    if(isMobile&&orbit&&now-lastRender<27)return;
+    if(isMobile&&orbitRunning&&now-lastRender<27)return;
     lastRender=now;
     const reach=isMobile?Math.max(174,Math.min(stageWidth*.52,340)):Math.min(stageWidth*.32,440);
     const depth=isMobile?130:245;
@@ -116,7 +117,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
         x,y:Math.abs(sine)*(isMobile?9:15),
         z,rotationY:-sine*pivot,
         scale:isMobile?.78+.22*focus:.79+.21*focus,
-        opacity:.64+.36*focus,
+        opacity:1,
         force3D:true
       });
       // The cutout rises physically in front of its card, without image warps.
@@ -136,34 +137,62 @@ export function initOccasionsCarousel(director:Director):()=>void {
     counter!.setAttribute('aria-label',`Ocasião ${current+1} de 3: ${labels[current]}`);
   }
 
-  function stopAuto(){
-    window.clearTimeout(timer);timer=0;
-    if(orbit){orbit.kill();orbit=null;}
+  // A single source of truth drives the orbit. Do not create a looping GSAP
+  // tween then kill it from hover/focus events: it can stay killed forever.
+  // Ticker is attached only while visible and never rotates during a drag,
+  // manual snap, keyboard interaction or an explicit user pause.
+  function activeShopLinkFocused(){
+    return links.some(link=>link===document.activeElement);
+  }
+  function updatePauseButton(){
+    if(!pauseButton)return;
+    pauseButton.setAttribute('aria-pressed',String(userPaused));
+    pauseButton.setAttribute('aria-label',userPaused?'Retomar a rotação automática':'Pausar a rotação automática');
+    pauseButton.textContent=userPaused?'▶':'Ⅱ';
+    pauseButton.title=userPaused?'Retomar carrossel':'Pausar carrossel';
+  }
+  function ticker(_time:number,deltaTime:number){
+    if(!enabled||!onscreen||document.hidden)return;
+    const canAdvance=!userPaused&&!pointer&&!activeShopLinkFocused()
+      &&performance.now()>=pauseUntil&&!gsap.isTweening(state);
+    if(!canAdvance){
+      orbitRunning=false;
+      shell!.dataset.autoOrbit='paused';
+      return;
+    }
+    orbitRunning=true;
+    shell!.dataset.autoOrbit='running';
+    // GSAP provides elapsed wall-clock milliseconds. Bound sudden tab/device
+    // stalls so a frame cannot skip an entire look after resuming.
+    const dt=clamp(deltaTime,0,55);
+    state.position+=dt/1000*(cards.length/(desktop.matches?30:42));
+    // Keep floating point precision even after hours of browsing.
+    if(Math.abs(state.position)>300)state.position=wrap(state.position,cards.length);
+    render();
+  }
+  function attachOrbit(){
+    if(tickerAttached||!enabled||!onscreen||document.hidden)return;
+    tickerAttached=true;
+    gsap.ticker.add(ticker);
+  }
+  function detachOrbit(){
+    if(tickerAttached){gsap.ticker.remove(ticker);tickerAttached=false;}
+    orbitRunning=false;
     delete shell!.dataset.autoOrbit;
   }
-  function startOrbit(){
-    timer=0;
-    if(!enabled||!onscreen||hovered||focused||pointer||document.hidden||orbit)return;
-    // 360° per 39s desktop / 51s mobile, no discrete index jumps.
-    orbit=gsap.to(state,{
-      position:state.position+cards.length,
-      duration:desktop.matches?39:51,
-      ease:'none',repeat:-1,overwrite:true,onUpdate:render
-    });
-    shell!.dataset.autoOrbit='running';
+  function syncOrbit(){
+    if(enabled&&onscreen&&!document.hidden)attachOrbit();
+    else detachOrbit();
   }
-  function schedule(){
-    if(orbit)return;
-    window.clearTimeout(timer);timer=0;
-    if(!enabled||!onscreen||hovered||focused||pointer||document.hidden)return;
-    timer=window.setTimeout(startOrbit,Math.max(1300,pauseUntil-performance.now()));
+  function markInteraction(){
+    pauseUntil=performance.now()+3600;
+    orbitRunning=false;
+    shell!.dataset.autoOrbit='paused';
   }
-  function markInteraction(){pauseUntil=performance.now()+11500;stopAuto();}
 
   function settle(next:number,byUser:boolean){
     if(!enabled)return;
     if(byUser)markInteraction();
-    else stopAuto();
     gsap.killTweensOf(state);
     gsap.to(state,{
       position:next,
@@ -171,7 +200,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
       ease:byUser?'power3.out':'power2.inOut',
       overwrite:true,
       onUpdate:render,
-      onComplete:()=>{render();announce();schedule();}
+      onComplete:()=>{render();announce();}
     });
   }
   function navigate(delta:number,byUser:boolean){
@@ -193,14 +222,14 @@ export function initOccasionsCarousel(director:Director):()=>void {
       id:e.pointerId,x:e.clientX,y:e.clientY,start:state.position,
       lastX:e.clientX,lastAt:performance.now(),velocity:0,moved:false
     };
-    stopAuto();
+    markInteraction();
   }
   function move(e:PointerEvent){
     const p=pointer;
     if(!p||p.id!==e.pointerId)return;
     const dx=e.clientX-p.x,dy=e.clientY-p.y;
     if(!p.moved){
-      if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>9){pointer=null;schedule();return;}
+      if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>9){pointer=null;return;}
       if(Math.abs(dx)<9||Math.abs(dx)<=Math.abs(dy)*1.12)return;
       p.moved=true;
       gsap.killTweensOf(state);
@@ -220,7 +249,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
     pointer=null;
     stage!.classList.remove('is-dragging');
     if(stage!.hasPointerCapture(e.pointerId))stage!.releasePointerCapture(e.pointerId);
-    if(!p.moved){schedule();return;}
+    if(!p.moved)return;
     blockClickUntil=performance.now()+350;
     const velocity=performance.now()-p.lastAt<125
       ?clamp(-p.velocity*.12,-.28,.28):0;
@@ -238,6 +267,8 @@ export function initOccasionsCarousel(director:Director):()=>void {
     enabled=true;
     lastIndex=-1;
     shell!.classList.add('is-round');
+    userPaused=false;
+    updatePauseButton();
     stageWidth=Math.max(1,stage!.clientWidth);
     render();
     announce();
@@ -246,6 +277,13 @@ export function initOccasionsCarousel(director:Director):()=>void {
     const signal=local.signal;
     shell!.querySelector<HTMLElement>('[data-occ-prev]')?.addEventListener('click',()=>navigate(-1,true),{signal});
     shell!.querySelector<HTMLElement>('[data-occ-next]')?.addEventListener('click',()=>navigate(1,true),{signal});
+    pauseButton?.addEventListener('click',()=>{
+      userPaused=!userPaused;
+      if(!userPaused)pauseUntil=performance.now()+350;
+      updatePauseButton();
+      shell!.dataset.autoOrbit=userPaused?'paused':'running';
+      syncOrbit();
+    },{signal});
     stage!.addEventListener('pointerdown',down,{signal});
     stage!.addEventListener('pointermove',move,{signal});
     stage!.addEventListener('pointerup',release,{signal});
@@ -268,15 +306,17 @@ export function initOccasionsCarousel(director:Director):()=>void {
       else if(e.key==='Home'){e.preventDefault();settle(Math.round(state.position)-activeIndex(),true);}
       else if(e.key==='End'){e.preventDefault();settle(Math.round(state.position)-activeIndex()+2,true);}
     },{signal});
-    shell!.addEventListener('mouseenter',()=>{hovered=true;stopAuto();},{signal});
-    shell!.addEventListener('mouseleave',()=>{hovered=false;schedule();},{signal});
-    shell!.addEventListener('focusin',()=>{focused=true;stopAuto();},{signal});
-    shell!.addEventListener('focusout',()=>{focused=shell!.contains(document.activeElement);schedule();},{signal});
+    // Hover and a permanently focused arrow must never freeze the carousel.
+    // Intentional CTA keyboard focus is respected until focus moves away.
     document.addEventListener('visibilitychange',()=>{
-      if(document.hidden){stopAuto();gsap.killTweensOf(state);}
-      else{render();schedule();}
+      if(document.hidden)detachOrbit();
+      else{render();syncOrbit();}
     },{signal});
-    desktop.addEventListener('change',()=>{render();schedule();},{signal});
+    window.addEventListener('pagehide',detachOrbit,{signal});
+    window.addEventListener('pageshow',()=>{
+      if(!disposed){render();syncOrbit();}
+    },{signal});
+    desktop.addEventListener('change',()=>{render();},{signal});
 
     ro=new ResizeObserver(()=>{
       stageWidth=Math.max(1,stage!.clientWidth);
@@ -290,26 +330,26 @@ export function initOccasionsCarousel(director:Director):()=>void {
       trigger:section!,start:'top 85%',end:'bottom 18%',
       onEnter:()=>{
         onscreen=true;
-        gsap.fromTo(shell!,{autoAlpha:.2,y:28},{autoAlpha:1,y:0,duration:.86,ease:'power3.out',overwrite:true});
+        // Do not fade the whole carousel: this washed all three cards out.
         entrance(activeIndex());
-        schedule();
+        syncOrbit();
       },
-      onEnterBack:()=>{onscreen=true;entrance(activeIndex());schedule();},
-      onLeave:()=>{onscreen=false;stopAuto();},
-      onLeaveBack:()=>{onscreen=false;stopAuto();},
+      onEnterBack:()=>{onscreen=true;syncOrbit();},
+      onLeave:()=>{onscreen=false;detachOrbit();},
+      onLeaveBack:()=>{onscreen=false;detachOrbit();},
       onUpdate:self=>setAura((self.progress-.5)*26)
     });
     if(section!.getBoundingClientRect().top<innerHeight*.85 &&
        section!.getBoundingClientRect().bottom>0){
       onscreen=true;
-      schedule();
+      syncOrbit();
     }
   }
 
   function teardown(){
     if(!enabled)return;
     enabled=false;
-    stopAuto();pointer=null;onscreen=false;
+    detachOrbit();pointer=null;onscreen=false;
     gsap.killTweensOf(state);
     for(const target of arrivals)if(target){gsap.killTweensOf(target);gsap.set(target,{clearProps:'all'});}
     for(const figure of portraits)if(figure)gsap.set(figure,{clearProps:'all'});
@@ -331,6 +371,8 @@ export function initOccasionsCarousel(director:Director):()=>void {
       link.removeAttribute('aria-hidden');
     });
     gsap.set(shell!,{clearProps:'all'});
+    userPaused=false;
+    updatePauseButton();
     gsap.set(aura!,{clearProps:'all'});
     delete stage!.dataset.activeIndex;
     delete stage!.dataset.occasion;
