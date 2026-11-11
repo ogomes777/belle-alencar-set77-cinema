@@ -23,6 +23,7 @@ try {
     await page.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.classList.contains('md-motion'));
     check(await page.locator('[data-md-scene]').count()===9,width+': nine motion scenes mounted');
+    check(!(await page.locator('#duvidas').evaluate(el=>el.classList.contains('md-in'))),width+': future scenes not prematurely revealed');
     check(await page.locator('.film .chapter').count()===7,width+': seven film chapters preserved');
     for(const id of sceneIds){
       const scene=page.locator('#'+id);
