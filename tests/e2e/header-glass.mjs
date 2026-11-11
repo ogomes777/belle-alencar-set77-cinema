@@ -66,6 +66,9 @@ try{
   check(true,width+': collection sets pearl glass');
   await page.locator('#lojas').scrollIntoViewIfNeeded();
   await page.waitForFunction(()=>document.getElementById('siteHeader')?.dataset.atmosphere==='noir',null,{timeout:4000});
+  // The glass color changes smoothly; assert final contrast only after
+  // the 720ms text transition finishes, not on its first animation frame.
+  await page.waitForTimeout(870);
   check(await header.evaluate(el=>{
     const c=getComputedStyle(el).color;
     return c==='rgb(248, 240, 228)'||c==='rgb(255, 247, 238)'||c==='rgb(248, 240, 228)';
