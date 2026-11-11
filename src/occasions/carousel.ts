@@ -84,8 +84,13 @@ export function initOccasionsCarousel(director:Director):()=>void {
     const target=arrivals[index];
     if(!target)return;
     gsap.killTweensOf(target);
-    gsap.fromTo(target,{y:44,opacity:.42,scale:.93},
-      {y:0,opacity:1,scale:1,duration:1.13,ease:'power3.out',overwrite:true});
+    // Brief editorial "step out of the card": approach the lens, rise a little
+    // past the resting plane, then settle under gentle simulated gravity.
+    gsap.timeline({defaults:{overwrite:true}})
+      .fromTo(target,
+        {y:66,z:-32,opacity:.22,scale:.84},
+        {y:-12,z:36,opacity:1,scale:1.045,duration:.91,ease:'power3.out'})
+      .to(target,{y:0,z:0,scale:1,duration:.47,ease:'sine.inOut'});
   }
 
   function render(){
