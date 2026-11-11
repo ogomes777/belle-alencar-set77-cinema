@@ -1,0 +1,265 @@
+/* BELLE ALENCAR · SET77 Motion Director V8
+ * Nine editorial scenes, one quiet visual grammar.
+ * Preserve the existing WebGL film and runway; no fixed scroll-cover or
+ * artificial loading time. Every effect uses opacity/transform/clip-path.
+ */
+:root {
+  --md-ease:cubic-bezier(.17,1,.3,1);
+  --md-gold:#b79a70;
+  --md-silk:#f4efe5;
+  --md-time:840ms;
+}
+
+/* Hairline bridge gives successive chapters continuity without decorating
+ * the content with large boxes or disturbing their backgrounds. */
+html.md-motion .md-scene::before {
+  content:'';
+  display:block;
+  position:absolute;
+  left:clamp(18px,5vw,88px);
+  right:clamp(18px,5vw,88px);
+  top:0;
+  z-index:3;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(181,141,81,.4),transparent);
+  transform:scaleX(0);
+  transform-origin:50% 50%;
+  transition:transform 1100ms var(--md-ease) 100ms;
+  pointer-events:none;
+}
+html.md-motion .md-scene.md-in::before {transform:scaleX(1);}
+
+html.md-motion .md-scene .md-reveal {
+  opacity:1;
+  transform:none;
+  filter:none;
+  transition:
+    opacity var(--md-time) ease,
+    transform var(--md-time) var(--md-ease),
+    filter var(--md-time) ease,
+    clip-path var(--md-time) var(--md-ease);
+  transition-delay:calc(var(--md-index,0) * 68ms);
+}
+html.md-motion .md-scene:not(.md-in) .md-reveal {
+  opacity:0;
+  transform:translate3d(0,25px,0);
+}
+html.md-motion .md-scene.md-in .md-reveal {
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+
+/* 01 — Cortina: gently unlock the existing Billie runway. The curtain
+ * is decorative and cannot intercept drag, arrows, favorites or cart. */
+html.md-motion #passarela .md-runway-veil {
+  position:absolute;
+  inset:0;
+  z-index:1000;
+  background:
+    linear-gradient(96deg,rgba(177,145,94,.11),transparent 30%),
+    #f2ece2;
+  pointer-events:none;
+  clip-path:inset(0 0 0 0);
+  transition:clip-path 1100ms cubic-bezier(.73,0,.17,1) 50ms;
+}
+html.md-motion #passarela.md-in .md-runway-veil {clip-path:inset(0 0 0 101%);}
+html.md-motion #passarela:not(.md-in) .runway__intro.md-reveal,
+html.md-motion #passarela:not(.md-in) .runway__tag.md-reveal {
+  transform:translate3d(-16px,0,0);
+}
+html.md-motion #passarela.md-in .runway__intro.md-reveal,
+html.md-motion #passarela.md-in .runway__tag.md-reveal {
+  transition-delay:470ms;
+}
+
+/* 02 — Colunas: an editorial group reveal, not a fake page navigation. */
+html.md-motion #ocasioes:not(.md-in) .occ-card.md-reveal {
+  transform:translate3d(0,43px,0) rotate(-.5deg);
+  filter:blur(2px);
+}
+html.md-motion #ocasioes.md-in .occ-card.md-reveal {transition-duration:960ms;}
+html.md-motion #ocasioes .occ-card__art::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(112deg,transparent 33%,rgba(255,245,224,.24) 49%,transparent 64%);
+  transform:translateX(-145%);
+  pointer-events:none;
+  transition:transform 1150ms var(--md-ease);
+}
+html.md-motion #ocasioes.md-in .occ-card__art::after {transform:translateX(145%);}
+
+/* 03 — Varredura: a heading is unveiled like a couture page being turned.
+ * The collection and its controls remain native and clickable. */
+html.md-motion #colecao .section-head.md-reveal {
+  clip-path:inset(0 0 0 0);
+  transition-duration:1000ms;
+}
+html.md-motion #colecao:not(.md-in) .section-head.md-reveal {
+  clip-path:inset(0 100% 0 0);
+  transform:none;
+}
+html.md-motion #colecao .section-head {position:relative;}
+html.md-motion #colecao .section-head::after {
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-17px;
+  width:min(190px,27vw);
+  height:1px;
+  background:linear-gradient(90deg,var(--md-gold),transparent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 1050ms var(--md-ease) 420ms;
+  pointer-events:none;
+}
+html.md-motion #colecao.md-in .section-head::after {transform:scaleX(1);}
+html.md-motion #colecao:not(.md-in) .catalog.md-reveal {transform:translate3d(0,20px,0);}
+
+/* 04 — Pilha: looks settle into place like cards in a fashion portfolio. */
+html.md-motion #looks:not(.md-in) .look.md-reveal {
+  transform:translate3d(0,36px,0) scale(.968);
+}
+html.md-motion #looks.md-in .look.md-reveal {
+  transition-duration:1020ms;
+}
+html.md-motion #looks .look__art::after {
+  content:'';
+  position:absolute;
+  left:18%;
+  right:18%;
+  bottom:7%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(195,159,100,.55),transparent);
+  opacity:0;
+  transform:scaleX(.4);
+  transition:opacity 800ms ease,transform 1200ms var(--md-ease);
+  pointer-events:none;
+}
+html.md-motion #looks.md-in .look__art::after {opacity:1;transform:scaleX(1);}
+
+/* 05 — Digitação: the label expands with typographic rhythm; body copy is
+ * never replaced, scrambled or repeated for screen readers. */
+html.md-motion #como-comprar .eyebrow {
+  display:table;
+  width:max-content;
+  max-width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  clip-path:inset(0 0 0 0);
+  transition:clip-path 820ms steps(16,end) 170ms;
+}
+html.md-motion #como-comprar:not(.md-in) .eyebrow {
+  clip-path:inset(0 100% 0 0);
+}
+html.md-motion #como-comprar:not(.md-in) .how__steps li.md-reveal {transform:translate3d(0,28px,0);}
+html.md-motion #como-comprar .how__steps li::before {
+  content:'';
+  display:block;
+  height:1px;
+  background:var(--md-gold);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 780ms var(--md-ease);
+}
+html.md-motion #como-comprar.md-in .how__steps li::before {transform:scaleX(1);}
+
+/* 06 — Círculo: individual stores emerge from a calm iris. Buttons remain
+ * in the real DOM, not overlayed with fake navigational panels. */
+html.md-motion #lojas .store-card.md-reveal {clip-path:circle(145% at 50% 48%);}
+html.md-motion #lojas:not(.md-in) .store-card.md-reveal {
+  clip-path:circle(0 at 50% 48%);
+  transform:translate3d(0,10px,0);
+}
+html.md-motion #lojas.md-in .store-card.md-reveal {transition-duration:940ms;}
+
+/* 07 — Cortina lateral + parallax: image and concierge message open together.
+ * Parallax is ~12px and never moves interactive content. */
+html.md-motion #atendimento .concierge__media.md-reveal {
+  clip-path:inset(0 0 0 0);
+  transform:none;
+  transition:clip-path 1100ms var(--md-ease);
+}
+html.md-motion #atendimento:not(.md-in) .concierge__media.md-reveal {
+  clip-path:inset(0 100% 0 0);
+}
+html.md-motion #atendimento .concierge__media img {
+  transform:translate3d(0,var(--md-shift,0px),0) scale(1.045);
+}
+html.md-motion #atendimento:not(.md-in) .concierge__body.md-reveal {transform:translate3d(25px,0,0);}
+html.md-motion #atendimento.md-in .concierge__body.md-reveal {transition-delay:310ms;}
+
+/* 08 — Dobra: FAQ rows rise gently. Native details/summary semantics intact. */
+html.md-motion #duvidas:not(.md-in) .faq details.md-reveal {
+  transform:perspective(1200px) rotateX(-9deg) translate3d(0,15px,0);
+  transform-origin:top;
+}
+html.md-motion #duvidas.md-in .faq details.md-reveal {transition-duration:680ms;}
+html.md-motion #duvidas .faq details[open] {background:rgba(220,199,161,.075);}
+html.md-motion #duvidas .faq details summary {transition:padding-left 260ms ease,color 260ms ease;}
+html.md-motion #duvidas .faq details summary:hover,
+html.md-motion #duvidas .faq details summary:focus-visible {padding-left:9px;color:var(--gold-deep);}
+
+/* 09 — Veludo: a finale is quiet and ceremonial; no WebGL fire, spinning
+ * cube, particles, or second automatic loader before the conversion CTA. */
+html.md-motion .finale[data-md-scene='velvet'] {
+  background:
+    radial-gradient(ellipse 75% 55% at 50% 35%,rgba(218,192,145,.10),transparent 85%),
+    var(--ivory);
+}
+html.md-motion .finale:not(.md-in) .finale__mark.md-reveal {
+  transform:translate3d(0,22px,0) scale(.94);
+  filter:blur(4px);
+}
+html.md-motion .finale.md-in .finale__mark.md-reveal {transition-duration:1180ms;}
+html.md-motion .finale #finaleTitle.md-reveal {transition-duration:1000ms;}
+
+/* The seven existing film chapters have their own measured 3D camera.
+ * Only signal entry with a restrained gold baseline; never animate the
+ * .chapter__card transform, sticky layout or Scroll state. */
+html.md-motion .film .chapter__card .eyebrow {position:relative;display:table;}
+html.md-motion .film .chapter__card .eyebrow::after {
+  content:'';
+  display:block;
+  height:1px;
+  margin-top:11px;
+  width:min(170px,100%);
+  background:linear-gradient(90deg,rgba(150,108,53,.66),transparent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 850ms var(--md-ease) 140ms;
+  pointer-events:none;
+}
+html.md-motion .film .chapter.md-chapter-seen .eyebrow::after {transform:scaleX(1);}
+
+/* Automatic accessibility and perf opt-outs. */
+@media(max-width:820px) {
+  :root {--md-time:660ms;}
+  html.md-motion #passarela .md-runway-veil {transition-duration:760ms;}
+  html.md-motion #ocasioes:not(.md-in) .occ-card.md-reveal {filter:none;transform:translate3d(0,20px,0);}
+  html.md-motion #lojas .store-card.md-reveal {clip-path:none;}
+  html.md-motion #lojas:not(.md-in) .store-card.md-reveal {transform:translate3d(0,18px,0);}
+  html.md-motion #duvidas:not(.md-in) .faq details.md-reveal {transform:translate3d(0,14px,0);}
+  html.md-motion #atendimento .concierge__media img {transform:none;}
+}
+html[data-intensity='essential'] .md-scene .md-reveal,
+html[data-intensity='essential'] .md-scene:not(.md-in) .md-reveal {
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  clip-path:none!important;
+  transition:none!important;
+}
+html[data-intensity='essential'] .md-runway-veil {display:none!important;}
+@media(prefers-reduced-motion:reduce) {
+  html.md-motion .md-scene .md-reveal,
+  html.md-motion .md-scene:not(.md-in) .md-reveal {
+    opacity:1!important;transform:none!important;filter:none!important;
+    clip-path:none!important;transition:none!important;
+  }
+  html.md-motion .md-runway-veil {display:none!important;}
+  html.md-motion .md-scene::before,
+  html.md-motion .film .chapter__card .eyebrow::after {transition:none!important;transform:none!important;}
+  html.md-motion #atendimento .concierge__media img {transform:none!important;}
+}
