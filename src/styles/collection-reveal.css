@@ -1,0 +1,79 @@
+/* BELLE ALENCAR · SET77 LABS · Collection Scroll Couture V13
+ *
+ * One ScrollTrigger scrubs each card into place as the page moves.
+ * The base HTML, product colors, stock disclaimers and commerce events stay
+ * unchanged. No source photo is recolored. No fixed overlay blocks clicks.
+ */
+#colecao .pgrid.is-cine-scroll {
+  perspective:1500px;
+  perspective-origin:50% 30%;
+}
+#colecao .pgrid.is-cine-scroll.is-entering .pcard {
+  /* Remove the old timer-based fade to avoid conflicting with scroll scrub. */
+  animation:none;
+}
+#colecao .pgrid.is-cine-scroll .pcard {
+  transform-origin:50% 85%;
+  backface-visibility:hidden;
+}
+#colecao .pgrid.is-cine-scroll .pcard.is-collection-staged {
+  will-change:transform,opacity;
+}
+/* A delicate champagne gradient unveils the photographs. It is not applied
+ * to the product image itself, so product color fidelity remains intact. */
+#colecao .pgrid.is-cine-scroll .pcard__media::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(0deg,
+    rgba(247,243,235,.92) 0%,
+    rgba(248,244,237,.56) 33%,
+    rgba(248,244,237,.06) 79%,
+    transparent 100%);
+  opacity:var(--cr-veil,0);
+  pointer-events:none;
+}
+#colecao .pgrid.is-cine-scroll .pcard.is-collection-revealed {
+  opacity:1;
+  transform:none;
+  will-change:auto;
+}
+#colecao .pgrid.is-cine-scroll .pcard__inner:focus-within {
+  outline:2px solid var(--gold-deep);
+  outline-offset:4px;
+}
+/* Refined, tactile motion only on users' direct interaction. */
+@media(hover:hover) and (pointer:fine) {
+  #colecao .pgrid.is-cine-scroll .pcard.is-collection-revealed .pcard__ill {
+    transition:transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  #colecao .pgrid.is-cine-scroll .pcard.is-collection-revealed:hover .pcard__ill {
+    transform:translate3d(0,-7px,0) scale(1.035);
+  }
+}
+@media(max-width:820px) {
+  #colecao .pgrid.is-cine-scroll{perspective:1100px;}
+  #colecao .pgrid.is-cine-scroll .pcard__media::after {
+    background:linear-gradient(0deg,
+      rgba(247,243,235,.80),
+      rgba(247,243,235,.26) 43%,
+      transparent 83%);
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #colecao .pgrid .pcard,
+  #colecao .pgrid .pcard.is-collection-staged{
+    transform:none!important;
+    opacity:1!important;
+    animation:none!important;
+  }
+  #colecao .pgrid .pcard__media::after{display:none!important;}
+}
+html[data-intensity='essential'] #colecao .pgrid .pcard {
+  transform:none!important;
+  opacity:1!important;
+}
+html[data-intensity='essential'] #colecao .pgrid .pcard__media::after {
+  display:none!important;
+}
