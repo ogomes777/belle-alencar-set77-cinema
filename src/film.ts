@@ -152,6 +152,7 @@ export function initFilm(director: Director): void {
     const onRoomRail = id === 'sala' && !posterMode && tier !== 'static';
     stage!.classList.toggle('is-room-rail', onRoomRail);
     roomRail.setActive(onRoomRail);
+    world?.setRailEngaged(onRoomRail);
     if (!stage!.classList.contains('is-live')) showPoster(id);
     bus.emit('film:chapter', { id, index: CHAPTERS.indexOf(id) });
   }
@@ -210,6 +211,7 @@ export function initFilm(director: Director): void {
       world.setDress(dressParams);
       await world.readyMedia();
       world.setProgress(progress, true);
+      world.setRailEngaged(active === 'sala');
       roomRail.refresh();
       mod.initReveals(film!);
       if (posterMode) {

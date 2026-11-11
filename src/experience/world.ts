@@ -70,6 +70,7 @@ export class World {
   private userYaw = 0;
   private dressState = { pos: new THREE.Vector3(), yaw: 0, energy: 0, onRail: true, atFitting: false };
   private scrollEnergy = 0;
+  private railEngaged = false;
   private time = 0;
   private firstFrameSent = false;
   private failed = false;
@@ -141,6 +142,8 @@ export class World {
     this.dress.energy = Math.max(this.dress.energy, 0.8);
     this.kick();
   }
+
+  setRailEngaged(on:boolean):void{this.railEngaged=on;}
 
   /** Produtos sempre pertencem à arara interna, nunca a uma interface 2D separada. */
   browseRack(direction:number):Product|null {
@@ -306,7 +309,8 @@ export class World {
     const targetEnergy = Math.min(1, d.energy + this.scrollEnergy * 0.35);
     this.dress.energy += (targetEnergy - this.dress.energy) * Math.min(1, dt * 2.5);
     if (exact) this.dress.energy = d.energy;
-    this.dress.update(exact ? 1 / 60 : dt);
+    // No full Verlet cloth integration during the calm storefront / rail chapters.
+    if(!d.onRail || exact)this.dress.update(exact ? 1/60 : dt);
 
     // ponteiro
     if (this.pointer) {
@@ -342,7 +346,8 @@ export class World {
         if (this.boutique.mirror) this.boutique.mirror.removeFromParent();
         this.mall.reflector = null;
         this.boutique.mirror = null;
-      } else if (this.frameAvg > 45) {
+      } else if (this.frameAvg > 45 && !this.railEngaged) {
+        // Never make an in-progress tap/drag/add-to-bag interaction disappear.
         this.fail('low-fps');
       }
     }
