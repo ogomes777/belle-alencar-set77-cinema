@@ -46,6 +46,7 @@ export function initRunway(ctx: Ctx): () => void {
       ensemble.setAttribute('aria-label',`Conjunto demonstrativo: ${look.pieces.map(piece=>piece.title).join(', ')}`);
       look.pieces.forEach((piece,slot)=>{
         const image=document.createElement('img');
+        if (!piece.cutout) throw new Error(`Runway: recorte ausente para ${piece.slug}`);
         image.src=piece.cutout;
         image.alt='';
         image.loading=slot===0?'eager':'lazy';
