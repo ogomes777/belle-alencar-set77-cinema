@@ -198,7 +198,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     }
   };
   swings.forEach((s, i) => writeSwing(s, i));
-  const heroSwing: Swing = { ax:0,az:0,vx:0,vz:0,hook:HERO_HANGER.clone(),yaw:-Math.PI/2,mesh:new THREE.Group(),clipped:false };
+  const heroSwing: Swing = { ax:0,az:0,vx:0,vz:0,hook:HERO_HANGER.clone(),yaw:-Math.PI/2,mesh:new THREE.Group(),clipped:false,product:clothing[0]!,side:1,baseZ:HERO_HANGER.z,focus:0,focusV:0,slide:0 };
   const writeHero = () => {
     tmpE.set(heroSwing.ax, heroSwing.yaw, heroSwing.az, 'YXZ');
     tmpQ.setFromEuler(tmpE);
