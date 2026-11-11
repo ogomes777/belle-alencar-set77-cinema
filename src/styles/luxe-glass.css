@@ -169,3 +169,61 @@ html .roomrail__hint,html .roomrail__gesture{color:#6f5634;text-shadow:0 1px 0 #
   html .roomrail__controls button,
   html .roomrail__actions button,.btn{transition-duration:0.01ms!important;transform:none!important}
 }
+
+
+/* Tailored size tiles: the native select remains as a progressive, keyboard-
+   compatible state source, while the visible controls use boutique-sized chips. */
+html .roomrail__size-label {position:relative;display:block}
+html .roomrail__size {
+  position:absolute!important;
+  opacity:0!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:0!important;
+  left:0;bottom:0;
+  pointer-events:none;
+  border:0!important;
+}
+html .roomrail__size-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+  margin-bottom:14px;
+}
+html .roomrail__size-choice {
+  position:relative;
+  display:inline-grid;
+  place-items:center;
+  min-width:52px;
+  height:46px;
+  padding:0 12px;
+  border:1px solid rgba(166,133,83,.62);
+  border-radius:11px;
+  background:linear-gradient(142deg,rgba(255,255,255,.84),rgba(244,231,203,.5));
+  box-shadow:inset 0 1px 0 #fff,0 3px 10px rgba(70,49,24,.06);
+  color:#4b3824;
+  font:600 13px/1 var(--sans);
+  transition:background .24s,color .24s,transform .24s,box-shadow .24s,border-color .24s;
+}
+html .roomrail__size-choice:hover{
+  transform:translateY(-2px);
+  border-color:#a17a42;
+  box-shadow:0 7px 16px rgba(117,78,29,.14),inset 0 1px 0 #fff;
+}
+html .roomrail__size-choice[aria-pressed=true]{
+  background:linear-gradient(140deg,#c1a36c,#856038 54%,#5a4129);
+  color:#fffdf7;
+  border-color:#866136;
+  box-shadow:0 5px 18px rgba(120,85,42,.22),inset 0 1px 0 rgba(255,255,255,.36);
+}
+html .roomrail__size-choice:focus-visible{outline:2px solid #71502e;outline-offset:3px}
+html .roomrail__size-label:focus-within .roomrail__size-options{border-radius:12px}
+@media(max-width:899px){
+  html .roomrail__size-options{gap:6px;margin-bottom:12px}
+  html .roomrail__size-choice{min-width:44px;height:42px;padding:0 9px}
+}
+@media(prefers-reduced-motion:reduce){
+  html .roomrail__size-choice{animation:none!important;transition:none!important}
+}

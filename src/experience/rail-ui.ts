@@ -27,6 +27,7 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       <p class="roomrail__description">Produto demonstrativo. Preço e estoque sujeitos à confirmação na loja.</p>
       <label class="roomrail__size-label">Tamanho
         <select class="roomrail__size" aria-label="Escolha o tamanho"><option value="">Escolha</option></select>
+        <span class="roomrail__size-options" role="group" aria-label="Tamanhos disponíveis"></span>
       </label>
       <div class="roomrail__actions">
         <button type="button" class="roomrail__add">Adicionar à sacola</button>
@@ -43,11 +44,25 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   const title=$<HTMLElement>('.roomrail__title');
   const desc=$<HTMLElement>('.roomrail__description');
   const sizeEl=$<HTMLSelectElement>('.roomrail__size');
+  const sizes=$<HTMLElement>('.roomrail__size-options');
   const addBtn=$<HTMLButtonElement>('.roomrail__add');
   const error=$<HTMLElement>('.roomrail__error');
   let active=false,selected:Product|null=null,flight=false,hoverRAF=0,hx=0,hy=0;
   let gesture:{x:number;y:number;last:number;id:number;moving:boolean}|null=null;
   const motion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function syncSizeChoices():void{
+    sizes.querySelectorAll<HTMLButtonElement>('button[data-size]').forEach(b=>{
+      b.setAttribute('aria-pressed',String(b.dataset.size===sizeEl.value));
+    });
+    error.hidden=true;
+  }
+  sizeEl.addEventListener('change',syncSizeChoices);
+  sizes.addEventListener('click',event=>{
+    const target=(event.target as HTMLElement).closest<HTMLButtonElement>('button[data-size]');
+    if(!target)return;
+    sizeEl.value=target.dataset.size??'';
+    sizeEl.dispatchEvent(new Event('change',{bubbles:true}));
+  });
   function paintProduct(p:Product|null){
     if(p && name.textContent!==p.title){
       name.textContent=p.title;
@@ -79,22 +94,43 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
     const w=getWorld(),item=p??w?.activeRackProduct();if(!w||!item||!active||flight)return;
     selected=item;paintProduct(item);title.textContent=item.title;desc.textContent=item.description;
     sizeEl.replaceChildren(new Option('Escolha',''),...item.variants.map(v=>new Option(v.size,v.size)));
+    sizes.replaceChildren(...item.variants.map(v=>{
+      const button=document.createElement('button');
+      button.type='button';button.className='roomrail__size-choice';
+      button.dataset.size=v.size;button.textContent=v.size;
+      button.setAttribute('aria-label','Tamanho '+v.size);
+      button.setAttribute('aria-pressed','false');
+      return button;
+    }));
+    syncSizeChoices();
     error.hidden=true;detail.hidden=false;
     w.selectRack(item.id);
     if(!motion())detail.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:250,easing:'ease-out'});
-    sizeEl.focus({preventScroll:true});
+    (sizes.querySelector<HTMLButtonElement>('button[data-size]')??sizeEl).focus({preventScroll:true});
   }
   async function add(){
     const w=getWorld(),p=selected,api=commerceApi();
     if(!w||!p||!api||flight||isFlying())return;
     const size=sizeEl.value as Size;
-    if(!size){error.hidden=false;sizeEl.focus();return;}
+    if(!size){error.hidden=false;(sizes.querySelector<HTMLButtonElement>('button[data-size]')??sizeEl).focus();return;}
     error.hidden=true;
     const start=async()=>{
       const city=api.storeCity();
-      const bounds=w.projectRackProduct(p.id);
-      if(!bounds||!p.cutout){announce('Esta peça está fora do campo de visão. Selecione outra.');return;}
+      if(!p.cutout){announce('Imagem desta peça indisponível.');return;}
       flight=true;addBtn.disabled=true;addBtn.setAttribute('aria-busy','true');
+      w.prepareRackPurchase(p.id);
+      // For fast rail scrubs, let the physical camera catch the selected garment.
+      // The real piece stays in the room and the selected image leaves from it.
+      await new Promise<void>(resolve=>setTimeout(resolve,motion()?80:480));
+      if(!active||getWorld()!==w){flight=false;addBtn.disabled=false;addBtn.removeAttribute('aria-busy');return;}
+      const physical=w.projectRackProduct(p.id);
+      const viewportOk=physical&&physical.x+physical.w>8&&physical.x<innerWidth-8
+        &&physical.y+physical.h>8&&physical.y<innerHeight-8;
+      const anchor=name.getBoundingClientRect();
+      const bounds=viewportOk?physical:{
+        x:anchor.left+anchor.width*.35,y:anchor.top-44,
+        w:Math.max(40,Math.min(100,anchor.width*.55)),h:Math.max(72,Math.min(148,anchor.height*5))
+      };
       const origin=document.createElement('img');
       origin.src=p.cutout;origin.alt='';origin.className='roomrail__origin';
       origin.style.cssText=`position:fixed;left:${bounds.x}px;top:${bounds.y}px;width:${bounds.w}px;height:${bounds.h}px;opacity:0;pointer-events:none;object-fit:contain;z-index:0`;

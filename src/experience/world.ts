@@ -159,6 +159,16 @@ export class World {
   }
   setRailPointer(normalizedX:number|null):void{this.railPanGoal=THREE.MathUtils.clamp(normalizedX??0,-1,1);this.kick();}
   railPosition(){return this.boutique.railPosition();}
+  /** Smoothly prepare the physical rack for a purchase when the customer
+   * navigates a long distance faster than the camera can travel.
+   * No extra scene is created. Scroll keeps ownership of the chapter. */
+  prepareRackPurchase(id:string):void {
+    this.boutique.select(id);
+    this.roomFocus.copy(this.boutique.focusPoint());
+    this.roomFocusReady=true;
+    this.railPanGoal=0;
+    this.kick();
+  }
 
   /** Produtos sempre pertencem à arara interna, nunca a uma interface 2D separada. */
   browseRack(direction:number):Product|null {
