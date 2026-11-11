@@ -144,7 +144,13 @@ export function initOccasionsCarousel(director:Director):()=>void {
   function activeShopLinkFocused(){
     return links.some(link=>link===document.activeElement);
   }
+  function updateAmbient(){
+    if(enabled&&onscreen&&!document.hidden&&!userPaused)
+      shell!.dataset.ambient='running';
+    else delete shell!.dataset.ambient;
+  }
   function updatePauseButton(){
+    updateAmbient();
     if(!pauseButton)return;
     pauseButton.setAttribute('aria-pressed',String(userPaused));
     pauseButton.setAttribute('aria-label',userPaused?'Retomar a rotação automática':'Pausar a rotação automática');
@@ -173,16 +179,19 @@ export function initOccasionsCarousel(director:Director):()=>void {
   function attachOrbit(){
     if(tickerAttached||!enabled||!onscreen||document.hidden)return;
     tickerAttached=true;
+    updateAmbient();
     gsap.ticker.add(ticker);
   }
   function detachOrbit(){
     if(tickerAttached){gsap.ticker.remove(ticker);tickerAttached=false;}
     orbitRunning=false;
     delete shell!.dataset.autoOrbit;
+    delete shell!.dataset.ambient;
   }
   function syncOrbit(){
     if(enabled&&onscreen&&!document.hidden)attachOrbit();
     else detachOrbit();
+    updateAmbient();
   }
   function markInteraction(){
     pauseUntil=performance.now()+3600;
