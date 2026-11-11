@@ -5,6 +5,7 @@ on:
       - claude/bold-dijkstra-jyzqak
       - feat/belle-calligraphy-intro
       - feat/belle-motion-storytelling-v8
+      - fix/belle-ticker-runway-flush
   workflow_dispatch:
 permissions:
   contents: read
