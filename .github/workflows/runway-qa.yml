@@ -9,6 +9,7 @@ on:
       - feat/belle-occasions-round-carousel-v9
       - feat/belle-occasions-living-portraits-v10
       - fix/belle-orbit-resilience-v11
+      - fix/belle-portrait-alpha-v12
   workflow_dispatch:
 permissions:
   contents: read
