@@ -29,7 +29,31 @@ try{
     const round=page.locator('[data-occ-round]');
     await page.waitForFunction(()=>document.querySelector('[data-occ-round]')?.classList.contains('is-round'),null,{timeout:9000});
     check(await round.locator('.occ-card').count()===3,width+': three authentic occasion cards');
+    const mapping={
+      dia:'billie-look-05.webp',
+      noite:'billie-look-04.webp',
+      celebrar:'billie-look-06.webp'
+    };
+    for(const [occasion,file] of Object.entries(mapping)){
+      const img=round.locator('.occ-card[data-occasion="'+occasion+'"] .occ-card__model');
+      check((await img.getAttribute('src'))?.endsWith(file),width+': '+occasion+' uses the correct existing Billie look');
+    }
+    check(await round.locator('.occ-card__world').count()===3,width+': three atmospheric scenes are mounted');
+    check(await round.locator('.occ-card__portrait').count()===3,width+': three portrait layers break out of their cards');
+    check(await round.locator('.occ-card.is-active .occ-card__portrait').evaluate(el=>{
+      const p=el.getBoundingClientRect(), c=el.closest('.occ-card').getBoundingClientRect();
+      return p.top<c.top-8 && getComputedStyle(el).pointerEvents==='none';
+    }),width+': foreground model rises above the card without intercepting input');
+    check(await round.locator('.occ-card__model').evaluateAll(imgs=>imgs.every(img=>img.getAttribute('src')?.startsWith('/assets/belle/billie/'))),width+': only the local optimized editorial portraits are used');
+
     check(await round.locator('.occ-card.is-active').count()===1,width+': one active category');
+    if(width===1440){
+      await page.waitForFunction(()=>document.querySelector('[data-occ-round]')?.dataset.autoOrbit==='running',null,{timeout:8000});
+      const before=await round.locator('.occ-card[data-occasion="dia"]').evaluate(el=>getComputedStyle(el).transform);
+      await page.waitForTimeout(680);
+      const after=await round.locator('.occ-card[data-occasion="dia"]').evaluate(el=>getComputedStyle(el).transform);
+      check(before!==after,width+': infinite orbit advances continuously without user interaction');
+    }
     check((await round.locator('.occ-card.is-active').getAttribute('data-occasion'))==='dia',width+': default active moment is day');
     check(await round.locator('.occ-card').evaluateAll(els=>els.some(el=>getComputedStyle(el).transform.startsWith('matrix3d('))),width+': side panels use 3D perspective without new canvas');
     check(await round.locator('.occ-card a[data-filter-occasion]').count()===3,width+': original commercial filters preserved');
@@ -67,6 +91,8 @@ try{
   const rp=await reduce.newPage();
   await rp.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
   check(!(await rp.locator('[data-occ-round]').evaluate(el=>el.classList.contains('is-round'))),'reduced motion preserves original three-card grid');
+  check(await rp.locator('.occ-card__portrait').first().isHidden(),'reduced motion does not show breakout portraits');
+
   check(await rp.locator('.occ-card [data-filter-occasion]').count()===3,'reduced motion exposes all 3 shopping actions');
   await reduce.close();
 
