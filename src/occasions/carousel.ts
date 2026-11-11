@@ -5,7 +5,8 @@
  *
  * Compositor-only CSS 3D, GSAP tween/snap, GSAP ScrollTrigger for
  * viewport-bound entrance / ambient depth, pointer drag with momentum.
- * No ticker in idle/offscreen. Vertical mobile scroll is ALWAYS native.
+ * Continuous orbit runs only while visible, with touch and focus pauses.
+ * Vertical mobile scroll stays native.
  * Every original href and data-filter-occasion remains intact.
  */
 import { gsap } from 'gsap';
@@ -40,11 +41,15 @@ export function initOccasionsCarousel(director:Director):()=>void {
 
   const labels=cards.map(card=>card.querySelector('h3')?.textContent?.trim()??'Ocasião');
   const links=cards.map(card=>card.querySelector<HTMLAnchorElement>('[data-filter-occasion]'));
+  const portraits=cards.map(card=>card.querySelector<HTMLElement>('.occ-card__portrait'));
+  const arrivals=cards.map(card=>card.querySelector<HTMLElement>('.occ-card__arrival'));
+  if(portraits.some(p=>!p)||arrivals.some(a=>!a))return ()=>{};
   const media=matchMedia('(prefers-reduced-motion: reduce)');
   const desktop=matchMedia('(min-width: 900px)');
   let disposed=false, enabled=false, onscreen=false, hovered=false, focused=false;
   let lastIndex=-1, timer=0, pauseUntil=0, stageWidth=1, pointer:PointerState|null=null;
-  let blockClickUntil=0;
+  let blockClickUntil=0,lastRender=0;
+  let orbit:ReturnType<typeof gsap.to>|null=null;
   const state={position:0};
   let trigger:ScrollTrigger|null=null;
   let local:AbortController|null=null;
@@ -72,11 +77,23 @@ export function initOccasionsCarousel(director:Director):()=>void {
     });
     stage!.dataset.occasion=tone[current]!;
     stage!.dataset.activeIndex=String(current);
+    announce();
+    if(onscreen)entrance(current);
+  }
+  function entrance(index:number){
+    const target=arrivals[index];
+    if(!target)return;
+    gsap.killTweensOf(target);
+    gsap.fromTo(target,{y:44,opacity:.42,scale:.93},
+      {y:0,opacity:1,scale:1,duration:1.13,ease:'power3.out',overwrite:true});
   }
 
   function render(){
     if(!enabled)return;
     const isMobile=!desktop.matches;
+    const now=performance.now();
+    if(isMobile&&orbit&&now-lastRender<27)return;
+    lastRender=now;
     const reach=isMobile?Math.max(174,Math.min(stageWidth*.52,340)):Math.min(stageWidth*.32,440);
     const depth=isMobile?130:245;
     const pivot=isMobile?25:36;
@@ -97,6 +114,11 @@ export function initOccasionsCarousel(director:Director):()=>void {
         opacity:.64+.36*focus,
         force3D:true
       });
+      // The cutout rises physically in front of its card, without image warps.
+      if(portraits[index])gsap.set(portraits[index],{
+        xPercent:-50,y:-18*focus,z:70*focus,
+        scale:.94+.08*focus,force3D:true
+      });
       card.style.zIndex=String(Math.round((cosine+1)*50));
       card.style.setProperty('--occ-face',focus.toFixed(3));
     });
@@ -109,19 +131,34 @@ export function initOccasionsCarousel(director:Director):()=>void {
     counter!.setAttribute('aria-label',`Ocasião ${current+1} de 3: ${labels[current]}`);
   }
 
-  function stopAuto(){window.clearTimeout(timer);timer=0;}
-  function schedule(){
-    stopAuto();
-    if(!enabled||!onscreen||hovered||focused||pointer||!desktop.matches||document.hidden)return;
-    // A person browsing luxury goods needs a generous reading window.
-    const wait=Math.max(7900,pauseUntil-performance.now());
-    timer=window.setTimeout(()=>navigate(1,false),wait);
+  function stopAuto(){
+    window.clearTimeout(timer);timer=0;
+    if(orbit){orbit.kill();orbit=null;}
+    delete shell!.dataset.autoOrbit;
   }
-  function markInteraction(){pauseUntil=performance.now()+13500;stopAuto();}
+  function startOrbit(){
+    timer=0;
+    if(!enabled||!onscreen||hovered||focused||pointer||document.hidden||orbit)return;
+    // 360° per 39s desktop / 51s mobile, no discrete index jumps.
+    orbit=gsap.to(state,{
+      position:state.position+cards.length,
+      duration:desktop.matches?39:51,
+      ease:'none',repeat:-1,overwrite:true,onUpdate:render
+    });
+    shell!.dataset.autoOrbit='running';
+  }
+  function schedule(){
+    if(orbit)return;
+    window.clearTimeout(timer);timer=0;
+    if(!enabled||!onscreen||hovered||focused||pointer||document.hidden)return;
+    timer=window.setTimeout(startOrbit,Math.max(1300,pauseUntil-performance.now()));
+  }
+  function markInteraction(){pauseUntil=performance.now()+11500;stopAuto();}
 
   function settle(next:number,byUser:boolean){
     if(!enabled)return;
     if(byUser)markInteraction();
+    else stopAuto();
     gsap.killTweensOf(state);
     gsap.to(state,{
       position:next,
@@ -249,9 +286,10 @@ export function initOccasionsCarousel(director:Director):()=>void {
       onEnter:()=>{
         onscreen=true;
         gsap.fromTo(shell!,{autoAlpha:.2,y:28},{autoAlpha:1,y:0,duration:.86,ease:'power3.out',overwrite:true});
+        entrance(activeIndex());
         schedule();
       },
-      onEnterBack:()=>{onscreen=true;schedule();},
+      onEnterBack:()=>{onscreen=true;entrance(activeIndex());schedule();},
       onLeave:()=>{onscreen=false;stopAuto();},
       onLeaveBack:()=>{onscreen=false;stopAuto();},
       onUpdate:self=>setAura((self.progress-.5)*26)
@@ -268,6 +306,8 @@ export function initOccasionsCarousel(director:Director):()=>void {
     enabled=false;
     stopAuto();pointer=null;onscreen=false;
     gsap.killTweensOf(state);
+    for(const target of arrivals)if(target){gsap.killTweensOf(target);gsap.set(target,{clearProps:'all'});}
+    for(const figure of portraits)if(figure)gsap.set(figure,{clearProps:'all'});
     gsap.killTweensOf(shell!);
     trigger?.kill();trigger=null;
     ro?.disconnect();ro=null;
