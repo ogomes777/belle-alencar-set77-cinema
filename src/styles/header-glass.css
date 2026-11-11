@@ -1,0 +1,398 @@
+/* BELLE ALENCAR · SET77 LABS · Adaptive Glass Atelier V14
+ * Original floating capsule, referencing the motion language of GB Imports,
+ * Street Goose 034 and Beauty Drop but retaining Belle's champagne identity.
+ * All navigation actions stay native. No canvas, no scroll hijacking.
+ */
+.site-header {
+  --ba-nav-bg:rgba(250,247,240,.88);
+  --ba-nav-solid:#faf7f0;
+  --ba-nav-text:#30261d;
+  --ba-nav-muted:#665648;
+  --ba-nav-line:rgba(132,106,71,.28);
+  --ba-nav-accent:#977348;
+  --ba-nav-hover:rgba(139,109,65,.12);
+  --ba-nav-glow:rgba(178,146,102,.15);
+  position:fixed;
+  top:13px;left:50%;right:auto;
+  width:min(1224px,calc(100% - 28px));
+  height:70px;
+  padding:0 clamp(13px,1.7vw,23px);
+  display:flex;
+  align-items:center;
+  gap:clamp(10px,1.8vw,22px);
+  border:1px solid var(--ba-nav-line);
+  border-radius:25px;
+  transform:translate3d(-50%,0,0);
+  background:
+    linear-gradient(120deg,rgba(255,255,255,.19),transparent 33%,rgba(255,255,255,.06) 76%,transparent),
+    var(--ba-nav-bg);
+  -webkit-backdrop-filter:blur(19px) saturate(1.23);
+  backdrop-filter:blur(19px) saturate(1.23);
+  color:var(--ba-nav-text);
+  box-shadow:
+    0 15px 42px -20px rgba(48,34,23,.29),
+    0 3px 12px rgba(41,29,17,.06),
+    inset 0 1px 0 rgba(255,255,255,.54),
+    inset 0 -1px 0 rgba(255,255,255,.13);
+  isolation:isolate;
+  overflow:visible;
+  transition:
+    top .45s cubic-bezier(.22,1,.36,1),
+    width .45s cubic-bezier(.22,1,.36,1),
+    height .45s cubic-bezier(.22,1,.36,1),
+    background-color .6s ease,
+    border-color .6s ease,
+    box-shadow .6s ease,
+    color .55s ease;
+}
+.site-header.is-compact {
+  top:8px;
+  left:50%;right:auto;
+  width:min(1120px,calc(100% - 36px));
+  height:60px;
+  border-radius:22px;
+  transform:translate3d(-50%,0,0);
+  border-color:var(--ba-nav-line);
+  background:
+    linear-gradient(120deg,rgba(255,255,255,.15),transparent 42%,rgba(255,255,255,.045)),
+    var(--ba-nav-bg);
+}
+.site-header::before {
+  content:'';
+  position:absolute;
+  z-index:0;
+  top:-1px;
+  left:16%;right:16%;
+  height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+}
+.site-header::after {
+  content:'';
+  position:absolute;
+  z-index:2;
+  bottom:-1px;left:24px;
+  width:calc((100% - 48px) * var(--ba-nav-progress,0));
+  max-width:calc(100% - 48px);
+  height:2px;
+  border-radius:2px;
+  background:linear-gradient(90deg,rgba(255,255,255,.3),var(--ba-nav-accent));
+  pointer-events:none;
+}
+.site-header > .brand,
+.site-header > .site-nav,
+.site-header > .site-actions,
+.site-header > .belle-menu-panel {position:relative;z-index:1;}
+/* A calibrated palette. Chrome follows the section, NOT the user's device
+ * theme, so each chapter feels like one app-shaped boutique experience. */
+.site-header[data-atmosphere='pearl'] {
+  --ba-nav-bg:rgba(250,247,240,.89);
+  --ba-nav-solid:#faf7f0;
+  --ba-nav-text:#30261d;
+  --ba-nav-muted:#665648;
+  --ba-nav-line:rgba(132,106,71,.28);
+  --ba-nav-accent:#977348;
+  --ba-nav-hover:rgba(139,109,65,.12);
+  --ba-nav-glow:rgba(178,146,102,.15);
+}
+.site-header[data-atmosphere='champagne'] {
+  --ba-nav-bg:rgba(235,219,195,.88);
+  --ba-nav-solid:#ebdbc3;
+  --ba-nav-text:#33271f;
+  --ba-nav-muted:#65513e;
+  --ba-nav-line:rgba(137,104,66,.32);
+  --ba-nav-accent:#8f6533;
+  --ba-nav-hover:rgba(126,86,45,.15);
+  --ba-nav-glow:rgba(201,163,101,.23);
+}
+.site-header[data-atmosphere='sand'] {
+  --ba-nav-bg:rgba(222,206,185,.89);
+  --ba-nav-solid:#decdb9;
+  --ba-nav-text:#30241c;
+  --ba-nav-muted:#5e4d3b;
+  --ba-nav-line:rgba(113,86,52,.31);
+  --ba-nav-accent:#7c5938;
+  --ba-nav-hover:rgba(102,74,42,.15);
+  --ba-nav-glow:rgba(167,128,78,.17);
+}
+.site-header[data-atmosphere='olive'] {
+  --ba-nav-bg:rgba(91,98,75,.9);
+  --ba-nav-solid:#5b624b;
+  --ba-nav-text:#fcf8ec;
+  --ba-nav-muted:#e5e4d1;
+  --ba-nav-line:rgba(224,225,185,.35);
+  --ba-nav-accent:#e9d1a1;
+  --ba-nav-hover:rgba(255,250,224,.14);
+  --ba-nav-glow:rgba(190,196,137,.17);
+}
+.site-header[data-atmosphere='wine'] {
+  --ba-nav-bg:rgba(65,33,40,.91);
+  --ba-nav-solid:#412128;
+  --ba-nav-text:#fff7ee;
+  --ba-nav-muted:#e4cbd0;
+  --ba-nav-line:rgba(226,167,154,.34);
+  --ba-nav-accent:#efc6a2;
+  --ba-nav-hover:rgba(255,227,218,.13);
+  --ba-nav-glow:rgba(176,70,90,.21);
+}
+.site-header[data-atmosphere='sky'] {
+  --ba-nav-bg:rgba(214,228,234,.89);
+  --ba-nav-solid:#d6e4ea;
+  --ba-nav-text:#293942;
+  --ba-nav-muted:#536b76;
+  --ba-nav-line:rgba(92,123,137,.31);
+  --ba-nav-accent:#537885;
+  --ba-nav-hover:rgba(91,143,163,.17);
+  --ba-nav-glow:rgba(140,185,202,.24);
+}
+.site-header[data-atmosphere='noir'] {
+  --ba-nav-bg:rgba(32,27,25,.91);
+  --ba-nav-solid:#201b19;
+  --ba-nav-text:#f8f0e4;
+  --ba-nav-muted:#d9c9b5;
+  --ba-nav-line:rgba(221,186,139,.31);
+  --ba-nav-accent:#ddbb84;
+  --ba-nav-hover:rgba(247,226,193,.11);
+  --ba-nav-glow:rgba(184,137,89,.16);
+}
+/* Fine brand lockup and real controls: not generic app icons. */
+.site-header .brand {
+  color:var(--ba-nav-text);
+  flex:none;
+  min-width:0;
+  gap:9px;
+}
+.site-header .brand__mark {width:35px;flex:0 0 35px;color:var(--ba-nav-accent);}
+.site-header .brand__word {font-size:1.09rem;letter-spacing:.205em;white-space:nowrap;}
+.site-header .brand__word small {
+  font-size:.53rem;
+  letter-spacing:.285em;
+  color:var(--ba-nav-muted);
+}
+.site-header .site-nav {
+  display:flex;
+  align-items:center;
+  gap:0;
+  margin-left:auto;
+  min-width:0;
+}
+.site-header .site-nav a {
+  z-index:1;
+  color:var(--ba-nav-muted);
+  min-height:44px;
+  border-radius:999px;
+  padding:0 clamp(8px,.95vw,14px);
+  font-size:10px;
+  letter-spacing:.14em;
+  transition:color .23s ease;
+}
+.site-header .site-nav a[aria-current],
+.site-header .site-nav a:hover,
+.site-header .site-nav a:focus-visible {color:var(--ba-nav-text);}
+.site-header .site-nav a::after {
+  left:50%;right:auto;bottom:5px;
+  width:4px;height:4px;border-radius:50%;
+  background:var(--ba-nav-accent);
+  transform:translateX(-50%) scale(0);
+  transform-origin:center;
+  transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+.site-header .site-nav a:hover::after,
+.site-header .site-nav a[aria-current]::after {transform:translateX(-50%) scale(1);}
+.site-header .belle-nav-glider {
+  position:absolute;
+  z-index:0;
+  left:0;top:2px;
+  width:var(--ba-glide-width,0px);
+  height:40px;
+  border:1px solid var(--ba-nav-line);
+  border-radius:999px;
+  background:var(--ba-nav-hover);
+  transform:translate3d(var(--ba-glide-x,0px),0,0);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .45s cubic-bezier(.22,1,.36,1),width .45s cubic-bezier(.22,1,.36,1),opacity .2s ease,background-color .55s;
+}
+.site-header .site-nav.is-gliding .belle-nav-glider{opacity:1;}
+.site-header .site-actions {margin-left:0;gap:2px;flex:none;min-width:0;}
+.site-header .store-pill {
+  color:var(--ba-nav-text);
+  min-height:42px;
+  max-width:190px;
+  margin-right:3px;
+  border-radius:999px;
+  border-color:var(--ba-nav-line);
+  background:var(--ba-nav-hover);
+  padding:0 12px;
+  transition:background-color .25s ease,border-color .25s ease,transform .22s ease;
+}
+.site-header .store-pill__label {
+  display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  min-width:0;
+}
+.site-header .store-pill:hover,
+.site-header .store-pill:focus-visible {background:var(--ba-nav-hover);border-color:var(--ba-nav-accent);}
+.site-header .store-pill svg{flex:none;width:17px;height:17px;stroke-width:1.65;}
+.site-header .icon-btn,
+.site-header .belle-menu-toggle {
+  position:relative;
+  display:inline-grid;
+  place-items:center;
+  flex:0 0 44px;
+  width:44px;
+  height:44px;
+  color:var(--ba-nav-text);
+  border-radius:14px;
+  transition:background-color .24s ease,transform .24s ease,color .3s ease;
+}
+.site-header .icon-btn svg{stroke-width:1.7;width:19px;height:19px;}
+.site-header .icon-btn:hover,
+.site-header .belle-menu-toggle:hover,
+.site-header .icon-btn:focus-visible,
+.site-header .belle-menu-toggle:focus-visible {
+  background:var(--ba-nav-hover);
+}
+.site-header .icon-btn:active,.site-header .belle-menu-toggle:active,.site-header .store-pill:active{transform:scale(.955);}
+.site-header .icon-btn__count {
+  top:3px;right:2px;
+  background:var(--ba-nav-accent);
+  color:var(--ba-nav-solid);
+  box-shadow:0 0 0 2px var(--ba-nav-solid);
+}
+.site-header :focus-visible,
+.site-header .belle-menu-panel :focus-visible {
+  outline:2px solid var(--ba-nav-accent);
+  outline-offset:2px;
+}
+/* Our custom two-stroke menu has no emoji or externally sourced icon set. */
+.site-header .belle-menu-toggle {display:none;}
+.site-header .belle-menu-toggle svg{
+  width:22px;height:22px;
+  fill:none;stroke:currentColor;stroke-width:1.65;
+  stroke-linecap:round;
+}
+.site-header .belle-menu-line {transform-origin:12px 12px;transition:transform .3s cubic-bezier(.22,1,.36,1);}
+.site-header .belle-menu-toggle[aria-expanded='true'] .belle-menu-line--top{transform:translateY(4px) rotate(45deg);}
+.site-header .belle-menu-toggle[aria-expanded='true'] .belle-menu-line--bottom{transform:translateY(-4px) rotate(-45deg);}
+/* Glass navigation sheet. Separate stacking context, no fullscreen blocker. */
+.site-header .belle-menu-panel {
+  position:absolute;
+  display:block;
+  top:calc(100% + 11px);
+  right:0;
+  width:min(360px,calc(100vw - 24px));
+  max-height:min(72dvh,640px);
+  overflow-y:auto;overscroll-behavior:contain;
+  padding:21px clamp(18px,3vw,25px) 17px;
+  border:1px solid var(--ba-nav-line);
+  border-radius:23px;
+  color:var(--ba-nav-text);
+  background:
+    radial-gradient(ellipse 75% 38% at 105% -15%,var(--ba-nav-glow),transparent 88%),
+    var(--ba-nav-bg);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);
+  backdrop-filter:blur(20px) saturate(1.2);
+  box-shadow:0 25px 58px rgba(30,21,15,.22),inset 0 1px 0 rgba(255,255,255,.27);
+  animation:baNavSheetIn .32s cubic-bezier(.22,1,.36,1) both;
+}
+.site-header .belle-menu-panel[hidden] {display:none!important;}
+.site-header .belle-menu-panel__intro {
+  display:flex;flex-direction:column;gap:5px;
+  border-bottom:1px solid var(--ba-nav-line);
+  padding-bottom:16px;
+}
+.site-header .belle-menu-panel__intro>span {
+  font-family:var(--serif);font-size:1.65rem;
+  line-height:1;letter-spacing:.02em;
+}
+.site-header .belle-menu-panel__intro small{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:650;
+  letter-spacing:.17em;
+  color:var(--ba-nav-muted);
+}
+.site-header .belle-menu-panel__links {display:grid;gap:1px;padding:9px 0 12px;}
+.site-header .belle-menu-panel__links a {
+  min-height:48px;display:flex;align-items:center;gap:18px;
+  padding:5px 9px;
+  border-radius:12px;
+  color:var(--ba-nav-text);
+  font-family:var(--serif);
+  font-size:clamp(1.45rem,3vw,1.75rem);
+  line-height:1.1;
+  text-decoration:none;
+  transition:background-color .2s,transform .25s;
+}
+.site-header .belle-menu-panel__links a span {
+  font-family:var(--sans);font-size:9px;font-weight:650;
+  color:var(--ba-nav-muted);letter-spacing:.16em;
+}
+.site-header .belle-menu-panel__links a:hover,
+.site-header .belle-menu-panel__links a:focus-visible,
+.site-header .belle-menu-panel__links a[aria-current] {
+  background:var(--ba-nav-hover);
+  transform:translateX(2px);
+}
+.site-header .belle-menu-panel__links a[aria-current] {box-shadow:inset 2px 0 0 var(--ba-nav-accent);}
+.site-header .belle-menu-panel__foot {
+  padding-top:12px;
+  border-top:1px solid var(--ba-nav-line);
+  display:flex;flex-wrap:wrap;gap:3px 11px;justify-content:space-between;
+  color:var(--ba-nav-muted);font-size:8px;letter-spacing:.13em;font-weight:650;
+}
+@keyframes baNavSheetIn {
+  from{opacity:0;transform:translate3d(0,-9px,0) scale(.985);}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+}
+@supports not ((backdrop-filter:blur(4px)) or (-webkit-backdrop-filter:blur(4px))) {
+  .site-header,.site-header.is-compact,.site-header .belle-menu-panel {
+    background:var(--ba-nav-solid);
+  }
+}
+@media(max-width:1100px) {
+  .site-header {gap:11px;}
+  .site-header .brand__word{font-size:.99rem;letter-spacing:.16em;}
+  .site-header .site-nav a{padding:0 9px;font-size:9px;letter-spacing:.1em;}
+  .site-header .store-pill{max-width:135px;}
+}
+@media(max-width:1020px) {
+  .site-header .site-nav{display:none;}
+  .site-header .belle-menu-toggle{display:inline-grid;}
+  .site-header .site-actions{margin-left:auto;}
+}
+@media(max-width:860px) {
+  .site-header {top:10px;height:60px;width:calc(100% - 20px);padding:0 10px;border-radius:20px;gap:3px;}
+  .site-header.is-compact {top:7px;height:56px;width:calc(100% - 20px);border-radius:19px;}
+  .site-header .brand{min-width:36px;min-height:44px;gap:0;}
+  .site-header .brand__word{display:none;}
+  .site-header .brand__mark{width:34px;flex-basis:34px;}
+  .site-header .site-actions{gap:1px;margin-left:auto;}
+  .site-header .store-pill{max-width:118px;min-width:75px;min-height:42px;padding:0 9px;margin-right:1px;gap:5px;font-size:10px;letter-spacing:.035em;}
+  .site-header .icon-btn,.site-header .belle-menu-toggle{width:44px;height:44px;flex-basis:44px;border-radius:12px;}
+  .site-header .belle-menu-panel{width:min(354px,calc(100vw - 20px));}
+}
+@media(max-width:390px) {
+  .site-header{width:calc(100% - 14px);padding:0 7px;gap:1px;}
+  .site-header.is-compact{width:calc(100% - 14px);}
+  .site-header .brand{min-width:34px;}
+  .site-header .brand__mark{width:32px;flex-basis:32px;}
+  .site-header .site-actions{gap:0;}
+  .site-header .store-pill{max-width:95px;min-width:65px;min-height:42px;padding:0 6px;gap:3px;font-size:9px;}
+  .site-header .store-pill svg{width:14px;height:14px;}
+  .site-header .icon-btn,.site-header .belle-menu-toggle{width:44px;height:44px;flex-basis:44px;}
+  .site-header .belle-menu-panel{width:calc(100vw - 14px);right:0;border-radius:19px;}
+}
+@media(max-width:340px) {
+  .site-header .store-pill{max-width:65px;min-width:59px;}
+  .site-header .store-pill__label{max-width:41px;}
+  .site-header .brand{min-width:31px;}
+  .site-header .brand__mark{width:30px;flex-basis:30px;}
+  .site-header .site-actions{margin-left:auto;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .site-header,.site-header.is-compact,
+  .site-header .site-nav a,.site-header .belle-nav-glider,
+  .site-header .belle-menu-panel,.site-header .belle-menu-panel__links a,
+  .site-header .belle-menu-line {animation:none!important;transition:none!important;}
+}
