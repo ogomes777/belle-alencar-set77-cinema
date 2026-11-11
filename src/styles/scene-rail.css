@@ -37,3 +37,40 @@ html.scene-rail-viewer .pv__backdrop{background:rgba(242,236,226,.2);backdrop-fi
 .roomrail__error{font-size:11px;color:#9d372e;margin:10px 0 0}
 .roomrail__origin{pointer-events:none}
 @media(max-width:899px){.roomrail__detail{right:0;bottom:auto;top:calc(100% + 10px);width:min(350px,100%);padding:15px}.roomrail__title{font-size:28px}.roomrail__controls{max-width:100%}}
+
+/* V3 · understated editorial controls, consistent with the ivory/gold boutique. */
+.roomrail {right:clamp(20px,5.5vw,84px);bottom:clamp(24px,4.8vh,58px);max-width:min(680px,80vw)}
+.roomrail__hint,.roomrail__gesture {display:flex;justify-content:space-between;gap:22px;letter-spacing:.17em;font-weight:600;font-size:9px;text-shadow:0 1px 2px #fff9;color:#796547}
+.roomrail__hint {margin:0 2px 10px;text-align:left}
+.roomrail__scroll {white-space:nowrap}
+.roomrail__scroll span {font-size:14px;display:inline-block;animation:room-scroll-cue 1.9s ease-in-out infinite;vertical-align:middle}
+.roomrail__gesture {justify-content:flex-end;margin:9px 2px 0;font-size:8px;opacity:.9}
+.roomrail__gesture span {opacity:.5}
+.roomrail__controls {gap:0;padding:6px 8px;background:rgba(249,246,240,.88);border:1px solid rgba(165,128,73,.40);border-radius:2px;box-shadow:0 18px 45px rgba(34,24,15,.13),inset 0 1px 0 #fff9;backdrop-filter:blur(18px)}
+.roomrail__controls button {background:transparent;border:0;border-radius:1px;padding:0 13px;min-height:46px;font-size:11px;letter-spacing:.02em;transition:background .2s,color .2s,transform .2s}
+.roomrail__controls button:hover {background:rgba(175,142,93,.12);transform:translateY(-1px)}
+.roomrail__prev,.roomrail__next {min-width:42px;font-size:21px!important;font-family:var(--serif);color:#866c48!important}
+.roomrail__name{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:170px;max-width:215px;padding:0 14px;border-left:1px solid rgba(175,142,93,.24);border-right:1px solid rgba(175,142,93,.24)}
+.roomrail__product {display:block;min-width:0;max-width:100%;font-size:17px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.roomrail__counter {font-size:9px;letter-spacing:.18em;color:#a28b68;font-variant-numeric:tabular-nums}
+.roomrail__inspect {background:#3e3025!important;color:#fdf8ec!important;border:1px solid #3e3025!important;padding:0 17px!important;margin:0 5px;letter-spacing:.065em!important}
+.roomrail__inspect:hover {background:#574431!important}
+.roomrail__bag {border-left:1px solid #dbc8aa!important;margin-left:2px;letter-spacing:.055em!important}
+.roomrail__bag b{padding-left:8px}
+.roomrail__detail {border-radius:2px;box-shadow:0 24px 62px #221a1029}
+@keyframes room-scroll-cue {0%,100%{transform:translateY(-2px);opacity:.6}50%{transform:translateY(3px);opacity:1}}
+@media(max-width:899px) {
+ .roomrail{left:12px;right:12px;top:calc(var(--header-h) + 48px);bottom:auto;max-width:unset}
+ .roomrail__hint{font-size:7px;margin-bottom:7px;letter-spacing:.08em}
+ .roomrail__gesture{font-size:7px;white-space:normal;letter-spacing:.05em;justify-content:center}
+ .roomrail__controls{gap:0;padding:4px}
+ .roomrail__controls button{padding:0 6px;min-height:43px;font-size:9px}
+ .roomrail__prev,.roomrail__next{min-width:29px!important;font-size:17px!important}
+ .roomrail__name{min-width:56px;max-width:none;flex:1;padding:0 7px}
+ .roomrail__product{font-size:13px}
+ .roomrail__counter{font-size:8px}
+ .roomrail__inspect{padding:0 8px!important;margin:0 2px;min-width:92px}
+ .roomrail__bag{min-width:54px}
+ .roomrail__detail{top:calc(100% + 14px);bottom:auto}
+}
+@media(prefers-reduced-motion:reduce){.roomrail__scroll span{animation:none!important}.roomrail__controls button{transition:none!important}}

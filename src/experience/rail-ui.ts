@@ -12,14 +12,15 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   const ui=document.createElement('div');ui.className='roomrail';ui.setAttribute('role','group');
   ui.setAttribute('aria-label','Arara interativa dentro da boutique Belle');
   ui.innerHTML=`
-    <div class="roomrail__hint">ARRASTE · ESCOLHA · A CÂMERA CONTINUA NA LOJA</div>
+    <div class="roomrail__hint"><span>03 / BOUTIQUE · ARARA VIVA</span><span class="roomrail__scroll">ROLE PARA CONTINUAR <span aria-hidden="true">↓</span></span></div>
     <div class="roomrail__controls">
       <button type="button" class="roomrail__prev" aria-label="Peça anterior">←</button>
-      <span class="roomrail__product" aria-live="polite"></span>
+      <span class="roomrail__name"><span class="roomrail__product" aria-live="polite"></span><span class="roomrail__counter" aria-label="Posição na arara">05 / 30</span></span>
       <button type="button" class="roomrail__next" aria-label="Próxima peça">→</button>
       <button type="button" class="roomrail__inspect">Explorar peça ↗</button>
       <button type="button" class="roomrail__bag" aria-label="Abrir sacola de interesse">Sacola <b>0</b></button>
     </div>
+    <div class="roomrail__gesture">MOVA O CURSOR PARA EXPLORAR <span aria-hidden="true">·</span> ARRASTE PARA PERCORRER AS PEÇAS</div>
     <section class="roomrail__detail" hidden aria-label="Peça selecionada na arara">
       <p class="roomrail__eyebrow">BELLE ALENCAR · REFERÊNCIA EDITORIAL</p>
       <h3 class="roomrail__title"></h3>
@@ -36,6 +37,7 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   stage.appendChild(ui);
   const $=<T extends HTMLElement>(q:string)=>ui.querySelector<T>(q)!;
   const name=$<HTMLElement>('.roomrail__product'),count=$<HTMLElement>('.roomrail__bag b');
+  const posLabel=$<HTMLElement>('.roomrail__counter');
   const bagBtn=$<HTMLButtonElement>('.roomrail__bag');
   const detail=$<HTMLElement>('.roomrail__detail');
   const title=$<HTMLElement>('.roomrail__title');
@@ -46,11 +48,19 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   let active=false,selected:Product|null=null,flight=false,hoverRAF=0,hx=0,hy=0;
   let gesture:{x:number;y:number;last:number;id:number;moving:boolean}|null=null;
   const motion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function paintProduct(p:Product|null){
+    if(p && name.textContent!==p.title){
+      name.textContent=p.title;
+      if(!motion())name.animate([{opacity:.45,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:210,easing:'ease-out'});
+    }
+    const position=getWorld()?.railPosition();
+    if(position)posLabel.textContent=String(position.index).padStart(2,'0')+' / '+String(position.total).padStart(2,'0');
+  }
 
   function refresh(){
     const world=getWorld();ui.classList.toggle('is-on',active&&!!world);
     if(!active||!world)return;
-    const p=world.activeRackProduct();if(p&&!selected)name.textContent=p.title;
+    const p=world.activeRackProduct();if(p&&!selected)paintProduct(p);
     count.textContent=String(commerceApi()?.count()??0);
   }
   function close(){
@@ -63,11 +73,11 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
   function browse(delta:number){
     const w=getWorld();if(!active||!w||flight)return;
     if(selected)close();
-    const p=w.browseRack(delta);if(p)name.textContent=p.title;
+    const p=w.browseRack(delta);paintProduct(p);
   }
   function inspect(p?:Product){
     const w=getWorld(),item=p??w?.activeRackProduct();if(!w||!item||!active||flight)return;
-    selected=item;name.textContent=item.title;title.textContent=item.title;desc.textContent=item.description;
+    selected=item;paintProduct(item);title.textContent=item.title;desc.textContent=item.description;
     sizeEl.replaceChildren(new Option('Escolha',''),...item.variants.map(v=>new Option(v.size,v.size)));
     error.hidden=true;detail.hidden=false;
     w.selectRack(item.id);
@@ -89,6 +99,8 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       origin.src=p.cutout;origin.alt='';origin.className='roomrail__origin';
       origin.style.cssText=`position:fixed;left:${bounds.x}px;top:${bounds.y}px;width:${bounds.w}px;height:${bounds.h}px;opacity:0;pointer-events:none;object-fit:contain;z-index:0`;
       document.body.appendChild(origin);
+      // Keep the original garment on the rail until the exact alpha image is decoded.
+      try{await origin.decode();}catch{/* The flight helper retains the reduced-motion fallback. */}
       w.hideRackProduct(p.id,true);
       try{
         await flyToBag({
@@ -123,29 +135,44 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
     gesture={x:e.clientX,y:e.clientY,last:e.clientX,id:e.pointerId,moving:false};
   });
   stage.addEventListener('pointermove',e=>{
-    if(!active||!getWorld()||inUi(e))return;
+    const w=getWorld();if(!active||!w)return;
+    const r=stage.getBoundingClientRect();
+    if(!inUi(e))w.setRailPointer(((e.clientX-r.left)/Math.max(1,r.width))*2-1);
+    if(inUi(e))return;
     if(gesture&&gesture.id===e.pointerId){
       const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
-      if(!gesture.moving&&Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.3)gesture.moving=true;
-      if(gesture.moving&&Math.abs(e.clientX-gesture.last)>44){browse(e.clientX<gesture.last?1:-1);gesture.last=e.clientX;}
-    } else if(e.pointerType==='mouse'&&!selected){
+      if(!gesture.moving&&Math.abs(dx)>11&&Math.abs(dx)>Math.abs(dy)*1.2){
+        gesture.moving=true;
+        try{stage.setPointerCapture(e.pointerId);}catch{/* Capturing is not supported on every touch browser. */}
+      }
+      if(gesture.moving){
+        const travelled=e.clientX-gesture.last;
+        const steps=Math.min(4,Math.floor(Math.abs(travelled)/32));
+        if(steps>0){
+          for(let i=0;i<steps;i++)browse(travelled<0?1:-1);
+          gesture.last+=Math.sign(travelled)*steps*32;
+        }
+      }
+    } else if(e.pointerType==='mouse'&&!selected&&!flight){
       hx=e.clientX;hy=e.clientY;
       if(!hoverRAF)hoverRAF=requestAnimationFrame(()=>{
-        hoverRAF=0;const p=getWorld()?.pickRack(hx,hy);
-        if(p)name.textContent=p.title;
+        hoverRAF=0;
+        const p=getWorld()?.hoverRack(hx,hy);
         stage.style.cursor=p?'pointer':'';
       });
     }
   },{passive:true});
+  stage.addEventListener('pointerleave',()=>{getWorld()?.setRailPointer(null);stage.style.cursor='';});
   const end=(e:PointerEvent)=>{
     const g=gesture;if(!g||g.id!==e.pointerId)return;gesture=null;
+    if(stage.hasPointerCapture(e.pointerId))stage.releasePointerCapture(e.pointerId);
     if(g.moving||!active||inUi(e)||flight)return;
     const w=getWorld();if(!w)return;
     if(w.bagHit(e.clientX,e.clientY)){commerceApi()?.openBag(bagBtn);return;}
     const p=w.pickRack(e.clientX,e.clientY);if(p)inspect(p);
   };
   stage.addEventListener('pointerup',end);
-  stage.addEventListener('pointercancel',()=>{gesture=null;});
+  stage.addEventListener('pointercancel',()=>{gesture=null;getWorld()?.setRailPointer(null);});
   let wheel=0;
   stage.addEventListener('wheel',e=>{
     if(!active||!getWorld()||inUi(e))return;
@@ -158,5 +185,5 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
     if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();browse(e.key==='ArrowLeft'?-1:1);}
     if(e.key==='Escape'&&!detail.hidden){e.preventDefault();close();}
   });
-  return {setActive(on){active=on;if(!on){gesture=null;stage.style.cursor='';close();}refresh();},refresh};
+  return {setActive(on){active=on;if(!on){gesture=null;stage.style.cursor='';getWorld()?.setRailPointer(null);close();}refresh();},refresh};
 }
