@@ -10,6 +10,8 @@
   --md-time:840ms;
 }
 
+.md-scene {position:relative;}
+
 /* Hairline bridge gives successive chapters continuity without decorating
  * the content with large boxes or disturbing their backgrounds. */
 html.md-motion .md-scene::before {
@@ -221,9 +223,11 @@ html.md-motion .finale #finaleTitle.md-reveal {transition-duration:1000ms;}
 html.md-motion .film .chapter__card .eyebrow {position:relative;display:table;}
 html.md-motion .film .chapter__card .eyebrow::after {
   content:'';
+  position:absolute;
+  left:0;
+  bottom:-12px;
   display:block;
   height:1px;
-  margin-top:11px;
   width:min(170px,100%);
   background:linear-gradient(90deg,rgba(150,108,53,.66),transparent);
   transform:scaleX(0);
