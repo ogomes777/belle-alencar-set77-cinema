@@ -14,8 +14,8 @@ export function depthAt(index: number, position: number) {
   return { depth:d, x: mix(KX), feet: mix(KF), height: mix(KH), blur: mix(KB), opacity: mix(KO), z: 100 - Math.round(d * 10) };
 }
 export function railOffset(index: number, position: number, card: number) {
-  const length = 12 * card;
-  let y = wrap(index * card - position * 2 * card, length);
+  const length = 18 * card;
+  let y = wrap(index * card - position * 3 * card, length);
   if (y > length - card) y -= length;
   return y;
 }
