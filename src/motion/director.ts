@@ -17,7 +17,8 @@ export const BELLE_MOTION_SCENES: readonly Scene[] = [
   // Collection V17 owns a continuous, scroll-synchronized editorial entrance.
   // Do not put a second one-shot opacity transition over live commerce cards.
 
-  {selector:'#como-comprar', motif:'typing', targets:['.sec-head','.how__steps li','.how__trust','.cta-row']},
+  // Como comprar is owned by the reversible video-scrub chapter. In
+  // static/video-fallback modes, copy must never depend on one-shot opacity.
   {selector:'#lojas', motif:'iris', targets:['.section-head','.store-card']},
   {selector:'#atendimento', motif:'split', targets:['.concierge__media','.concierge__body']},
   {selector:'#duvidas', motif:'fold', targets:['.sec-head','.faq details']},
