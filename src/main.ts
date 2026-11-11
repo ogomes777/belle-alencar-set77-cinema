@@ -15,6 +15,7 @@ import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
 import { initMotionDirector } from './motion/director';
+import { initOccasionsCarousel } from './occasions/carousel';
 
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
@@ -23,4 +24,5 @@ initCommerce();
 initSections();
 initMotionDirector();
 const director = initDirector();
+initOccasionsCarousel(director);
 initFilm(director);
