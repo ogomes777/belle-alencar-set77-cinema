@@ -1,5 +1,10 @@
-/* Belle's runway: measured reference depths, local fonts and native landing scroll. */
-.runway { isolation:isolate; --ru:min(calc(100vw / 1600),calc(100svh / 900)); height:100svh; min-height:620px; padding-top:var(--header-h); background:#fff; color:#16191f; display:grid; grid-template-rows:minmax(0,1fr); }
+/* Belle's runway: measured reference depths, local fonts and native landing scroll.
+ * The category ticker sits immediately above #passarela. The runway is NOT
+ * the page top: it needs no extra header-height padding. Its stage must start
+ * at the same boundary on desktop, tablet and mobile, without a white strip.
+ * Keep the existing header and all the layout's original responsive heights.
+ */
+.runway { isolation:isolate; --ru:min(calc(100vw / 1600),calc(100svh / 900)); height:100svh; min-height:620px; padding-top:0; background:#fff; color:#16191f; display:grid; grid-template-rows:minmax(0,1fr); }
 .runway__layout {min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,23.25vw,372px);}
 .runway__stage {position:relative;overflow:hidden;min-width:0;touch-action:pan-y;user-select:none;background:linear-gradient(transparent 60%,rgba(255,255,255,.72)),linear-gradient(90deg,#f1f5fa,#e7eff6 38%,#eef4f9 62%,#f6f9fc);}
 .runway__line {position:absolute;inset:0;}
