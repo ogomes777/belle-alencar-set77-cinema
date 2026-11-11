@@ -75,6 +75,10 @@ export class World {
   private railEngaged = false;
   private railPan = 0;
   private railPanGoal = 0;
+  // Suaviza a troca entre a parede direita e esquerda sem teletransportar
+  // a câmera ou perder o ponto de vista da boutique.
+  private roomFocus = new THREE.Vector3();
+  private roomFocusReady = false;
   private railRested = false;
   private time = 0;
   private firstFrameSent = false;
@@ -148,7 +152,11 @@ export class World {
     this.kick();
   }
 
-  setRailEngaged(on:boolean):void{this.railEngaged=on;if(!on)this.railPanGoal=0;}
+  setRailEngaged(on:boolean):void{
+    if(this.railEngaged!==on)this.roomFocusReady=false;
+    this.railEngaged=on;
+    if(!on)this.railPanGoal=0;
+  }
   setRailPointer(normalizedX:number|null):void{this.railPanGoal=THREE.MathUtils.clamp(normalizedX??0,-1,1);this.kick();}
   railPosition(){return this.boutique.railPosition();}
 
@@ -281,12 +289,25 @@ export class World {
     this.railPan+=(this.railPanGoal-this.railPan)*railStep;
     if(this.railEngaged && sala && p>=sala.s-.02 && p<=sala.e+.02){
       const point=this.boutique.focusPoint();
-      this.camPos.x=THREE.MathUtils.lerp(this.camPos.x,point.x>0?-.6:.6,.36);
-      this.camPos.z=THREE.MathUtils.lerp(this.camPos.z,THREE.MathUtils.clamp(point.z+3.2,-7.8,-3.0),.58);
-      this.camTgt.x=THREE.MathUtils.lerp(this.camTgt.x,point.x,.73)+this.railPan*1.30;
-      this.camTgt.y=THREE.MathUtils.lerp(this.camTgt.y,1.38,.58);
-      this.camTgt.z=THREE.MathUtils.lerp(this.camTgt.z,point.z,.73)-this.railPan*1.45*(point.x>0?1:-1);
-    }
+      if(!this.roomFocusReady){this.roomFocus.copy(this.camTgt);this.roomFocusReady=true;}
+      // O alvo acompanha a arara com amortecimento, inclusive ao cruzar de parede.
+      const focusStep=exact?1:1-Math.exp(-dt*3.0);
+      this.roomFocus.lerp(point,focusStep);
+      // Entradas e saídas da cena mantêm continuidade com o travelling do filme.
+      const length=Math.max(.0001,sala.e-sala.s);
+      const inWeight=THREE.MathUtils.smoothstep(p,sala.s,sala.s+length*.17);
+      const outWeight=1-THREE.MathUtils.smoothstep(p,sala.e-length*.17,sala.e);
+      const blend=THREE.MathUtils.clamp(inWeight*outWeight,0,1);
+      const side=this.roomFocus.x>=0?1:-1;
+      const camX=side>0?-.65:.65;
+      const camZ=THREE.MathUtils.clamp(this.roomFocus.z+3.1,-7.8,-3.0);
+      this.camPos.x=THREE.MathUtils.lerp(this.camPos.x,camX,.32*blend);
+      this.camPos.z=THREE.MathUtils.lerp(this.camPos.z,camZ,.50*blend);
+      this.camTgt.x=THREE.MathUtils.lerp(this.camTgt.x,this.roomFocus.x+this.railPan*1.14,.75*blend);
+      this.camTgt.y=THREE.MathUtils.lerp(this.camTgt.y,1.38,.53*blend);
+      this.camTgt.z=THREE.MathUtils.lerp(this.camTgt.z,
+        this.roomFocus.z-this.railPan*.92*side,.70*blend);
+    } else this.roomFocusReady=false;
     if (!exact && this.opts.tier === 'cinema') {
       // câmera na mão, quase imperceptível (respiração do operador)
       const t = this.time;

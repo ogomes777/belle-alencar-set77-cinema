@@ -231,6 +231,29 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.17,.55,side*.078),new THREE.Vector3(-.13,.80,side*.078),new THREE.Vector3(.13,.80,side*.078),new THREE.Vector3(.17,.55,side*.078)]);
     bag.add(new THREE.Mesh(new THREE.TubeGeometry(curve,20,.012,7,false),leather));
   }
+  // O lettering vem do arquivo oficial da Belle, sem reconstrução tipográfica.
+  // Placa inexistente: a impressão é aplicada na superfície frontal do couro,
+  // com mapas alfa, para parecer uma gravação de folha dourada.
+  const officialLogo=new THREE.TextureLoader().load('/brand/belle-alencar-logo.svg',texture=>{
+    texture.colorSpace=THREE.SRGBColorSpace;
+    texture.anisotropy=4;
+    texture.needsUpdate=true;
+  });
+  officialLogo.colorSpace=THREE.SRGBColorSpace;
+  const foil=new THREE.Mesh(
+    new THREE.PlaneGeometry(.37,.178),
+    new THREE.MeshBasicMaterial({map:officialLogo,transparent:true,opacity:.97,
+      depthWrite:false,alphaTest:.02,polygonOffset:true,polygonOffsetFactor:-1,toneMapped:false})
+  );
+  foil.name='logo-oficial-belle-alencar';
+  foil.position.set(0,.325,.134);
+  foil.renderOrder=3;
+  bag.add(foil);
+  // Uma costura delicada, não um adesivo sobre a marca.
+  const seam=new THREE.Mesh(new THREE.PlaneGeometry(.426,.0028),
+    new THREE.MeshBasicMaterial({color:'#bea170',transparent:true,opacity:.34,depthWrite:false}));
+  seam.position.set(0,.104,.132);
+  bag.add(seam);
   bag.add(box(.075,.055,.015,kit.brass,0,.44,.135));g.add(bag);g.add(contact(kit,.8,.48,2.05,-6.05));
   let bagPulse=0;
   function swingFor(id:string){return railSwings.find(s=>s.product.id===id)||null;}

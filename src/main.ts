@@ -6,6 +6,7 @@
 import './styles/base.css';
 import './styles/shell.css';
 import './styles/film.css';
+import './styles/luxe-glass.css';
 import { mountMonograms } from './shell/monogram';
 import { initIntro } from './shell/intro';
 import { initHeader } from './shell/header';

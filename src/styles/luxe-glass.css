@@ -1,0 +1,171 @@
+/**
+ * BELLE ALENCAR · GLASS ATELIER V4
+ * Uma superfície editorial de vidro champagne, aplicada ao filme real,
+ * aos controles da arara e aos CTAs. Não interfere na narrativa/ScrollTrigger.
+ * Acessibilidade: foco visível, contraste e reduced-motion preservados.
+ */
+:root{
+  --ba-glass-ivory:rgba(255,252,246,.79);
+  --ba-glass-pearl:rgba(252,248,239,.69);
+  --ba-glass-line:rgba(180,142,78,.50);
+  --ba-glass-gold:#977348;
+  --ba-glass-ink:#362a1f;
+  --ba-glass-shadow:0 20px 62px rgba(51,36,17,.18),0 6px 16px rgba(72,48,25,.07);
+  --ba-card-radius:20px;
+  --ba-button-radius:12px;
+}
+/* O vidro é translúcido: o cômodo permanece visível por trás da narrativa. */
+.chapter__card,
+.chapter--hero .chapter__card{
+  position:sticky;
+  isolation:isolate;
+  overflow:hidden;
+  border-radius:var(--ba-card-radius);
+  border:1px solid var(--ba-glass-line);
+  background:linear-gradient(137deg,rgba(255,255,253,.89) 0%,rgba(255,251,244,.77) 43%,rgba(236,220,191,.48) 100%);
+  box-shadow:var(--ba-glass-shadow),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(181,141,78,.18);
+  -webkit-backdrop-filter:blur(19px) saturate(1.18);
+  backdrop-filter:blur(19px) saturate(1.18);
+  transition:border-color .4s ease,box-shadow .5s ease,background .5s ease;
+}
+.chapter__card::before,
+.roomrail__detail::before{
+  content:'';
+  position:absolute;
+  z-index:0;
+  pointer-events:none;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(125deg,rgba(255,255,255,.62),transparent 27%,transparent 69%,rgba(201,164,102,.12)),
+    linear-gradient(180deg,rgba(255,255,255,.32),transparent 19%);
+  opacity:.48;
+  animation:belleGlassBreathe 8s ease-in-out infinite alternate;
+}
+.chapter__card::after{
+  content:'';
+  position:absolute;
+  pointer-events:none;
+  width:80%;height:1px;top:0;left:10%;
+  background:linear-gradient(90deg,transparent,rgba(255,252,232,.94) 45%,rgba(179,140,71,.42),transparent);
+}
+.chapter__card>*,
+.roomrail__detail>*{position:relative;z-index:1}
+.chapter__card:hover,
+.chapter__card:focus-within{
+  border-color:rgba(177,137,67,.72);
+  box-shadow:0 25px 75px rgba(45,31,12,.22),inset 0 1px 0 white,0 0 0 1px rgba(242,212,150,.23);
+}
+.chapter__card .display,
+.chapter__card .lede{color:var(--ba-glass-ink)}
+.chapter__card .display em{color:#8b683b}
+.chapter__card .eyebrow,
+.chapter__card .fineprint{color:#795f3e}
+.chapter__card .lede{line-height:1.58;text-wrap:pretty}
+@keyframes belleGlassBreathe{0%,100%{opacity:.38}50%{opacity:.72}}
+
+/* Não recriar componentes: refinamento dos CTAs existentes. */
+.btn{
+  border-radius:var(--ba-button-radius);
+  box-shadow:0 3px 14px rgba(59,42,25,.09),inset 0 1px 0 rgba(255,255,255,.15);
+  transition:color .28s ease,border-color .28s ease,transform .28s ease,box-shadow .35s ease;
+}
+.btn::before{border-radius:inherit}
+.btn:hover:not([disabled]),
+.btn:focus-visible{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(96,62,24,.16),0 0 0 1px rgba(180,145,89,.2);
+}
+.btn:active:not([disabled]){transform:translateY(0) scale(.985)}
+.btn:focus-visible{outline:2px solid #80603c;outline-offset:3px}
+.fitting__group button,
+.select,
+.size span,
+.pv__size span{border-radius:10px;transition:border-color .25s,background .25s,box-shadow .25s,transform .25s}
+.fitting__group button:hover,
+.pv__size:hover span,.size:hover span{box-shadow:0 4px 18px rgba(168,127,71,.13)}
+.size input:checked+span,
+.pv__size input:checked+span{border-color:#a58755;background:linear-gradient(145deg,#8c714d,#463628);color:#fffaf2;box-shadow:0 6px 18px rgba(83,57,24,.19)}
+.select:focus-visible{outline:2px solid #927148;outline-offset:3px}
+
+/* HUD: uma lâmina de vidro flutuante, não uma barra de videogame. */
+html .roomrail__controls{
+  border:1px solid rgba(188,149,90,.55);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,255,253,.90),rgba(251,246,234,.77));
+  box-shadow:0 16px 50px rgba(41,29,18,.18),inset 0 1px 0 #fff,0 0 0 1px rgba(255,232,186,.10);
+  -webkit-backdrop-filter:blur(15px) saturate(1.2);
+  backdrop-filter:blur(15px) saturate(1.2);
+}
+html .roomrail__controls button{border-radius:10px;transition:transform .25s,background .25s,color .25s,box-shadow .25s}
+html .roomrail__controls button:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.62);transform:translateY(-1px)}
+html .roomrail__controls .roomrail__inspect{
+  border-radius:10px;
+  background:linear-gradient(135deg,#61472f,#30251e)!important;
+  box-shadow:0 4px 14px rgba(54,38,24,.18),inset 0 1px 0 rgba(255,255,255,.16)
+}
+html .roomrail__controls .roomrail__inspect:hover{background:linear-gradient(135deg,#886846,#493526)!important}
+html .roomrail__detail{
+  isolation:isolate;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid rgba(184,147,92,.64);
+  background:linear-gradient(150deg,rgba(255,253,248,.95),rgba(248,239,221,.88));
+  box-shadow:0 24px 60px rgba(40,27,11,.19),inset 0 1px 0 #fff;
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
+  backdrop-filter:blur(18px) saturate(1.15);
+}
+html .roomrail__detail::before{opacity:.42;animation-duration:7s}
+html .roomrail__title{color:#3a2b1d;letter-spacing:-.025em}
+html .roomrail__description{line-height:1.6;color:#695844}
+html .roomrail__size-label{letter-spacing:.15em;color:#73542e}
+html .roomrail__size{
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid rgba(161,125,71,.66);
+  border-radius:12px;
+  min-height:49px;
+  color:#34281d;
+  font-weight:550;
+  letter-spacing:.03em;
+  background-color:rgba(255,253,248,.89);
+  background-image:linear-gradient(45deg,transparent 50%,#98754b 50%),linear-gradient(135deg,#98754b 50%,transparent 50%),
+    linear-gradient(to right,transparent,rgba(201,174,128,.14));
+  background-position:calc(100% - 23px) 52%,calc(100% - 17px) 52%,0 0;
+  background-size:6px 6px,6px 6px,100% 100%;
+  background-repeat:no-repeat;
+  padding:0 42px 0 14px;
+  box-shadow:inset 0 1px 0 white,0 4px 13px rgba(131,97,51,.07);
+  transition:border-color .25s,box-shadow .25s;
+}
+html .roomrail__size:hover{border-color:#926a36;box-shadow:0 0 0 2px rgba(186,146,80,.10)}
+html .roomrail__size:focus-visible{outline:2px solid #765327;outline-offset:3px;box-shadow:0 0 0 4px rgba(201,160,93,.16)}
+html .roomrail__actions button{
+  position:relative;
+  overflow:hidden;
+  border-radius:11px;
+  min-height:49px;
+  font-weight:650;
+  letter-spacing:.025em;
+  transition:transform .25s,box-shadow .3s,background .25s;
+}
+html .roomrail__actions .roomrail__add{
+  background:linear-gradient(120deg,#99774a,#65472a 56%,#3f2f22);
+  border-color:#785a35;
+  box-shadow:inset 0 1px 0 #f1cb8a66,0 6px 16px #4e372d25;
+}
+html .roomrail__actions .roomrail__close{background:rgba(255,255,255,.28);border-color:#c5a875}
+html .roomrail__actions button:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 10px 22px #6c4c2630}
+html .roomrail__actions button:active:not([disabled]){transform:scale(.98)}
+html .roomrail__actions button:focus-visible{outline:2px solid #836135;outline-offset:3px}
+html .roomrail__hint,html .roomrail__gesture{color:#6f5634;text-shadow:0 1px 0 #fff7}
+@media(max-width:899px){
+  .chapter__card,.chapter--hero .chapter__card{border-radius:16px;-webkit-backdrop-filter:blur(11px);backdrop-filter:blur(11px)}
+  html .roomrail__detail{border-radius:15px}
+  html .roomrail__controls{border-radius:13px;-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
+  .btn{border-radius:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .chapter__card::before,html .roomrail__detail::before{animation:none!important}
+  html .roomrail__controls button,
+  html .roomrail__actions button,.btn{transition-duration:0.01ms!important;transform:none!important}
+}
