@@ -8,6 +8,7 @@
  */
 import { bus } from './core/bus';
 import { productById, productBySlug } from './commerce/catalog.demo';
+import { CATALOG_MANIFEST } from './commerce/catalog.data';
 import { $, $$, clamp } from './core/dom';
 import { detectCapabilities, resolveTier, type Tier } from './core/tier';
 
@@ -347,6 +348,7 @@ export function initFilm(director: Director): void {
   const fittingSelection = $<HTMLElement>('#fittingSelection');
   const selectedSlugs = ['vestidos-01','vestidos-02','vestidos-03','vestidos-05','vestidos-06'] as const;
   const selectedDresses = selectedSlugs.map(slug => productBySlug(slug)).filter((p): p is NonNullable<typeof p> => !!p);
+  const catalogColor = (slug:string):string => CATALOG_MANIFEST.find(p=>p.slug===slug)?.color ?? 'Consultar cor';
   const colorMap: Record<string,string> = {
     'vestidos-01':'#ceb38b','vestidos-02':'#722b3c','vestidos-03':'#f0e6d3',
     'vestidos-05':'#abc5dc','vestidos-06':'#272326',
@@ -383,12 +385,12 @@ export function initFilm(director: Director): void {
       button.className='fitting__tone';
       button.dataset.dressId=p.id;
       button.setAttribute('aria-pressed','false');
-      button.setAttribute('aria-label',p.color+' · '+p.title);
+      button.setAttribute('aria-label',catalogColor(p.slug)+' · '+p.title);
       const sw=document.createElement('i');
       sw.className='fitting__swatch';
       sw.style.setProperty('--sw',colorMap[p.slug] ?? '#ceb38b');
       const name=document.createElement('span');
-      name.textContent=p.color;
+      name.textContent=catalogColor(p.slug);
       button.append(sw,name);
       return button;
     }));
@@ -400,7 +402,7 @@ export function initFilm(director: Director): void {
       btn.setAttribute('aria-pressed',String(btn.dataset.dressId===selected.id)));
     tones?.querySelectorAll<HTMLButtonElement>('[data-dress-id]').forEach(btn=>
       btn.setAttribute('aria-pressed',String(btn.dataset.dressId===selected.id)));
-    if(fittingSelection) fittingSelection.textContent=selected.title+' · '+selected.color;
+    if(fittingSelection) fittingSelection.textContent=selected.title+' · '+catalogColor(selected.slug);
     if (fittingStatic && selected.cutout) {
       // Reuse the exact same image loaded by the WebGL fitting display.
       // Keep this as an accessible/fallback rendering; no made-up 360-degree garment.
