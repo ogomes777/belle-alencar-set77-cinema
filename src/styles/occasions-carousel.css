@@ -181,7 +181,9 @@
   background:#876b43;border-color:#876b43;transform:translate3d(0,-2px,0);
 }
 .occ-round.is-round .occ-card:not(.is-active) .occ-card__body {
-  background:linear-gradient(180deg,#f9f4eb,#f0e8dc);
+  /* Depth is carried by scale and perspective, NEVER by bleaching the
+     product colors or lowering the opacity of the entire card. */
+  background:linear-gradient(180deg,#fffdfa,#faf6ee);
 }
 .occ-round.is-round .occ-round__footer {
   display:flex;
@@ -213,6 +215,33 @@
 }
 .occ-round__arrow:hover {background:#e6d7bd;border-color:#9b7742;transform:scale(1.05);}
 .occ-round__arrow:focus-visible {outline:2px solid var(--gold-deep);outline-offset:3px;}
+/* A visible motion control is important for an endlessly moving showcase.
+ * Only explicit pause freezes the orbit. Hovering a card no longer does. */
+.occ-round__pause {
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:44px;
+  padding:0;
+  margin-left:2px;
+  font-size:16px;
+  line-height:1;
+  color:#665238;
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:50%;
+  transition:color .2s,background-color .2s,border-color .2s;
+}
+.occ-round__pause:hover,
+.occ-round__pause[aria-pressed="true"] {
+  color:#2b2119;
+  background:rgba(187,151,101,.13);
+  border-color:rgba(171,136,89,.33);
+}
+.occ-round__pause:focus-visible {
+  outline:2px solid var(--gold-deep);
+  outline-offset:3px;
+}
 .occ-round__counter {
   display:inline-block;
   min-width:58px;
@@ -530,4 +559,87 @@ html.md-motion #colecao.md-scene::before {display:none;}
 }
 @media print{
   .occ-card__world,.occ-card__portrait {display:none!important;}
+}
+
+/* V11 · Chromatic fidelity and lightweight ambient life.
+   All three cards remain fully opaque. Inner layers may drift independently
+   without ever washing over Billie or the product copy. */
+.occ-round.is-round .occ-card,
+.occ-round.is-round .occ-card:not(.is-active) {
+  opacity:1!important;
+}
+.occ-round.is-round .occ-card__art::before {
+  background:linear-gradient(135deg,rgba(255,255,255,.11),transparent 44%,rgba(64,44,25,.035));
+}
+.occ-round.is-round .occ-card__foil {opacity:.32;}
+.occ-round.is-round .occ-card__world-depth {
+  animation:occSceneBreath 13s ease-in-out infinite alternate;
+  animation-play-state:paused;
+  will-change:transform;
+}
+.occ-round.is-round .occ-card__world-glow {
+  opacity:.38;
+  animation:occLightTravel 10s ease-in-out infinite alternate;
+  animation-play-state:paused;
+  will-change:transform,opacity;
+}
+.occ-round.is-round .occ-card__world-ground {
+  animation:occShadowBreath 6.8s ease-in-out infinite alternate;
+  animation-play-state:paused;
+}
+.occ-round.is-round[data-auto-orbit="running"] .occ-card__world-depth,
+.occ-round.is-round[data-auto-orbit="running"] .occ-card__world-glow,
+.occ-round.is-round[data-auto-orbit="running"] .occ-card__world-ground,
+.occ-round.is-round[data-auto-orbit="paused"] .occ-card__world-depth,
+.occ-round.is-round[data-auto-orbit="paused"] .occ-card__world-glow,
+.occ-round.is-round[data-auto-orbit="paused"] .occ-card__world-ground {
+  /* The world remains alive during a short user snap/pause; all keyframes
+     stop when the section is offscreen and the ticker detaches. */
+  animation-play-state:running;
+}
+.occ-round.is-round .occ-card--dia .occ-card__world-glow {
+  background:radial-gradient(ellipse 52% 65% at 22% 24%,rgba(255,255,249,.63),transparent 84%);
+}
+.occ-round.is-round .occ-card--noite .occ-card__world-glow {
+  background:radial-gradient(ellipse 63% 55% at 50% 31%,rgba(170,81,82,.19),transparent 83%);
+}
+.occ-round.is-round .occ-card--celebrar .occ-card__world-glow {
+  background:radial-gradient(ellipse 52% 57% at 58% 22%,rgba(252,249,236,.50),transparent 83%);
+}
+.occ-round.is-round .occ-card__model {
+  opacity:1;
+  backface-visibility:hidden;
+}
+.occ-round.is-round .occ-card.is-active .occ-card__model {
+  animation:occPortraitBreathe 5.8s ease-in-out infinite;
+}
+.occ-round.is-round .occ-card:not(.is-active) .occ-card__model {
+  animation:occPortraitSideFloat 8.4s ease-in-out infinite;
+}
+@keyframes occSceneBreath {
+  from{transform:translate3d(-1%,0,0) scale(1.01);}
+  to{transform:translate3d(1%,.8%,0) scale(1.035);}
+}
+@keyframes occLightTravel {
+  from{transform:translate3d(-3%,0,0);opacity:.32;}
+  to{transform:translate3d(3%,1.5%,0);opacity:.46;}
+}
+@keyframes occShadowBreath {
+  from{transform:scaleX(.72) scaleY(.26);}
+  to{transform:scaleX(.77) scaleY(.28);}
+}
+@keyframes occPortraitSideFloat {
+  from,to{transform:translate3d(0,0,0);}
+  50%{transform:translate3d(0,-3px,0);}
+}
+@media(max-width:560px){
+  .occ-round__pause{width:32px;height:44px;font-size:15px;margin-left:0;}
+  .occ-round.is-round .occ-card__world-depth {animation-duration:16s;}
+  .occ-round.is-round .occ-card__model {filter:drop-shadow(0 7px 6px rgba(48,33,21,.14));}
+}
+@media(prefers-reduced-motion:reduce){
+  .occ-round .occ-card__world-depth,
+  .occ-round .occ-card__world-glow,
+  .occ-round .occ-card__world-ground,
+  .occ-round .occ-card__model {animation:none!important;}
 }
