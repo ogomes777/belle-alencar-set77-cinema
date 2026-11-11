@@ -84,13 +84,15 @@ export function initMotionDirector():()=>void {
 
   // A visual effect must NEVER leave commerce content invisible after a
   // missed observer event, delayed script, BFCache restore or tab switch.
-  const revealAll=()=>{
-    scenes.forEach(s=>s.classList.add('md-in'));
-    chapters.forEach(s=>s.classList.add('md-chapter-seen'));
+  const rescueVisible=()=>{
+    // Fail-open applies ONLY to what is currently on screen. Revealing all
+    // future scenes after six seconds would erase the full scroll story.
+    scenes.forEach(s=>{if(visibleNow(s))s.classList.add('md-in');});
+    chapters.forEach(s=>{if(visibleNow(s))s.classList.add('md-chapter-seen');});
   };
-  let fallback=window.setTimeout(revealAll,6000);
-  const onVisible=()=>{if(!document.hidden)revealAll();};
-  const onPageShow=(event:PageTransitionEvent)=>{if(event.persisted)revealAll();};
+  const fallback=window.setTimeout(rescueVisible,6000);
+  const onVisible=()=>{if(!document.hidden)rescueVisible();};
+  const onPageShow=(event:PageTransitionEvent)=>{if(event.persisted)rescueVisible();};
   document.addEventListener('visibilitychange',onVisible);
   window.addEventListener('pageshow',onPageShow);
 
@@ -100,6 +102,7 @@ export function initMotionDirector():()=>void {
   let frame=0;
   const updateShift=()=>{
     frame=0;
+    rescueVisible();
     if(!concierge||root.dataset.intensity==='essential')return;
     const rect=concierge.getBoundingClientRect();
     if(rect.bottom<0||rect.top>innerHeight)return;
