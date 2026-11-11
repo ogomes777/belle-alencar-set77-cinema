@@ -76,7 +76,7 @@ export function initMotionDirector():()=>void {
       entry.target.classList.add('md-in');
       observer.unobserve(entry.target);
     }
-  },{rootMargin:'0px 0px -10% 0px',threshold:.07});
+  },{rootMargin:'0px 0px -10% 0px',threshold:0});
   for(const section of scenes){
     if(visibleNow(section))section.classList.add('md-in');
     else observer.observe(section);
