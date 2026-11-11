@@ -14,7 +14,7 @@ const LOOK_PLANS: readonly LookPlan[] = [
   { key:'azul', name:'Azul & pérola', styling:'Camisa + calça + pulseira', slugs:['camisas-03','calcas-01','pulseiras-01'] },
   { key:'noite', name:'Noite', styling:'Vestido + bolsa + anel', slugs:['vestidos-02','bolsas-03','aneis-02'] },
   { key:'oliva', name:'Oliva & creme', styling:'Cropped + saia + bolsa', slugs:['croppeds-04','saias-04','bolsas-04'] },
-  { key:'azul-claro', name:'Azul delicado', styling:'Vestido + bolsa + anel', slugs:['vestidos-05','bolsas-05','aneis-05'] },
+  { key:'azul-claro', name:'Azul delicado', styling:'Vestido + bolsa + anel', slugs:['vestidos-05','bolsas-06','aneis-05'] },
 ];
 
 export interface RunwayLook { key:string; name:string; styling:string; pieces:readonly [Product,Product,Product]; hero:Product; }
