@@ -23,6 +23,24 @@ try {
     await page.goto(base+'/?tier=static',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.documentElement.classList.contains('md-motion'));
     check(await page.locator('[data-md-scene]').count()===9,width+': nine motion scenes mounted');
+    const seam=await page.evaluate(()=>{
+      const ticker=document.querySelector('.manifesto--ticker .band');
+      const runway=document.querySelector('#passarela');
+      const stage=document.querySelector('#passarela .runway__stage');
+      const rail=document.querySelector('#passarela .runway__rail');
+      if(!ticker||!runway||!stage||!rail)return null;
+      return {
+        gap:Math.round((runway.getBoundingClientRect().top-ticker.getBoundingClientRect().bottom)*100)/100,
+        stageInset:Math.round((stage.getBoundingClientRect().top-runway.getBoundingClientRect().top)*100)/100,
+        padding:getComputedStyle(runway).paddingTop,
+        mobileRailGap:Math.round((rail.getBoundingClientRect().top-stage.getBoundingClientRect().bottom)*100)/100,
+        mobile:innerWidth<=820
+      };
+    });
+    check(!!seam && Math.abs(seam.gap)<=1,width+': infinite ticker touches runway without a blank seam '+JSON.stringify(seam));
+    check(!!seam && Math.abs(seam.stageInset)<=1 && seam.padding==='0px',width+': visual runway stage starts at section boundary');
+    if(width<=820)check(!!seam && Math.abs(seam.mobileRailGap)<=1,width+': mobile product rail stays directly below runway stage');
+
     check(!(await page.locator('#duvidas').evaluate(el=>el.classList.contains('md-in'))),width+': future scenes not prematurely revealed');
     check(await page.locator('.film .chapter').count()===7,width+': seven film chapters preserved');
     for(const id of sceneIds){
