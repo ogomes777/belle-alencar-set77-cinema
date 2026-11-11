@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { depthAt, railOffset } from '../../src/runway/depth';
-import { RUNWAY_PRODUCTS } from '../../src/runway/data';
+import { RUNWAY_PRODUCTS, RUNWAY_LOOKS } from '../../src/runway/data';
 
 describe('runway depth and commerce contract', () => {
   it('returns to the same scene after six looks, including reverse navigation', () => {
@@ -18,13 +18,20 @@ describe('runway depth and commerce contract', () => {
     expect(back.opacity).toBeLessThan(front.opacity);
     expect(back.z).toBeLessThan(front.z);
   });
-  it('moves both products of a look to the start of the rail', () => {
-    expect(railOffset(4,2,160)).toBe(0);
-    expect(railOffset(5,2,160)).toBe(160);
+  it('moves all three pieces of each look to the start of the rail', () => {
+    expect(railOffset(6,2,160)).toBe(0);
+    expect(railOffset(7,2,160)).toBe(160);
+    expect(railOffset(8,2,160)).toBe(320); 
     expect(railOffset(0,6,160)).toBe(0);
   });
   it('never invents sale prices or available stock for the reference pieces', () => {
-    expect(RUNWAY_PRODUCTS).toHaveLength(12);
+    expect(RUNWAY_PRODUCTS).toHaveLength(18);
+    expect(RUNWAY_LOOKS).toHaveLength(6);
+    for(const look of RUNWAY_LOOKS) {
+      expect(look.pieces).toHaveLength(3);
+      expect(new Set(look.pieces.map(p=>p.category)).size).toBe(3);
+      expect(look.hero.id).toBe(look.pieces[0].id);
+    }
     for(const p of RUNWAY_PRODUCTS) {
       expect(p.isDemo).toBe(true);
       expect(p.price.priceCents).toBeNull();
