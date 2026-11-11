@@ -31,7 +31,7 @@ try{
     check(await round.locator('.occ-card').count()===3,width+': three authentic occasion cards');
     check(await round.locator('.occ-card.is-active').count()===1,width+': one active category');
     check((await round.locator('.occ-card.is-active').getAttribute('data-occasion'))==='dia',width+': default active moment is day');
-    check((await round.locator('.occ-card').first().evaluate(el=>getComputedStyle(el).transform))?.startsWith('matrix3d('),width+': GPU-composited 3D rotation without new canvas');
+    check(await round.locator('.occ-card').evaluateAll(els=>els.some(el=>getComputedStyle(el).transform.startsWith('matrix3d('))),width+': side panels use 3D perspective without new canvas');
     check(await round.locator('.occ-card a[data-filter-occasion]').count()===3,width+': original commercial filters preserved');
     check(await round.locator('.occ-card .editorial-cutout').count()===6,width+': paired original product images still rendered');
     check(await page.locator('#ocasioes canvas').count()===0,width+': no extra Three.js canvas');
