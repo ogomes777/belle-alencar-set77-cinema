@@ -29,24 +29,40 @@ export function initRunway(ctx: Ctx): () => void {
     const el=document.createElement('div');el.className='runway__model';el.dataset.look=String(i);el.dataset.productId=product.id;
     const [w,h]=product.cutoutSize ?? [600,900];
     const approvedPortrait=BELLE_APPROVED_LOOK_IMAGES[look.key];
-    const pair=product.category==='croppeds' && look.pieces[1].category==='saias';
+    // Visual contract: the stage preview and the right-hand cards are built from
+    // the SAME canonical Product objects. Never use an unrelated generated outfit.
+    // An approved Billie editorial portrait is allowed only after visual QA.
     if (approvedPortrait) {
-      // Real identity-approved editorial photos are supplied per look; never infer the owner's face.
       el.classList.add('runway__model--portrait');
-      el.innerHTML=`<img src="${approvedPortrait}" alt="Belle em look ${look.name}" draggable="false">`;
-    } else if(pair) {
-      // Two genuine demo product cutouts, not a fake model or a simulated try-on photo.
-      const bottom=look.pieces[1];
-      el.classList.add('runway__model--pair');
-      el.innerHTML=`<div class="runway__pair" aria-label="${product.title} e ${bottom.title}, composição demonstrativa">
-        <img class="runway__pair-top" src="${product.cutout}" alt="" draggable="false">
-        <img class="runway__pair-bottom" src="${bottom.cutout}" alt="" draggable="false">
-      </div>`;
+      const image=document.createElement('img');
+      image.src=approvedPortrait;
+      image.alt=`Billie no conjunto ${look.name}: ${look.pieces.map(piece=>piece.title).join(', ')}`;
+      image.draggable=false;
+      el.append(image);
     } else {
-      el.innerHTML=`<img src="${product.cutout}" alt="${product.title}, recorte demonstrativo" width="${w}" height="${h}" draggable="false">`;
+      el.classList.add('runway__model--ensemble');
+      const ensemble=document.createElement('div');
+      ensemble.className='runway__ensemble';
+      ensemble.setAttribute('role','img');
+      ensemble.setAttribute('aria-label',`Conjunto demonstrativo: ${look.pieces.map(piece=>piece.title).join(', ')}`);
+      look.pieces.forEach((piece,slot)=>{
+        const image=document.createElement('img');
+        image.src=piece.cutout;
+        image.alt='';
+        image.loading=slot===0?'eager':'lazy';
+        image.decoding='async';
+        image.draggable=false;
+        image.className=`runway__ensemble-piece runway__ensemble-piece--${slot===0?'primary':slot===1?'secondary':'tertiary'}`;
+        image.dataset.productId=piece.id;
+        image.dataset.productSlug=piece.slug;
+        ensemble.append(image);
+      });
+      ensemble.dataset.ensembleKind=look.pieces[0].category==='croppeds' ? 'separates'
+        : look.pieces[0].category==='camisas' ? 'tailoring' : 'dress';
+      el.append(ensemble);
     }
     line.append(el);
-    return {el,ratio:(approvedPortrait||pair)?0.67:w/h,product,pair:!!(pair&&!approvedPortrait),portrait:!!approvedPortrait};
+    return {el,ratio:0.67,product,ensemble:!approvedPortrait,portrait:!!approvedPortrait};
   });
   const cards = RUNWAY_PRODUCTS.map((product, i) => {
     const el = document.createElement('article'); el.className = 'runway__card'; el.dataset.product = product.id;
@@ -77,9 +93,8 @@ export function initRunway(ctx: Ctx): () => void {
   }
   function paint() {
     people.forEach((model,i) => {
-      const d=depthAt(i,p), category=model.product.category;
-      const relative: Record<string,number>={vestidos:1,camisas:.57,croppeds:.35,saias:.58,calcas:.85};
-      const h=d.height*height*(model.pair||model.portrait ? 1 : (relative[category] ?? .65)), scale=h/base;
+      const d=depthAt(i,p);
+      const h=d.height*height*1, scale=h/base;
       const modelWidth=h*model.ratio;
       const fitCenter=Math.max(modelWidth/2+12,Math.min(width-modelWidth/2-12,d.x*width));
       const fitWeight=d.depth<0?1-Math.min(1,-d.depth):1;
