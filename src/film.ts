@@ -170,6 +170,41 @@ export function initFilm(director: Director): void {
   measure();
   setActive('vitrine');
 
+  // ---------- glass atelier · estreia editorial dos capítulos ----------
+  // Progressive enhancement: all text remains accessible without JS/3D.
+  // A single observer plays a one-shot reveal; no perpetual scroll handler
+  // and no filter animation on low-powered mobile devices.
+  const glassCards=Array.from(film.querySelectorAll<HTMLElement>('.chapter__card'));
+  const reducedGlass=matchMedia('(prefers-reduced-motion: reduce)');
+  glassCards.forEach(card=>{
+    const glint=document.createElement('i');
+    glint.className='chapter__glint';
+    glint.setAttribute('aria-hidden','true');
+    card.prepend(glint);
+    if(matchMedia('(pointer:fine)').matches){
+      card.addEventListener('pointermove',event=>{
+        const r=card.getBoundingClientRect();
+        card.style.setProperty('--glass-x',((event.clientX-r.left)/Math.max(1,r.width)*100).toFixed(1)+'%');
+        card.style.setProperty('--glass-y',((event.clientY-r.top)/Math.max(1,r.height)*100).toFixed(1)+'%');
+      },{passive:true});
+    }
+  });
+  const glassObserver=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      if(!entry.isIntersecting)continue;
+      const card=entry.target as HTMLElement;
+      card.classList.add('is-glass-appeared');
+      glassObserver.unobserve(card);
+      if(!reducedGlass.matches && !document.documentElement.classList.contains('poster-mode')){
+        card.animate([
+          {opacity:0.62,transform:'translate3d(0,22px,0) scale(.985)'},
+          {opacity:1,transform:'translate3d(0,0,0) scale(1)'}
+        ],{duration:720,easing:'cubic-bezier(.16,1,.3,1)'});
+      }
+    }
+  },{threshold:0.13,rootMargin:'0px 0px -6% 0px'});
+  glassCards.forEach(card=>glassObserver.observe(card));
+
   // ---------- 3D sob demanda ----------
   async function startWorld(): Promise<void> {
     if (world || loading || tier === 'static') return;
