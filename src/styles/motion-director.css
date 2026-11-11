@@ -176,6 +176,8 @@ html.md-motion #lojas:not(.md-in) .store-card.md-reveal {
 }
 html.md-motion #lojas.md-in .store-card.md-reveal {transition-duration:940ms;}
 
+html.md-motion #atendimento {overflow-x:clip;}
+
 /* 07 — Cortina lateral + parallax: image and concierge message open together.
  * Parallax is ~12px and never moves interactive content. */
 html.md-motion #atendimento .concierge__media.md-reveal {
@@ -189,7 +191,7 @@ html.md-motion #atendimento:not(.md-in) .concierge__media.md-reveal {
 html.md-motion #atendimento .concierge__media img {
   transform:translate3d(0,var(--md-shift,0px),0) scale(1.045);
 }
-html.md-motion #atendimento:not(.md-in) .concierge__body.md-reveal {transform:translate3d(25px,0,0);}
+html.md-motion #atendimento:not(.md-in) .concierge__body.md-reveal {transform:translate3d(0,23px,0);}
 html.md-motion #atendimento.md-in .concierge__body.md-reveal {transition-delay:310ms;}
 
 /* 08 — Dobra: FAQ rows rise gently. Native details/summary semantics intact. */
