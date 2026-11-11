@@ -56,19 +56,5 @@ export function initSections(): void {
     }),
   );
 
-  // reveal ao entrar na tela (sem JS ou com reduced-motion, tudo já visível)
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) return;
-  const targets = $$<HTMLElement>('[data-reveal], .occ-card, .look, .how__steps li, .faq details');
-  targets.forEach((el) => el.classList.add('rv'));
-  const io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('rv-in');
-        io.unobserve(e.target);
-      }),
-    { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
-  );
-  targets.forEach((el) => io.observe(el));
+  // Revelation timing now belongs to Motion Director V8; this module stays responsible for commerce data and interactions.
 }
