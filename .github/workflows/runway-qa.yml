@@ -6,6 +6,7 @@ on:
       - feat/belle-calligraphy-intro
       - feat/belle-motion-storytelling-v8
       - fix/belle-ticker-runway-flush
+      - feat/belle-occasions-round-carousel-v9
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,3 +38,4 @@ jobs:
           node tests/e2e/runway.mjs
           node tests/e2e/intro-calligraphy.mjs
           node tests/e2e/motion-director.mjs
+          node tests/e2e/occasions-round.mjs
