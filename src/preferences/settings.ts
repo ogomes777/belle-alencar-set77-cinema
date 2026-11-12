@@ -113,9 +113,19 @@ export function initBelleSettings(){
   const target=event.target as Element;
   if(target.closest('[data-close-settings]')){toggle(false,true);return;}
   const themeButton=target.closest<HTMLButtonElement>('[data-theme-option]');
-  if(themeButton){setBelleTheme(themeButton.dataset.themeOption as BelleTheme);refresh();return;}
+  if(themeButton){
+   const selected=themeButton.dataset.themeOption as BelleTheme;
+   setBelleTheme(selected);refresh();
+   panel.querySelector<HTMLButtonElement>('[data-theme-option="'+selected+'"]')?.focus({preventScroll:true});
+   return;
+  }
   const langButton=target.closest<HTMLButtonElement>('[data-lang-option]');
-  if(langButton){setBelleLocale(langButton.dataset.langOption as BelleLocale);refresh();return;}
+  if(langButton){
+   const selected=langButton.dataset.langOption as BelleLocale;
+   setBelleLocale(selected);
+   panel.querySelector<HTMLButtonElement>('[data-lang-option="'+selected+'"]')?.focus({preventScroll:true});
+   return;
+  }
  });
  document.addEventListener('pointerdown',event=>{
   if(open&&!panel.contains(event.target as Node)&&!trigger.contains(event.target as Node))toggle(false);

@@ -8,7 +8,7 @@ export type BelleLocale='pt'|'en'|'es'|'it';
 const languages: BelleLocale[]=['pt','en','es','it'];
 const dictionary:Record<'en'|'es'|'it',Record<string,string>>={en:{},es:{},it:{}};
 for(const [pt,en,es,it] of [...phrasePairs,...productPairs]){
- dictionary.en[pt]=en;dictionary.es[pt]=es;dictionary.it[pt]=it;
+ dictionary.en[pt.trim()]=en;dictionary.es[pt.trim()]=es;dictionary.it[pt.trim()]=it;
 }
 const storeKey='belle:v31:locale';
 function readLocale():BelleLocale{
@@ -55,7 +55,12 @@ function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
  return source;
 }
 function translate(text:string,to:Exclude<BelleLocale,'pt'>):string{
- return dictionary[to][text]??computedText(text,to);
+ const direct=dictionary[to][text]??computedText(text,to);
+ if(direct!==text)return direct;
+ // Composite labels are assembled from translated category, occasion and
+ // live stock values without reconstructing checkout or product state.
+ if(text.includes(' · '))return text.split(' · ').map(part=>translate(part,to)).join(' · ');
+ return text;
 }
 function translateText(node:Text){
  const parent=node.parentElement;

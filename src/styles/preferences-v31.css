@@ -280,3 +280,5 @@ html[data-belle-theme="rose"] #como-comprar::after{background:linear-gradient(18
  .belle-settings{animation:none}
  .belle-settings__theme,#belleSettingsButton svg{transition:none}
 }
+
+html[data-belle-theme] { overflow-x:clip; }
