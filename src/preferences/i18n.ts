@@ -38,25 +38,25 @@ function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
  const w=words[to];
  const number=source.match(/^(\d+)\s+(peças?|itens)\s+(.+)$/i);
  const result=source.match(/^(\d+)\s+(resultado|resultados)$/);
- if(result)return result[1]+' '+translate(result[2],to);
+ if(result)return result[1]!+' '+translate(result[2]!,to);
  const runway=source.match(/^Look (\d+)\. (.+?), (.+?)\. Três peças disponíveis para visualizar individualmente\.$/);
- if(runway)return 'Look '+runway[1]+'. '+translate(runway[2],to)+', '+translate(runway[3],to)+'. '+translate('Três peças disponíveis para visualizar individualmente.',to);
+ if(runway)return 'Look '+runway[1]!+'. '+translate(runway[2]!,to)+', '+translate(runway[3]!,to)+'. '+translate('Três peças disponíveis para visualizar individualmente.',to);
  const position=source.match(/^Ocasião (\d+) de (\d+): (.+)$/);
- if(position)return ({en:'Occasion ',es:'Ocasión ',it:'Occasione '}[to])+position[1]+({en:' of ',es:' de ',it:' di '}[to])+position[2]+': '+translate(position[3],to);
+ if(position)return ({en:'Occasion ',es:'Ocasión ',it:'Occasione '}[to])+position[1]!+({en:' of ',es:' de ',it:' di '}[to])+position[2]!+': '+translate(position[3]!,to);
  const pieces=source.match(/^Conjunto (.+?), peça (\d+) de (\d+): (.+)$/);
- if(pieces)return ({en:'Outfit ',es:'Conjunto ',it:'Completo '}[to])+translate(pieces[1],to)+({en:', item ',es:', prenda ',it:', capo '}[to])+pieces[2]+({en:' of ',es:' de ',it:' di '}[to])+pieces[3]+': '+translate(pieces[4],to);
+ if(pieces)return ({en:'Outfit ',es:'Conjunto ',it:'Completo '}[to])+translate(pieces[1]!,to)+({en:', item ',es:', prenda ',it:', capo '}[to])+pieces[2]!+({en:' of ',es:' de ',it:' di '}[to])+pieces[3]!+': '+translate(pieces[4]!,to);
  const available=source.match(/^Disponibilidade: consultar a loja de (.+)$/);
- if(available)return ({en:'Availability: ask the store in ',es:'Disponibilidad: consultar con la tienda de ',it:'Disponibilità: chiedi al negozio di '}[to])+available[1];
+ if(available)return ({en:'Availability: ask the store in ',es:'Disponibilidad: consultar con la tienda de ',it:'Disponibilità: chiedi al negozio di '}[to])+available[1]!;
  const emptyBag=source.match(/^Sua sacola de (.+?) está vazia\.$/);
- if(emptyBag)return ({en:'Your ',es:'Tu bolsa de ',it:'La tua borsa di '}[to])+emptyBag[1]+({en:' bag is empty.',es:' está vacía.',it:' è vuota.'}[to]);
+ if(emptyBag)return ({en:'Your ',es:'Tu bolsa de ',it:'La tua borsa di '}[to])+emptyBag[1]!+({en:' bag is empty.',es:' está vacía.',it:' è vuota.'}[to]);
  const sendBelle=source.match(/^Enviar para a Belle (.+)$/);
- if(sendBelle)return ({en:'Send to Belle ',es:'Enviar a Belle ',it:'Invia a Belle '}[to])+sendBelle[1];
+ if(sendBelle)return ({en:'Send to Belle ',es:'Enviar a Belle ',it:'Invia a Belle '}[to])+sendBelle[1]!;
  const openCity=source.match(/^Abrir (Araxá|Frutal|Catalão|Mineiros)$/);
- if(openCity)return translate('Abrir',to)+' '+openCity[1];
+ if(openCity)return translate('Abrir',to)+' '+openCity[1]!;
  const askStore=source.match(/^Cada loja tem o próprio estoque\. Como você quer seguir em (.+)\?$/);
- if(askStore)return ({en:'Every store has its own stock. How would you like to continue in ',es:'Cada tienda tiene su propio inventario. ¿Cómo quieres seguir en ',it:'Ogni negozio ha il proprio assortimento. Come vuoi continuare a '}[to])+askStore[1]+'?';
+ if(askStore)return ({en:'Every store has its own stock. How would you like to continue in ',es:'Cada tienda tiene su propio inventario. ¿Cómo quieres seguir en ',it:'Ogni negozio ha il proprio assortimento. Come vuoi continuare a '}[to])+askStore[1]!+'?';
  const availRecheck=source.match(/^A disponibilidade é consultada de novo em (.+)\. Nada é removido sem você ver\.$/);
- if(availRecheck)return ({en:'Availability will be checked again in ',es:'La disponibilidad se consultará de nuevo en ',it:'La disponibilità verrà verificata di nuovo a '}[to])+availRecheck[1]+({en:'. Nothing is removed without your approval.',es:'. No se elimina nada sin tu aprobación.',it:'. Nulla viene rimosso senza la tua approvazione.'}[to]);
+ if(availRecheck)return ({en:'Availability will be checked again in ',es:'La disponibilidad se consultará de nuevo en ',it:'La disponibilità verrà verificata di nuovo a '}[to])+availRecheck[1]!+({en:'. Nothing is removed without your approval.',es:'. No se elimina nada sin tu aprobación.',it:'. Nulla viene rimosso senza la tua approvazione.'}[to]);
  const by=source.match(/^(Quantidade de|Diminuir quantidade de|Aumentar quantidade de|Escolher tamanho de|Remover) (.+?)( da sacola| dos favoritos)?$/);
  if(by){
   const translated={
@@ -64,15 +64,15 @@ function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
    es:{'Quantidade de':'Cantidad de','Diminuir quantidade de':'Reducir cantidad de','Aumentar quantidade de':'Aumentar cantidad de','Escolher tamanho de':'Elegir talla para','Remover':'Eliminar'},
    it:{'Quantidade de':'Quantità di','Diminuir quantidade de':'Riduci quantità di','Aumentar quantidade de':'Aumenta quantità di','Escolher tamanho de':'Scegli la taglia per','Remover':'Rimuovi'}
   }[to];
-  const suffix=by[3]=== ' da sacola'?({en:' from bag',es:' de la bolsa',it:' dalla borsa'}[to]):by[3]=== ' dos favoritos'?({en:' from favorites',es:' de favoritos',it:' dai preferiti'}[to]):'';
-  return translated[by[1] as keyof typeof translated]+' '+translate(by[2],to)+suffix;
+  const suffix=by[3]!=== ' da sacola'?({en:' from bag',es:' de la bolsa',it:' dalla borsa'}[to]):by[3]!=== ' dos favoritos'?({en:' from favorites',es:' de favoritos',it:' dai preferiti'}[to]):'';
+  return translated[by[1]! as keyof typeof translated]+' '+translate(by[2]!,to)+suffix;
  }
  const unique=source.match(/^Tamanho (PP|P|M|G|GG|Único)$/);
- if(unique)return translate('Tamanho',to)+' '+translate(unique[1],to);
+ if(unique)return translate('Tamanho',to)+' '+translate(unique[1]!,to);
  const seeDemo=source.match(/^Ver (.+), produto demonstrativo$/);
- if(seeDemo)return translate('Ver',to)+' '+translate(seeDemo[1],to)+', '+translate('produto demonstrativo',to);
+ if(seeDemo)return translate('Ver',to)+' '+translate(seeDemo[1]!,to)+', '+translate('produto demonstrativo',to);
  const favorites=source.match(/^(.+) e (.+), composição demonstrativa$/);
- if(favorites)return translate(favorites[1],to)+' '+({en:'and',es:'y',it:'e'}[to])+' '+translate(favorites[2],to)+', '+translate('composição demonstrativa',to);
+ if(favorites)return translate(favorites[1]!,to)+' '+({en:'and',es:'y',it:'e'}[to])+' '+translate(favorites[2]!,to)+', '+translate('composição demonstrativa',to);
  if(number){
   const noun=number[1]==='1'?'peça':'peças';
   const tail=number[3]!;
