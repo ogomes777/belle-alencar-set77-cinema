@@ -8,21 +8,18 @@
 }
 #lojas.stores{
   --stores-edge:rgba(133,95,41,.23);
-  background:
-    radial-gradient(circle 285px at 81% 51%,
-      rgba(54,39,26,.76) 0%,rgba(84,60,35,.56) 44%,
-      rgba(165,128,77,.12) 81%,transparent 100%),
-    linear-gradient(117deg,#f9f2e6 0%,#f7ecd6 42%,#f0dfbc 100%);
+  background:linear-gradient(105deg,
+    #e9dac1 0%,#e0ccad 38%,#cdb38c 67%,#ad9274 100%);
   color:#392b20;
 }
-/* Golden globe retains contrast thanks to a localized subtle chocolate halo
-   painted by the section background, not by editing the globe itself. */
+/* A continuous latte-to-taupe gradient creates contrast behind the original
+   gold globe with NO large brown vignette, blur or radial shadow. */
 #lojas.stores .section-head .eyebrow{color:#87612b;letter-spacing:.24em}
 #lojas.stores .section-head .lede{color:#62513b;text-wrap:pretty}
 #lojas.stores .section-head .display{
   color:#6e502e;
   background:repeating-linear-gradient(90deg,
-    #423020 0px,#513721 70px,#ae7d37 118px,#fdfaf1 157px,
+    #423020 0px,#513721 70px,#ae7d37 118px,#ebd6aa 157px,
     #c18e42 198px,#7b5126 255px,#423020 335px,#423020 400px);
   background-size:400px 100%;
   -webkit-background-clip:text;background-clip:text;
@@ -62,32 +59,32 @@
   box-shadow:0 0 0 1px rgba(168,116,44,.18),0 0 19px rgba(201,152,71,.13);
 }
 #lojas.stores :focus-visible{outline-color:#94671e;outline-offset:3px}
-/* Scroll makes solid copy/cities reveal. Reversing scroll reverses the mask. */
+/* Quick, visible entry: content stays legible even before the reveal completes.
+   Animation is now tied to the chapter's arrival, not each card's late position.
+   Reverse scroll simply rewinds the subtle mask. */
 #lojas.stores.stores--scrubbed .section-head .eyebrow,
 #lojas.stores.stores--scrubbed .section-head .display,
 #lojas.stores.stores--scrubbed .section-head .lede,
 #lojas.stores.stores--scrubbed .store-card,
 #lojas.stores.stores--scrubbed .stores__note{
-  opacity:calc(.12 + var(--stores-reveal,1)*.88);
-  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*34px),0);
+  opacity:calc(.78 + var(--stores-reveal,1)*.22);
+  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*15px),0);
 }
-#lojas.stores.stores--scrubbed .section-head .display,
-#lojas.stores.stores--scrubbed .store-card{
-  clip-path:inset(0 calc((1 - var(--stores-reveal,1))*100%) 0 0);
+/* No full-width clipping of the store cards or commercial buttons.
+   Only the heading gets a restrained 18% word-mask. */
+#lojas.stores.stores--scrubbed .section-head .display{
+  clip-path:inset(0 calc((1 - var(--stores-reveal,1))*18%) 0 0);
 }
 #lojas.stores.stores--scrubbed .stores__note{
-  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*17px),0);
+  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*8px),0);
 }
 @media(max-width:959px){
   #lojas.stores{
-    background:
-      radial-gradient(circle 240px at 50% 40%,
-        rgba(55,41,27,.69) 0%,rgba(92,66,35,.41) 50%,
-        rgba(161,119,62,.08) 84%,transparent 100%),
-      linear-gradient(175deg,#f9f2e6 0%,#f4e8d0 62%,#efe0bc 100%);
+    background:linear-gradient(173deg,
+      #e9dac1 0%,#dcc6a3 50%,#c3a684 100%);
   }
   #lojas.stores.stores--scrubbed .store-card{
-    transform:translate3d(0,calc((1 - var(--stores-reveal,1))*23px),0);
+    transform:translate3d(0,calc((1 - var(--stores-reveal,1))*12px),0);
   }
 }
 @media(prefers-reduced-motion:reduce){
