@@ -1,6 +1,6 @@
 # V37 · aceite
 
-Data 12/11/2026 (V37.1: véus visíveis em 8 passagens) · branch `claude/wonderful-meitner-kt2rnw` · produção **não** publicada.
+Data 12/11/2026 (V37.2: cartelas de título + véus em 8 passagens) · branch `claude/wonderful-meitner-kt2rnw` · produção **não** publicada.
 
 ## Testes
 | Comando | Resultado |
@@ -41,3 +41,14 @@ Data 12/11/2026 (V37.1: véus visíveis em 8 passagens) · branch `claude/wonder
 - BFCache e aba suspensa: cobertos por código (`pageshow`, `visibilitychange`) e testes unitários de destroy/reentrada, não por teste de navegador dedicado.
 - Safari/Firefox não testados (só Chromium disponível).
 - Wheel/touch físicos: simulados via `scrollTo` em contextos `hasTouch`; não há gesto real.
+
+## V37.2 · fluidez medida (`qa/v37-perf.mjs`, 390px, DPR 2, CPU 4× mais lenta, ms por quadro média/p95)
+| Passagem | V36 (2 execuções) | V37.2 (2 execuções) |
+|---|---|---|
+| Ocasiões | 47/77 · 42/63 | 46/69 · 52/83 |
+| Coleção | 52/87 · 47/61 | 50/65 · 48/71 |
+| Atendimento | 20/30 · 18/23 | 19/24 · 20/32 |
+| Dúvidas | 44/214 · 42/186 | 42/199 · 46/211 |
+| Finale | 60/72 · 57/68 | 62/75 · 63/81 |
+
+A V37.2 fica dentro da variação da V36. Os picos de Dúvidas/Finale existem na V36 (canvas do BA e carrossel). Os números valem só para este ambiente headless, não para um aparelho real.

@@ -25,28 +25,33 @@ export interface Boundary {
   span?: number;
   /** Decorative reveal veil family (aria-hidden, removed on destroy). */
   veil?: string;
+  /** Short decorative title shown on the veil before the reveal: [roman, italic]. */
+  title?: [string, string];
 }
 
 /** Fronteiras V37: uma por passagem, ver docs/qa-v37/MOTION_OWNERSHIP.md. */
 export const BOUNDARIES: Boundary[] = [
-  { section: '#passarela', veil: 'cortina' },     // champagne sobe
-  { section: '#ocasioes', veil: 'colunas' },      // ouro/marfim em colunas
-  { section: '#colecao', veil: 'varredura' },     // noite varre dir→esq
-  { section: '#como-comprar', veil: 'dobra' },    // rosé vira do canto
-  { section: '#lojas', veil: 'circulo' },         // noite abre em íris
-  { section: '#atendimento', veil: 'lateral' },   // areia abre lateral
-  { section: '#duvidas', veil: 'fatias' },        // marfim/ouro em faixas
-  { section: '.finale', veil: 'veludo' },         // vinho com pregas
+  { section: '#passarela', veil: 'cortina', title: ['A passarela', '.'] },
+  { section: '#ocasioes', veil: 'colunas', title: ['Para cada', ' momento.'] },
+  { section: '#colecao', veil: 'varredura', title: ['A coleção', '.'] },
+  { section: '#como-comprar', veil: 'dobra', title: ['Do clique', ' à loja.'] },
+  { section: '#lojas', veil: 'circulo', title: ['Quatro cidades', '.'] },
+  { section: '#atendimento', veil: 'lateral', title: ['Com você', '.'] },
+  { section: '#duvidas', veil: 'fatias', title: ['Antes de', ' escolher.'] },
+  { section: '.finale', veil: 'veludo', title: ['Assinatura', '.'] },
 ];
 
 /** Smoothstep progress; complete while the anchor still sits in the lower viewport. */
-export function boundaryProgress(top: number, height: number, start = .98, span = .34): number {
+export function boundaryLinear(top: number, height: number, start = .98, span = .9): number {
   const vh = Math.max(1, height);
-  const p = Math.max(0, Math.min(1, (vh * start - top) / (vh * span)));
+  return Math.max(0, Math.min(1, (vh * start - top) / (vh * span)));
+}
+export function boundaryProgress(top: number, height: number, start = .98, span = .9): number {
+  const p = boundaryLinear(top, height, start, span);
   return p * p * (3 - 2 * p);
 }
 
-interface Live { section: HTMLElement; anchor: HTMLElement; start: number; span: number; value: number; veil?: HTMLElement }
+interface Live { section: HTMLElement; anchor: HTMLElement; start: number; span: number; value: number; veil?: HTMLElement; skip: boolean }
 
 export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => void {
   const root = document.documentElement;
@@ -61,9 +66,22 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
       veil = document.createElement('div');
       veil.className = `v37-veil v37-veil--${b.veil}`;
       veil.setAttribute('aria-hidden', 'true');
+      if (b.title) {
+        const t = document.createElement('p');
+        t.className = 'v37-veil__title';
+        const em = document.createElement('em');
+        t.append(b.title[0], em);
+        em.textContent = b.title[1];
+        const rule = document.createElement('span');
+        rule.className = 'v37-veil__rule';
+        const wrap = document.createElement('div');
+        wrap.className = 'v37-veil__stage';
+        wrap.append(t, rule);
+        veil.append(wrap);
+      }
       section.appendChild(veil);
     }
-    live.push({ section, anchor, start: b.start ?? .98, span: b.span ?? .6, value: -1, veil });
+    live.push({ section, anchor, start: b.start ?? .98, span: b.span ?? .9, value: -1, veil, skip: false });
   }
   let frame = 0, disposed = false;
   const device = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
@@ -72,8 +90,10 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
 
   function clear(item: Live) {
     item.section.classList.remove('v37-boundary', 'v37-done');
-    item.section.style.removeProperty('--v37-entry');
-    item.section.style.removeProperty('--v37-light');
+    for (const el of [item.section, item.veil]) {
+      el?.style.removeProperty('--v37-entry');
+      el?.style.removeProperty('--v37-lin');
+    }
     item.value = -1;
   }
   function update() {
@@ -82,20 +102,46 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
     if (staticMode()) { live.forEach(clear); return; }
     const vh = innerHeight;
     // Reads first, then writes: no layout thrash.
-    const next = live.map(item => item.section.contains(document.activeElement) ? 1
-      : boundaryProgress(item.anchor.getBoundingClientRect().top, vh, item.start, item.span));
+    const next = live.map(item => {
+      const top = item.anchor.getBoundingClientRect().top;
+      // A menu/hash jump lands with the section already revealed; the skip
+      // ends once the section is scrolled back below the viewport.
+      if (item.skip && top > vh) item.skip = false;
+      return item.skip || item.section.contains(document.activeElement) ? 1
+        : boundaryLinear(top, vh, item.start, item.span);
+    });
     live.forEach((item, i) => {
-      const p = next[i]!;
-      if (Math.abs(item.value - p) < .001) return;
-      item.value = p;
+      const lin = next[i]!;
+      if (Math.abs(item.value - lin) < .001) return;
+      item.value = lin;
+      const p = lin * lin * (3 - 2 * lin);
       const s = item.section;
-      s.style.setProperty('--v37-entry', p.toFixed(4));
-      s.style.setProperty('--v37-light', Math.sin(p * Math.PI).toFixed(4));
-      s.classList.add('v37-boundary');
-      s.classList.toggle('v37-done', p >= .999);
+      // Custom properties go on the veil (their only consumer) so each frame
+      // restyles one small subtree, not the whole section (48 cards in #colecao).
+      const target = item.veil ?? s;
+      target.style.setProperty('--v37-entry', p.toFixed(4));
+      target.style.setProperty('--v37-lin', lin.toFixed(4));
+      if (!s.classList.contains('v37-boundary')) s.classList.add('v37-boundary');
+      const done = p >= .999;
+      if (s.classList.contains('v37-done') !== done) s.classList.toggle('v37-done', done);
     });
   }
   const schedule = () => { if (!disposed && !frame && !document.hidden) frame = requestAnimationFrame(update); };
+  const markJump = (hash: string) => {
+    if (!hash || hash.length < 2) return;
+    let target: Element | null = null;
+    try { target = document.querySelector(hash); } catch { return; }
+    live.forEach(item => { if (target && (item.section === target || item.section.contains(target))) item.skip = true; });
+    schedule();
+  };
+  const onHash = () => markJump(location.hash);
+  const onClick = (e: MouseEvent) => {
+    const a = (e.target as Element | null)?.closest?.('a[href^="#"]');
+    if (a) markJump(a.getAttribute('href') || '');
+  };
+  window.addEventListener('hashchange', onHash);
+  document.addEventListener('click', onClick, true);
+  onHash();
   const modes = new MutationObserver(schedule);
   modes.observe(root, { attributes: true, attributeFilter: ['data-intensity'] });
   const winEvents = ['scroll', 'resize', 'pageshow', 'hashchange'] as const;
@@ -111,6 +157,8 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
     document.removeEventListener('visibilitychange', schedule);
     document.removeEventListener('focusin', schedule);
     reduced.removeEventListener('change', schedule);
+    window.removeEventListener('hashchange', onHash);
+    document.removeEventListener('click', onClick, true);
     live.forEach(clear);
     live.forEach(item => item.veil?.remove());
   };

@@ -17,11 +17,12 @@ describe('V37 boundary integration',()=>{
   it('reverses without touching commercial controls and destroys its enhancement',()=>{
     const {section,move}=fixture();const product=document.getElementById('product')!;const originalStyle=product.getAttribute('style');
     const click=vi.fn();product.addEventListener('click',click);
-    const destroy=initEditorialBoundaries();const first=section.style.getPropertyValue('--v37-entry');
-    move(200);expect(section.style.getPropertyValue('--v37-entry')).toBe('1.0000');
-    move(850);expect(section.style.getPropertyValue('--v37-entry')).toBe(first);
+    const destroy=initEditorialBoundaries();const veil=()=>section.querySelector<HTMLElement>('.v37-veil')!;
+    expect(veil().getAttribute('aria-hidden')).toBe('true');const first=veil().style.getPropertyValue('--v37-entry');
+    move(-50);expect(veil().style.getPropertyValue('--v37-entry')).toBe('1.0000');
+    move(850);expect(veil().style.getPropertyValue('--v37-entry')).toBe(first);
     product.click();expect(click).toHaveBeenCalledOnce();expect(product.getAttribute('style')).toBe(originalStyle);
-    destroy();move(200);expect(section.classList.contains('v37-boundary')).toBe(false);expect(section.style.getPropertyValue('--v37-entry')).toBe('');
+    destroy();move(-50);expect(section.classList.contains('v37-boundary')).toBe(false);expect(section.querySelector('.v37-veil')).toBeNull();
   });
   it.each(['reduced','essential'])('keeps static content untouched in %s mode',mode=>{
     const {section}=fixture(mode==='reduced');if(mode==='essential')document.documentElement.dataset.intensity='essential';
@@ -39,14 +40,14 @@ describe('V37 boundary progress contract',()=>{
   });
   it('marks completion so masks drop, and re-enters on the way back',()=>{
     const {section,move}=fixture();const destroy=initEditorialBoundaries([{section:'#colecao'}]);
-    move(100);expect(section.classList.contains('v37-done')).toBe(true);
+    move(-100);expect(section.classList.contains('v37-done')).toBe(true);
     move(700);expect(section.classList.contains('v37-done')).toBe(false);expect(section.classList.contains('v37-boundary')).toBe(true);
     destroy();
   });
   it('measures a stable anchor, never requiring the animated node',()=>{
     document.body.innerHTML='<section id="ocasioes"><div class="occ-round"></div></section>';
     const anchor=document.querySelector<HTMLElement>('.occ-round')!;let cb:FrameRequestCallback|undefined;
-    const spy=vi.spyOn(anchor,'getBoundingClientRect').mockImplementation(()=>({top:100,bottom:600,left:0,right:1,width:1,height:500,x:0,y:100,toJSON:()=>({})}));
+    const spy=vi.spyOn(anchor,'getBoundingClientRect').mockImplementation(()=>({top:-100,bottom:600,left:0,right:1,width:1,height:500,x:0,y:100,toJSON:()=>({})}));
     vi.stubGlobal('innerHeight',900);vi.stubGlobal('matchMedia',()=>({matches:false,addEventListener:()=>{},removeEventListener:()=>{}}));
     vi.stubGlobal('requestAnimationFrame',(fn:FrameRequestCallback)=>{cb=fn;return 1;});vi.stubGlobal('cancelAnimationFrame',()=>{});
     const destroy=initEditorialBoundaries([{section:'#ocasioes',anchor:'.occ-round'}]);

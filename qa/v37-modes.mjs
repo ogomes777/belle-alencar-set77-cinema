@@ -34,9 +34,11 @@ for (const r of runs) {
   const walk = await page.evaluate(async (sections) => {
     const raf = () => new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
     const total = document.documentElement.scrollHeight - innerHeight;
-    const read = () => sections.map(s => { const el = document.querySelector(s); return el ? +(el.style.getPropertyValue('--v37-entry') || -1) : -2; });
+    const read = () => sections.map(s => { const el = document.querySelector(s); if (!el) return -2; const v = el.querySelector('.v37-veil') || el; return +(v.style.getPropertyValue('--v37-entry') || -1); });
+    const sample = [];
     const down = [], up = [];
     for (let y = 0; y <= total; y += innerHeight / 5) { scrollTo(0, y); await raf(); down.push([y, read()]); }
+    const active = down.filter(([, v]) => v.some(x => x > 0 && x < 1)).length;
     for (let y = total; y >= 0; y -= innerHeight / 5) { scrollTo(0, y); await raf(); up.push([y, read()]); }
     let monotonic = true;
     for (let i = 0; i < sections.length; i++) { let prev = -9; for (const [, v] of down) { if (v[i] >= 0 && v[i] + 1e-3 < prev) monotonic = false; if (v[i] >= 0) prev = v[i]; } }
@@ -44,14 +46,14 @@ for (const r of runs) {
     const map = new Map(down.map(([y, v]) => [Math.round(y), v.join()]));
     const reversible = up.every(([y, v]) => !map.has(Math.round(y)) || map.get(Math.round(y)) === v.join());
     const bigFixed = [...document.querySelectorAll('body *')].filter(n => { const c = getComputedStyle(n); const b = n.getBoundingClientRect(); return c.position === 'fixed' && b.width >= innerWidth * .9 && b.height >= innerHeight * .9 && c.display !== 'none' && c.visibility !== 'hidden' && +c.opacity > .05; }).map(n => n.id || n.className);
-    return { monotonic, reversible, bigFixed, overflowX: document.documentElement.scrollWidth > innerWidth + 1, boundaryCount: document.querySelectorAll('.v37-boundary').length };
+    return { active, monotonic, reversible, bigFixed, overflowX: document.documentElement.scrollWidth > innerWidth + 1, boundaryCount: document.querySelectorAll('.v37-boundary').length };
   }, SECTIONS);
   // Hash jump straight to the FAQ and the stores: reveal must be complete.
   const jumps = {};
   for (const id of ['duvidas', 'atendimento', 'colecao']) {
     await page.evaluate(i => { location.hash = ''; location.hash = i; }, id);
     await page.waitForTimeout(250);
-    jumps[id] = await page.evaluate(i => { const s = document.getElementById(i); return { entry: s.style.getPropertyValue('--v37-entry') || 'static', done: s.classList.contains('v37-done') || !s.classList.contains('v37-boundary') }; }, id);
+    jumps[id] = await page.evaluate(i => { const s = document.getElementById(i); const v = s.querySelector('.v37-veil') || s; return { entry: v.style.getPropertyValue('--v37-entry') || 'static', done: s.classList.contains('v37-done') || !s.classList.contains('v37-boundary') }; }, id);
   }
   // CTA hit-testing after completion (WhatsApp in atendimento, store select).
   const hits = await page.evaluate(() => ['#atendimento .btn--solid', '[data-select-store="araxa"]', '#duvidas summary'].map(sel => {
@@ -65,7 +67,7 @@ for (const r of runs) {
   }
   const staticExpected = r.reduced || r.essential;
   const ok = errors.length === 0 && walk.monotonic && walk.reversible && walk.bigFixed.length === 0 && !walk.overflowX && hitOk.every(Boolean)
-    && Object.values(jumps).every(j => j.done) && (staticExpected ? walk.boundaryCount === 0 : true);
+    && Object.values(jumps).every(j => j.done) && (staticExpected ? walk.boundaryCount === 0 : walk.active > 0);
   results.push({ run: r.name, ok, ...walk, jumps, hitOk, errors });
   await ctx.close();
 }

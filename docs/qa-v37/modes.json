@@ -2,6 +2,7 @@
  {
   "run": "360",
   "ok": true,
+  "active": 32,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -31,6 +32,7 @@
  {
   "run": "390",
   "ok": true,
+  "active": 30,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -60,6 +62,7 @@
  {
   "run": "768",
   "ok": true,
+  "active": 24,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -89,6 +92,7 @@
  {
   "run": "1440",
   "ok": true,
+  "active": 23,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -118,6 +122,7 @@
  {
   "run": "1440-dark",
   "ok": true,
+  "active": 23,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -147,6 +152,7 @@
  {
   "run": "390-rose",
   "ok": true,
+  "active": 30,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -176,6 +182,7 @@
  {
   "run": "1440-reduced",
   "ok": true,
+  "active": 0,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
@@ -205,6 +212,7 @@
  {
   "run": "1440-essential",
   "ok": true,
+  "active": 0,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
