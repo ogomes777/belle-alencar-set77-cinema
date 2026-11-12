@@ -123,21 +123,31 @@ export function initFilm(director: Director): void {
   // Não existe uma segunda arara HTML sobreposta ao filme.
 
   // ---------- scroll → progresso ----------
-  let ticking = false;
-  function onScroll(): void {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      ticking = false;
-      progress = clamp((scrollY - filmTop) / range, 0, 1);
-      // "dentro do filme" só enquanto o palco cobre a maior parte da tela
-      document.documentElement.classList.toggle('in-film', scrollY >= filmTop - innerHeight * 0.3 && scrollY <= filmTop + range + innerHeight * 0.15);
-      debug.progress = progress;
-      if (bar) bar.style.setProperty('--p', progress.toFixed(4));
-      world?.setProgress(progress);
-      let current: ChapterId = spans[0]?.id ?? 'vitrine';
-      for (const sp of spans) if (progress >= sp.s - 0.012) current = sp.id;
-      if (current !== active) setActive(current);
+  // Static/painter mode and large reverse jumps cannot wait for a delayed RAF:
+  // the chapter poster, rail and debug state must reflect scrollY right away.
+  let ticking=false,lastScrollPosition=scrollY;
+  function applyScrollPosition():void{
+    const previous=progress;
+    progress=clamp((scrollY-filmTop)/range,0,1);
+    document.documentElement.classList.toggle('in-film',
+      scrollY>=filmTop-innerHeight*.3&&scrollY<=filmTop+range+innerHeight*.15);
+    debug.progress=progress;
+    if(bar)bar.style.setProperty('--p',progress.toFixed(4));
+    world?.setProgress(progress,Math.abs(progress-previous)>.16);
+    let current:ChapterId=spans[0]?.id??'vitrine';
+    for(const sp of spans)if(progress>=sp.s-.012)current=sp.id;
+    if(current!==active)setActive(current);
+  }
+  function onScroll():void{
+    const current=scrollY;
+    const jumped=Math.abs(current-lastScrollPosition)>innerHeight*.65;
+    lastScrollPosition=current;
+    if(jumped||tier==='static'||!world){applyScrollPosition();return;}
+    if(ticking)return;
+    ticking=true;
+    requestAnimationFrame(()=>{
+      ticking=false;
+      applyScrollPosition();
     });
   }
   function setActive(id: ChapterId): void {
@@ -160,6 +170,7 @@ export function initFilm(director: Director): void {
   }
 
   addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('scrollend', applyScrollPosition, { passive: true });
   let measurementFrame=0;
   const scheduleMeasure=()=>{
     if(measurementFrame)return;
