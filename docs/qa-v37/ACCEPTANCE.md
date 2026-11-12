@@ -61,3 +61,8 @@ A V37.2 fica dentro da variação da V36. Os picos de Dúvidas/Finale existem na
 - Deploy de produção `dpl_FVGWGe2dLsaZ1VUJAUFTpfj2Ry2d`, commit `f46286c` (mesmo código do preview aprovado `dpl_CfLtUkZUNBYXoziLZisixsUrpNQh`; a promoção direta do preview foi recusada pela API com 422, então foi feito build de produção do mesmo SHA).
 - https://belle-alencar-set77.vercel.app/ servindo o bundle V37; `qa/v37-modes.mjs` contra produção: 8/8, 0 erros JS.
 - Rollback: produção anterior V36 `dpl_9mLZjoetnnHPYoGogMR72KWnZzJe` (commit `7518b76`).
+
+## Produção V37.5 (12/11/2026, autorizada: "sobe pra prod deploy")
+- `dpl_seoQAzQUNYvCiZnUS8HZqEoTMaRu`, commit `f461b1d` (paletas por tema). Produção servindo o CSS novo; `qa/v37-modes.mjs` contra produção 8/8.
+- e2e pré-deploy 104/105: única falha = filtro "Para sair" (instável, também falha na V36 isolada).
+- Rollback: V37.4 `dpl_FVGWGe2dLsaZ1VUJAUFTpfj2Ry2d` · V36 `dpl_9mLZjoetnnHPYoGogMR72KWnZzJe`.
