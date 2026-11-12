@@ -10,7 +10,16 @@ export function initStoreMap(): void {
   const enter=document.createElement('button');enter.type='button';enter.className='btn btn--line stores__enter-map';
   enter.textContent='Explorar esta cidade no Google Maps';enter.hidden=true;stage.append(enter);
   const dialog=document.createElement('dialog');dialog.className='stores-map';
-  dialog.innerHTML='<form method="dialog"><button autofocus aria-label="Voltar ao globo">← Voltar ao globo</button></form><h2>Encontre sua Belle</h2><iframe title="Google Maps — endereço da loja" referrerpolicy="no-referrer-when-downgrade"></iframe><a target="_blank" rel="noopener noreferrer">Abrir rotas no Google Maps ↗</a>';
+  dialog.innerHTML=`<div class="stores-map__bar">
+    <span class="stores-map__eyebrow">BELLE ALENCAR · LOJAS</span>
+    <form method="dialog"><button autofocus aria-label="Voltar ao globo">← Voltar ao globo</button></form>
+  </div>
+  <div class="stores-map__heading"><h2>Encontre sua Belle</h2>
+    <p class="stores-map__sub">Seu destino, sua experiência.</p></div>
+  <div class="stores-map__frame"><iframe title="Google Maps — endereço da loja"
+    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+  <div class="stores-map__foot"><span class="stores-map__address"></span>
+    <a target="_blank" rel="noopener noreferrer">Abrir rotas no Maps ↗</a></div>`;
   stage.append(dialog);
   let trigger:HTMLElement|null=null;
   function open(href:string,source:HTMLElement){
@@ -18,7 +27,12 @@ export function initStoreMap(): void {
     const query=new URL(href).searchParams.get('query');
     dialog.querySelector('iframe')!.src=`https://maps.google.com/maps?q=${encodeURIComponent(query??'')}&z=16&output=embed`;
     dialog.querySelector('a')!.href=href;
-    dialog.show();stage.classList.add('is-map');dialog.querySelector('button')!.focus();
+    dialog.querySelector<HTMLElement>('.stores-map__address')!.textContent=query??'Localização da loja';
+    const city=CITIES.find(c=>query?.toLowerCase().includes(c.name.toLowerCase()));
+    dialog.querySelector('h2')!.textContent=city?`Belle em ${city.name}`:'Encontre sua Belle';
+    if(!dialog.open)dialog.show();
+    stage.classList.add('is-map');
+    dialog.querySelector('button')!.focus();
   }
   document.querySelectorAll<HTMLAnchorElement>('#lojas .store-card__map').forEach(link=>link.addEventListener('click',event=>{
     if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;

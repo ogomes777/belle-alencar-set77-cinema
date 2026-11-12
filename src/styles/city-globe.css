@@ -11,7 +11,34 @@ html body #lojas .stores__orbit {width:100%;max-width:700px;margin:0 auto;align-
 .stores__flight{position:fixed;left:0;top:0;z-index:40;pointer-events:none;will-change:transform;filter:drop-shadow(0 8px 8px #79592330)}
 .stores__flight[hidden]{display:none}
 @media(prefers-reduced-motion:reduce){.stores__flight{display:none}}
-html body #lojas.stores .section-head .display,html body #lojas.stores .section-head .display em{background:none;-webkit-text-fill-color:#765129!important;-webkit-text-stroke:0;animation:none;text-shadow:none}
+/* V27: one moving light band on the ENTIRE heading, not separate words. */
+html body #lojas.stores .section-head .display{
+  background:repeating-linear-gradient(90deg,
+    #573a20 0px,#694628 82px,#ae7839 145px,
+    #f6dfad 169px,#fffaf0 185px,#dbb363 200px,
+    #9d6d34 245px,#573a20 360px);
+  background-size:360px 100%;
+  background-position:0 0;
+  -webkit-background-clip:text;background-clip:text;
+  color:#614222;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:.2px rgba(92,57,23,.18);
+  text-shadow:0 4px 24px rgba(172,121,52,.10);
+  animation:belleHeadingTravellingLight 7.8s linear infinite paused;
+}
+html body #lojas.stores .section-head .display em{
+  background:transparent!important;
+  -webkit-text-fill-color:inherit!important;
+  -webkit-text-stroke:inherit;
+  text-shadow:inherit;
+  animation:none!important;
+}
+html body #lojas.stores.stores--illuminated .section-head .display{
+  animation-play-state:running;
+}
+@keyframes belleHeadingTravellingLight{
+  to{background-position:-360px 0;}
+}
 .stores-map{width:min(900px,94vw);max-height:90dvh;border:1px solid #c4aa7c;border-radius:16px;padding:20px;background:#fff;color:#493b2d}
 .stores-map::backdrop{background:#221b1499}
 .stores-map form{text-align:right}.stores-map button{padding:12px;cursor:pointer}
@@ -28,6 +55,76 @@ html body #lojas.stores .section-head .display,html body #lojas.stores .section-
 .stores__city-hit{position:absolute;width:48px;height:54px;transform:translate(-50%,-50%);border:0;border-radius:9px;background:transparent;cursor:pointer;z-index:1;padding:0}
 .stores__city-hit[hidden]{display:none}
 .stores__city-hit:focus-visible{outline:2px solid #ffce62;box-shadow:0 0 14px #ffd76b}
-html body #lojas.stores .section-head .display,html body #lojas.stores .section-head .display em{text-shadow:0 0 22px #cf9b4a55,0 2px 10px #d8b16b33;animation:belleCopyGlow 4s ease-in-out infinite alternate}
-@keyframes belleCopyGlow{to{text-shadow:0 0 30px #cf9b4a88,0 2px 12px #d8b16b55}}
-@media(prefers-reduced-motion:reduce){html body #lojas.stores .section-head .display,html body #lojas.stores .section-head .display em{animation:none}}
+/* The sphere itself is the interaction surface; never hijack scroll elsewhere. */
+html body #lojas .stores__orbit{touch-action:none;cursor:grab;user-select:none}
+html body #lojas .stores__orbit:active{cursor:grabbing}
+html body #lojas .stores__orbit{background:transparent}
+/* Branded editorial map, fitted INSIDE the existing globe stage. */
+.stores__geo-stage .stores-map{
+  border:1px solid rgba(170,128,68,.45);
+  border-radius:21px;
+  padding:clamp(10px,1.4vw,18px);
+  background:linear-gradient(152deg,#fffdf9 0%,#f8f1e5 100%);
+  color:#433022;
+  box-shadow:0 12px 40px rgba(71,48,26,.14),inset 0 1px 0 #fff;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:auto auto minmax(0,1fr) auto;
+  gap:clamp(6px,1.1vw,11px);
+  animation:belleMapArrival .58s cubic-bezier(.2,.78,.21,1) both;
+}
+.stores__geo-stage .stores-map:not([open]){display:none}
+.stores-map__bar,.stores-map__foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stores-map__bar{border-bottom:1px solid rgba(178,141,89,.24);padding-bottom:8px}
+.stores-map__eyebrow{color:#98723b;font-size:9px;letter-spacing:.19em;font-weight:700}
+.stores__geo-stage .stores-map form{text-align:right;margin:0}
+.stores__geo-stage .stores-map button{
+  border:1px solid rgba(168,119,49,.4);border-radius:20px;padding:7px 10px;
+  background:#fffaf2;color:#6f4b23;font-size:10px;white-space:nowrap;
+}
+.stores-map__heading{min-width:0}
+.stores__geo-stage .stores-map h2{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-weight:500;font-size:clamp(21px,2.8vw,30px);line-height:1.02;
+  color:#50341d;letter-spacing:-.02em;margin:0;
+}
+.stores-map__sub{font-size:10px;color:#826b50;margin:4px 0 0}
+.stores-map__frame{
+  min-height:0;position:relative;overflow:hidden;border-radius:11px;
+  border:1px solid rgba(171,134,76,.28);
+  box-shadow:0 3px 12px rgba(63,45,21,.08);
+  background:#f0e9df;
+}
+.stores__geo-stage .stores-map iframe{
+  width:100%;height:100%;min-height:0;margin:0;display:block;border:0;
+}
+.stores-map__foot{padding-top:4px;min-height:24px}
+.stores-map__address{font-size:10px;color:#77634d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stores__geo-stage .stores-map a{
+  color:#7b4f1f;padding:0;font-size:10px;white-space:nowrap;
+  font-weight:700;text-decoration:underline;text-underline-offset:3px;
+}
+@keyframes belleMapArrival{
+  from{opacity:0;transform:translate3d(0,9px,0) scale(.965);clip-path:inset(0 round 21px)}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1);clip-path:inset(0 round 21px)}
+}
+@media(max-width:600px){
+  .stores__geo-stage .stores-map{padding:10px;gap:6px;border-radius:15px}
+  .stores-map__eyebrow{letter-spacing:.09em;font-size:8px}
+  .stores-map__address{max-width:45%}
+  .stores-map__sub{font-size:9px}
+  .stores__geo-stage .stores-map button{font-size:9px;padding:6px 7px}
+}
+@media(prefers-reduced-motion:reduce){
+  html body #lojas.stores .section-head .display{
+    background:none!important;
+    -webkit-text-fill-color:#765129!important;
+    -webkit-text-stroke:0!important;
+    text-shadow:none!important;animation:none!important;
+  }
+  .stores__geo-stage .stores-map{animation:none!important}
+}
+html[data-intensity="essential"] body #lojas.stores .section-head .display{
+  background:none!important;-webkit-text-fill-color:#765129!important;animation:none!important;
+}
+
