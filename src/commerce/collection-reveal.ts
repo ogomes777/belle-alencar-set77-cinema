@@ -68,7 +68,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   }
 
   function update(){
-    if(!active||document.hidden)return;
+    if(!active)return;
     const viewport=innerHeight;
     const gridY=grid!.getBoundingClientRect().top;
     const travel=Math.max(145,Math.min(viewport*.34,300));
@@ -82,7 +82,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   }
 
   function updateStory(){
-    if(!active||document.hidden)return;
+    if(!active)return;
     const height=innerHeight;
     const rect=section!.getBoundingClientRect();
     const headline=clamp((height*.94-rect.top)/Math.max(190,height*.48));
