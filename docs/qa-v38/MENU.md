@@ -19,3 +19,7 @@ Temas: claro = ouro champagne/tinta café/ativo marfim; escuro = ônix/tinta our
 Comportamento: scroll travado com o menu aberto; Esc fecha; foco preso no menu e devolvido ao fechar; capítulo clicado → salto instantâneo sob o painel que sobe, com correção enquanto seções acima mudam de altura (corrige bug herdado da V36: link para Lojas parava 1.543 px antes porque o vídeo "Como comprar" cresce de 889 para 2.340 px ao ativar); a seção chega já revelada (transições V37). Movimento reduzido: abre/fecha sem animação.
 
 QA: `npm test` 67/67 · `npm run e2e` 105/105 · `tests/e2e/header-glass.mjs` 122/122 (atualizado para o menu novo em 320–1440 px) · `qa/v37-modes.mjs` 8/8. Vídeos: `menu-light-1440.webm`, `menu-dark-390.webm`, `menu-rose-1440.webm`.
+
+## Produção (12/11/2026, autorizada: "SOBE")
+- `dpl_5i6rDve7QAoYEQhQr8cdS7eRk8Td`, commit `d984e07`. Contra produção: `header-glass.mjs` 122/122, `qa/v37-modes.mjs` 8/8.
+- Rollback: V37.5 `dpl_seoQAzQUNYvCiZnUS8HZqEoTMaRu`.
