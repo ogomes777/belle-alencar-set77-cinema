@@ -59,9 +59,9 @@ try{
     await page.waitForTimeout(76);
     mid=await cssCard(page,id);
     samples.push({step,opacity:mid.opacity,clip:mid.clip.slice(0,18),shear:mid.shear});
-    if(mid.staged&&mid.opacity>.07&&mid.opacity<.95&&mid.shear>.01)break;
+    if(mid.staged&&mid.clip.startsWith('polygon(')&&mid.shear>.01)break;
   }
-  check(mid.staged&&mid.opacity>.07&&mid.opacity<.95,width+': one product appears partially fractured during scrolling '+JSON.stringify({span,mid,samples}));
+  check(mid.staged&&mid.clip.startsWith('polygon(')&&mid.shear>.01,width+': one solid product is partially cut by a golden diagonal during scrolling '+JSON.stringify({span,mid,samples}));
   check(mid.clip.startsWith('polygon('),width+': actual jagged CSS clip mask exposed mid-entrance');
   check(mid.transform!=='none',width+': product shifts/rotates while reassembling');
   check(mid.shear>.01,width+': golden fracture seam follows the visible edge');
@@ -78,7 +78,7 @@ try{
     return !!el&&el.classList.contains('is-collection-staged')&&getComputedStyle(el).clipPath.startsWith('polygon(');
   },id,{timeout:4500});
   const back=await cssCard(page,id);
-  check(back.opacity<.95&&back.clip!=='none',width+': scrolling UP visibly fractures the SAME card back into its entrance');
+  check(back.staged&&back.clip.startsWith('polygon('),width+': scrolling UP visibly fractures the SAME card back into its entrance');
   await move(1.20);
   await page.waitForFunction(id=>document.querySelector('#colecao .pgrid .pcard[data-product="'+id+'"]')?.classList.contains('is-collection-revealed'),id,{timeout:4500});
   check(true,width+': repeated downward scroll recomposes the card without re-rendering the catalog');
