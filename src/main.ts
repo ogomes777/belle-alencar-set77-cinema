@@ -1,3 +1,4 @@
+import { initEditorialBoundaries } from './motion/editorial-boundaries';
 import { initStoreMap } from './astral/store-map';
 import './styles/city-globe.css';
 import { initStoreOrbit } from './astral/orbit';
@@ -39,6 +40,7 @@ initSections();
 // city globe and all their own scroll-based interactions undisturbed.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
 const director = initDirector();
+initEditorialBoundaries();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
 // A coleção contém peças renderizadas dinamicamente. O módulo de movimento
 // só carrega quando o catálogo se aproxima, evitando custo no hero e na

@@ -1,0 +1,23 @@
+/* V37 pilot: a single hairline belongs to the collection heading, never the clothes. */
+#colecao.v37-boundary>.section-head{position:relative}
+#colecao.v37-boundary>.section-head::after{content:"";position:absolute;left:0;bottom:-12px;height:1px;width:min(180px,34%);background:linear-gradient(90deg,transparent,var(--gold),transparent);transform-origin:left;transform:scaleX(var(--v37-entry,1));opacity:calc(.7 * var(--v37-light,0))}
+@media(prefers-reduced-motion:reduce){#colecao.v37-boundary>.section-head::after{display:none}}
+
+/* Existing lettering is the curtain's surface; no cloth/panel crosses the models. */
+#passarela.v37-boundary .runway__intro{clip-path:inset(0 calc((1 - var(--v37-entry,1))*12%) 0 0);translate:calc((1 - var(--v37-entry,1))*-12px) 0}
+/* Sweep completes before catalogue controls enter the viewport. */
+#colecao.v37-boundary>.section-head>.display{translate:calc((1 - var(--v37-entry,1))*12px) 0}
+/* Lateral reveal uses the actual photograph, leaving WhatsApp/focus untouched. */
+#atendimento.v37-boundary .concierge__media img{clip-path:inset(0 calc((1 - var(--v37-entry,1))*12%) 0 0)}
+#atendimento.v37-boundary #conciergeTitle{translate:calc((1 - var(--v37-entry,1))*12px) 0}
+/* The editorial heading folds gently; native FAQ controls have no new styles. */
+#duvidas.v37-boundary #faqTitle{transform-origin:left bottom;transform:perspective(900px) rotateX(calc((1 - var(--v37-entry,1))*3deg));translate:0 calc((1 - var(--v37-entry,1))*12px)}
+@media(max-width:700px){
+ #passarela.v37-boundary .runway__intro{clip-path:inset(0 calc((1 - var(--v37-entry,1))*6%) 0 0);translate:calc((1 - var(--v37-entry,1))*-8px) 0}
+ #colecao.v37-boundary>.section-head>.display{translate:calc((1 - var(--v37-entry,1))*8px) 0}
+ #atendimento.v37-boundary #conciergeTitle{translate:calc((1 - var(--v37-entry,1))*8px) 0}
+}
+@media(prefers-reduced-motion:reduce){
+ #passarela.v37-boundary .runway__intro,#atendimento.v37-boundary .concierge__media img{clip-path:none;translate:none}
+ #colecao.v37-boundary>.section-head>.display,#atendimento.v37-boundary #conciergeTitle,#duvidas.v37-boundary #faqTitle{transform:none;translate:none}
+}
