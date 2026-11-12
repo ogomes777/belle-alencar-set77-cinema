@@ -334,3 +334,46 @@ html[data-belle-theme="rose"] .ov--search.ba-search-v38 .ba-search-product-image
   .ov--search.ba-search-v38 *,
   .ov--search.ba-search-v38 *:before{animation:none!important;transition:none!important}
 }
+
+/* V38.1: protect the full-viewport dialog from theme overlays/legacy CSS.
+ * Product thumbnails are deliberately a HORIZONTAL thumbnail+copy row,
+ * never the tall e-commerce cards used elsewhere in the landing.
+ */
+html .ov--search.ba-search-v38 .ov__panel{
+  z-index:3!important;
+}
+html .ov--search.ba-search-v38.is-open .ov__panel,
+html[data-belle-theme="dark"] .ov--search.ba-search-v38.is-open .ov__panel,
+html[data-belle-theme="rose"] .ov--search.ba-search-v38.is-open .ov__panel{
+  opacity:1!important;transform:none!important;visibility:visible!important;
+}
+html .ov--search.ba-search-v38 .search-hit--product{
+  position:relative;display:flex!important;flex-flow:row nowrap!important;
+  align-items:center!important;justify-content:flex-start!important;gap:11px!important;
+  padding-right:23px!important;
+}
+html .ov--search.ba-search-v38 .search-hit--product .ba-search-product-image{
+  flex:0 0 67px!important;display:grid;align-self:center;
+  margin:0!important;width:67px;height:65px;
+}
+html .ov--search.ba-search-v38 .search-hit--product .ba-search-product-description{
+  flex:1 1 auto!important;min-width:0;align-self:center;
+  align-items:flex-start!important;justify-content:center;
+  padding:0!important;margin:0!important;
+}
+html .ov--search.ba-search-v38 .search-hit--product .ba-v38-hit-arrow{
+  position:absolute;right:9px;top:50%;transform:translateY(-50%);
+}
+@media(max-width:690px){
+  html .ov--search.ba-search-v38 .search-hit--product{
+    gap:7px!important;padding-right:6px!important;
+  }
+  html .ov--search.ba-search-v38 .search-hit--product .ba-search-product-image{
+    flex-basis:48px!important;width:48px;height:61px;
+  }
+}
+@media(max-width:365px){
+  html .ov--search.ba-search-v38 .search-hit--product .ba-search-product-image{
+    flex-basis:40px!important;width:40px;height:55px;
+  }
+}
