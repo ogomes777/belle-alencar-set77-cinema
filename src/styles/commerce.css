@@ -339,4 +339,4 @@ html.is-locked { overflow: hidden; }
 .pcard__ill--cutout img,.qv__ill--cutout img{object-fit:contain;max-width:100%;max-height:100%;}
 
 /* Decorative store orbit; does not capture store or scroll interactions. */
-.stores__orbit { display:block; width:min(480px, 85vw); aspect-ratio:1; margin:clamp(-30px,-2vw,0px) auto clamp(30px,4vw,60px); pointer-events:none; }
+.stores__orbit { display:block; width:min(480px, 85vw); aspect-ratio:1; margin:clamp(-30px,-2vw,0px) auto clamp(30px,4vw,60px); touch-action:pan-y; cursor:grab; }
