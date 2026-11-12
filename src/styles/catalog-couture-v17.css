@@ -231,3 +231,60 @@ html[data-intensity='essential'] #colecao .collection__handoff *{
     background:linear-gradient(180deg,rgba(248,245,240,0),rgba(241,226,199,.83) 64%,#e8f0f1 100%);
   }
 }
+
+
+/* V30 · A short curated preview, not 48 eagerly mounted cards. The
+   physical catalogue opens only when invited, with all existing filters. */
+#colecao .catalog-more {
+  max-width:1280px;
+  margin:clamp(34px,5vw,66px) auto clamp(12px,2vw,28px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  text-align:center;
+}
+#colecao .catalog-more[hidden] { display:none!important; }
+#colecao .catalog-more__rule {
+  display:block;
+  height:1px;
+  width:clamp(100px,15vw,200px);
+  background:linear-gradient(90deg,transparent,rgba(154,117,64,.72),transparent);
+}
+#colecao .catalog-more__hint {
+  margin:0;
+  font-size:clamp(.72rem,.9vw,.84rem);
+  color:#85745f;
+  letter-spacing:.045em;
+}
+#colecao .catalog-more__button {
+  display:inline-flex;align-items:center;justify-content:center;gap:19px;
+  min-width:190px;min-height:51px;padding:12px 22px;
+  border:1px solid rgba(154,117,64,.55);border-radius:100px;
+  color:#5f482c;background:rgba(255,252,246,.72);
+  font-size:.71rem;font-weight:700;letter-spacing:.18em;
+  transition:background-color .24s ease,border-color .24s ease,box-shadow .24s ease,transform .24s ease;
+}
+#colecao .catalog-more__button:hover,
+#colecao .catalog-more__button:focus-visible {
+  background:#fffaf0;border-color:#94703f;
+  box-shadow:0 9px 24px rgba(123,91,51,.12);
+}
+#colecao .catalog-more__button:focus-visible {
+  outline:2px solid #94703f;outline-offset:4px;
+}
+#colecao .catalog-more__arrow {
+  font-size:1.22rem;font-weight:400;line-height:1;transition:transform .28s ease;
+}
+#colecao .catalog-more__button[aria-expanded='true'] .catalog-more__arrow {
+  transform:rotate(180deg);
+}
+@media(max-width:640px){
+  #colecao .catalog-more{margin-top:30px;gap:12px}
+  #colecao .catalog-more__button{min-height:48px;width:min(100%,260px)}
+}
+@media(prefers-reduced-motion:reduce){
+  #colecao .catalog-more__button,
+  #colecao .catalog-more__arrow{transition:none!important}
+}
