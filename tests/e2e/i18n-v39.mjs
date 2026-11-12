@@ -9,10 +9,10 @@ const base=process.env.BASE || 'http://127.0.0.1:4173';
 const browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const requireCheck=(ok,message)=>{if(!ok)throw new Error(message)};
 const expected={
- pt:{home:'A loja',runway:'Passarela',collection:'Coleção',service:'Atendimento',buy:'Como comprar',questions:'Dúvidas'},
- en:{home:'The boutique',runway:'Runway',collection:'Collection',service:'Personal assistance',buy:'How to shop',questions:'Questions'},
- es:{home:'La boutique',runway:'Pasarela',collection:'Colección',service:'Atención personalizada',buy:'Cómo comprar',questions:'Preguntas'},
- it:{home:'La boutique',runway:'Passerella',collection:'Collezione',service:'Assistenza',buy:'Come acquistare',questions:'Domande'}
+ pt:['A loja','Passarela','Ocasiões','Coleção','Lojas','Atendimento','Como comprar','Dúvidas','WhatsApp','Instagram'],
+ en:['The boutique','Runway','Occasions','Collection','Stores','Personal assistance','How to shop','Questions','WhatsApp','Instagram'],
+ es:['La boutique','Pasarela','Ocasiones','Colección','Tiendas','Atención personalizada','Cómo comprar','Preguntas','WhatsApp','Instagram'],
+ it:['La boutique','Passerella','Occasioni','Collezione','Negozi','Assistenza','Come acquistare','Domande','WhatsApp','Instagram']
 };
 await mkdir('artifacts/i18n-v39',{recursive:true});
 try{
@@ -44,8 +44,7 @@ try{
         markers:pane.querySelectorAll('.couture-nav__marker').length,
         panelVisible:getComputedStyle(pane).visibility!=='hidden'};
     });
-    const exp=expected[lang];
-    const desired=[exp.home,exp.runway,expected[lang].collection,expected[lang].service,exp.buy,exp.questions];
+    const desired=expected[lang];
     requireCheck(menu.anchors.length===10,'menu items mismatch '+lang+' '+width);
     desired.forEach((label,index)=>{
       const item=menu.anchors[index];
