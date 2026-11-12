@@ -84,3 +84,6 @@ initFilm(director);
 
 initStoreOrbit();
 initStoreMap();
+void import('./finale/ba-solid').then(({initFinaleSolid})=>initFinaleSolid()).catch(()=>{
+  // Authenticated BA foil remains visible in fallback, including no WebGL.
+});
