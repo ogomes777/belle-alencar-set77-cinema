@@ -44,7 +44,7 @@ export function createSearch(ctx:Ctx) {
     placeholder:'O que você procura?',autocomplete:'off',autocapitalize:'off',
     spellcheck:'false',enterkeyhint:'search',
     'aria-label':'Pesquisar peças na Belle','aria-describedby':'searchCount',
-    'aria-controls':'searchResults','aria-autocomplete':'list'
+    'aria-controls':'searchResults'
   }) as HTMLInputElement;
   const clear=h('button',{type:'button',class:'ba-search-clear','aria-label':'Limpar pesquisa',hidden:true,text:'LIMPAR'});
   const count=h('p',{id:'searchCount',class:'search-count','role':'status','aria-live':'polite',text:'Explore algumas peças'});
@@ -96,12 +96,12 @@ export function createSearch(ctx:Ctx) {
       h('h3',{class:'ba-v38-group-title',text:label}),
       h('ul',{},...items.map(button=>h('li',{},button))));
   }
-  const productButton=(p:Product)=>
+  const productButton=(p:Product,index:number)=>
     h('button',{
       class:'search-hit search-hit--product',type:'button',
       'data-hit-product':p.id,'aria-label':'Ver detalhes de '+p.title
     },
-      h('span',{class:'ba-search-product-image'},productImage(p,{alt:''})),
+      h('span',{class:'ba-search-product-image'},productImage(p,{alt:'',eager:index<8})),
       h('span',{class:'ba-search-product-description'},
         h('small',{class:'ba-search-product-category',text:CATEGORY_LABEL[p.category]}),
         h('strong',{class:'ba-search-product-title',text:p.title}),
