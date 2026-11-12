@@ -338,3 +338,124 @@ html[data-intensity='essential'] .how--couture .how__foot{
 @media(prefers-reduced-motion:reduce){
   .how--couture.how--enhanced .how__steps li{transform:none!important;opacity:1!important}
 }
+
+
+/* V20 · LUZ QUE RESPIRA | a champagne-gold travelling pulse across the
+   four solid cards. CSS compositing only: no additional RAF, GSAP or canvas.
+   The scrubbed throw retains exclusive control of transform and opacity. */
+#como-comprar .how__steps li { --how-lumen-phase:0; }
+#como-comprar .how__steps li:nth-child(2) { --how-lumen-phase:1; }
+#como-comprar .how__steps li:nth-child(3) { --how-lumen-phase:2; }
+#como-comprar .how__steps li:nth-child(4) { --how-lumen-phase:3; }
+#como-comprar .how__steps li > span,
+#como-comprar .how__steps li > h3,
+#como-comprar .how__steps li > p {
+  position:relative;
+  z-index:2;
+}
+#como-comprar .how__steps .how__lumen {
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:block;
+  overflow:hidden;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:1;
+  transition:opacity .4s ease;
+}
+#como-comprar.how--enhanced .how__steps li:not(.is-how-settled) .how__lumen {
+  opacity:0;
+}
+#como-comprar .how__lumen::before,
+#como-comprar .how__lumen::after {
+  content:"";
+  position:absolute;
+  display:block;
+  pointer-events:none;
+}
+#como-comprar .how__lumen::before {
+  inset:1px;
+  border-radius:inherit;
+  border:1px solid rgba(255,220,153,.48);
+  box-shadow:inset 0 0 17px rgba(255,210,126,.20),inset 0 0 2px rgba(255,244,211,.72);
+  background:radial-gradient(ellipse 78% 45% at 50% 0,rgba(255,228,165,.25),transparent 82%);
+  opacity:.42;
+}
+#como-comprar .how__lumen::after {
+  top:-27%;
+  left:0;
+  width:43%;
+  height:157%;
+  background:linear-gradient(90deg,transparent,rgba(255,221,158,.10) 28%,rgba(255,245,213,.57) 52%,rgba(241,188,96,.17) 70%,transparent);
+  filter:blur(5px);
+  opacity:0;
+  transform:translate3d(-180%,0,0) rotate(17deg);
+}
+#como-comprar.how--enhanced .how__steps li.is-how-settled,
+#como-comprar:not(.how--enhanced) .how__steps li {
+  animation:belleLumenPulse 7.2s ease-in-out infinite;
+  animation-delay:calc(var(--how-lumen-phase)*-1.8s);
+}
+#como-comprar.how--enhanced .how__steps li.is-how-settled .how__lumen::before,
+#como-comprar:not(.how--enhanced) .how__steps li .how__lumen::before {
+  animation:belleLumenEdge 7.2s ease-in-out infinite;
+  animation-delay:calc(var(--how-lumen-phase)*-1.8s);
+}
+#como-comprar.how--enhanced .how__steps li.is-how-settled .how__lumen::after,
+#como-comprar:not(.how--enhanced) .how__steps li .how__lumen::after {
+  animation:belleLumenTravel 7.2s linear infinite;
+  animation-delay:calc(var(--how-lumen-phase)*-1.8s);
+}
+@keyframes belleLumenPulse {
+  0%,100% {
+    border-color:rgba(190,143,77,.54);
+    box-shadow:0 30px 59px -38px rgba(72,40,13,.40),0 0 16px rgba(199,147,65,.15),inset 0 1px 0 rgba(255,255,255,.98),inset 0 0 0 1px rgba(185,138,71,.18);
+  }
+  37%,47% {
+    border-color:rgba(235,190,114,.92);
+    box-shadow:0 36px 63px -36px rgba(72,40,13,.44),0 0 14px rgba(242,187,89,.44),0 0 31px rgba(228,172,75,.24),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,226,168,.57);
+  }
+  68% {
+    border-color:rgba(206,160,89,.62);
+    box-shadow:0 31px 60px -37px rgba(72,40,13,.40),0 0 20px rgba(224,167,77,.21),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(206,164,96,.24);
+  }
+}
+@keyframes belleLumenEdge {
+  0%,100% { opacity:.38; }
+  34%,48% { opacity:1; }
+  72% { opacity:.51; }
+}
+@keyframes belleLumenTravel {
+  0%,7% { opacity:0; transform:translate3d(-180%,0,0) rotate(17deg); }
+  13% { opacity:.45; }
+  27%,41% { opacity:.75; }
+  55% { opacity:0; transform:translate3d(420%,0,0) rotate(17deg); }
+  100% { opacity:0; transform:translate3d(420%,0,0) rotate(17deg); }
+}
+@media(max-width:600px) {
+  #como-comprar.how--enhanced .how__steps li.is-how-settled,
+  #como-comprar:not(.how--enhanced) .how__steps li {
+    animation-name:belleLumenPulseMobile;
+  }
+  #como-comprar .how__lumen::after {
+    filter:none;
+    background:linear-gradient(90deg,transparent,rgba(255,244,208,.22),rgba(255,217,143,.12),transparent);
+  }
+}
+@keyframes belleLumenPulseMobile {
+  0%,100% { border-color:rgba(190,143,77,.54);box-shadow:0 16px 26px -19px rgba(89,53,17,.31),0 0 10px rgba(199,147,65,.1),inset 0 1px 0 #fff; }
+  37%,47% { border-color:rgba(233,187,112,.86);box-shadow:0 19px 29px -19px rgba(89,53,17,.39),0 0 15px rgba(223,161,64,.29),inset 0 1px 0 #fff; }
+}
+@media(prefers-reduced-motion:reduce) {
+  #como-comprar .how__steps li,
+  #como-comprar .how__lumen::before,
+  #como-comprar .how__lumen::after { animation:none!important; }
+  #como-comprar .how__lumen::after { display:none; }
+}
+html[data-intensity="essential"] #como-comprar .how__steps li,
+html[data-intensity="essential"] #como-comprar .how__lumen::before,
+html[data-intensity="essential"] #como-comprar .how__lumen::after {
+  animation:none!important;
+}
+html[data-intensity="essential"] #como-comprar .how__lumen::after { display:none; }

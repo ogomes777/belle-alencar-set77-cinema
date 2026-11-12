@@ -101,6 +101,8 @@ export function initHowFilm(director: Director): () => void {
       card.style.setProperty('--how-card-scale', scale.toFixed(4));
       card.style.setProperty('--how-card-glow', String(smooth(0.28, 0.89, reveal)));
       card.style.setProperty('--how-card-impact', (Math.sin(Math.PI*reveal)**2).toFixed(4));
+      // Light loop starts only after each solid card has landed; reverses on scroll-up.
+      card.classList.toggle('is-how-settled', reveal >= 0.995);
     });
 
     const interactive = progress >= 0.955;
@@ -136,6 +138,7 @@ export function initHowFilm(director: Director): () => void {
     section.classList.remove('how--enhanced', 'how--interactive', 'how--video-ready');
     for (const key of ['--how-title', '--how-intro', '--how-wash', '--how-bottom', '--how-foot', '--how-gold']) section.style.removeProperty(key);
     cards.forEach(card => {
+      card.classList.remove('is-how-settled');
       for (const name of ['--how-card', '--how-card-opacity', '--how-card-x',
         '--how-card-y', '--how-card-z', '--how-card-rotation', '--how-card-scale',
         '--how-card-glow', '--how-card-impact', '--how-card-tilt-x',
