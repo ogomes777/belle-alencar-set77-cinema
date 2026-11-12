@@ -144,8 +144,10 @@ describe('initCommerce (DOM)', () => {
   });
 
   it('favoritos atualizam contador e persistem', () => {
-    // Rings are below the curated preview, but their original actions remain.
-    (document.querySelector('#catalogMount [data-catalog-toggle]') as HTMLElement).click();
+    // Rings are below the curated preview; prior quick-view steps may have
+    // already expanded the catalogue, so don't accidentally collapse it.
+    const toggle = document.querySelector<HTMLButtonElement>('#catalogMount [data-catalog-toggle]')!;
+    if (toggle.getAttribute('aria-expanded') !== 'true') toggle.click();
     (document.querySelector('[data-wish="belle-demo-aneis-02"]') as HTMLElement).click();
     const c = document.querySelector('[data-wishlist-count]') as HTMLElement;
     expect(c.hidden).toBe(false);
