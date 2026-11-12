@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - fix/belle-v36-remove-decorative-overlays
+  pull_request:
+    branches:
+      - fix/belle-v34-transition-integrity
 permissions:
   contents: read
 jobs:
