@@ -10,7 +10,8 @@ describe('store geographic journey',()=>{
       expect(journey(city,0).label).toBe('Brasil');
       const state=journey(city,2200);expect(state.lat).toBeCloseTo(city.stateLat);expect(state.lon).toBeCloseTo(city.stateLon);
       const final=journey(city,5000);expect(final.lat).toBeCloseTo(city.lat);expect(final.lon).toBeCloseTo(city.lon);
-      for(const time of [600,2100,2400,4200])expect(Math.abs(journey(city,time+1).zoom-journey(city,time-1).zoom)).toBeLessThan(.01);
+      expect(journey(city,5400).zoom).toBe(1);
+      for(const time of [600,2100,2400,4200,5200])expect(Math.abs(journey(city,time+1).zoom-journey(city,time-1).zoom)).toBeLessThan(.01);
       const p=spherePoint(city.lat,city.lon);expect(Math.hypot(p.x,p.y,p.z)).toBeCloseTo(1);
     }
   });

@@ -14,6 +14,7 @@ export function journey(city:typeof CITIES[number],elapsed:number){
   const state=smooth((elapsed-600)/1500), local=smooth((elapsed-2400)/1800);
   return {lat:-15+ (city.stateLat+15)*state+(city.lat-city.stateLat)*local,
     lon:-51+(city.stateLon+51)*state+(city.lon-city.stateLon)*local,
-    zoom:1+4*state+25*local,
+    // Return to the living globe after the geographic close-up.
+    zoom:1+(4*state+25*local)*(1-smooth((elapsed-4200)/1000)),
     label:elapsed<2100?'Brasil':elapsed<4200?city.state:city.name};
 }

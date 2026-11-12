@@ -109,26 +109,29 @@ export function initStoreOrbit(): void {
         rotate(velocityX*dt,velocityY*dt);const damping=Math.exp(-dt/420);velocityX*=damping;velocityY*=damping;
       }
     }
+    const delta=Math.min(40,Math.max(1,now-last||16));
     last=now;
+    if(!navigation)zoom=still()?1:1+(zoom-1)*Math.exp(-delta/100);
     const city=cities.find(c=>c.name===selected);
     if(city&&navigation){
-      const camera=journey(city,still()?5000:now-focusAt);
+      const camera=journey(city,still()?5400:now-focusAt);
       zoom=camera.zoom;angle=(camera.lon-90)*Math.PI/180;
       orientation=[0,0,0,1];rotate(0,-camera.lat*Math.PI/180);
       section!.dataset.geoStage=camera.label;
       const message=`${camera.label} · ${city.name}, ${city.state}`;
       if(caption.textContent!==message)caption.textContent=message;
+      if(still()||now-focusAt>=5200){navigation=false;zoom=1;}
     }
     const dpr=Math.min(devicePixelRatio||1,mobile ? 1.15 : 1.5), w=canvas!.clientWidth;
     if (size!==w || canvas!.width!==Math.round(w*dpr)) {size=w;canvas!.width=Math.round(w*dpr);canvas!.height=Math.round(w*dpr);}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,w);
     const radius=w*.44*zoom, c=Math.cos(angle), s=Math.sin(angle);
     const [qx,qy,qz,qw]=orientation;
-    function project(p:{x:number;y:number;z:number}) {
+    function project(p:{x:number;y:number;z:number},scale=radius) {
       const x=p.x*c+p.z*s,z=-p.x*s+p.z*c,y=p.y;
       const tx=2*(qy*z-qz*y),ty=2*(qz*x-qx*z),tz=2*(qx*y-qy*x);
-      return {x:w/2+(x+qw*tx+qy*tz-qz*ty)*radius,
-        y:w/2+(y+qw*ty+qz*tx-qx*tz)*radius,z:z+qw*tz+qx*ty-qy*tx};
+      return {x:w/2+(x+qw*tx+qy*tz-qz*ty)*scale,
+        y:w/2+(y+qw*ty+qz*tx-qx*tz)*scale,z:z+qw*tz+qx*ty-qy*tx};
     }
     // A restrained atmospheric halo gives the network a sense of light in space.
     const glow=ctx.createRadialGradient(w/2,w/2,radius*.18,w/2,w/2,radius*1.3);
@@ -136,12 +139,12 @@ export function initStoreOrbit(): void {
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,w);
     ctx.save();ctx.beginPath();ctx.arc(w/2,w/2,w*.46,0,Math.PI*2);
     ctx.fillStyle='#fffdf8';ctx.fill();ctx.strokeStyle='rgba(173,137,78,.3)';ctx.lineWidth=1;ctx.stroke();ctx.clip();
-    if(zoom<6){
-    const projected=points.map(project);
-    ctx.globalAlpha=Math.max(.04,1-(zoom-1)/5);
+    {
+    const projected=points.map(p=>project(p,w*.44));
+    ctx.globalAlpha=zoom>2?.7:1;
     ctx.globalCompositeOperation='source-over';
     ctx.fillStyle='rgba(255,176,66,.42)';ctx.beginPath();
-    for (const p of inner) { const q=project(p); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
+    for (const p of inner) { const q=project(p,w*.44); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
     ctx.fill();
     const hovering=pointerX>-999, pulseLife=Math.max(0,1-(now-pulseAt)/1100);
     // Batch paths by brightness: a handful of strokes instead of thousands per frame.
@@ -180,7 +183,7 @@ export function initStoreOrbit(): void {
         }
       }
       ctx.lineWidth=border.kind==='state'?1.8:1;
-      ctx.strokeStyle=border.kind==='state'?'#997025':'rgba(125,103,63,.65)';ctx.stroke();
+      ctx.strokeStyle=border.kind==='state'?'rgba(153,112,37,.65)':'rgba(125,103,63,.25)';ctx.stroke();
     }
     if(zoom>2){
       for(const region of [{name:'Minas Gerais',lat:-18.5,lon:-44.6},{name:'Goiás',lat:-15.8,lon:-49.6}]){
@@ -209,7 +212,8 @@ export function initStoreOrbit(): void {
   canvas.addEventListener('pointermove', event => {
     const rect=canvas.getBoundingClientRect(); pointerX=event.clientX-rect.left; pointerY=event.clientY-rect.top;
     if (dragging && event.pointerId===activePointer) {
-      const dx=(event.clientX-previousX)*.018,dy=(event.clientY-previousY)*.018;
+      const sensitivity=.018/Math.max(1,zoom);
+      const dx=(event.clientX-previousX)*sensitivity,dy=(event.clientY-previousY)*sensitivity;
       const now=performance.now(),dt=Math.max(8,now-lastDragTime);
       rotate(dx,dy);velocityX=Math.max(-.012,Math.min(.012,dx/dt));velocityY=Math.max(-.012,Math.min(.012,dy/dt));lastDragTime=now;
     }

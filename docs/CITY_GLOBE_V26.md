@@ -37,3 +37,10 @@ Substitui as limitações anteriores de ausência de contornos/etapas geográfic
 - Projeções geográficas são pré-calculadas ao carregar; malha luminosa deixa de ser desenhada no zoom urbano; render suspenso fora da tela.
 
 Validação adicional: 40 testes unitários, build aprovado, percurso estado/cidade/mapa/retorno em 360/390/768/1440, sem overflow nem exceções JS. Voo verificado nos progressos 0/.1/.5/.9/1 e no retorno. Evidências em reports/city-globe/geographic. Cartografia Google externa não pode ser validada visualmente sob a política de rede atual. Não houve publicação. Não há garantia de FPS em aparelhos físicos; a navegação continua sendo uma esfera editorial com mapa incorporado, não um motor Google Earth.
+
+
+## Correção da regressão de malha e arraste
+
+A aproximação geográfica desativava a rede acima de 6x e deixava a escala em até 30x após o pointerdown. Corrigido: rede e camada interna mantêm raio constante, inclusive durante a aproximação; o percurso retorna ao globo em 5,2s. Interrupção manual restaura suavemente a escala e ajusta a sensibilidade enquanto ela decai. Movimento reduzido mantém a esfera em escala normal.
+
+Build e 40 testes aprovados. Regressão em Chromium 390px/toque e 1440px/mouse: arrastar durante o zoom mantém resposta e malha visível. Capturas recovered-390.png e recovered-1440.png revisadas. Não publicado nesta sessão.
