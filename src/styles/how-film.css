@@ -343,10 +343,10 @@ html[data-intensity='essential'] .how--couture .how__foot{
 /* V20 · LUZ QUE RESPIRA | a champagne-gold travelling pulse across the
    four solid cards. CSS compositing only: no additional RAF, GSAP or canvas.
    The scrubbed throw retains exclusive control of transform and opacity. */
-#como-comprar .how__steps li { --how-lumen-phase:0; }
-#como-comprar .how__steps li:nth-child(2) { --how-lumen-phase:1; }
-#como-comprar .how__steps li:nth-child(3) { --how-lumen-phase:2; }
-#como-comprar .how__steps li:nth-child(4) { --how-lumen-phase:3; }
+#como-comprar .how__steps li { --how-lumen-delay:0s; }
+#como-comprar .how__steps li:nth-child(2) { --how-lumen-delay:-1.8s; }
+#como-comprar .how__steps li:nth-child(3) { --how-lumen-delay:-3.6s; }
+#como-comprar .how__steps li:nth-child(4) { --how-lumen-delay:-5.4s; }
 #como-comprar .how__steps li > span,
 #como-comprar .how__steps li > h3,
 #como-comprar .how__steps li > p {
@@ -395,28 +395,31 @@ html[data-intensity='essential'] .how--couture .how__foot{
 #como-comprar.how--enhanced .how__steps li.is-how-settled,
 #como-comprar:not(.how--enhanced) .how__steps li {
   animation:belleLumenPulse 7.2s ease-in-out infinite;
-  animation-delay:calc(var(--how-lumen-phase)*-1.8s);
+  animation-delay:var(--how-lumen-delay);
 }
 #como-comprar.how--enhanced .how__steps li.is-how-settled .how__lumen::before,
 #como-comprar:not(.how--enhanced) .how__steps li .how__lumen::before {
   animation:belleLumenEdge 7.2s ease-in-out infinite;
-  animation-delay:calc(var(--how-lumen-phase)*-1.8s);
+  animation-delay:var(--how-lumen-delay);
 }
 #como-comprar.how--enhanced .how__steps li.is-how-settled .how__lumen::after,
 #como-comprar:not(.how--enhanced) .how__steps li .how__lumen::after {
   animation:belleLumenTravel 7.2s linear infinite;
-  animation-delay:calc(var(--how-lumen-phase)*-1.8s);
+  animation-delay:var(--how-lumen-delay);
 }
 @keyframes belleLumenPulse {
   0%,100% {
+    scale:1;
     border-color:rgba(190,143,77,.54);
     box-shadow:0 30px 59px -38px rgba(72,40,13,.40),0 0 16px rgba(199,147,65,.15),inset 0 1px 0 rgba(255,255,255,.98),inset 0 0 0 1px rgba(185,138,71,.18);
   }
   37%,47% {
+    scale:1.009;
     border-color:rgba(235,190,114,.92);
     box-shadow:0 36px 63px -36px rgba(72,40,13,.44),0 0 14px rgba(242,187,89,.44),0 0 31px rgba(228,172,75,.24),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,226,168,.57);
   }
   68% {
+    scale:1.003;
     border-color:rgba(206,160,89,.62);
     box-shadow:0 31px 60px -37px rgba(72,40,13,.40),0 0 20px rgba(224,167,77,.21),inset 0 1px 0 #fff,inset 0 0 0 1px rgba(206,164,96,.24);
   }
@@ -444,8 +447,8 @@ html[data-intensity='essential'] .how--couture .how__foot{
   }
 }
 @keyframes belleLumenPulseMobile {
-  0%,100% { border-color:rgba(190,143,77,.54);box-shadow:0 16px 26px -19px rgba(89,53,17,.31),0 0 10px rgba(199,147,65,.1),inset 0 1px 0 #fff; }
-  37%,47% { border-color:rgba(233,187,112,.86);box-shadow:0 19px 29px -19px rgba(89,53,17,.39),0 0 15px rgba(223,161,64,.29),inset 0 1px 0 #fff; }
+  0%,100% { scale:1;border-color:rgba(190,143,77,.54);box-shadow:0 16px 26px -19px rgba(89,53,17,.31),0 0 10px rgba(199,147,65,.1),inset 0 1px 0 #fff; }
+  37%,47% { scale:1.005;border-color:rgba(233,187,112,.86);box-shadow:0 19px 29px -19px rgba(89,53,17,.39),0 0 15px rgba(223,161,64,.29),inset 0 1px 0 #fff; }
 }
 @media(prefers-reduced-motion:reduce) {
   #como-comprar .how__steps li,
