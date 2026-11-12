@@ -1402,5 +1402,221 @@ export const phrasePairs = [
     "Gold and crystal",
     "Dorado y cristal",
     "Oro e cristallo"
+  ],
+  [
+    "Em qual cidade",
+    "Which city are",
+    "¿En qué ciudad",
+    "In quale città"
+  ],
+  [
+    "você está?",
+    "you in?",
+    "estás?",
+    "ti trovi?"
+  ],
+  [
+    "Sua",
+    "Your",
+    "Tu",
+    "La tua"
+  ],
+  [
+    "sacola",
+    "bag",
+    "bolsa",
+    "borsa"
+  ],
+  [
+    "Peças que",
+    "Pieces that",
+    "Prendas que",
+    "Capi che"
+  ],
+  [
+    "ficaram",
+    "stayed with you",
+    "se quedaron contigo",
+    "ti sono rimasti nel cuore"
+  ],
+  [
+    "SELEÇÃO DE PEÇAS · ESTUDO EDITORIAL",
+    "CURATED SELECTION · EDITORIAL STUDY",
+    "SELECCIÓN DE PRENDAS · ESTUDIO EDITORIAL",
+    "SELEZIONE DI CAPI · STUDIO EDITORIALE"
+  ],
+  [
+    "Explore algumas peças",
+    "Explore a few pieces",
+    "Descubre algunas prendas",
+    "Scopri alcuni capi"
+  ],
+  [
+    "referência demonstrativa",
+    "demo reference",
+    "referencia demostrativa",
+    "riferimento dimostrativo"
+  ],
+  [
+    "Tamanho de interesse",
+    "Preferred size",
+    "Talla de interés",
+    "Taglia desiderata"
+  ],
+  [
+    "grade a confirmar",
+    "size availability to be confirmed",
+    "tallaje por confirmar",
+    "disponibilità taglie da confermare"
+  ],
+  [
+    "Escolha sua loja para consultar disponibilidade.",
+    "Choose your store to check availability.",
+    "Elige tu tienda para consultar disponibilidad.",
+    "Scegli il negozio per verificare la disponibilità."
+  ],
+  [
+    "Favoritar",
+    "Save to favorites",
+    "Añadir a favoritos",
+    "Aggiungi ai preferiti"
+  ],
+  [
+    "Nos favoritos",
+    "In favorites",
+    "En favoritos",
+    "Nei preferiti"
+  ],
+  [
+    "Favorito",
+    "Favorite",
+    "Favorito",
+    "Preferito"
+  ],
+  [
+    "Adicionar aos favoritos",
+    "Save to favorites",
+    "Añadir a favoritos",
+    "Aggiungi ai preferiti"
+  ],
+  [
+    "Ver todas as peças",
+    "View all pieces",
+    "Ver todas las prendas",
+    "Vedi tutti i capi"
+  ],
+  [
+    "Interesse em tamanho único",
+    "Interest in one size",
+    "Interés en talla única",
+    "Interesse per taglia unica"
+  ],
+  [
+    "Tamanho de interesse · grade a confirmar",
+    "Preferred size · availability to be confirmed",
+    "Talla de interés · tallaje por confirmar",
+    "Taglia desiderata · disponibilità da confermare"
+  ],
+  [
+    "Peça removida da sacola.",
+    "Item removed from your bag.",
+    "Prenda eliminada de tu bolsa.",
+    "Capo rimosso dalla borsa."
+  ],
+  [
+    "Mensagem copiada. Cole na conversa do WhatsApp que abrimos em outra aba.",
+    "Message copied. Paste it into the WhatsApp chat opened in another tab.",
+    "Mensaje copiado. Pégalo en el chat de WhatsApp que abrimos en otra pestaña.",
+    "Messaggio copiato. Incollalo nella chat WhatsApp aperta in un'altra scheda."
+  ],
+  [
+    "Não conseguimos copiar automaticamente. Selecione e copie a mensagem abaixo.",
+    "We couldn't copy automatically. Select and copy the message below.",
+    "No pudimos copiar automáticamente. Selecciona y copia el mensaje de abajo.",
+    "Impossibile copiare automaticamente. Seleziona e copia il messaggio qui sotto."
+  ],
+  [
+    "Removido dos favoritos.",
+    "Removed from favorites.",
+    "Eliminado de favoritos.",
+    "Rimosso dai preferiti."
+  ],
+  [
+    "Trocar loja",
+    "Change store",
+    "Cambiar tienda",
+    "Cambia negozio"
+  ],
+  [
+    "Cancelar",
+    "Cancel",
+    "Cancelar",
+    "Annulla"
+  ],
+  [
+    "Confirmar",
+    "Confirm",
+    "Confirmar",
+    "Conferma"
+  ],
+  [
+    "Continuar",
+    "Continue",
+    "Continuar",
+    "Continua"
+  ],
+  [
+    "Enviar para a Belle",
+    "Send to Belle",
+    "Enviar a Belle",
+    "Invia a Belle"
+  ],
+  [
+    "Escolha sua loja",
+    "Choose your store",
+    "Elige tu tienda",
+    "Scegli il negozio"
+  ],
+  [
+    "Próximo",
+    "Next",
+    "Siguiente",
+    "Successivo"
+  ],
+  [
+    "Voltar",
+    "Back",
+    "Volver",
+    "Indietro"
+  ],
+  [
+    "A loja mudou durante a animação. Confira a unidade e adicione novamente.",
+    "The store changed during the animation. Check the location and add the item again.",
+    "La tienda cambió durante la animación. Comprueba la ubicación y vuelve a añadir la prenda.",
+    "Il negozio è cambiato durante l'animazione. Controlla la sede e aggiungi nuovamente il capo."
+  ],
+  [
+    "Nenhuma peça encontrada.",
+    "No items found.",
+    "No encontramos prendas.",
+    "Nessun capo trovato."
+  ],
+  [
+    "Sua sacola está vazia.",
+    "Your bag is empty.",
+    "Tu bolsa está vacía.",
+    "La tua borsa è vuota."
+  ],
+  [
+    "Escolha a sua cidade",
+    "Choose your city",
+    "Elige tu ciudad",
+    "Scegli la tua città"
+  ],
+  [
+    "O link oficial do WhatsApp da Belle não aceita texto pré-preenchido: cole a mensagem na conversa. O contato de cada unidade ainda está em confirmação; a equipe direciona você para a loja certa.",
+    "Belle's official WhatsApp link does not accept a prefilled message. Paste the text into your chat. Each store's contact is being confirmed and the team will guide you to the right one.",
+    "El WhatsApp oficial de Belle no admite mensajes predefinidos. Pega el texto en la conversación. Se están confirmando los contactos de cada tienda y el equipo te dirigirá a la correcta.",
+    "Il link WhatsApp ufficiale Belle non accetta messaggi precompilati. Incolla il testo nella chat. I contatti delle sedi sono in conferma e il team ti guiderà al negozio giusto."
   ]
 ] as const;
