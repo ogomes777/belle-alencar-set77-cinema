@@ -69,13 +69,6 @@
     <span class="brand__mark" data-monogram="header" aria-hidden="true"></span>
     <span class="brand__word">BELLE ALENCAR<small>MODA &amp; ACESSÓRIOS</small></span>
   </a>
-  <nav class="site-nav" aria-label="Principal">
-    <a href="#inicio">A loja</a>
-    <a href="#passarela">Passarela</a>
-    <a href="#ocasioes">Ocasiões</a>
-    <a href="#colecao">Coleção</a>
-    <a href="#lojas">Lojas</a>
-  </nav>
   <div class="site-actions">
     <button type="button" class="store-pill" id="storeButton" data-open-store aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
@@ -92,28 +85,41 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
       <span class="icon-btn__count" data-bag-count hidden>0</span>
     </button>
-    <button type="button" class="belle-menu-toggle" id="belleMenuButton" aria-label="Abrir navegação" aria-controls="belleMenuPanel" aria-expanded="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="belle-menu-line belle-menu-line--top" d="M4 8h16"/><path class="belle-menu-line belle-menu-line--bottom" d="M4 16h16"/></svg>
+    <button type="button" class="couture-toggle" id="belleMenuButton" aria-label="Abrir menu" aria-controls="belleMenuPanel" aria-expanded="false">
+      <span class="couture-toggle__pill" aria-hidden="true"><span class="couture-toggle__track">
+        <span class="couture-toggle__label couture-toggle__label--menu" data-roll>Menu</span>
+        <span class="couture-toggle__label couture-toggle__label--close" data-roll>Fechar</span>
+      </span></span>
+      <span class="couture-toggle__disc" aria-hidden="true"><span class="couture-toggle__glyph">
+        <span class="couture-toggle__diamond"></span>
+        <svg class="couture-toggle__close" viewBox="0 0 12 12" focusable="false"><path d="M1 1l10 10M1 11L11 1"/></svg>
+      </span></span>
     </button>
   </div>
-  <div class="belle-menu-panel" id="belleMenuPanel" hidden>
-    <div class="belle-menu-panel__intro">
-      <span>BELLE ALENCAR</span><small>UM CONVITE PARA SE VESTIR BEM.</small>
-    </div>
-    <nav class="belle-menu-panel__links" aria-label="Navegação mobile">
-      <a href="#inicio" data-mobile-nav><span>01</span>A loja</a>
-      <a href="#passarela" data-mobile-nav><span>02</span>Passarela</a>
-      <a href="#ocasioes" data-mobile-nav><span>03</span>Ocasiões</a>
-      <a href="#colecao" data-mobile-nav><span>04</span>Coleção</a>
-      <a href="#lojas" data-mobile-nav><span>05</span>Lojas</a>
-      <a href="#atendimento" data-mobile-nav><span>06</span>Atendimento</a>
-    </nav>
-    <div class="belle-menu-panel__foot">
-      <span>ARAXÁ · FRUTAL · CATALÃO · MINEIROS</span>
-      <span>MODA &amp; ACESSÓRIOS</span>
-    </div>
-  </div>
 </header>
+
+<!-- V38 · menu de capítulos em tela cheia (fora do header: o header tem transform). -->
+<div class="couture-nav" id="belleMenuPanel" aria-hidden="true" inert>
+  <div class="couture-nav__inner">
+    <nav class="couture-nav__primary" aria-label="Capítulos">
+      <ol class="couture-nav__list" style="--last:5">
+        <li class="couture-nav__item" style="--i:0"><a class="couture-nav__link" href="#inicio" data-mobile-nav data-split>A loja</a></li>
+        <li class="couture-nav__item" style="--i:1"><a class="couture-nav__link" href="#passarela" data-mobile-nav data-split>Passarela</a></li>
+        <li class="couture-nav__item" style="--i:2"><a class="couture-nav__link" href="#ocasioes" data-mobile-nav data-split>Ocasiões</a></li>
+        <li class="couture-nav__item" style="--i:3"><a class="couture-nav__link" href="#colecao" data-mobile-nav data-split>Coleção</a></li>
+        <li class="couture-nav__item" style="--i:4"><a class="couture-nav__link" href="#lojas" data-mobile-nav data-split>Lojas</a></li>
+        <li class="couture-nav__item" style="--i:5"><a class="couture-nav__link" href="#atendimento" data-mobile-nav data-split>Atendimento</a></li>
+      </ol>
+    </nav>
+    <ul class="couture-nav__secondary">
+      <li style="--i:6"><a href="#como-comprar" data-mobile-nav data-split>Como comprar</a></li>
+      <li style="--i:7"><a href="#duvidas" data-mobile-nav data-split>Dúvidas</a></li>
+      <li style="--i:8"><a href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer" data-split data-external>WhatsApp</a></li>
+      <li style="--i:9"><a href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer" data-split data-external>Instagram</a></li>
+    </ul>
+    <p class="couture-nav__legal">Araxá · Frutal · Catalão · Mineiros</p>
+  </div>
+</div>
 
 <main id="main">
 

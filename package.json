@@ -15,6 +15,7 @@
     "legacy": "node legacy/v3/dev-server.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/bodoni-moda": "^5.3.0",
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource/cormorant-garamond": "^5.3.0",
     "gsap": "^3.15.0",

@@ -20,6 +20,7 @@ import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
 import { initIntro } from './shell/intro';
 import { initHeader } from './shell/header';
+import { initCoutureMenu } from './shell/couture-menu';
 import { initDirector } from './shell/director';
 import { initCommerce } from './commerce';
 import { initFilm } from './film';
@@ -33,6 +34,7 @@ initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
 initHeader();
+initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();

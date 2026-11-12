@@ -56,7 +56,7 @@ export function boundaryProgress(top: number, height: number, start = .98, span 
   return p * p * (3 - 2 * p);
 }
 
-interface Live { section: HTMLElement; anchor: HTMLElement; start: number; span: number; value: number; veil?: HTMLElement; skip: boolean }
+interface Live { section: HTMLElement; anchor: HTMLElement; start: number; span: number; value: number; veil?: HTMLElement; skip: boolean; reached: boolean; skipAt: number }
 
 export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => void {
   const root = document.documentElement;
@@ -94,7 +94,7 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
       }
       section.appendChild(veil);
     }
-    live.push({ section, anchor, start: b.start ?? .98, span: b.span ?? .9, value: -1, veil, skip: false });
+    live.push({ section, anchor, start: b.start ?? .98, span: b.span ?? .9, value: -1, veil, skip: false, reached: false, skipAt: 0 });
   }
   let frame = 0, disposed = false;
   const device = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
@@ -119,7 +119,13 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
       const top = viewTop(item.anchor); // cached: no forced layout per frame
       // A menu/hash jump lands with the section already revealed; the skip
       // ends once the section is scrolled back below the viewport.
-      if (item.skip && top > vh) item.skip = false;
+      // With smooth scrolling the section is still far away on the first
+      // frames, so the skip only ends after it was reached and then left
+      // below the viewport (or after a 4s safety window if never reached).
+      if (item.skip) {
+        if (top <= vh * .5) item.reached = true;
+        if ((item.reached && top > vh) || (!item.reached && performance.now() - item.skipAt > 4000)) item.skip = false;
+      }
       return item.skip || item.section.contains(document.activeElement) ? 1
         : boundaryLinear(top, vh, item.start, item.span);
     });
@@ -144,7 +150,7 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
     if (!hash || hash.length < 2) return;
     let target: Element | null = null;
     try { target = document.querySelector(hash); } catch { return; }
-    live.forEach(item => { if (target && (item.section === target || item.section.contains(target))) item.skip = true; });
+    live.forEach(item => { if (target && (item.section === target || item.section.contains(target))) { item.skip = true; item.reached = false; item.skipAt = performance.now(); } });
     schedule();
   };
   const onHash = () => markJump(location.hash);
