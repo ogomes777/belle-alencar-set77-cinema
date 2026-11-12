@@ -1,0 +1,32 @@
+name: Belle V36 | clean storefront browser QA
+on:
+  push:
+    branches:
+      - fix/belle-v36-remove-decorative-overlays
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save playwright@1.58.0
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run build
+      - name: Verify clean DOM at 4 viewports and live purchase interactions
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v36.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/clean-overlays-v36.mjs
