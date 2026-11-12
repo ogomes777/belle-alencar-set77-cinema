@@ -1,0 +1,184 @@
+/**
+ * Belle Alencar · SET77 Cinematic Director V32
+ * Silk shutters, golden cuts, moving editorial ink. Effects are decorative:
+ * no fixed blockers, no pinning, no hidden commerce elements, no DOM reflow.
+ * Driven by the native scroll position in cinematic-v32.ts.
+ */
+:root{
+  --md32-accent:#bd9560;
+  --md32-accent-light:#efdfb6;
+  --md32-ink:#44372b;
+  --md32-silk:rgba(248,244,233,.88);
+  --md32-shadow:rgba(83,55,29,.12);
+  --md32-drift:rgba(214,168,102,.18);
+  --md32-ease:cubic-bezier(.19,1,.27,1);
+}
+html[data-belle-theme="dark"]{
+  --md32-accent:#e4b971;
+  --md32-accent-light:#f7dfb1;
+  --md32-ink:#f7eee2;
+  --md32-silk:rgba(35,27,33,.89);
+  --md32-shadow:rgba(0,0,0,.31);
+  --md32-drift:rgba(239,185,120,.20);
+}
+html[data-belle-theme="rose"]{
+  --md32-accent:#c17f9b;
+  --md32-accent-light:#edd0a6;
+  --md32-ink:#5b3047;
+  --md32-silk:rgba(255,234,240,.88);
+  --md32-shadow:rgba(139,58,96,.16);
+  --md32-drift:rgba(227,153,167,.23);
+}
+/* Existing director V8 also follows the selected brand palette. */
+html[data-belle-theme="dark"] {--md-gold:#deb87b;--md-silk:#2a2429}
+html[data-belle-theme="rose"] {--md-gold:#bf8e68;--md-silk:#f8e4eb}
+html.md32-active .md32-scene{position:relative}
+html.md32-active .md32-portal{
+  position:absolute;z-index:12;inset:0 0 auto;
+  height:clamp(90px,19vh,188px);overflow:hidden;pointer-events:none;
+  contain:layout paint style;isolation:isolate;
+  --p:var(--md32-progress,0);
+}
+.md32-portal .md32-blade{
+  position:absolute;top:0;bottom:0;left:calc(var(--md32-blade) * 33.33333%);
+  width:33.33334%;display:block;pointer-events:none;
+  background:linear-gradient(132deg,var(--md32-silk) 2%,var(--md32-drift) 47%,var(--md32-silk) 100%);
+  border-right:1px solid color-mix(in srgb,var(--md32-accent) 42%,transparent);
+  box-shadow:10px 0 30px var(--md32-shadow);
+  opacity:calc(.86 * (1 - var(--p)));
+  transform:translate3d(0,calc(-86% * var(--p)),0);
+  will-change:auto;
+}
+.md32-portal .md32-seam{
+  position:absolute;left:clamp(20px,7vw,135px);right:clamp(20px,7vw,135px);bottom:25%;
+  height:1px;opacity:calc(.15 + .72 * var(--p));
+  background:linear-gradient(90deg,transparent,var(--md32-accent),var(--md32-accent-light),transparent);
+  transform:scaleX(var(--p));transform-origin:50% 50%;
+  box-shadow:0 0 12px var(--md32-drift);
+}
+html.md32-active [data-md32-scene="silk-curtain"] .md32-blade{
+  transform:translate3d(0,calc(-105% * var(--p)),0);
+}
+html.md32-active [data-md32-scene="silk-curtain"] .md32-blade:nth-child(2){
+  transform:translate3d(0,calc(-125% * var(--p)),0);
+}
+html.md32-active [data-md32-scene="columns"] .md32-blade{
+  transform:translate3d(0,calc((-105% + var(--md32-blade) * 13%) * var(--p)),0);
+  background:linear-gradient(180deg,var(--md32-silk),var(--md32-drift),transparent);
+}
+html.md32-active [data-md32-scene="prism"] .md32-blade{
+  transform:translate3d(calc((var(--md32-blade) - 1) * 19% * var(--p)),calc(-68% * var(--p)),0)
+    skewX(calc((var(--md32-blade) - 1) * 6deg * var(--p)));
+  background:linear-gradient(115deg,transparent,var(--md32-drift) 40%,var(--md32-silk) 58%,transparent);
+}
+html.md32-active [data-md32-scene="ribbon"] .md32-blade{
+  transform:translate3d(calc((var(--md32-blade) - 1) * 28% * var(--p)),calc(-110% * var(--p)),0);
+  background:linear-gradient(145deg,transparent,var(--md32-drift) 36%,var(--md32-silk) 50%,transparent);
+}
+html.md32-active [data-md32-scene="iris"] .md32-blade{
+  opacity:calc(.60 * (1 - var(--p)));
+  border-radius:50% 50% 0 0;
+  transform:translate3d(0,calc(-85% * var(--p)),0) scale(calc(1 + .11 * var(--p)));
+  background:radial-gradient(ellipse at 50% 80%,transparent 23%,var(--md32-drift) 44%,var(--md32-silk) 88%);
+}
+html.md32-active [data-md32-scene="split"] .md32-blade:first-child{
+  transform:translate3d(calc(-110% * var(--p)),0,0);
+}
+html.md32-active [data-md32-scene="split"] .md32-blade:nth-child(2){
+  opacity:calc(.28 * (1 - var(--p)));transform:translate3d(0,calc(-130% * var(--p)),0);
+}
+html.md32-active [data-md32-scene="split"] .md32-blade:nth-child(3){
+  transform:translate3d(calc(110% * var(--p)),0,0);
+}
+html.md32-active [data-md32-scene="shutter"] .md32-blade{
+  transform:translate3d(0,calc(-104% * var(--p)),0) scaleX(calc(1 - .08 * var(--p)));
+  background:repeating-linear-gradient(0deg,transparent 0 8px,var(--md32-silk) 8px 11px,var(--md32-drift) 11px 14px);
+}
+html.md32-active [data-md32-scene="fold"] .md32-blade{
+  transform-origin:50% 0;
+  transform:translate3d(0,calc(-92% * var(--p)),0) skewY(calc((var(--md32-blade) - 1) * -9deg * var(--p)));
+}
+/* Reversible title reveal. Apply only to editorial headings, never to the
+ * existing catalog, globe, cinematic video, 3D canvases or buttons. */
+html.md32-active .md32-heading--scrub{
+  --q:var(--md32-title-progress,1);
+  clip-path:inset(0 calc((1 - var(--q)) * 100%) 0 0);
+}
+html.md32-active .md32-heading--scrub::after{
+  content:"";display:block;width:min(150px,36%);height:2px;margin-top:.11em;
+  background:linear-gradient(90deg,var(--md32-accent),var(--md32-accent-light),transparent);
+  transform:scaleX(var(--q));transform-origin:left center;
+  opacity:calc(.15 + .72 * var(--q));
+  box-shadow:0 0 9px var(--md32-drift);
+}
+/* Different micro-beats for editorial paragraphs and small metadata.
+ * Paragraphs never become invisible; their entrance adds emphasis. */
+html.md32-active .md32-scene .md32-heading em{
+  text-shadow:0 0 0 transparent;
+}
+html.md32-active .md32-near .md32-heading em{
+  animation:md32-couture-ink 9.5s ease-in-out infinite;
+}
+@keyframes md32-couture-ink{
+  0%,15%,88%,100%{text-shadow:0 0 0 transparent}
+  47%{text-shadow:0 0 15px color-mix(in srgb,var(--md32-accent) 20%,transparent)}
+}
+html.md32-active [data-md32-scene="iris"] #lojasTitle em{
+  animation:none; /* V22 has its own full-title gradient choreography. */
+}
+html.md32-active [data-md32-scene="prism"] .md32-portal .md32-seam{
+  background:linear-gradient(90deg,transparent,var(--md32-accent),transparent,var(--md32-accent-light),transparent);
+}
+html.md32-active [data-md32-scene="fold"] .md32-portal .md32-seam{
+  box-shadow:0 2px 10px var(--md32-shadow);
+}
+/* Compact silver-gold micro-transition between moving-film chapters.
+ * Does not run a second camera or alter the WebGL stage itself. */
+html.md32-active .film .chapter{
+  --md32-rule:var(--md32-accent);
+}
+html.md32-active .film .chapter::selection{
+  background:var(--md32-accent);
+}
+/* Opening directly after the existing intro loader: three silk doors draw
+ * upwards at different intervals. This is inside the film stage and
+ * pointer-events:none so it cannot lock user scroll or interaction. */
+html .md32-postloader{
+  position:absolute;inset:0;display:flex;overflow:hidden;isolation:isolate;
+  pointer-events:none;z-index:28;contain:layout paint style;
+}
+html .md32-postloader i{
+  display:block;width:33.3334%;height:100%;
+  background:linear-gradient(125deg,var(--md32-silk),color-mix(in srgb,var(--md32-accent) 10%,var(--md32-silk)),var(--md32-silk));
+  border-right:1px solid color-mix(in srgb,var(--md32-accent) 38%,transparent);
+  box-shadow:0 0 30px var(--md32-shadow);
+  transform:translate3d(0,0,0);
+}
+html .md32-postloader--exit i{
+  animation:md32-doors 850ms var(--md32-ease) forwards;
+  animation-delay:calc(var(--md32-blade) * 72ms);
+}
+@keyframes md32-doors{
+  0%{transform:translate3d(0,0,0);opacity:1}
+  54%{transform:translate3d(0,-23%,0);opacity:1}
+  100%{transform:translate3d(0,-105%,0);opacity:0}
+}
+@media(max-width:700px){
+  html.md32-active .md32-portal{height:clamp(68px,13vh,108px)}
+  html.md32-active .md32-portal .md32-blade{
+    box-shadow:none;
+    opacity:calc(.65 * (1 - var(--p)));
+  }
+  html.md32-active .md32-near .md32-heading em{
+    animation-duration:13s;
+  }
+  html .md32-postloader--exit i{
+    animation-duration:620ms;
+    animation-delay:calc(var(--md32-blade) * 50ms);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .md32-portal,.md32-postloader{display:none!important}
+  .md32-heading,.md32-heading--scrub{clip-path:none!important;animation:none!important}
+  .md32-heading em{animation:none!important;text-shadow:none!important}
+}
