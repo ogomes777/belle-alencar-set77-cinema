@@ -56,3 +56,8 @@ A V37.2 fica dentro da variação da V36. Os picos de Dúvidas/Finale existem na
 ## V37.4
 - `npm test` 67/67 · `npm run build` ✅ · `npm run e2e` **105/105** (primeira vez sem falhas; V36 tinha 104/105) · `qa/v37-modes.mjs` 8/8.
 - Desempenho: ver `PERFORMANCE.md`.
+
+## Produção (12/11/2026, autorizada pelo cliente: "sobe")
+- Deploy de produção `dpl_FVGWGe2dLsaZ1VUJAUFTpfj2Ry2d`, commit `f46286c` (mesmo código do preview aprovado `dpl_CfLtUkZUNBYXoziLZisixsUrpNQh`; a promoção direta do preview foi recusada pela API com 422, então foi feito build de produção do mesmo SHA).
+- https://belle-alencar-set77.vercel.app/ servindo o bundle V37; `qa/v37-modes.mjs` contra produção: 8/8, 0 erros JS.
+- Rollback: produção anterior V36 `dpl_9mLZjoetnnHPYoGogMR72KWnZzJe` (commit `7518b76`).
