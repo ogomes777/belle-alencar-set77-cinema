@@ -15,6 +15,7 @@ on:
       - feat/belle-glass-living-search-v15
       - feat/belle-scroll-couture-v16-integrated
       - feat/belle-collection-couture-v17
+      - feat/belle-golden-impact-v18
   workflow_dispatch:
 permissions:
   contents: read
@@ -44,6 +45,7 @@ jobs:
           npm run preview > /tmp/belle-preview.log 2>&1 &
           node -e "let n=0;const t=setInterval(async()=>{try{const r=await fetch('http://127.0.0.1:4173');if(r.ok){clearInterval(t);process.exit(0)}}catch{}if(++n>45){clearInterval(t);process.exit(1)}},500)"
           node tests/e2e/collection-couture-v17.mjs
+          node tests/e2e/golden-impact-v18.mjs
           node tests/e2e/header-glass.mjs
           node tests/e2e/living-glass-search.mjs
           node tests/e2e/scroll-couture.mjs
