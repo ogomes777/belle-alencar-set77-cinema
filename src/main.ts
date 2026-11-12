@@ -13,6 +13,9 @@ import './styles/luxe-glass.css';
 import './styles/header-glass.css';
 import './styles/search-atelier.css';
 import './styles/catalog-couture-v17.css';
+import './styles/preferences-v31.css';
+import { initBelleI18n } from './preferences/i18n';
+import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
 import { initIntro } from './shell/intro';
 import { initHeader } from './shell/header';
@@ -29,6 +32,8 @@ mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
 initHeader();
 initCommerce();
+initBelleI18n();
+initBelleSettings();
 initSections();
 initMotionDirector();
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
