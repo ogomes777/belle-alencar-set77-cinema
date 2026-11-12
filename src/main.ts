@@ -20,6 +20,7 @@ import { initFilm } from './film';
 import { initSections } from './sections';
 import { initHowFilm } from './how-film';
 import { initMotionDirector } from './motion/director';
+import { initStoresChampagne } from './motion/stores-champagne';
 
 
 mountMonograms();
@@ -28,6 +29,7 @@ initHeader();
 initCommerce();
 initSections();
 initMotionDirector();
+initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
 const director = initDirector();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
 // A coleção contém peças renderizadas dinamicamente. O módulo de movimento

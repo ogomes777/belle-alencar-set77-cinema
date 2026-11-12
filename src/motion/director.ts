@@ -19,7 +19,7 @@ export const BELLE_MOTION_SCENES: readonly Scene[] = [
 
   // Como comprar is owned by the reversible video-scrub chapter. In
   // static/video-fallback modes, copy must never depend on one-shot opacity.
-  {selector:'#lojas', motif:'iris', targets:['.section-head','.store-card']},
+  // #lojas V22 uses its own reversible scroll choreography, not the one-shot iris.
   {selector:'#atendimento', motif:'split', targets:['.concierge__media','.concierge__body']},
   {selector:'#duvidas', motif:'fold', targets:['.sec-head','.faq details']},
   {selector:'.finale', motif:'velvet', targets:['.finale__mark','#finaleTitle','.cta-row']},

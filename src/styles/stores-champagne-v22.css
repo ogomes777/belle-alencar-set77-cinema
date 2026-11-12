@@ -1,0 +1,118 @@
+/* SET77 LABS · Belle V22 Champagne. Globe canvas code, size and layout untouched. */
+#como-comprar.how--couture::after{
+  height:clamp(100px,14vw,180px);
+  background:linear-gradient(180deg,
+    rgba(247,236,212,0) 0%,rgba(251,244,230,.10) 23%,
+    rgba(253,248,238,.38) 49%,rgba(249,239,219,.78) 78%,#f7ecd6 100%);
+  pointer-events:none;
+}
+#lojas.stores{
+  --stores-edge:rgba(133,95,41,.23);
+  background:
+    radial-gradient(circle 285px at 81% 51%,
+      rgba(54,39,26,.76) 0%,rgba(84,60,35,.56) 44%,
+      rgba(165,128,77,.12) 81%,transparent 100%),
+    linear-gradient(117deg,#f9f2e6 0%,#f7ecd6 42%,#f0dfbc 100%);
+  color:#392b20;
+}
+/* Golden globe retains contrast thanks to a localized subtle chocolate halo
+   painted by the section background, not by editing the globe itself. */
+#lojas.stores .section-head .eyebrow{color:#87612b;letter-spacing:.24em}
+#lojas.stores .section-head .lede{color:#62513b;text-wrap:pretty}
+#lojas.stores .section-head .display{
+  color:#6e502e;
+  background:repeating-linear-gradient(90deg,
+    #423020 0px,#513721 70px,#ae7d37 118px,#fdfaf1 157px,
+    #c18e42 198px,#7b5126 255px,#423020 335px,#423020 400px);
+  background-size:400px 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:.35px rgba(75,49,25,.39);
+  text-shadow:0 5px 22px rgba(172,126,63,.11);
+  animation:belleCityGoldJourney 10s linear infinite paused;
+}
+#lojas.stores .section-head .display em{color:inherit;-webkit-text-fill-color:transparent}
+#lojas.stores.stores--illuminated .section-head .display{animation-play-state:running}
+@keyframes belleCityGoldJourney{
+  from{background-position:0 0}
+  to{background-position:-400px 0}
+}
+#lojas.stores .store-list{border-top:1px solid var(--stores-edge)}
+#lojas.stores .store-card{border-bottom:1px solid var(--stores-edge)}
+#lojas.stores .store-card::before{background:linear-gradient(90deg,#a57532,#edcc8e)}
+#lojas.stores .store-card h3{color:#392819}
+#lojas.stores .store-card__uf{color:#88602a}
+#lojas.stores .store-card__addr{color:#584a38}
+#lojas.stores .store-card__addr.is-pending{color:#766852}
+#lojas.stores .store-card__map{color:#80551c;text-decoration-color:rgba(155,107,46,.55)}
+#lojas.stores .stores__note{color:#675844}
+#lojas.stores .btn--line{
+  --bg:rgba(255,250,240,.38);--fg:#5e421f;
+  --bd:rgba(154,103,36,.62);--fill:#bd8a40;
+  color:#5e421f;border-color:var(--bd);
+  box-shadow:0 5px 19px -15px rgba(142,93,36,.42);
+}
+#lojas.stores .btn--line:hover,
+#lojas.stores .btn--line:focus-visible{
+  --fg:#fffdf7;color:#fffdf7;border-color:#bd8a40;
+}
+#lojas.stores .btn--line[aria-pressed='true']{
+  --bg:#f0dcb7;--bd:#a67a3a;--fg:#573c20;
+  color:#573c20;border-color:#a67a3a;
+  box-shadow:0 0 0 1px rgba(168,116,44,.18),0 0 19px rgba(201,152,71,.13);
+}
+#lojas.stores :focus-visible{outline-color:#94671e;outline-offset:3px}
+/* Scroll makes solid copy/cities reveal. Reversing scroll reverses the mask. */
+#lojas.stores.stores--scrubbed .section-head .eyebrow,
+#lojas.stores.stores--scrubbed .section-head .display,
+#lojas.stores.stores--scrubbed .section-head .lede,
+#lojas.stores.stores--scrubbed .store-card,
+#lojas.stores.stores--scrubbed .stores__note{
+  opacity:calc(.12 + var(--stores-reveal,1)*.88);
+  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*34px),0);
+}
+#lojas.stores.stores--scrubbed .section-head .display,
+#lojas.stores.stores--scrubbed .store-card{
+  clip-path:inset(0 calc((1 - var(--stores-reveal,1))*100%) 0 0);
+}
+#lojas.stores.stores--scrubbed .stores__note{
+  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*17px),0);
+}
+@media(max-width:959px){
+  #lojas.stores{
+    background:
+      radial-gradient(circle 240px at 50% 40%,
+        rgba(55,41,27,.69) 0%,rgba(92,66,35,.41) 50%,
+        rgba(161,119,62,.08) 84%,transparent 100%),
+      linear-gradient(175deg,#f9f2e6 0%,#f4e8d0 62%,#efe0bc 100%);
+  }
+  #lojas.stores.stores--scrubbed .store-card{
+    transform:translate3d(0,calc((1 - var(--stores-reveal,1))*23px),0);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #lojas.stores .section-head .display{
+    animation:none!important;background:none!important;
+    -webkit-text-fill-color:#765129!important;
+    -webkit-text-stroke:0!important;text-shadow:none!important;
+  }
+  #lojas.stores.stores--scrubbed .section-head .eyebrow,
+  #lojas.stores.stores--scrubbed .section-head .display,
+  #lojas.stores.stores--scrubbed .section-head .lede,
+  #lojas.stores.stores--scrubbed .store-card,
+  #lojas.stores.stores--scrubbed .stores__note{
+    opacity:1!important;transform:none!important;clip-path:none!important;
+  }
+}
+html[data-intensity='essential'] #lojas.stores .section-head .display{
+  animation:none!important;background:none!important;
+  -webkit-text-fill-color:#765129!important;
+  -webkit-text-stroke:0!important;text-shadow:none!important;
+}
+html[data-intensity='essential'] #lojas.stores.stores--scrubbed .section-head .eyebrow,
+html[data-intensity='essential'] #lojas.stores.stores--scrubbed .section-head .display,
+html[data-intensity='essential'] #lojas.stores.stores--scrubbed .section-head .lede,
+html[data-intensity='essential'] #lojas.stores.stores--scrubbed .store-card,
+html[data-intensity='essential'] #lojas.stores.stores--scrubbed .stores__note{
+  opacity:1!important;transform:none!important;clip-path:none!important;
+}
