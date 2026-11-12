@@ -39,7 +39,15 @@ try{
    await page.waitForTimeout(170);
   };
   await move(.45);
-  const mid=await cssCard(page,id);
+  let mid=await cssCard(page,id);
+  // At tablet breakpoints the sticky filter and scroll restoration can
+  // complete after the first direct jump. Adjust upward only when needed
+  // and prove the actual intermediate mask instead of relying on one frame.
+  for(let attempt=0;attempt<3&&(!mid.staged||mid.clip==='none');attempt++){
+    await page.evaluate(()=>scrollBy({top:-Math.round(innerHeight*.24),behavior:'instant'}));
+    await page.waitForTimeout(190);
+    mid=await cssCard(page,id);
+  }
   check(mid.staged&&mid.opacity>.07&&mid.opacity<.95,width+': one product appears partially fractured during scrolling '+JSON.stringify(mid));
   check(mid.clip.startsWith('polygon('),width+': actual jagged CSS clip mask exposed mid-entrance');
   check(mid.transform!=='none',width+': product shifts/rotates while reassembling');
