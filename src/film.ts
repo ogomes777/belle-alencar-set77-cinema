@@ -171,6 +171,18 @@ export function initFilm(director: Director): void {
 
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('scrollend', applyScrollPosition, { passive: true });
+  // Safety net for rare Chromium/WebKit cases where a large native
+  // scrollIntoView / jump updates scrollY before a scroll event is delivered.
+  // A single number is sampled 6x/second, without a permanent RAF or
+  // any DOM writes while scroll and chapter state are already in sync.
+  window.setInterval(()=>{
+    if(document.hidden)return;
+    const current=scrollY;
+    const expected=clamp((current-filmTop)/range,0,1);
+    if(current===lastScrollPosition&&Math.abs(expected-progress)<.0005)return;
+    lastScrollPosition=current;
+    applyScrollPosition();
+  },160);
   let measurementFrame=0;
   const scheduleMeasure=()=>{
     if(measurementFrame)return;
