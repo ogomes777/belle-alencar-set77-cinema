@@ -64,7 +64,7 @@ function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
    es:{'Quantidade de':'Cantidad de','Diminuir quantidade de':'Reducir cantidad de','Aumentar quantidade de':'Aumentar cantidad de','Escolher tamanho de':'Elegir talla para','Remover':'Eliminar'},
    it:{'Quantidade de':'Quantità di','Diminuir quantidade de':'Riduci quantità di','Aumentar quantidade de':'Aumenta quantità di','Escolher tamanho de':'Scegli la taglia per','Remover':'Rimuovi'}
   }[to];
-  const suffix=by[3]!=== ' da sacola'?({en:' from bag',es:' de la bolsa',it:' dalla borsa'}[to]):by[3]!=== ' dos favoritos'?({en:' from favorites',es:' de favoritos',it:' dai preferiti'}[to]):'';
+  const suffix=by[3] === ' da sacola'?({en:' from bag',es:' de la bolsa',it:' dalla borsa'}[to]):by[3] === ' dos favoritos'?({en:' from favorites',es:' de favoritos',it:' dai preferiti'}[to]):'';
   return translated[by[1]! as keyof typeof translated]+' '+translate(by[2]!,to)+suffix;
  }
  const unique=source.match(/^Tamanho (PP|P|M|G|GG|Único)$/);
