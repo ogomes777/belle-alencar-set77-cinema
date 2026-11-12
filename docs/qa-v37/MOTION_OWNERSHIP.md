@@ -34,3 +34,6 @@ O filme 3D (7 capítulos) não recebe camada. Controladores originais (`film.ts`
 - Removida a transição Atendimento → Dúvidas (Fatias) a pedido. Restam 7 passagens; o Finale vira "07 · Assinatura".
 - Trabalho de desempenho em módulos pré-existentes (geometria em cache, coleção sem gsap.set por quadro, filme sem escrita redundante, BA aquecido antes) e modo leve adaptativo. Ver `PERFORMANCE.md`.
 - Acessibilidade: botão "Escolher loja" com área de toque 44×44 em telas ≤370 px (antes 38×36; era a única falha e2e herdada da V36).
+
+## V37.5 · paletas por tema
+As transições seguem o tema do site (`html[data-belle-theme]`): **claro** = ouro, café, rosé e bronze; **escuro** = ônix, grafite e ouro noturno (varredura e círculo invertem para ouro com título ônix); **rosé** = pink dourado (rosé-ouro, rosa profundo, dourado champagne, veludo rosé com fio dourado). A troca de tema é só CSS, sem custo extra. Capturas: `shots/v37.5-theme-*.jpg`.
