@@ -37,6 +37,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   let entries:Entry[]=[];
   let trigger:ScrollTrigger|null=null,storyTrigger:ScrollTrigger|null=null;
   let mutation:MutationObserver|null=null,resize:ResizeObserver|null=null;
+  let bridgeObserver:IntersectionObserver|null=null;
 
   function display(entry:Entry,progress:number,close=true){
     const el=entry.element;
@@ -188,12 +189,22 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     mutation.observe(grid!,{childList:true});
     resize=new ResizeObserver(scheduleMeasure);
     resize.observe(grid!);
+    if(handoff){
+      resize.observe(handoff);
+      // Intersection callbacks also fire on instant anchor jumps, including
+      // those where a browser coalesces several scroll events into one.
+      bridgeObserver=new IntersectionObserver(()=>updateStory(),{
+        rootMargin:'150px 0px',threshold:[0,.25,.60,1]
+      });
+      bridgeObserver.observe(handoff);
+    }
     grid!.addEventListener('focusin',onFocus);
     grid!.addEventListener('focusout',update);
     document.addEventListener('visibilitychange',onVisibility);
     window.addEventListener('pageshow',onPageShow);
     window.addEventListener('resize',scheduleMeasure,{passive:true});
     window.addEventListener('scroll',scheduleStory,{passive:true});
+    window.addEventListener('scrollend',updateStory,{passive:true});
   }
   function teardown(){
     if(!active)return;
@@ -205,12 +216,14 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     storyTrigger?.kill();storyTrigger=null;
     mutation?.disconnect();mutation=null;
     resize?.disconnect();resize=null;
+    bridgeObserver?.disconnect();bridgeObserver=null;
     grid!.removeEventListener('focusin',onFocus);
     grid!.removeEventListener('focusout',update);
     document.removeEventListener('visibilitychange',onVisibility);
     window.removeEventListener('pageshow',onPageShow);
     window.removeEventListener('resize',scheduleMeasure);
     window.removeEventListener('scroll',scheduleStory);
+    window.removeEventListener('scrollend',updateStory);
     grid!.classList.remove('is-cine-scroll');
     section!.classList.remove('is-cine-story');
     section!.style.removeProperty('--collection-copy');
