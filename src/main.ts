@@ -25,7 +25,7 @@ import { initFilm } from './film';
 import { initSections } from './sections';
 import { initHowFilm } from './how-film';
 import { initMotionDirector } from './motion/director';
-import { initCoutureTransitions } from './motion/couture-transitions-v33';
+import { initCoutureV35 } from './motion/couture-transitions-v35';
 import { initStoresChampagne } from './motion/stores-champagne';
 
 
@@ -37,7 +37,7 @@ initBelleI18n();
 initBelleSettings();
 initSections();
 initMotionDirector();
-initCoutureTransitions(); // V33: full-viewport scroll-linked transitions. No extra document height.
+initCoutureV35(); // V35: 22 cinematic scroll-reversible micro-intros; zero section spacers.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
 const director = initDirector();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
