@@ -5,7 +5,7 @@ let chromium;try{({chromium}=require('playwright'));}catch{({chromium}=require('
 const browser=await chromium.launch({args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const BASE=process.env.BASE||'http://127.0.0.1:4173';
 let count=0;const check=(condition,msg)=>{if(!condition)throw Error('FAIL '+msg);console.log('PASS '+msg);count++;};
-const cssCard=async(page,id)=>page.locator('[data-product="'+id+'"]').evaluate(el=>{
+const cssCard=async(page,id)=>page.locator('#colecao .pgrid .pcard[data-product="'+id+'"]').evaluate(el=>{
  const s=getComputedStyle(el);
  return {opacity:Number(s.opacity),clip:s.clipPath,transform:s.transform,
   staged:el.classList.contains('is-collection-staged'),
@@ -46,20 +46,20 @@ try{
   check(mid.shear>.01,width+': golden fracture seam follows the visible edge');
   await move(1.20);
   await page.waitForFunction(id=>{
-    const el=document.querySelector('[data-product="'+id+'"]');
+    const el=document.querySelector('#colecao .pgrid .pcard[data-product="'+id+'"]');
     return !!el&&el.classList.contains('is-collection-revealed')&&Number(getComputedStyle(el).opacity)>.99;
   },id,{timeout:4500});
   const full=await cssCard(page,id);
   check(full.clip==='none'&&full.revealed,width+': card becomes sharp, solid and fully clickable after reveal');
   await move(.27);
   await page.waitForFunction(id=>{
-    const el=document.querySelector('[data-product="'+id+'"]');
+    const el=document.querySelector('#colecao .pgrid .pcard[data-product="'+id+'"]');
     return !!el&&el.classList.contains('is-collection-staged')&&getComputedStyle(el).clipPath.startsWith('polygon(');
   },id,{timeout:4500});
   const back=await cssCard(page,id);
   check(back.opacity<.95&&back.clip!=='none',width+': scrolling UP visibly fractures the SAME card back into its entrance');
   await move(1.20);
-  await page.waitForFunction(id=>document.querySelector('[data-product="'+id+'"]')?.classList.contains('is-collection-revealed'),id,{timeout:4500});
+  await page.waitForFunction(id=>document.querySelector('#colecao .pgrid .pcard[data-product="'+id+'"]')?.classList.contains('is-collection-revealed'),id,{timeout:4500});
   check(true,width+': repeated downward scroll recomposes the card without re-rendering the catalog');
   check(await page.locator('#colecao .pcard').count()===48,width+': all 48 catalog products remain intact');
   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),width+': no horizontal overflow with diagonal slices');
