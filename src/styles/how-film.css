@@ -305,3 +305,36 @@ html[data-intensity='essential'] .how--couture .how__steps li,
 html[data-intensity='essential'] .how--couture .how__foot{
   opacity:1!important;transform:none!important;
 }
+
+/* V19 | The cards must feel physically placed, not ghost overlays.
+   The outer halo peaks at impact and settles into a champagne edge. */
+.how--couture.how--enhanced .how__steps li {
+  rotate:none;
+  transform:
+    translate3d(var(--how-card-x,0px),var(--how-card-y,0px),var(--how-card-z,0px))
+    rotateX(var(--how-card-tilt-x,0deg))
+    rotateY(var(--how-card-rotation,0deg))
+    rotateZ(var(--how-card-tilt-z,0deg))
+    scale(var(--how-card-scale,1));
+  box-shadow:
+    0 36px 70px -39px rgba(71,42,14,.46),
+    0 0 31px rgba(207,153,73,.19),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 0 0 1px rgba(177,130,67,.24);
+}
+.how--couture.how--enhanced .how__steps li::after {
+  opacity:calc(var(--how-card-glow,0)*.68 + var(--how-card-impact,0)*.32);
+  background:
+    radial-gradient(ellipse 70% 70% at 63% 0,
+      rgba(255,228,174,.62),rgba(244,192,105,.20) 49%,transparent 86%),
+    linear-gradient(125deg,transparent 25%,rgba(255,255,255,.32) 43%,transparent 59%);
+}
+@media(max-width:600px){
+  .how--couture.how--enhanced .how__steps li{
+    box-shadow:0 19px 35px -24px rgba(71,42,14,.48),
+      inset 0 1px 0 rgba(255,255,255,.95);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .how--couture.how--enhanced .how__steps li{transform:none!important;opacity:1!important}
+}

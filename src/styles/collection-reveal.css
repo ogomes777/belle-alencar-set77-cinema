@@ -77,3 +77,45 @@ html[data-intensity='essential'] #colecao .pgrid .pcard {
 html[data-intensity='essential'] #colecao .pgrid .pcard__media::after {
   display:none!important;
 }
+
+/* V19 | Diagonal couture fracture. One product, multiple planes of movement.
+   Direction is computed from the real scroll position in both directions. */
+#colecao .pgrid.is-cine-scroll {
+  position:relative;
+  perspective:1250px;
+  perspective-origin:50% 39%;
+}
+#colecao .pgrid.is-cine-scroll .pcard {
+  transform-origin:50% 75%;
+  transform-style:preserve-3d;
+}
+#colecao .pgrid.is-cine-scroll .pcard.is-collection-staged {
+  backface-visibility:hidden;
+}
+#colecao .pgrid.is-cine-scroll .pcard.is-collection-staged .pcard__inner::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  border-radius:inherit;
+  opacity:var(--cr-sheen,0);
+  background:linear-gradient(90deg,
+    transparent calc(var(--cr-seam-x,50%) - 6%),
+    rgba(255,252,238,.10) calc(var(--cr-seam-x,50%) - 4%),
+    rgba(244,187,98,.48) var(--cr-seam-x,50%),
+    rgba(255,246,218,.15) calc(var(--cr-seam-x,50%) + 4%),
+    transparent calc(var(--cr-seam-x,50%) + 8%));
+}
+#colecao .pgrid.is-cine-scroll .pcard.is-collection-revealed{
+  clip-path:none;
+}
+@media(max-width:820px){
+  #colecao .pgrid.is-cine-scroll{perspective:1000px}
+}
+@media(prefers-reduced-motion:reduce){
+  #colecao .pgrid .pcard{clip-path:none!important;filter:none!important}
+  #colecao .pcard__inner::after{display:none!important}
+}
+html[data-intensity='essential'] #colecao .pgrid .pcard{clip-path:none!important}
+html[data-intensity='essential'] #colecao .pcard__inner::after{display:none!important}

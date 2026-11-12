@@ -82,23 +82,28 @@ export function initHowFilm(director: Director): () => void {
     section.style.setProperty('--how-gold', String(smooth(0.56, 0.96, progress)));
     const mobile = window.innerWidth <= 600;
     cards.forEach((card, i) => {
-      const a = 0.665 + i * 0.056;
-      const reveal = smooth(a, a + 0.117, progress);
+      // Distinct arrivals. The stronger throw begins as the dress clears
+      // the camera, but each card stays entirely driven by scroll position.
+      const a = 0.642 + i * 0.059;
+      const reveal = smooth(a, a + 0.146, progress);
       const sign = i % 2 === 0 ? -1 : 1;
-      const settle = smooth(0, 0.91, reveal);
-      const overshoot = Math.sin(Math.PI * reveal) * 0.075;
-      const scale = 0.57 + 0.43 * settle + overshoot;
+      const settle = smooth(0,1,reveal);
+      const overshoot = Math.sin(Math.PI*reveal) * (mobile ? .078 : .125);
+      const scale = (mobile ? .48 : .33) + (mobile ? .52 : .67) * settle + overshoot;
       card.style.setProperty('--how-card', String(reveal));
       card.style.setProperty('--how-card-opacity', String(smooth(0, 0.23, reveal)));
-      card.style.setProperty('--how-card-x', `${(sign * (mobile ? 38 : 105) * (1 - reveal)).toFixed(2)}px`);
-      card.style.setProperty('--how-card-y', `${((mobile ? 78 : 140) * (1 - reveal)).toFixed(2)}px`);
-      card.style.setProperty('--how-card-z', `${((mobile ? -40 : -145) * (1 - reveal)).toFixed(2)}px`);
-      card.style.setProperty('--how-card-rotation', `${(sign * (mobile ? 9 : 17) * (1 - reveal)).toFixed(2)}deg`);
+      card.style.setProperty('--how-card-x', `${(sign * (mobile ? 44 : 164) * (1 - reveal)).toFixed(2)}px`);
+      card.style.setProperty('--how-card-y', `${((mobile ? 88 : 186) * (1 - reveal)).toFixed(2)}px`);
+      card.style.setProperty('--how-card-z', `${((mobile ? -58 : -280) * (1 - reveal)).toFixed(2)}px`);
+      card.style.setProperty('--how-card-rotation', `${(sign * (mobile ? 14 : 30) * (1 - reveal)).toFixed(2)}deg`);
+      card.style.setProperty('--how-card-tilt-x', `${((mobile ? 7 : 19) * (1 - reveal)).toFixed(2)}deg`);
+      card.style.setProperty('--how-card-tilt-z', `${(sign * (mobile ? 3 : 8) * (1 - reveal)).toFixed(2)}deg`);
       card.style.setProperty('--how-card-scale', scale.toFixed(4));
-      card.style.setProperty('--how-card-glow', String(smooth(0.38, 0.94, reveal)));
+      card.style.setProperty('--how-card-glow', String(smooth(0.28, 0.89, reveal)));
+      card.style.setProperty('--how-card-impact', (Math.sin(Math.PI*reveal)**2).toFixed(4));
     });
 
-    const interactive = progress >= 0.95;
+    const interactive = progress >= 0.955;
     if (interactive !== lastInteractive) {
       lastInteractive = interactive;
       bottom.inert = !interactive;
@@ -133,7 +138,8 @@ export function initHowFilm(director: Director): () => void {
     cards.forEach(card => {
       for (const name of ['--how-card', '--how-card-opacity', '--how-card-x',
         '--how-card-y', '--how-card-z', '--how-card-rotation', '--how-card-scale',
-        '--how-card-glow']) card.style.removeProperty(name);
+        '--how-card-glow', '--how-card-impact', '--how-card-tilt-x',
+        '--how-card-tilt-z']) card.style.removeProperty(name);
     });
     lastProgress = -1;
     seeking = false;
