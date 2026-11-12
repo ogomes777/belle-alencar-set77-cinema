@@ -325,3 +325,7 @@ html[data-belle-theme="rose"]{
 }
 html[data-intensity="essential"] .bm35-stage{display:none!important}
 html[data-intensity="essential"] .bm35-copy{clip-path:none!important}
+
+/* The V8 one-shot runway veil used an opaque ivory fill. V35 replaces that
+ * layer with the real reversible curtain, avoiding a second cloth on top. */
+html.bm35-mounted #passarela .md-runway-veil{display:none!important}
