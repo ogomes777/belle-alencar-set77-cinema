@@ -1,19 +1,24 @@
-# V37 · propriedade de movimento
+# V37 · propriedade de movimento (revisão Claude sobre o piloto Codex)
 
-Base confirmada: branch remota `fix/belle-v36-remove-decorative-overlays`, HEAD `712591e3d071e116450f85c3ebe9d776fbf583f1`. O kit citava `7518b769...` como produção; não foi possível confirmar esse deployment. Não há reset nem reativação de V33/V35. A branch de entrada `work` em `aef55aa` foi preservada.
+Base: `fix/belle-v36-remove-decorative-overlays` @ `712591e` → piloto Codex `fix/belle-v37-editorial-boundary-reveals` @ `ddf620c` → esta branch `claude/wonderful-meitner-kt2rnw`. Nada de V33/V35/Motion Director V8 foi religado (`src/motion/director.ts` e `couture-transitions-v33.ts` continuam sem import).
 
-| Fronteira | Elemento/propriedades existentes | Decisão V37 e proprietário |
-|---|---|---|
-| Intro e sete capítulos | `film.ts` câmera, canvas, chapter cards | Preservados; nenhuma nova camada |
-| Filme → passarela | `runway.ts` modelos/transform/opacity; `.runway__stage` controles | Cortina somente sobre a tipografia original `.runway__intro`, sem superfície extra; V37 `clip-path`/translate local |
-| Passarela → ocasiões | `occasions/carousel.ts` GSAP possui chegada, transform, opacity dos três módulos | Preservado; Colunas adicional dispensada para evitar duas entradas |
-| Ocasiões → coleção | `collection-reveal.ts` controla produtos, grid e handoff | Varredura da hairline do header e movimento de 12px do título original; V37 somente esses estilos |
-| Coleção → como comprar | `how-film.ts` seek, texto e quatro cards | Preservado integralmente |
-| Como comprar → lojas | `stores-champagne.ts` possui reveal da copy/cards; `astral/*` globo e navegação | Íris adicional dispensada, evita duplicação e preserva mapa/CTA |
-| Lojas → atendimento | `concierge__media img` sem outro controlador ativo; copy original sem controlador V36 | Cortina lateral: clip suave da própria imagem e deslocamento curto do título; V37 |
-| Atendimento → FAQ | `details/summary` nativo, header sem controlador ativo V36 | Dobra limitada ao título, 3° e 12px; V37 |
-| FAQ → finale | `ba-solid.ts` monograma/canvas/rotação | Preservado: gradiente original `finale-solid-v28.css` já fornece a passagem tonal. A proposta Veludo adicional foi descartada porque seria invisível sob esse gradiente ou exigiria substituir a composição aprovada |
+**Um único controlador** (`src/motion/editorial-boundaries.ts`): um rAF agendado por scroll passivo, leituras antes de escritas, escreve só `--v37-entry`, `--v37-light` e as classes `v37-boundary`/`v37-done` na `<section>`. Mede uma âncora que nunca é transformada. Ao concluir (`v37-done`) todas as máscaras saem do CSS; ao subir, a fronteira reentra (reversível). Reduced-motion, intensidade essencial, save-data e memória ≤2GB → nenhuma classe, conteúdo estático integral.
 
-Um controlador V37 mede geometria das seções estáveis e escreve apenas `--v37-entry` nas mesmas. CSS consome a variável em descendentes autorizados. Nenhuma seção medida é transformada. Leituras agrupadas antes das escritas. Motion reduzido/essential, save-data e memória reportada ≤2GB removem enhancement; conteúdo base fica íntegro. Foco dentro da seção conclui a revelação. `pageshow`, hash, resize e visibility recalculam; destroy remove listeners/variáveis/classes. Não há loops rAF permanentes, pin ou listeners wheel/touch extras.
+| Fronteira | Dono original (intocado) | V37 · efeito | Nó que o V37 estiliza | Âncora de medição |
+|---|---|---|---|---|
+| Intro + 7 capítulos | `film.ts` | **nenhum** | — | — |
+| Filme → Passarela | `runway.ts` (modelos, drag, controles) | **Cortina** — lettering descoberto de baixo p/ cima | `.runway__intro` (clip-path) | `#passarela` |
+| Passarela → Ocasiões | `occasions/carousel.ts` (transform/opacity dos cards) | **Colunas** — moldura sobe em 3 colunas escalonadas; ao voltar, a da direita recua primeiro | `.occ-round` wrapper (mask) — nunca os cards | `.occ-round` |
+| Ocasiões → Coleção | `collection-reveal.ts` (cards, filtros) | **Varredura** — máscara dir→esq no título + empurrão 16px + fio de luz | `#colecaoTitle` (mask/translate), `.section-head::after` | `#colecao` |
+| Coleção → Como comprar | `how-film.ts` (scrub MP4, 4 cartas) | **nenhum** | — | — |
+| Como comprar → Lojas | `stores-champagne.ts` (copy/cards), `astral/*` (globo) | **Círculo** — íris de luz champagne atrás do conteúdo, nasce e some | `#lojas::before` (z-index −1, isolado) | `#lojas` |
+| Lojas → Atendimento | sem controlador | **Cortina lateral** na própria foto + título com atraso | `.concierge__media img` (clip-path), `#conciergeTitle` (translate) | `#atendimento` |
+| Atendimento → Dúvidas | `<details>` nativo | **Dobra** — eixo diagonal (canto inf. dir. → sup. esq.) só no título | `#faqTitle` | `#duvidas` |
+| Dúvidas → Finale | `finale/ba-solid.ts` | **Veludo** — tom de fundo aprofunda a partir da direita | `.finale::before` (z-index −1, isolado) | `.finale` |
 
-As seis famílias são uma seleção editorial: Colunas e Círculo já têm passagem equivalente no controlador original e são conservadas, não empilhadas. Veludo adicional foi descartado após revisar o gradiente original do finale. Moldura/Digitação opcionais descartadas por ganho pequeno.
+Moldura e Digitação: **não implementadas** (ganho visual pequeno; teste de sobriedade). Rasgo/Pixels/Fatias/Cubo/Tinta/Queima/Retícula/Espiral/Canal/Partículas: catalogadas, não implementadas.
+
+### Divergências em relação ao piloto Codex (e por quê)
+- Codex descartou Colunas/Círculo/Veludo. Reintroduzi os três **sem segundo dono de propriedade**: Colunas mascara o wrapper (o carrossel continua único dono do transform dos cards); Círculo e Veludo vivem em pseudo-elemento de fundo dentro de seção isolada (não cobrem globo/CTA/selo; Codex observou corretamente que no Veludo um overlay ficaria invisível sob o gradiente — o pseudo com `z-index:-1` + `isolation` resolve, desenhando acima do fundo e abaixo do conteúdo).
+- Direções corrigidas para o que a Promptfly descreve/mostra ao vivo (ver REFERENCE_OBSERVATIONS).
+- Adicionado estado `v37-done` (nenhuma máscara persiste após a passagem) e âncora explícita por fronteira.

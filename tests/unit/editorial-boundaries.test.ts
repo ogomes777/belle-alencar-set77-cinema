@@ -28,3 +28,29 @@ describe('V37 boundary integration',()=>{
     const destroy=initEditorialBoundaries();expect(section.classList.contains('v37-boundary')).toBe(false);expect(document.querySelector('h2')!.textContent).toBe('Original');destroy();
   });
 });
+
+describe('V37 boundary progress contract',()=>{
+  it('is monotonic, clamped and symmetric for reverse scroll',async()=>{
+    const {boundaryProgress}=await import('../../src/motion/editorial-boundaries');
+    const down=[900,800,700,600,500].map(t=>boundaryProgress(t,900));
+    for(let i=1;i<down.length;i++)expect(down[i]!).toBeGreaterThanOrEqual(down[i-1]!);
+    expect(boundaryProgress(2000,900)).toBe(0);expect(boundaryProgress(-500,900)).toBe(1);
+    const up=[500,600,700,800,900].map(t=>boundaryProgress(t,900));expect(up).toEqual([...down].reverse());
+  });
+  it('marks completion so masks drop, and re-enters on the way back',()=>{
+    const {section,move}=fixture();const destroy=initEditorialBoundaries([{section:'#colecao'}]);
+    move(100);expect(section.classList.contains('v37-done')).toBe(true);
+    move(700);expect(section.classList.contains('v37-done')).toBe(false);expect(section.classList.contains('v37-boundary')).toBe(true);
+    destroy();
+  });
+  it('measures a stable anchor, never requiring the animated node',()=>{
+    document.body.innerHTML='<section id="ocasioes"><div class="occ-round"></div></section>';
+    const anchor=document.querySelector<HTMLElement>('.occ-round')!;let cb:FrameRequestCallback|undefined;
+    const spy=vi.spyOn(anchor,'getBoundingClientRect').mockImplementation(()=>({top:100,bottom:600,left:0,right:1,width:1,height:500,x:0,y:100,toJSON:()=>({})}));
+    vi.stubGlobal('innerHeight',900);vi.stubGlobal('matchMedia',()=>({matches:false,addEventListener:()=>{},removeEventListener:()=>{}}));
+    vi.stubGlobal('requestAnimationFrame',(fn:FrameRequestCallback)=>{cb=fn;return 1;});vi.stubGlobal('cancelAnimationFrame',()=>{});
+    const destroy=initEditorialBoundaries([{section:'#ocasioes',anchor:'.occ-round'}]);
+    expect(spy).toHaveBeenCalled();expect(document.getElementById('ocasioes')!.style.getPropertyValue('--v37-entry')).toBe('1.0000');
+    expect(anchor.getAttribute('style')).toBeNull();cb;destroy();
+  });
+});

@@ -31,3 +31,20 @@ O arquivo original permanece na pasta de anexos, fora do código público. As fo
 Os estados 0/25/50/75/100% **não foram controlados nem medidos**: trata-se de uma filmagem de demos em reprodução e uma página em movimento. As folhas de contato são quadros em tempos conhecidos, não amostras de progresso normalizado. Reversibilidade por scroll, easing, perspectiva exata, velocidade em pixels/s e duração integral de cada ciclo permanecem **NÃO VERIFICADOS**. Não há base para alegar reprodução pixel-perfect.
 
 A implementação Belle deve ser autoral: as famílias e suas direções vêm das observações acima; a faixa curta de progresso, os deslocamentos de 12–24px e o acabamento champagne são decisões do briefing V37, não medidas da Promptfly. A lista de 22 efeitos foi observada como acervo; não é checklist de instalação.
+
+## Adendo · inspeção ao vivo (sessão Claude, 12/11/2026)
+
+Nesta sessão a rede alcançou os três sites (HTTP 200 para promptfly.com.br/transicoes, belle-alencar-set77.vercel.app e gb-imports-set77.vercel.app). A página Promptfly foi aberta em Chromium 1280×800 e cada demonstrador foi localizado por `id` (`#cortina`, `#colunas`, `#varredura`, `#circulo`, `#dobra`, `#veludo`); 14 quadros a cada 120ms por demo. Um modal promocional cobre parte dos demos, limitando a leitura de quadros.
+
+**Observado (texto publicado na própria página, itens grátis com parâmetros):**
+
+| Família | Descrição publicada | Parâmetros publicados |
+|---|---|---|
+| Cortina | painel sobe, cobre, sai pelo topo; ao voltar, de cima para baixo | 1s, power2.inOut |
+| Colunas | barras lado a lado sobem uma depois da outra; ao voltar, começa pela direita | (Premium; não publicado) — quadros mostram borda em degraus |
+| Varredura | painel atravessa da direita para a esquerda empurrando a página | 0.9s, power2.inOut, empurrão ~80px |
+| Círculo | círculo cresce do ponto do clique (clip-path circle) | 0.7s, power3.inOut |
+| Dobra | página vira como papel, dobra do canto inferior direito ao superior esquerdo, verso mais escuro | (Premium) |
+| Veludo | cortina de veludo fecha da direita, página ao lado escurece (WebGL) | (Premium) |
+
+**Inferido/adaptado:** a Belle usa progresso de scroll (não tempo), por isso durações viram faixas de viewport (34–50% da altura); o "empurrão" de 80px foi reduzido a 16px; o painel opaco foi substituído pelo próprio conteúdo sendo descoberto. Não há alegação de reprodução pixel-perfect.

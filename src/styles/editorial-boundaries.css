@@ -1,23 +1,94 @@
-/* V37 pilot: a single hairline belongs to the collection heading, never the clothes. */
-#colecao.v37-boundary>.section-head{position:relative}
-#colecao.v37-boundary>.section-head::after{content:"";position:absolute;left:0;bottom:-12px;height:1px;width:min(180px,34%);background:linear-gradient(90deg,transparent,var(--gold),transparent);transform-origin:left;transform:scaleX(var(--v37-entry,1));opacity:calc(.7 * var(--v37-light,0))}
-@media(prefers-reduced-motion:reduce){#colecao.v37-boundary>.section-head::after{display:none}}
+/* V37 · editorial boundary reveals. One effect per boundary, local to real
+   elements. `--v37-entry` 0→1 (scroll-derived, reversible); `--v37-light` is
+   sin(πp): a light that rises and vanishes. `.v37-done` drops every mask so
+   nothing remains over content once the passage is complete.
+   Guardrail: no position:fixed, no new full-viewport layer, no commerce node. */
 
-/* Existing lettering is the curtain's surface; no cloth/panel crosses the models. */
-#passarela.v37-boundary .runway__intro{clip-path:inset(0 calc((1 - var(--v37-entry,1))*12%) 0 0);translate:calc((1 - var(--v37-entry,1))*-12px) 0}
-/* Sweep completes before catalogue controls enter the viewport. */
-#colecao.v37-boundary>.section-head>.display{translate:calc((1 - var(--v37-entry,1))*12px) 0}
-/* Lateral reveal uses the actual photograph, leaving WhatsApp/focus untouched. */
-#atendimento.v37-boundary .concierge__media img{clip-path:inset(0 calc((1 - var(--v37-entry,1))*12%) 0 0)}
-#atendimento.v37-boundary #conciergeTitle{translate:calc((1 - var(--v37-entry,1))*12px) 0}
-/* The editorial heading folds gently; native FAQ controls have no new styles. */
-#duvidas.v37-boundary #faqTitle{transform-origin:left bottom;transform:perspective(900px) rotateX(calc((1 - var(--v37-entry,1))*3deg));translate:0 calc((1 - var(--v37-entry,1))*12px)}
-@media(max-width:700px){
- #passarela.v37-boundary .runway__intro{clip-path:inset(0 calc((1 - var(--v37-entry,1))*6%) 0 0);translate:calc((1 - var(--v37-entry,1))*-8px) 0}
- #colecao.v37-boundary>.section-head>.display{translate:calc((1 - var(--v37-entry,1))*8px) 0}
- #atendimento.v37-boundary #conciergeTitle{translate:calc((1 - var(--v37-entry,1))*8px) 0}
+/* 1 · Filme → Passarela · CORTINA. The real lettering is uncovered bottom→top
+   (observed: the Promptfly panel rises); models, controls and drag are never masked. */
+#passarela.v37-boundary:not(.v37-done) .runway__intro{
+  clip-path:inset(calc((1 - var(--v37-entry))*100%) 0 0 0);
 }
+
+/* 2 · Passarela → Ocasiões · COLUNAS. The existing carousel FRAME (wrapper,
+   not the cards the carousel transforms) rises in three staggered columns. */
+#ocasioes.v37-boundary:not(.v37-done) .occ-round{
+  --c1:clamp(0, var(--v37-entry) * 1.6, 1);
+  --c2:clamp(0, var(--v37-entry) * 1.6 - .3, 1);
+  --c3:clamp(0, var(--v37-entry) * 1.6 - .6, 1);
+  -webkit-mask:linear-gradient(#000 0 0) 0 100%/33.4% calc(var(--c1)*100%) no-repeat,
+               linear-gradient(#000 0 0) 50% 100%/33.4% calc(var(--c2)*100%) no-repeat,
+               linear-gradient(#000 0 0) 100% 100%/33.4% calc(var(--c3)*100%) no-repeat;
+          mask:linear-gradient(#000 0 0) 0 100%/33.4% calc(var(--c1)*100%) no-repeat,
+               linear-gradient(#000 0 0) 50% 100%/33.4% calc(var(--c2)*100%) no-repeat,
+               linear-gradient(#000 0 0) 100% 100%/33.4% calc(var(--c3)*100%) no-repeat;
+}
+
+/* 3 · Ocasiões → Coleção · VARREDURA. A soft mask sweeps the heading right to
+   left (observed direction) with a short 16px push while a thin light rides its edge; finishes before filters/cards. */
+#colecao.v37-boundary>.section-head{position:relative}
+#colecao.v37-boundary:not(.v37-done)>.section-head>.display{
+  -webkit-mask:linear-gradient(270deg,#000 calc(var(--v37-entry)*120% - 20%),transparent calc(var(--v37-entry)*120%));
+  translate:calc((1 - var(--v37-entry))*16px) 0;
+          mask:linear-gradient(270deg,#000 calc(var(--v37-entry)*120% - 20%),transparent calc(var(--v37-entry)*120%));
+  translate:calc((1 - var(--v37-entry))*16px) 0;
+}
+#colecao.v37-boundary>.section-head::after{
+  content:"";position:absolute;left:0;bottom:-12px;height:1px;width:min(180px,34%);pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform-origin:right;transform:scaleX(var(--v37-entry));opacity:calc(.7 * var(--v37-light));
+}
+
+/* 4 · Como comprar → Lojas · CÍRCULO. A champagne iris of light opens behind
+   the content (z-index:-1 inside an isolated section) and fades to nothing.
+   Globe, pins, store cards and CTAs are never masked. */
+#lojas.v37-boundary{isolation:isolate}
+#lojas.v37-boundary:not(.v37-done)::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle at 72% 46%,color-mix(in srgb,var(--gold) 26%,transparent),transparent 62%);
+  clip-path:circle(calc(var(--v37-entry)*85%) at 72% 46%);
+  opacity:var(--v37-light);
+}
+
+/* 5 · Lojas → Atendimento · CORTINA LATERAL on the photograph itself, copy
+   follows with a short offset. WhatsApp/Instagram buttons never move. */
+#atendimento.v37-boundary:not(.v37-done) .concierge__media img{
+  clip-path:inset(0 calc((1 - var(--v37-entry))*100%) 0 0);
+}
+#atendimento.v37-boundary:not(.v37-done) #conciergeTitle{
+  translate:calc((1 - clamp(0, var(--v37-entry) * 1.25 - .25, 1))*16px) 0;
+}
+
+/* 6 · Atendimento → Dúvidas · DOBRA on the editorial heading only. Native
+   <details>/<summary> receive no styles. */
+#duvidas.v37-boundary:not(.v37-done) #faqTitle{
+  transform-origin:0 0;
+  transform:perspective(900px) rotate3d(1,-1,0,calc((1 - var(--v37-entry))*12deg));
+  translate:0 calc((1 - var(--v37-entry))*12px);
+}
+
+/* 7 · Dúvidas → Finale · VELUDO. Only the local background tone deepens like
+   light settling into velvet; it is a background, behind the BA mark. */
+.finale.v37-boundary{isolation:isolate}
+.finale.v37-boundary::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(120% 90% at 100% 50%,color-mix(in srgb,var(--gold) 20%,transparent),transparent 70%);
+  opacity:var(--v37-entry);
+}
+
+@media(max-width:700px){
+  #lojas.v37-boundary:not(.v37-done)::before{
+    background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--gold) 24%,transparent),transparent 65%);
+    clip-path:circle(calc(var(--v37-entry)*95%) at 50% 30%);
+  }
+  #atendimento.v37-boundary:not(.v37-done) #conciergeTitle{translate:calc((1 - clamp(0, var(--v37-entry) * 1.25 - .25, 1))*8px) 0}
+  #duvidas.v37-boundary:not(.v37-done) #faqTitle{transform:perspective(700px) rotate3d(1,-1,0,calc((1 - var(--v37-entry))*8deg))}
+}
+
+/* Belt and braces: JS already clears state in these modes. */
 @media(prefers-reduced-motion:reduce){
- #passarela.v37-boundary .runway__intro,#atendimento.v37-boundary .concierge__media img{clip-path:none;translate:none}
- #colecao.v37-boundary>.section-head>.display,#atendimento.v37-boundary #conciergeTitle,#duvidas.v37-boundary #faqTitle{transform:none;translate:none}
+  .v37-boundary *, .v37-boundary{ -webkit-mask:none !important; mask:none !important }
+  .v37-boundary .runway__intro,.v37-boundary .concierge__media img{clip-path:none !important}
+  .v37-boundary #conciergeTitle,.v37-boundary #faqTitle{transform:none !important;translate:none !important}
+  #lojas.v37-boundary::before,#colecao.v37-boundary>.section-head::after{display:none}
 }
