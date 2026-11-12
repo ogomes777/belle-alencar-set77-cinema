@@ -27,18 +27,23 @@ export interface Boundary {
   veil?: string;
   /** Short decorative title shown on the veil before the reveal: [roman, italic]. */
   title?: [string, string];
+  /** Chapter line above the title, e.g. "02 · Ocasiões". */
+  chapter?: string;
 }
+
+/** Number of compositor-only panels each veil family is cut into. */
+const PIECES: Record<string, number> = { colunas: 5, fatias: 6 };
 
 /** Fronteiras V37: uma por passagem, ver docs/qa-v37/MOTION_OWNERSHIP.md. */
 export const BOUNDARIES: Boundary[] = [
-  { section: '#passarela', veil: 'cortina', title: ['A passarela', '.'] },
-  { section: '#ocasioes', veil: 'colunas', title: ['Para cada', ' momento.'] },
-  { section: '#colecao', veil: 'varredura', title: ['A coleção', '.'] },
-  { section: '#como-comprar', veil: 'dobra', title: ['Do clique', ' à loja.'] },
-  { section: '#lojas', veil: 'circulo', title: ['Quatro cidades', '.'] },
-  { section: '#atendimento', veil: 'lateral', title: ['Com você', '.'] },
-  { section: '#duvidas', veil: 'fatias', title: ['Antes de', ' escolher.'] },
-  { section: '.finale', veil: 'veludo', title: ['Assinatura', '.'] },
+  { section: '#passarela', veil: 'cortina', chapter: '01 · Passarela', title: ['A passarela', '.'] },
+  { section: '#ocasioes', veil: 'colunas', chapter: '02 · Ocasiões', title: ['Para cada', ' momento.'] },
+  { section: '#colecao', veil: 'varredura', chapter: '03 · Coleção', title: ['A coleção', '.'] },
+  { section: '#como-comprar', veil: 'dobra', chapter: '04 · Como comprar', title: ['Do clique', ' à loja.'] },
+  { section: '#lojas', veil: 'circulo', chapter: '05 · Lojas', title: ['Quatro cidades', '.'] },
+  { section: '#atendimento', veil: 'lateral', chapter: '06 · Atendimento', title: ['Com', ' você.'] },
+  { section: '#duvidas', veil: 'fatias', chapter: '07 · Dúvidas', title: ['Antes de', ' escolher.'] },
+  { section: '.finale', veil: 'veludo', chapter: '08 · Assinatura', title: ['Belle', ' Alencar.'] },
 ];
 
 /** Smoothstep progress; complete while the anchor still sits in the lower viewport. */
@@ -66,18 +71,26 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
       veil = document.createElement('div');
       veil.className = `v37-veil v37-veil--${b.veil}`;
       veil.setAttribute('aria-hidden', 'true');
+      const n = PIECES[b.veil] ?? 1;
+      for (let i = 0; i < n; i++) {
+        const piece = document.createElement('span');
+        piece.className = 'v37-veil__piece';
+        piece.style.setProperty('--i', String(i));
+        veil.append(piece);
+      }
       if (b.title) {
-        const t = document.createElement('p');
-        t.className = 'v37-veil__title';
+        const el = (tag: string, cls: string) => { const e = document.createElement(tag); e.className = cls; return e; };
+        const stage = el('div', 'v37-veil__stage');
+        const chapter = el('span', 'v37-veil__chapter');
+        chapter.textContent = b.chapter ?? '';
+        const mask = el('span', 'v37-veil__mask');
+        const t = el('span', 'v37-veil__title');
         const em = document.createElement('em');
-        t.append(b.title[0], em);
         em.textContent = b.title[1];
-        const rule = document.createElement('span');
-        rule.className = 'v37-veil__rule';
-        const wrap = document.createElement('div');
-        wrap.className = 'v37-veil__stage';
-        wrap.append(t, rule);
-        veil.append(wrap);
+        t.append(b.title[0], em);
+        mask.append(t);
+        stage.append(chapter, mask, el('span', 'v37-veil__rule'));
+        veil.append(stage);
       }
       section.appendChild(veil);
     }

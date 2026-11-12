@@ -6,10 +6,13 @@ const { chromium } = require('playwright');
 const base = process.argv[2] || 'http://localhost:4173';
 const b = await chromium.launch();
 const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+const OFF = process.env.VEILS === 'off';
 await ctx.addInitScript(() => sessionStorage.setItem('belle:v4:intro', '1'));
 const p = await ctx.newPage();
 await p.goto(base + '/?tier=static', { waitUntil: 'load' });
 await p.waitForTimeout(1000);
+// VEILS=off hides only the V37 veils (same build, same JS), isolating their render cost.
+if (OFF) await p.addStyleTag({ content: '.v37-veil{display:none!important}' });
 const cdp = await ctx.newCDPSession(p);
 await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
 const out = {};
@@ -35,4 +38,4 @@ for (const sel of ['#ocasioes', '#colecao', '#atendimento', '#duvidas', '.finale
   }, sel);
 }
 await b.close();
-console.log(base, JSON.stringify(out));
+console.log(base + (OFF ? '#off' : '#on'), JSON.stringify(out));

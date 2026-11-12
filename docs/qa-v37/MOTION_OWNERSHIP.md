@@ -22,3 +22,10 @@ O filme 3D (7 capítulos) não recebe camada. Controladores originais (`film.ts`
 - Mais lento: começa quando a seção encosta na base da tela e termina quando ela chega ao topo (span 0,9 vh, antes 0,6).
 - Link de menu/hash/âncora: a seção de destino chega já revelada (p=1) e assim fica até sair por baixo da tela.
 - Performance: variáveis CSS escritas **no véu**, não na seção (a herança fazia cada quadro recalcular a seção inteira, 48 cards na coleção); véu limitado a 118vh; cartela só com transform/opacity; posição da cartela calculada pelo progresso (sem `sticky`, que quebra em seções com `overflow:hidden`). Medição `qa/v37-perf.mjs` (390px, CPU 4× mais lenta): V37.2 dentro do ruído da V36 em todas as passagens.
+
+## V37.3 (cliente, 12/11): mais forte, mais limpo, mais leve
+- **Cores fortes**: ouro rico (Passarela), café + ouro em colunas (Ocasiões), café (Coleção), rosé intenso (Como comprar), café (Lojas), bronze (Atendimento), faixas ouro/café (Dúvidas), veludo dourado (Finale). Título marfim com itálico champagne; nas cores claras (ouro/veludo) o acento é café.
+- **Cartela de capítulo**: "01 · Passarela" … "08 · Assinatura" + título que sobe por máscara + fio que se abre. Finale: *Belle Alencar.*
+- **Abertura com ease in-out** (smoothstep na 2ª metade) — começa suave, corta decidida.
+- **Compositor**: véus cortados em peças (`.v37-veil__piece`: 5 colunas, 6 faixas, 1 nas demais) animadas só por `transform`; a Dobra usa recorte estático + translação diagonal. Única repintura: a íris do Círculo.
+- Medição isolada (`VEILS=off|on node qa/v37-perf.mjs`, mesmo build, 3 rodadas intercaladas, 390px CPU 4×): custo dos véus entre 0 e ~4ms/quadro. O custo base dessas seções (~45–65ms/quadro nesse perfil, ~17ms em modo essencial) vem dos efeitos pré-existentes (carrossel 3D, BA 3D, globo), não das transições.
