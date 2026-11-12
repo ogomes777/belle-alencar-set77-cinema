@@ -45,8 +45,8 @@ try{
   await move(1.25);
   await page.waitForTimeout(130);
   let high=await page.evaluate(()=>scrollY);
-  await page.evaluate(()=>scrollBy({top:-Math.round(innerHeight*1.45),behavior:'instant'}));
-  await page.waitForTimeout(160);
+  await page.evaluate(()=>document.querySelector('#colecao .pgrid')?.scrollIntoView({block:'start',behavior:'instant'}));
+  await page.waitForTimeout(180);
   let low=await page.evaluate(()=>scrollY);
   let mid=await cssCard(page,id);
   for(let attempt=0;attempt<10;attempt++){
