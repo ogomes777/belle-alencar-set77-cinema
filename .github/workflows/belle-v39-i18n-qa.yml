@@ -1,0 +1,47 @@
+name: Belle V39 | Complete Locale QA
+on:
+  push:
+    branches:
+      - fix/belle-v39-i18n-four-languages-all-ui
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  i18n-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Test four-language coverage and reversible translations
+        run: npm test
+      - name: TypeScript strict + production build
+        run: npm run build
+      - name: Install headless Chromium
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: Real mobile/desktop locale switching
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v39-preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/i18n-v39.mjs
+      - name: Preserve language screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: belle-v39-language-proof
+          path: artifacts/i18n-v39/*.png
+          retention-days: 7
+          if-no-files-found: ignore
