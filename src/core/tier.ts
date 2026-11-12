@@ -10,6 +10,7 @@ export interface Capabilities {
   coarse: boolean;
   small: boolean;
   webgl2: boolean;
+  softwareRenderer?: boolean;
   cores: number;
   memory: number | null;
 }
@@ -17,9 +18,19 @@ export interface Capabilities {
 export function detectCapabilities(): Capabilities {
   const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
   let webgl2 = false;
+  let softwareRenderer = false;
   try {
     const c = document.createElement('canvas');
-    webgl2 = !!c.getContext('webgl2');
+    const gl = c.getContext('webgl2');
+    webgl2 = !!gl;
+    if(gl){
+      // WebGL2 can exist on SwiftShader/llvmpipe without a hardware GPU.
+      // Do not compile an expensive boutique on a software rasterizer.
+      const ext=gl.getExtension('WEBGL_debug_renderer_info');
+      const renderer=(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)) as string|null;
+      softwareRenderer=/swiftshader|llvmpipe|software rasterizer|softpipe/i.test(renderer??'');
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+    }
   } catch {
     webgl2 = false;
   }
@@ -29,6 +40,7 @@ export function detectCapabilities(): Capabilities {
     coarse: matchMedia('(pointer: coarse)').matches,
     small: matchMedia('(max-width: 899px)').matches,
     webgl2,
+    softwareRenderer,
     cores: nav.hardwareConcurrency || 4,
     memory: typeof nav.deviceMemory === 'number' ? nav.deviceMemory : null,
   };
@@ -36,7 +48,7 @@ export function detectCapabilities(): Capabilities {
 
 export function resolveTier(c: Capabilities, intensity: Intensity, forced?: string | null): Tier {
   if (forced === 'cinema' || forced === 'touch' || forced === 'static') return forced;
-  if (intensity === 'essential' || c.reducedMotion || c.saveData || !c.webgl2) return 'static';
+  if (intensity === 'essential' || c.reducedMotion || c.saveData || !c.webgl2 || c.softwareRenderer) return 'static';
   // On devices with fewer than four CPU cores, constructing the 3D scene can
   // cause long main-thread stalls. Preserve cinematic posters and navigation.
   if (c.cores < 4 || (c.memory !== null && c.memory < 3)) return 'static';

@@ -146,7 +146,10 @@ export class World {
 
   setProgress(p: number, immediate = false): void {
     this.target = THREE.MathUtils.clamp(p, 0, 1);
-    if (immediate) this.shown = this.target;
+    // A large chapter jump (fast wheel, PageUp, scrollbar grab or BFCache)
+    // must not replay every missed chapter over several seconds.
+    // Small changes still preserve smooth scrubbing.
+    if(immediate || Math.abs(this.target-this.shown)>.16)this.shown=this.target;
     this.kick();
   }
 
@@ -319,7 +322,8 @@ export class World {
     if (!this.visible || document.hidden || this.failed) return;
     // dt real (até 250 ms) para a suavização não "atrasar" em GPU lenta;
     // a física usa passo fixo e as molas recebem dt limitado.
-    const dt = Math.max(1 / 240, Math.min(0.055, (now - this.last) / 1000 || 1 / 60));
+    const elapsed = Math.max(1 / 240, Math.min(0.25, (now - this.last) / 1000 || 1 / 60));
+    const dt=Math.min(.055,elapsed);
     this.last = now;
     this.step(dt, false);
     this.renderer.render(this.scene, this.camera);
@@ -328,7 +332,7 @@ export class World {
       this.firstFrameSent = true;
       this.opts.onFirstFrame?.();
     }
-    this.govern(dt);
+    this.govern(elapsed);
     this.raf = requestAnimationFrame(this.loop);
   };
 
