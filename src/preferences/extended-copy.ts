@@ -527,5 +527,203 @@ export const additionalPairs = [
     "My favorites",
     "Mis favoritos",
     "I miei preferiti"
+  ],
+  [
+    "Belle Alencar, Moda e Acessórios",
+    "Belle Alencar, Fashion & Accessories",
+    "Belle Alencar, Moda y Accesorios",
+    "Belle Alencar, Moda e Accessori"
+  ],
+  [
+    "Escolha",
+    "Choose",
+    "Elige",
+    "Scegli"
+  ],
+  [
+    "Imagem desta peça indisponível.",
+    "Image unavailable for this item.",
+    "Imagen no disponible para esta prenda.",
+    "Immagine non disponibile per questo capo."
+  ],
+  [
+    "Sua loja mudou. Confirme a peça novamente.",
+    "Your selected store changed. Please confirm the item again.",
+    "Tu tienda seleccionada ha cambiado. Confirma la prenda de nuevo.",
+    "Il negozio selezionato è cambiato. Conferma nuovamente il capo."
+  ],
+  [
+    "Selecione a unidade Belle para continuar.",
+    "Select a Belle location to continue.",
+    "Selecciona una tienda Belle para continuar.",
+    "Seleziona un negozio Belle per continuare."
+  ],
+  [
+    "Vista da parede oposta. Arraste no cômodo para continuar explorando.",
+    "Opposite wall view. Drag inside the room to keep exploring.",
+    "Vista de la pared opuesta. Arrastra por la sala para seguir explorando.",
+    "Vista della parete opposta. Trascina nella stanza per continuare a esplorare."
+  ],
+  [
+    "03 / BOUTIQUE · ARARA VIVA",
+    "03 / BOUTIQUE · LIVING RACK",
+    "03 / BOUTIQUE · PERCHERO VIVO",
+    "03 / BOUTIQUE · APPENDIABITI VIVO"
+  ],
+  [
+    "ROLE PARA CONTINUAR",
+    "SCROLL TO CONTINUE",
+    "DESLIZA PARA CONTINUAR",
+    "SCORRI PER CONTINUARE"
+  ],
+  [
+    "Explorar peça ↗",
+    "Explore item ↗",
+    "Explorar prenda ↗",
+    "Esplora capo ↗"
+  ],
+  [
+    "Sacola",
+    "Bag",
+    "Bolsa",
+    "Borsa"
+  ],
+  [
+    "ARRASTE NA LOJA PARA OLHAR AO REDOR",
+    "DRAG INSIDE THE BOUTIQUE TO LOOK AROUND",
+    "ARRASTRA POR LA TIENDA PARA MIRAR ALREDEDOR",
+    "TRASCINA NEL NEGOZIO PER GUARDARTI INTORNO"
+  ],
+  [
+    "NAS ROUPAS PARA PERCORRER",
+    "ON THE CLOTHES TO BROWSE",
+    "SOBRE LA ROPA PARA EXPLORAR",
+    "SUI VESTITI PER SCORRERE"
+  ],
+  [
+    "BELLE ALENCAR · REFERÊNCIA EDITORIAL",
+    "BELLE ALENCAR · EDITORIAL REFERENCE",
+    "BELLE ALENCAR · REFERENCIA EDITORIAL",
+    "BELLE ALENCAR · RIFERIMENTO EDITORIALE"
+  ],
+  [
+    "Produto demonstrativo. Preço e estoque sujeitos à confirmação na loja.",
+    "Illustrative item. Price and stock must be confirmed with the store.",
+    "Producto demostrativo. Precio y existencias sujetos a confirmación en tienda.",
+    "Articolo dimostrativo. Prezzo e disponibilità da confermare in negozio."
+  ],
+  [
+    "Voltar à arara ×",
+    "Back to rack ×",
+    "Volver al perchero ×",
+    "Torna all'appendiabiti ×"
+  ],
+  [
+    "Selecione o tamanho primeiro.",
+    "Select a size first.",
+    "Elige una talla primero.",
+    "Seleziona prima una taglia."
+  ],
+  [
+    "Ver no provador",
+    "View in fitting room",
+    "Ver en el probador",
+    "Vedi nel camerino"
+  ],
+  [
+    "Escolha sua loja para adicionar à sacola.",
+    "Choose your store to add an item to your bag.",
+    "Elige tu tienda para añadir la prenda a tu bolsa.",
+    "Scegli il negozio per aggiungere un capo alla borsa."
+  ],
+  [
+    "Ver no espaço de provador",
+    "View in fitting-room space",
+    "Ver en el espacio de probador",
+    "Visualizza nello spazio camerino"
+  ],
+  [
+    "Estudo sintético em vista frontal. Não é uma prova virtual nem uma peça oficial da Belle. Tamanho e disponibilidade são confirmados pela loja.",
+    "Synthetic front-view study. This is not a virtual try-on or an official Belle product. Size and availability must be confirmed with the store.",
+    "Estudio sintético de vista frontal. No es un probador virtual ni una prenda oficial de Belle. Confirma talla y disponibilidad con la tienda.",
+    "Studio sintetico in vista frontale. Non è una prova virtuale né un capo ufficiale Belle. Taglia e disponibilità vanno confermate con il negozio."
+  ],
+  [
+    "Você também tem peças salvas na sacola de",
+    "You also have items saved in the bag for",
+    "También tienes prendas guardadas en la bolsa de",
+    "Hai anche capi salvati nella borsa di"
+  ],
+  [
+    "Endereço a confirmar com a loja",
+    "Address to be confirmed with the store",
+    "Dirección por confirmar con la tienda",
+    "Indirizzo da confermare con il negozio"
+  ],
+  [
+    "Levar as peças para",
+    "Move the items to",
+    "Llevar las prendas a",
+    "Porta i capi a"
+  ],
+  [
+    "Manter a sacola de",
+    "Keep the bag for",
+    "Mantener la bolsa de",
+    "Mantieni la borsa di"
+  ],
+  [
+    "e começar outra",
+    "and start another",
+    "y empezar otra",
+    "e inizia un'altra"
+  ],
+  [
+    "Continuar em",
+    "Continue in",
+    "Continuar en",
+    "Continua a"
+  ],
+  [
+    "peça exibida",
+    "item displayed",
+    "prenda mostrada",
+    "capo mostrato"
+  ],
+  [
+    "peças exibidas",
+    "items displayed",
+    "prendas mostradas",
+    "capi mostrati"
+  ],
+  [
+    "Tamanho único",
+    "One size",
+    "Talla única",
+    "Taglia unica"
+  ],
+  [
+    "Na sacola ✓ · adicionar outra",
+    "In bag ✓ · add another",
+    "En la bolsa ✓ · añadir otra",
+    "Nella borsa ✓ · aggiungine un altro"
+  ],
+  [
+    "A loja mudou. Confirme a peça novamente.",
+    "The store changed. Confirm the item again.",
+    "La tienda cambió. Confirma la prenda de nuevo.",
+    "Il negozio è cambiato. Conferma di nuovo il capo."
+  ],
+  [
+    "A disponibilidade será confirmada pela loja.",
+    "Availability will be confirmed by the store.",
+    "La disponibilidad será confirmada por la tienda.",
+    "La disponibilità sarà confermata dal negozio."
+  ],
+  [
+    "Consultar a loja de",
+    "Ask the store in",
+    "Consultar con la tienda de",
+    "Chiedi al negozio di"
   ]
 ] as const;
