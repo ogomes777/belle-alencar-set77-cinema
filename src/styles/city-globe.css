@@ -1,0 +1,18 @@
+/* Scoped white stage; does not recolor other chapters. */
+html body #lojas.stores {background:#fff;color:#493b2d;position:relative;overflow:hidden}
+html body #lojas .lede,html body #lojas .stores__note {color:#665d52}
+html body #lojas .display,html body #lojas .store-card h3 {color:#493b2d}
+html body #lojas .store-card__addr {color:#665d52}
+html body #lojas .btn--line {--fg:#594323;--bd:#ad894e;--fill:#eee3cf;color:#594323}
+html body #lojas .stores__orbit {width:100%;max-width:700px;margin:0 auto;align-self:center}
+.stores__globe-caption {font-size:12px;color:#695a44;text-align:center;margin:0;grid-column:2;grid-row:4}
+@media(min-width:960px){html body #lojas.stores {grid-template-columns:minmax(0,480px) minmax(0,700px);column-gap:24px}}
+@media(max-width:959px){.stores__globe-caption{margin:0 0 28px}.stores__orbit{max-width:560px!important}}
+.stores__flight{position:fixed;left:0;top:0;z-index:40;pointer-events:none;will-change:transform;filter:drop-shadow(0 8px 8px #79592330)}
+.stores__flight[hidden]{display:none}
+@media(prefers-reduced-motion:reduce){.stores__flight{display:none}}
+html body #lojas.stores .section-head .display,html body #lojas.stores .section-head .display em{background:none;-webkit-text-fill-color:#765129!important;-webkit-text-stroke:0;animation:none;text-shadow:none}
+.stores-map{width:min(900px,94vw);max-height:90dvh;border:1px solid #c4aa7c;border-radius:16px;padding:20px;background:#fff;color:#493b2d}
+.stores-map::backdrop{background:#221b1499}
+.stores-map form{text-align:right}.stores-map button{padding:12px;cursor:pointer}
+.stores-map iframe{display:block;width:100%;height:55dvh;border:0;margin:16px 0}.stores-map a{display:inline-block;padding:12px;color:#765129}

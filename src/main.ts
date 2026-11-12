@@ -1,3 +1,5 @@
+import { initStoreMap } from './astral/store-map';
+import './styles/city-globe.css';
 import { initStoreOrbit } from './astral/orbit';
 /**
  * BELLE ALENCAR · boot.
@@ -81,3 +83,4 @@ if (occasionSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) 
 initFilm(director);
 
 initStoreOrbit();
+initStoreMap();

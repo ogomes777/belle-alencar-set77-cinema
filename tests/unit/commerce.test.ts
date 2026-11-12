@@ -39,11 +39,11 @@ describe('dados demonstrativos honestos', () => {
       expect(p.mediaRights.status).toBe('demo');
     }
   });
-  it('só Araxá tem endereço; contato por unidade não confirmado', () => {
+  it('endereços fornecidos pelo cliente; contato por unidade não confirmado', () => {
     expect(STORES.araxa.address).toContain('João Sena, 103');
-    expect(STORES.frutal.address).toBeNull();
-    expect(STORES.catalao.address).toBeNull();
-    expect(STORES.mineiros.address).toBeNull();
+    expect(STORES.frutal.address).toContain('Delfino Nunes, 382');
+    expect(STORES.catalao.address).toContain('José Marcelino, 206');
+    expect(STORES.mineiros.address).toContain('Quarta Avenida, 76');
     for (const s of Object.values(STORES)) expect(s.contact.contactConfirmed).toBe(false);
   });
   it('checkout online desativado com motivo', () => {

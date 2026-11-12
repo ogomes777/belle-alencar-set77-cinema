@@ -1,7 +1,7 @@
 import type { Store, StoreId } from './types';
 import { STORE_IDS } from './types';
 
-/** Fonte: docs/FACTS_AND_GAPS.md. Somente Araxá tem endereço confirmado. */
+/** Fonte: docs/FACTS_AND_GAPS.md. Endereços confirmados nos prints enviados pelo cliente em 12/11/2026. */
 export const OFFICIAL_WHATSAPP = 'https://wa.me/message/YYDB5NC7JMUQP1';
 export const OFFICIAL_INSTAGRAM = 'https://www.instagram.com/belle.alencar/';
 
@@ -16,15 +16,15 @@ export const STORES: Record<StoreId, Store> = {
   },
   frutal: {
     id: 'frutal', slug: 'frutal', city: 'Frutal', state: 'MG',
-    address: null, addressSource: null, active: true, contact, openingHours: null, fulfillmentRules: null,
+    address: 'Av. Coronel Delfino Nunes, 382', addressSource: 'bio do Instagram enviada pelo cliente em 12/11/2026', active: true, contact, openingHours: null, fulfillmentRules: null,
   },
   catalao: {
     id: 'catalao', slug: 'catalao', city: 'Catalão', state: 'GO',
-    address: null, addressSource: null, active: true, contact, openingHours: null, fulfillmentRules: null,
+    address: 'Av. José Marcelino, 206, Centro', addressSource: 'bio do Instagram enviada pelo cliente em 12/11/2026', active: true, contact, openingHours: null, fulfillmentRules: null,
   },
   mineiros: {
     id: 'mineiros', slug: 'mineiros', city: 'Mineiros', state: 'GO',
-    address: null, addressSource: null, active: true, contact, openingHours: null, fulfillmentRules: null,
+    address: 'Quarta Avenida, 76, Centro', addressSource: 'bio do Instagram enviada pelo cliente em 12/11/2026', active: true, contact, openingHours: null, fulfillmentRules: null,
   },
 };
 
