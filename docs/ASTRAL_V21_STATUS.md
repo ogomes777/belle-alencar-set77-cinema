@@ -9,3 +9,7 @@ O componente original pago não está no kit nem no repositório. Não foi detec
 Para continuar, configure localmente uma licença React Bits Pro válida, sem enviar a chave na conversa, e disponibilize o ambiente autenticado. Então instale o componente original pelo registry autorizado, confirme seu export e suas props reais, integre a ilha somente em `#lojas`, e faça QA visual, performance, comércio e acessibilidade antes de preview ou produção.
 
 Nenhum preview ou produção foi publicado. A Vercel não apresenta ferramenta disponível nesta sessão; acesso à API deve ser reconfirmado quando o componente estiver disponível. Os testes executados nesta branch validam apenas a base e o preset, não a esfera.
+
+## Aproximação solicitada posteriormente
+
+A pedido do usuário, foi criada uma aproximação original em Canvas 2D (`src/astral/orbit.ts`), aplicada apenas em `#lojas`. Ela não usa nem contém código do React Bits Pro, não implementa todas as interações do Astral Shell e não possui comprovação de equivalência percentual com o vídeo. A esfera usa pontos e linhas douradas, rotação, oscilação luminosa e pausa fora da tela, com quadro estático para movimento reduzido. Não intercepta os controles das lojas nem o scroll. A versão licenciada continua dependendo do acesso descrito acima.

@@ -1,3 +1,4 @@
+import { initStoreOrbit } from './astral/orbit';
 /**
  * BELLE ALENCAR · boot.
  * Ordem: estilos → monogramas → intro → shell → comércio → filme (3D lazy).
@@ -76,3 +77,5 @@ if (occasionSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) 
   }
 }
 initFilm(director);
+
+initStoreOrbit();
