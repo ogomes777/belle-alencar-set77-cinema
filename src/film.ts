@@ -337,9 +337,9 @@ export function initFilm(director: Director): void {
   new IntersectionObserver((entries) => {
     const vis = entries.some((e) => e.isIntersecting);
     if(vis){
-      // Landing revisits and BFCache restores must pick up at the CURRENT
-      // scroll chapter rather than easing across the entire forgotten scene.
-      progress=clamp((scrollY-filmTop)/range,0,1);
+      // Re-entry is an independent recovery path. Some touch devices defer
+      // scroll events during a very fast native jump across many sections.
+      applyScrollPosition();
       world?.setProgress(progress,true);
       if(world)world.setVisible(true);
     }else world?.setVisible(false);
@@ -348,7 +348,7 @@ export function initFilm(director: Director): void {
   window.addEventListener('pageshow',(event)=>{
     if(!event.persisted)return;
     scheduleMeasure();
-    progress=clamp((scrollY-filmTop)/range,0,1);
+    applyScrollPosition();
     world?.setProgress(progress,true);
     if(tier!=='static'&&!world&&!loading)void startWorld();
   });
