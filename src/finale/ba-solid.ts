@@ -104,7 +104,7 @@ export function initFinaleSolid():void {
       const THREE=await import('three');
       if(!active||isStill())return;
       renderer=new THREE.WebGLRenderer({
-        canvas,alpha:true,antialias:true,powerPreference:'high-performance'
+        canvas:canvas!,alpha:true,antialias:true,powerPreference:'high-performance'
       });
       renderer.outputColorSpace=THREE.SRGBColorSpace;
       renderer.toneMapping=THREE.ACESFilmicToneMapping;
