@@ -31,18 +31,30 @@ try{
   await page.locator('#colecao .collection__handoff').evaluate(el=>
     el.scrollIntoView({block:'center',behavior:'instant'})
   );
+  // Deep-link jumps may coincide with image/layout reflow. Re-align the actual
+  // handoff position before asserting scroll progress, not just the first tick.
   await page.waitForTimeout(260);
+  let aligned=await page.evaluate(()=>{
+    const r=document.querySelector('#colecao .collection__handoff').getBoundingClientRect();
+    return r.top<innerHeight*.78&&r.bottom>innerHeight*.1;
+  });
+  if(!aligned){
+    await page.locator('#colecao .collection__handoff').evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+    await page.waitForTimeout(320);
+  }
   const seam=await page.evaluate(()=>{
     const a=document.querySelector('#colecao').getBoundingClientRect();
     const b=document.querySelector('#como-comprar').getBoundingClientRect();
     const css=getComputedStyle(document.querySelector('#colecao'));
     const bridge=getComputedStyle(document.querySelector('#colecao .collection__handoff'));
     return {gap:b.top-a.bottom,scrollWidth:document.documentElement.scrollWidth,width:innerWidth,
-      bridgeBackground:bridge.backgroundImage,story:css.getPropertyValue('--collection-bridge')};
+      bridgeBackground:bridge.backgroundImage,story:css.getPropertyValue('--collection-bridge'),
+      handoffTop:document.querySelector('#colecao .collection__handoff').getBoundingClientRect().top,
+      scrollY,innerHeight};
   });
   ok(Math.abs(seam.gap)<=3,width+': no visible geometric gap between catalog and next video '+seam.gap);
   ok(seam.scrollWidth<=seam.width+1,width+': no horizontal overflow in chapter handoff');
-  ok(Number(seam.story)>=.1,width+': handoff has scroll-driven reveal progress ('+seam.story+')');
+  ok(Number(seam.story)>=.1,width+': handoff has scroll-driven reveal progress '+JSON.stringify(seam));
   await page.locator('#catalogMount [data-occ="noite"]').click();
   const filtered=await page.locator('#colecao .pcard').count();
   ok(filtered>0&&filtered<48,width+': commerce filters remain live');
