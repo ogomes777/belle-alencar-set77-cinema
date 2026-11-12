@@ -21,7 +21,7 @@ try{
   page.on('pageerror',e=>errors.push(e.message));
   await page.addInitScript(()=>{try{sessionStorage.setItem('belle:v4:intro','1')}catch{}});
   await page.goto(base+'/?tier=static',{waitUntil:'load'});
-  await page.waitForSelector('#searchDialog');
+  await page.waitForSelector('#searchDialog',{state:'attached'});
   await page.locator('#searchButton').click();
   const search=page.locator('#searchDialog');
   await search.locator('.ba-v38-suggest-card').first().waitFor({state:'visible'});
