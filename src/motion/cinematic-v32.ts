@@ -150,7 +150,11 @@ export function initCinematicV32():()=>void {
     const vh=Math.max(400,window.innerHeight);
     for(const entry of entries){
       const rect=entry.section.getBoundingClientRect();
-      if(!visible(rect,vh))continue;
+      if(!visible(rect,vh)){
+        entry.section.classList.remove('md32-near');
+        continue;
+      }
+      entry.section.classList.add('md32-near');
       // A reversible movement driven by the *incoming* section's proximity.
       // At .90vh top edge it starts; by .38vh all content is unobscured.
       const p=clamp((vh*.90-rect.top)/(vh*.52));
