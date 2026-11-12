@@ -1,3 +1,4 @@
+import { CITIES, spherePoint, journey } from './geography';
 import { commerceApi } from '../commerce/api';
 /** Original lightweight decorative approximation; not React Bits Astral Shell. */
 export function initStoreOrbit(): void {
@@ -52,12 +53,11 @@ export function initStoreOrbit(): void {
     const nz=qw*z+qx*y-qy*x+qz*w, nw=qw*w-qx*x-qy*y-qz*z;
     const n=Math.hypot(nx,ny,nz,nw)||1; orientation=[nx/n,ny/n,nz/n,nw/n];
   }
-  const cities = [
-    {name:'Araxá',lat:-19.593,lon:-46.941,state:'Minas Gerais'},
-    {name:'Frutal',lat:-20.025,lon:-48.935,state:'Minas Gerais'},
-    {name:'Catalão',lat:-18.165,lon:-47.946,state:'Goiás'},
-    {name:'Mineiros',lat:-17.565,lon:-52.554,state:'Goiás'},
-  ];
+  const cities=CITIES;
+  type Border={name:string;kind:string;rings:number[][][]};
+  let borders:{name:string;kind:string;rings:ReturnType<typeof spherePoint>[][]}[]=[];
+  fetch('/geo/boundaries.json').then(r=>{if(!r.ok)throw Error('geo');return r.json();}).then((data:Border[])=>{borders=data.map(b=>({...b,rings:b.rings.map(r=>r.map(p=>spherePoint(p[1]!,p[0]!)))}));wake();}).catch(()=>{caption.textContent='Arraste para girar · escolha sua loja abaixo';});
+  let navigation=true;
   let selected:string|null=null, zoom=1, focusAt=0, arrival=1;
   // Scroll-derived arrival is reversible and does not intercept page scrolling.
   const flight=document.createElement('span');flight.className='stores__flight';flight.setAttribute('aria-hidden','true');
@@ -70,12 +70,12 @@ export function initStoreOrbit(): void {
     const how=document.querySelector<HTMLElement>('#como-comprar');
     if(!how||selected||still()){flight.hidden=true;arrival=1;return;}
     const rect=how.getBoundingClientRect(),target=canvas!.getBoundingClientRect();
-    const start=scrollY+rect.top+Math.max(0,rect.height-innerHeight)*.86;
+    const start=scrollY+rect.top+Math.max(0,rect.height-innerHeight)*.61;
     const finish=scrollY+target.top+target.height*.5-innerHeight*.55;
     const p=Math.max(0,Math.min(1,(scrollY-start)/Math.max(1,finish-start)));
     flight.hidden=p<=0||p>=1;arrival=p;
     const x=innerWidth*.5+(target.x+target.width*.5-innerWidth*.5)*p;
-    const y=innerHeight*.5+(target.y+target.height*.5-innerHeight*.5)*p-Math.sin(p*Math.PI)*90;
+    const y=innerHeight*.5+(target.y+target.height*.5-innerHeight*.5)*p-Math.sin(p*Math.PI)*90+Math.sin(Math.max(0,p-.78)*Math.PI/.22)*24;
     flight.style.transform=`translate3d(${x-38}px,${y-38}px,0) rotate(${Math.sin(p*Math.PI)*-18}deg) scale(${1-p*.4})`;
   }
   window.addEventListener('scroll',()=>{if(!flightFrame)flightFrame=requestAnimationFrame(updateFlight);},{passive:true});
@@ -83,33 +83,42 @@ export function initStoreOrbit(): void {
   const caption=document.createElement('p'); caption.className='stores__globe-caption';
   caption.setAttribute('role','status'); caption.textContent='Quatro cidades conectadas · arraste para girar';
   canvas.insertAdjacentElement('afterend',caption);
-  function syncCity(){
+  function syncCity(userChange=false){
     const next=commerceApi()?.storeCity()??null;
     if(next===selected)return;
     selected=next;flight.hidden=true;arrival=1;focusAt=performance.now();velocityX=velocityY=0;
     const city=cities.find(c=>c.name===selected);
     if(city){
       // Face the actual city coordinates toward the camera before the two-stage approach.
-      angle=(city.lon-90)*Math.PI/180;orientation=[0,0,0,1];rotate(0,-city.lat*Math.PI/180);
+      navigation=true;
+      const rect=canvas!.getBoundingClientRect();
+      if(userChange&&(rect.bottom<80||rect.top>innerHeight-80))canvas!.scrollIntoView({behavior:still()?'auto':'smooth',block:'center'});
       caption.textContent=`${city.state} → ${city.name} · Ver no mapa para o endereço da loja`;
     }
     wake();
   }
-  queueMicrotask(()=>{syncCity();commerceApi()?.onChange(syncCity);});
+  queueMicrotask(()=>{syncCity();commerceApi()?.onChange(()=>syncCity(true));});
   rotate(0,.34);
   let pulseX = -9999, pulseY = -9999, pulseAt = 0;
   function draw(now: number) {
     frame=0;
     if (!visible || document.hidden) return;
     if (!still() && last) {
-      const dt=Math.min(40,now-last); if(!selected) angle += dt*.00018;
+      const dt=Math.min(40,now-last); if(!selected && arrival<.85) angle += dt*.00004;
       if (!dragging && (Math.abs(velocityX)+Math.abs(velocityY)>.00001)) {
         rotate(velocityX*dt,velocityY*dt);const damping=Math.exp(-dt/420);velocityX*=damping;velocityY*=damping;
       }
     }
     last=now;
-    const approach=selected?Math.min(1,(now-focusAt)/1800):0;
-    zoom=selected?(still()?1.12:1+.06*Math.min(1,approach*2)+.06*Math.max(0,approach*2-1)):1;
+    const city=cities.find(c=>c.name===selected);
+    if(city&&navigation){
+      const camera=journey(city,still()?5000:now-focusAt);
+      zoom=camera.zoom;angle=(camera.lon-90)*Math.PI/180;
+      orientation=[0,0,0,1];rotate(0,-camera.lat*Math.PI/180);
+      section!.dataset.geoStage=camera.label;
+      const message=`${camera.label} · ${city.name}, ${city.state}`;
+      if(caption.textContent!==message)caption.textContent=message;
+    }
     const dpr=Math.min(devicePixelRatio||1,mobile ? 1.15 : 1.5), w=canvas!.clientWidth;
     if (size!==w || canvas!.width!==Math.round(w*dpr)) {size=w;canvas!.width=Math.round(w*dpr);canvas!.height=Math.round(w*dpr);}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,w);
@@ -125,7 +134,11 @@ export function initStoreOrbit(): void {
     const glow=ctx.createRadialGradient(w/2,w/2,radius*.18,w/2,w/2,radius*1.3);
     glow.addColorStop(0,'rgba(255,255,255,0)');glow.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,w);
+    ctx.save();ctx.beginPath();ctx.arc(w/2,w/2,w*.46,0,Math.PI*2);
+    ctx.fillStyle='#fffdf8';ctx.fill();ctx.strokeStyle='rgba(173,137,78,.3)';ctx.lineWidth=1;ctx.stroke();ctx.clip();
+    if(zoom<6){
     const projected=points.map(project);
+    ctx.globalAlpha=Math.max(.04,1-(zoom-1)/5);
     ctx.globalCompositeOperation='source-over';
     ctx.fillStyle='rgba(255,176,66,.42)';ctx.beginPath();
     for (const p of inner) { const q=project(p); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
@@ -152,20 +165,44 @@ export function initStoreOrbit(): void {
       ctx.fillStyle='rgba(255,229,178,.8)';ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fill();
     }
     ctx.globalCompositeOperation='source-over';
+    }
+    ctx.globalAlpha=1;
+    // All boundaries and pins share the same spherical geographic projection.
+    for(const border of borders){
+      if(zoom>8&&border.kind!=='state')continue;
+      ctx.beginPath();
+      for(const ring of border.rings){
+        let pen=false;
+        for(const point of ring){
+          const q=project(point);
+          if(q.z<0){pen=false;continue;}
+          if(pen)ctx.lineTo(q.x,q.y);else ctx.moveTo(q.x,q.y);pen=true;
+        }
+      }
+      ctx.lineWidth=border.kind==='state'?1.8:1;
+      ctx.strokeStyle=border.kind==='state'?'#997025':'rgba(125,103,63,.65)';ctx.stroke();
+    }
+    if(zoom>2){
+      for(const region of [{name:'Minas Gerais',lat:-18.5,lon:-44.6},{name:'Goiás',lat:-15.8,lon:-49.6}]){
+        const p=project(spherePoint(region.lat,region.lon));
+        if(p.z>0){ctx.font='12px sans-serif';ctx.fillStyle='#80663e';ctx.textAlign='center';ctx.fillText(region.name,p.x,p.y);}
+      }
+    }
     // Geographic anchors with separated callouts: cities are close on a world globe.
     cities.forEach((city,i)=>{
       if(selected && city.name!==selected)return;
       const lat=city.lat*Math.PI/180,lon=city.lon*Math.PI/180;
       const p=project({x:Math.cos(lat)*Math.cos(lon),y:-Math.sin(lat),z:Math.cos(lat)*Math.sin(lon)});
       if(p.z<-.12)return;
-      const side=i%2?1:-1, split=still()?1:Math.max(0,Math.min(1,(arrival-.65)/.35));
-      const labelX=selected?w*.5:w*.5+(w*(side>0?.78:.22)-w*.5)*split;
-      const labelY=selected?w*.28:w*.5+(w*(i<2?.2:.8)-w*.5)*split;
+      const side=i%2?1:-1, split=still()?1:Math.max(0,Math.min(1,(arrival-.85)/.15));
+      const labelX=selected?p.x:p.x+side*28*split;
+      const labelY=selected?p.y-38:p.y+(i<2?48:-48)*split;
       ctx.strokeStyle='rgba(149,102,34,.55)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(labelX,labelY+12);ctx.stroke();
       ctx.fillStyle='#ad791d';ctx.beginPath();ctx.arc(p.x,p.y,3+(still()?0:Math.sin(now*.003+i)*1.2),0,Math.PI*2);ctx.fill();
-      if(bagImage.complete&&bagImage.naturalWidth)ctx.drawImage(bagImage,labelX-22,labelY-38,44,44);
+      if(bagImage.complete&&bagImage.naturalWidth)ctx.drawImage(bagImage,labelX-17,labelY-30,34,34);
       ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#594323';ctx.fillText(city.name,labelX,labelY+23);
     });
+    ctx.restore();
     if (!still()) frame=requestAnimationFrame(draw);
   }
   const wake=()=>{last=0;if(visible&&!document.hidden&&!frame) frame=requestAnimationFrame(draw)};
@@ -181,7 +218,7 @@ export function initStoreOrbit(): void {
   canvas.addEventListener('pointerleave',()=>{ if(!dragging){pointerX=-9999;pointerY=-9999;if(still())wake();} });
   canvas.addEventListener('pointerdown',event=>{
     if(dragging || (event.pointerType==='mouse' && event.button!==0)) return;
-    dragging=true;activePointer=event.pointerId;previousX=event.clientX;previousY=event.clientY;
+    navigation=false;dragging=true;activePointer=event.pointerId;previousX=event.clientX;previousY=event.clientY;
     velocityX=0;velocityY=0;lastDragTime=performance.now();canvas.setPointerCapture(event.pointerId);
   });
   function release(event:PointerEvent) {

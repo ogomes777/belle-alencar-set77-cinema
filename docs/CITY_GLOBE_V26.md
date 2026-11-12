@@ -23,3 +23,17 @@ Limites reais:
 - Maps embed depende da rede/Google; a verificação comprovou URL e modal, não carregamento cartográfico externo neste ambiente.
 - Voo completo entre capítulos requer revisão adicional com vídeo em movimento; não declarar fidelidade integral à referência. O efeito de impacto/split ainda é uma aproximação.
 - Nenhum deploy confirmado: plugin Vercel não disponível e API Vercel retorna HTTP403 neste ambiente. Produção preservada.
+
+
+## Evolução geográfica — 12/11/2026
+
+Substitui as limitações anteriores de ausência de contornos/etapas geográficas:
+- Países Natural Earth 1:110m e limites de MG/GO 1:50m, domínio público, simplificados localmente. Fonte em docs/licenses/GEOGRAPHY.md.
+- Mesma projeção esférica para contornos e coordenadas dos quatro centros urbanos; etiquetas próximas e linhas-guia. Lojas não são apresentadas como coordenadas de levantamento cadastral.
+- Câmera contínua Brasil → estado → cidade em 4,2s; movimento reduzido vai direto ao destino. Arraste manual interrompe a navegação automática.
+- Ao selecionar uma loja fora da área visível do globo, a esfera entra na tela; restauração inicial da loja não rola a página.
+- Google Maps aparece dentro da área da esfera sob clique explícito. Voltar preserva a seleção. Mapa/rotas usam endereço da loja; nada simula ruas ou atribuições Google.
+- Sacola surge na progressão .61 do capítulo do vestido, atravessa os capítulos e se separa nos quatro destinos. Retorno do scroll reverte o percurso.
+- Projeções geográficas são pré-calculadas ao carregar; malha luminosa deixa de ser desenhada no zoom urbano; render suspenso fora da tela.
+
+Validação adicional: 40 testes unitários, build aprovado, percurso estado/cidade/mapa/retorno em 360/390/768/1440, sem overflow nem exceções JS. Voo verificado nos progressos 0/.1/.5/.9/1 e no retorno. Evidências em reports/city-globe/geographic. Cartografia Google externa não pode ser validada visualmente sob a política de rede atual. Não houve publicação. Não há garantia de FPS em aparelhos físicos; a navegação continua sendo uma esfera editorial com mapa incorporado, não um motor Google Earth.

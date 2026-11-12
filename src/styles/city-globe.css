@@ -16,3 +16,12 @@ html body #lojas.stores .section-head .display,html body #lojas.stores .section-
 .stores-map::backdrop{background:#221b1499}
 .stores-map form{text-align:right}.stores-map button{padding:12px;cursor:pointer}
 .stores-map iframe{display:block;width:100%;height:55dvh;border:0;margin:16px 0}.stores-map a{display:inline-block;padding:12px;color:#765129}
+.stores__geo-stage{position:relative;grid-area:globe;width:100%;max-width:700px;margin:auto;isolation:isolate}
+.stores__enter-map{display:block;margin:8px auto 0!important;font-size:12px;cursor:pointer}
+.stores__enter-map[hidden]{display:none}
+.stores__geo-stage .stores-map{position:absolute;inset:0;margin:0;width:100%;height:100%;max-height:none;box-sizing:border-box;z-index:2;overflow:auto;box-shadow:0 8px 40px #76512915;animation:mapArrival .65s ease both}
+.stores__geo-stage .stores-map iframe{height:calc(100% - 150px);min-height:220px}
+.stores__geo-stage .stores-map h2{font-size:20px;margin:6px 0}
+.stores__geo-stage.is-map canvas{visibility:hidden}
+@keyframes mapArrival{from{clip-path:circle(8% at 50% 50%);opacity:0}to{clip-path:circle(75% at 50% 50%);opacity:1}}
+@media(prefers-reduced-motion:reduce){.stores__geo-stage .stores-map{animation:none}}
