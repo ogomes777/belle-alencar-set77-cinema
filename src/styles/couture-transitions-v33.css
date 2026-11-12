@@ -32,7 +32,7 @@ html[data-belle-theme="rose"]{
  --ct33-shade:rgba(135,62,92,.15);
 }
 .ct33-wipe{
- position:fixed;inset:0;z-index:85;
+ position:fixed;inset:0;z-index:35;
  width:100%;height:100vh;height:100dvh;
  overflow:hidden;pointer-events:none;user-select:none;
  isolation:isolate;contain:layout paint style;
@@ -94,8 +94,8 @@ html[data-belle-theme="rose"]{
  max-width:100%;text-wrap:balance;
 }
 .ct33-seam{
- position:absolute;left:15%;right:15%;bottom:17%;
- height:1px;opacity:calc(var(--ct33-progress,0) * .55);
+ position:absolute;left:35%;right:35%;top:calc(50% + 96px);
+ height:1px;opacity:calc(var(--ct33-progress,0) * .34);
  background:linear-gradient(90deg,transparent,var(--ct33-gold),var(--ct33-gold-light),transparent);
  transform:scaleX(calc(var(--ct33-progress,0) * .96));
  transform-origin:center;
@@ -118,7 +118,7 @@ html.ct33-motion .ct33-editorial em{
 /* After the session loader, three FULL-SCREEN cloth panels lift clear.
  * They are entirely decorative and clean themselves up within ~1 second. */
 .ct33-loader-exit{
- position:fixed;inset:0;z-index:84;
+ position:fixed;inset:0;z-index:35;
  width:100%;height:100dvh;
  display:flex;overflow:hidden;pointer-events:none;
  contain:layout paint style;
@@ -137,7 +137,7 @@ html.ct33-motion .ct33-editorial em{
  100%{transform:translate3d(0,-103%,0);opacity:0}
 }
 @media(max-width:700px){
- .ct33-wipe{z-index:70}
+ .ct33-wipe{z-index:35}
  .ct33-inscription{gap:10px}
  .ct33-name{font-size:clamp(26px,7vw,44px)}
  .ct33-monogram{font-size:15px}
