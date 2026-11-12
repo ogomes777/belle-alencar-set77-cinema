@@ -94,13 +94,15 @@ export class World {
 
   constructor(private opts: WorldOptions) {
     const { tier, container } = opts;
-    this.dpr = Math.min(window.devicePixelRatio || 1, opts.poster ? 2 : tier === 'cinema' ? 1.75 : 1.25);
+    const device = navigator as Navigator & {deviceMemory?:number};
+    const lessCapable = (device.deviceMemory !== undefined && device.deviceMemory <= 4) || (device.hardwareConcurrency||4)<=4;
+    this.dpr = Math.min(window.devicePixelRatio || 1, opts.poster ? 2 : tier === 'cinema' ? (lessCapable ? 1.2 : 1.5) : 1);
     this.renderer = new THREE.WebGLRenderer({ antialias: tier === 'cinema' || !!opts.poster, powerPreference: 'high-performance', preserveDrawingBuffer: !!opts.poster });
     this.renderer.setPixelRatio(this.dpr);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 0.92;
-    this.renderer.shadowMap.enabled = tier === 'cinema';
+    this.renderer.shadowMap.enabled = tier === 'cinema' && !lessCapable;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     container.appendChild(this.renderer.domElement);
     this.renderer.domElement.addEventListener('webglcontextlost', (e) => {
@@ -276,7 +278,16 @@ export class World {
   }
 
   setVisible(v: boolean): void {
+    if (this.visible === v) return;
     this.visible = v;
+    if (!v) {
+      if(this.raf)cancelAnimationFrame(this.raf);
+      this.raf=0;
+      return;
+    }
+    // Re-entry from a long tab switch or another section must not consume
+    // the missed time as an enormous cloth/camera physics step.
+    this.last=performance.now();
     this.kick();
   }
 
@@ -308,7 +319,7 @@ export class World {
     if (!this.visible || document.hidden || this.failed) return;
     // dt real (até 250 ms) para a suavização não "atrasar" em GPU lenta;
     // a física usa passo fixo e as molas recebem dt limitado.
-    const dt = Math.max(1 / 240, Math.min(0.25, (now - this.last) / 1000 || 1 / 60));
+    const dt = Math.max(1 / 240, Math.min(0.055, (now - this.last) / 1000 || 1 / 60));
     this.last = now;
     this.step(dt, false);
     this.renderer.render(this.scene, this.camera);
@@ -445,7 +456,7 @@ export class World {
     if (this.slowFor > 2) {
       this.slowFor = 0;
       if (this.dpr > 0.85) {
-        this.dpr = Math.max(0.75, this.dpr - 0.25);
+        this.dpr = Math.max(0.65, this.dpr - 0.2);
         this.renderer.setPixelRatio(this.dpr);
         this.resize();
       } else if (this.mall.reflector || this.boutique.mirror) {
@@ -453,9 +464,14 @@ export class World {
         if (this.boutique.mirror) this.boutique.mirror.removeFromParent();
         this.mall.reflector = null;
         this.boutique.mirror = null;
-      } else if (this.frameAvg > 45 && !this.railEngaged) {
-        // Never make an in-progress tap/drag/add-to-bag interaction disappear.
-        this.fail('low-fps');
+      } else {
+        // A slow laptop is NOT a fatal renderer error. Previously this branch
+        // permanently destroyed WebGL during a long session or scroll return.
+        // Keep the scene alive with reduced render cost and preserve controls.
+        this.renderer.shadowMap.enabled=false;
+        this.dpr=Math.max(.65,Math.min(this.dpr,.75));
+        this.renderer.setPixelRatio(this.dpr);
+        this.resize();
       }
     }
   }
@@ -479,7 +495,8 @@ export class World {
     // retrato: lens shift vertical — o assunto sobe para a metade livre acima da folha de texto
     if (w / h < 0.85) this.camera.setViewOffset(w, h, 0, Math.round(h * 0.17), w, h);
     else this.camera.clearViewOffset();
-    this.camera.fov = this.fitFov(this.camera.fov);
+    // Story.step() always recomputes FOV from the authored lens value.
+    // Reapplying fitFov(camera.fov) here compounded portrait zoom on resizes.
     this.camera.updateProjectionMatrix();
     this.kick();
   }

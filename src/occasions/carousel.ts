@@ -82,6 +82,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
     if(onscreen)entrance(current);
   }
   function entrance(index:number){
+    if(!onscreen||document.hidden)return;
     const target=arrivals[index];
     if(!target)return;
     // Root cause of washed-out portraits: the old entrance repeatedly
@@ -102,7 +103,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
     if(!enabled)return;
     const isMobile=!desktop.matches;
     const now=performance.now();
-    if(isMobile&&orbitRunning&&now-lastRender<27)return;
+    if(orbitRunning && now-lastRender < (isMobile ? 34 : 24))return;
     lastRender=now;
     const reach=isMobile?Math.max(174,Math.min(stageWidth*.52,340)):Math.min(stageWidth*.32,440);
     const depth=isMobile?130:245;
@@ -175,7 +176,7 @@ export function initOccasionsCarousel(director:Director):()=>void {
     // GSAP provides elapsed wall-clock milliseconds. Bound sudden tab/device
     // stalls so a frame cannot skip an entire look after resuming.
     const dt=clamp(deltaTime,0,55);
-    state.position+=dt/1000*(cards.length/(desktop.matches?30:42));
+    state.position+=dt/1000*(cards.length/(desktop.matches?54:72));
     // Keep floating point precision even after hours of browsing.
     if(Math.abs(state.position)>300)state.position=wrap(state.position,cards.length);
     render();

@@ -9,28 +9,29 @@ import { setBrandLogo } from './textures';
 
 gsap.registerPlugin(ScrollTrigger);
 // tempo real: em aparelho lento o texto não fica "preso" no meio da animação
-gsap.ticker.lagSmoothing(0);
+gsap.ticker.lagSmoothing(500,33);
 
 export async function createWorld(opts: WorldOptions): Promise<World> {
-  // letreiros em canvas precisam da tipografia carregada
-  if ('fonts' in document) {
-    await Promise.race([
-      Promise.all([
-        document.fonts.load("400 64px 'Cormorant Garamond'"),
-        document.fonts.load("italic 400 64px 'Cormorant Garamond'"),
-        document.fonts.load("600 32px 'DM Sans Variable'"),
-      ]),
-      new Promise((r) => setTimeout(r, 1500)),
-    ]).catch(() => undefined);
-  }
-  // logo oficial para o letreiro da fachada (fallback tipográfico se falhar)
-  await new Promise<void>((resolve) => {
-    const img = new Image();
-    img.onload = () => { setBrandLogo(img); resolve(); };
-    img.onerror = () => resolve();
-    img.src = '/brand/belle-alencar-logo.svg';
-    setTimeout(resolve, 2000);
+  // Font and brand media readiness must not be serialized (the old chain
+  // added ~3.5 seconds before the GPU scene could even start building).
+  const fontReady = 'fonts' in document ? Promise.race([
+    Promise.all([
+      document.fonts.load("400 64px 'Cormorant Garamond'"),
+      document.fonts.load("italic 400 64px 'Cormorant Garamond'"),
+      document.fonts.load("600 32px 'DM Sans Variable'"),
+    ]),
+    new Promise<void>(resolve => setTimeout(resolve, 1100)),
+  ]).catch(() => undefined) : Promise.resolve();
+  const brandReady = new Promise<void>(resolve => {
+    const image = new Image();
+    let done = false;
+    const finish = () => { if(done)return; done=true;resolve(); };
+    image.onload=()=>{setBrandLogo(image);finish();};
+    image.onerror=finish;
+    image.src='/brand/belle-alencar-logo.svg';
+    setTimeout(finish, 1300);
   });
+  await Promise.all([fontReady,brandReady]);
   return new World(opts);
 }
 

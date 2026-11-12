@@ -19,7 +19,7 @@ export function initRunway(ctx: Ctx): () => void {
   const abort = new AbortController(), { signal } = abort;
   const calm = matchMedia('(prefers-reduced-motion: reduce)');
   let p = 0, target = 0, raf = 0, last = 0, dirty = true, visible = true, destroyed = false;
-  let width = 1, height = 1, base = 1, cardSize = 1, mobile = false;
+  let width = 1, height = 1, base = 1, cardSize = 1, rollItemHeight = 1, mobile = false;
   let down = false, startX = 0, startY = 0, start = 0, moved = 0, pointer = -1, hitIndex: number | null = null;
   let lastDragX = 0, lastDragTime = 0, dragVelocity = 0;
   let wheelTimer = 0, mx = 0, my = 0, cx = 0, cy = 0, cursor = false, announced = -1;
@@ -73,6 +73,7 @@ export function initRunway(ctx: Ctx): () => void {
   function size() {
     width=stage.clientWidth; height=stage.clientHeight; base=height*1.2; mobile=innerWidth<=820;
     cardSize=mobile ? Math.max(136,Math.min(160,rail.clientWidth/2.45)) : rail.clientHeight/RUNWAY_CARDS_PER_LOOK;
+    rollItemHeight=roll.firstElementChild?.getBoundingClientRect().height||1;
     people.forEach(m => { m.el.style.width=`${base*m.ratio}px`; m.el.style.height=`${base}px`; });
     cards.forEach(c => { c.style.height=mobile?'100%':`${cardSize}px`; });
     dirty=true; wake();
@@ -87,7 +88,7 @@ export function initRunway(ctx: Ctx): () => void {
       const fitWeight=d.depth<0?1-Math.min(1,-d.depth):1;
       const center=d.x*width+(fitCenter-d.x*width)*fitWeight;
       model.el.style.transform=`translate3d(${center-modelWidth/2}px,${d.feet*height-h}px,0) scale(${scale})`;
-      model.el.style.filter=d.blur<.2?'none':`blur(${d.blur/scale}px)`;
+      model.el.style.filter=mobile || d.blur<.2 ? 'none' : `blur(${Math.min(3,d.blur/Math.max(.4,scale))}px)`;
       model.el.style.opacity=String(d.opacity); model.el.style.zIndex=String(d.z);
     });
     cards.forEach((card,i) => {
@@ -95,14 +96,16 @@ export function initRunway(ctx: Ctx): () => void {
       card.style.transform=mobile?`translate3d(${offset}px,0,0)`:`translate3d(0,${offset}px,0)`;
       // Only visible cards participate in keyboard navigation and screen-reader order.
       const on=offset>-cardSize+.5 && offset<(mobile?rail.clientWidth:rail.clientHeight)-.5;
-      card.inert=!on; card.setAttribute('aria-hidden',String(!on));
+      if(card.inert===on){card.inert=!on;card.setAttribute('aria-hidden',String(!on));}
     });
-    roll.style.transform=`translate3d(0,${-wrap(p,6)*roll.firstElementChild!.getBoundingClientRect().height}px,0)`;
+    roll.style.transform=`translate3d(0,${-wrap(p,6)*rollItemHeight}px,0)`;
     root!.dataset.position=p.toFixed(4);
     const index=wrap(Math.round(p),RUNWAY_LOOKS.length);
     const currentLook=RUNWAY_LOOKS[index]!;
-    styling.textContent=currentLook.styling;
-    root!.dataset.currentLook=currentLook.key;
+    if(root!.dataset.currentLook!==currentLook.key){
+      styling.textContent=currentLook.styling;
+      root!.dataset.currentLook=currentLook.key;
+    }
     if (index!==announced && Math.abs(p-target)<.01) {
       announced=index; status.textContent=`Look ${15+index}. ${currentLook.name}, ${currentLook.styling}. Três peças disponíveis para visualizar individualmente.`;
     }
@@ -168,7 +171,7 @@ export function initRunway(ctx: Ctx): () => void {
   stage.addEventListener('pointerleave',()=>{cursor=false;ring.classList.remove('is-visible');},{signal});
   calm.addEventListener('change',()=>{dirty=true;wake();},{signal});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;}else wake();},{signal});
-  const ro=typeof ResizeObserver !== 'undefined' ? new ResizeObserver(size) : null; ro?.observe(stage); ro?.observe(rail);
+  const ro=typeof ResizeObserver !== 'undefined' ? new ResizeObserver(size) : null; ro?.observe(stage);
   window.addEventListener('resize',size,{signal});
   document.body.classList.add('is-runway-visible');
   const io=typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);document.body.classList.toggle('is-runway-visible',visible);if(visible)wake();else{cancelAnimationFrame(raf);raf=0;} }) : null; io?.observe(root);
