@@ -256,7 +256,7 @@ body.is-how-visible #floatCta{visibility:hidden!important;opacity:0;pointer-even
   backface-visibility:hidden;
   box-shadow:
     0 30px 60px -39px rgba(89,53,17,.44),
-    0 0 calc(var(--how-card-glow,0)*21px) rgba(227,176,95,calc(var(--how-card-glow,0)*.18)),
+    0 0 21px rgba(227,176,95,.13),
     inset 0 1px 0 rgba(255,255,255,.91);
 }
 /* The CTA waits until the final card lands. Both reveal and removal follow
