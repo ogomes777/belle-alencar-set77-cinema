@@ -48,6 +48,11 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
 
 export function createCatalog(ctx: Ctx, mount: HTMLElement) {
   let filters: Filters = { ...DEFAULT_FILTERS };
+  let filteredProducts: Product[] = [];
+  let expanded = false;
+  let visibleLimit = 8;
+  // Two editorial rows on desktop; a shorter first look on narrow phones.
+  const previewLimit = () => matchMedia('(max-width: 640px)').matches ? 4 : 8;
 
   const segButtons = (['todas', ...SHOP_CATEGORIES] as const).map((c) =>
     h('button', { type: 'button', class: 'seg__btn', 'data-cat': c, 'aria-pressed': String(c === 'todas'), text: c === 'todas' ? 'Todas' : CATEGORY_LABEL[c] }),
@@ -69,7 +74,17 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
   const silChip = h('div', { class: 'active-filters' });
   const count = h('p', { class: 'cat-count', 'aria-live': 'polite' });
   const clear = h('button', { type: 'button', class: 'link-btn', 'data-clear': true, text: 'Limpar filtros' });
-  const grid = h('ul', { class: 'pgrid', 'aria-label': 'Peças da coleção' });
+  const grid = h('ul', { id: 'catalogGrid', class: 'pgrid', 'aria-label': 'Peças da coleção' });
+  const moreHint = h('p', { class: 'catalog-more__hint', 'aria-live': 'polite' });
+  const moreLabel = h('span', { class: 'catalog-more__label', text: 'VER TUDO' });
+  const moreButton = h('button', {
+    type: 'button', class: 'catalog-more__button', 'data-catalog-toggle': true,
+    'aria-controls': 'catalogGrid', 'aria-expanded': 'false',
+  }, moreLabel, h('span', { class: 'catalog-more__arrow', 'aria-hidden': 'true', text: '↓' }));
+  const moreArea = h('div', { class: 'catalog-more', hidden: true },
+    h('span', { class: 'catalog-more__rule', 'aria-hidden': 'true' }),
+    moreHint, moreButton,
+  );
   const emptyClear = h('button', { type: 'button', class: 'btn btn--line', 'data-clear': true, text: 'Limpar filtros' });
   const empty = h('div', { class: 'cat-empty', hidden: true },
     h('p', { class: 'cat-empty__title', text: 'Nenhuma peça com essa combinação.' }),
@@ -80,7 +95,7 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
   const bar = h('div', { class: 'cat-bar' }, seg, h('div', { class: 'cat-bar__row' }, occ, size), h('div', { class: 'cat-bar__meta' }, count, silChip, clear));
   // preserva o <noscript>
   Array.from(mount.children).forEach((c) => { if (c.tagName !== 'NOSCRIPT') c.remove(); });
-  mount.append(bar, grid, empty);
+  mount.append(bar, grid, moreArea, empty);
 
   function moveInk() {
     const active = segButtons.find((b) => b.getAttribute('aria-pressed') === 'true');
@@ -89,15 +104,29 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
     ink.style.setProperty('--w', `${active.offsetWidth}px`);
   }
 
+  function updateMore() {
+    const hasMore = filteredProducts.length > visibleLimit;
+    moreArea.hidden = !hasMore;
+    moreButton.setAttribute('aria-expanded', String(expanded));
+    moreLabel.textContent = expanded ? 'VER MENOS' : 'VER TUDO';
+    const remaining = filteredProducts.length - visibleLimit;
+    moreHint.textContent = expanded
+      ? `${plural(filteredProducts.length, 'peça exibida', 'peças exibidas')}`
+      : `Explore mais ${plural(remaining, 'peça', 'peças')} da seleção`;
+  }
+
   function render() {
-    const list = applyFilters(DEMO_CATALOG, filters);
+    filteredProducts = applyFilters(DEMO_CATALOG, filters);
+    expanded = false;
+    visibleLimit = previewLimit();
     const wish = ctx.commerce.get().wishlist;
-    grid.replaceChildren(...list.map((p, i) => productCard(p, wish.includes(p.id), i)));
+    grid.replaceChildren(...filteredProducts.slice(0, visibleLimit).map((p, i) => productCard(p, wish.includes(p.id), i)));
     grid.classList.remove('is-entering');
     void grid.offsetWidth;
     grid.classList.add('is-entering');
-    empty.hidden = list.length > 0;
-    count.textContent = `${plural(list.length, 'peça', 'peças')} ${isFiltered(filters) ? 'com estes filtros' : 'na prévia'}`;
+    empty.hidden = filteredProducts.length > 0;
+    count.textContent = `${plural(filteredProducts.length, 'peça', 'peças')} ${isFiltered(filters) ? 'com estes filtros' : 'na prévia'}`;
+    updateMore();
     clear.hidden = !isFiltered(filters);
     segButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === filters.category)));
     occButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.occ === filters.occasion)));
@@ -112,6 +141,25 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
 
   mount.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
+    if (t.closest('[data-catalog-toggle]')) {
+      if (!expanded) {
+        // Preserve the first row's nodes, favorites and focus; mount only the
+        // remaining images on demand. Collection ScrollTrigger remeasures via
+        // its existing MutationObserver and stays reversible.
+        const offset = grid.children.length;
+        const wished = ctx.commerce.get().wishlist;
+        grid.append(...filteredProducts.slice(offset).map((p, i) => productCard(p, wished.includes(p.id), offset + i)));
+        expanded = true;
+      } else {
+        // Keep original product DOM for the short preview to avoid rebuilding
+        // quick-view and wishlist targets needlessly.
+        Array.from(grid.children).slice(visibleLimit).forEach(node => node.remove());
+        expanded = false;
+      }
+      updateMore();
+      if (!expanded) requestAnimationFrame(() => moreButton.scrollIntoView({ block: 'end', behavior: 'instant' }));
+      return;
+    }
     const cat = t.closest<HTMLElement>('[data-cat]');
     if (cat) { filters = { ...filters, category: cat.dataset.cat as Category | 'todas', silhouette: cat.dataset.cat === 'vestidos' ? filters.silhouette : null }; render(); return; }
     const oc = t.closest<HTMLElement>('[data-occ]');
@@ -132,7 +180,17 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
     }
   });
   sizeSelect.addEventListener('change', () => { filters = { ...filters, size: sizeSelect.value as Size | 'todos' }; render(); });
-  addEventListener('resize', () => requestAnimationFrame(moveInk), { passive: true });
+  addEventListener('resize', () => {
+    requestAnimationFrame(moveInk);
+    const nextLimit = previewLimit();
+    if (nextLimit === visibleLimit) return;
+    visibleLimit = nextLimit;
+    if (!expanded) {
+      const wished = ctx.commerce.get().wishlist;
+      grid.replaceChildren(...filteredProducts.slice(0, visibleLimit).map((p, i) => productCard(p, wished.includes(p.id), i)));
+    }
+    updateMore();
+  }, { passive: true });
 
   // mantém corações em sincronia (quick view e drawer de favoritos também alternam)
   ctx.commerce.subscribe((s, prev) => {
