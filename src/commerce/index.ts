@@ -99,6 +99,7 @@ export function initCommerce(): void {
   };
 
   setCommerceApi({
+    selectStore: chooseStore,
     product: (id) => commerce.product(id),
     add: (productId, size) => commerce.add(productId, size as Size),
     count: () => commerce.currentBag().reduce((n, it) => n + it.qty, 0),

@@ -2,7 +2,7 @@
  * Fachada pública do comércio para a arara viva, a ficha editorial e o voo até a bolsa.
  * Uma única fonte de verdade (state.ts). Nada aqui cria pedido: é a sacola de interesse.
  */
-import type { Product, Size } from './types';
+import type { Product, Size, StoreId } from './types';
 
 export interface CommerceApi {
   product(id: string): Product | undefined;
@@ -10,6 +10,7 @@ export interface CommerceApi {
   add(productId: string, size: Size): { ok: boolean; reason?: string };
   count(): number;
   storeCity(): string | null;
+  selectStore(id: StoreId, trigger?: HTMLElement | null): Promise<void>;
   hasStore(): boolean;
   /** abre o seletor de loja e executa `then` após a escolha */
   ensureStore(trigger: HTMLElement | null, then: () => void): void;

@@ -25,3 +25,9 @@ html body #lojas.stores .section-head .display,html body #lojas.stores .section-
 .stores__geo-stage.is-map canvas{visibility:hidden}
 @keyframes mapArrival{from{clip-path:circle(8% at 50% 50%);opacity:0}to{clip-path:circle(75% at 50% 50%);opacity:1}}
 @media(prefers-reduced-motion:reduce){.stores__geo-stage .stores-map{animation:none}}
+.stores__city-hit{position:absolute;width:48px;height:54px;transform:translate(-50%,-50%);border:0;border-radius:9px;background:transparent;cursor:pointer;z-index:1;padding:0}
+.stores__city-hit[hidden]{display:none}
+.stores__city-hit:focus-visible{outline:2px solid #ffce62;box-shadow:0 0 14px #ffd76b}
+html body #lojas.stores .section-head .display,html body #lojas.stores .section-head .display em{text-shadow:0 0 22px #cf9b4a55,0 2px 10px #d8b16b33;animation:belleCopyGlow 4s ease-in-out infinite alternate}
+@keyframes belleCopyGlow{to{text-shadow:0 0 30px #cf9b4a88,0 2px 12px #d8b16b55}}
+@media(prefers-reduced-motion:reduce){html body #lojas.stores .section-head .display,html body #lojas.stores .section-head .display em{animation:none}}

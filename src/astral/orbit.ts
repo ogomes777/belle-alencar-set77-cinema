@@ -57,7 +57,7 @@ export function initStoreOrbit(): void {
   type Border={name:string;kind:string;rings:number[][][]};
   let borders:{name:string;kind:string;rings:ReturnType<typeof spherePoint>[][]}[]=[];
   fetch('/geo/boundaries.json').then(r=>{if(!r.ok)throw Error('geo');return r.json();}).then((data:Border[])=>{borders=data.map(b=>({...b,rings:b.rings.map(r=>r.map(p=>spherePoint(p[1]!,p[0]!)))}));wake();}).catch(()=>{caption.textContent='Arraste para girar · escolha sua loja abaixo';});
-  let navigation=true;
+  let navigation=true, mapAfterJourney=false, pendingEntry=false;
   let selected:string|null=null, zoom=1, focusAt=0, arrival=1;
   // Scroll-derived arrival is reversible and does not intercept page scrolling.
   const flight=document.createElement('span');flight.className='stores__flight';flight.setAttribute('aria-hidden','true');
@@ -68,14 +68,17 @@ export function initStoreOrbit(): void {
   function updateFlight(){
     flightFrame=0;
     const how=document.querySelector<HTMLElement>('#como-comprar');
-    if(!how||selected||still()){flight.hidden=true;arrival=1;return;}
+    if(!how||still()){flight.hidden=true;arrival=1;return;}
     const rect=how.getBoundingClientRect(),target=canvas!.getBoundingClientRect();
     const start=scrollY+rect.top+Math.max(0,rect.height-innerHeight)*.61;
     const finish=scrollY+target.top+target.height*.5-innerHeight*.55;
     const p=Math.max(0,Math.min(1,(scrollY-start)/Math.max(1,finish-start)));
     flight.hidden=p<=0||p>=1;arrival=p;
-    const x=innerWidth*.5+(target.x+target.width*.5-innerWidth*.5)*p;
-    const y=innerHeight*.5+(target.y+target.height*.5-innerHeight*.5)*p-Math.sin(p*Math.PI)*90+Math.sin(Math.max(0,p-.78)*Math.PI/.22)*24;
+    const card=how.querySelector<HTMLElement>('.how__steps li')?.getBoundingClientRect();
+    const originX=card?card.left+card.width*.5:innerWidth*.5;
+    const originY=card?card.top+card.height*.3:innerHeight*.5;
+    const x=originX+(target.x+target.width*.5-originX)*p;
+    const y=originY+(target.y+target.height*.5-originY)*p-Math.sin(p*Math.PI)*90+Math.sin(Math.max(0,p-.78)*Math.PI/.22)*24;
     flight.style.transform=`translate3d(${x-38}px,${y-38}px,0) rotate(${Math.sin(p*Math.PI)*-18}deg) scale(${1-p*.4})`;
   }
   window.addEventListener('scroll',()=>{if(!flightFrame)flightFrame=requestAnimationFrame(updateFlight);},{passive:true});
@@ -86,11 +89,11 @@ export function initStoreOrbit(): void {
   function syncCity(userChange=false){
     const next=commerceApi()?.storeCity()??null;
     if(next===selected)return;
-    selected=next;flight.hidden=true;arrival=1;focusAt=performance.now();velocityX=velocityY=0;
+    selected=next;mapAfterJourney=false;flight.hidden=true;arrival=1;focusAt=performance.now();velocityX=velocityY=0;
     const city=cities.find(c=>c.name===selected);
     if(city){
       // Face the actual city coordinates toward the camera before the two-stage approach.
-      navigation=true;
+      navigation=true;pendingEntry=!visible;
       const rect=canvas!.getBoundingClientRect();
       if(userChange&&(rect.bottom<80||rect.top>innerHeight-80))canvas!.scrollIntoView({behavior:still()?'auto':'smooth',block:'center'});
       caption.textContent=`${city.state} → ${city.name} · Ver no mapa para o endereço da loja`;
@@ -99,6 +102,17 @@ export function initStoreOrbit(): void {
   }
   queueMicrotask(()=>{syncCity();commerceApi()?.onChange(()=>syncCity(true));});
   rotate(0,.34);
+  const markerButtons=cities.map(city=>{
+    const button=document.createElement('button');button.type='button';button.className='stores__city-hit';
+    button.setAttribute('aria-label',`Explorar Belle ${city.name}`);button.hidden=true;
+    button.addEventListener('click',async()=>{
+      await commerceApi()?.selectStore(city.id,button);
+      if(commerceApi()?.storeCity()!==city.name)return;
+      selected=city.name;navigation=true;pendingEntry=false;focusAt=performance.now();mapAfterJourney=true;
+      velocityX=velocityY=0;wake();
+    });
+    queueMicrotask(()=>canvas!.parentElement!.append(button));return button;
+  });
   let pulseX = -9999, pulseY = -9999, pulseAt = 0;
   function draw(now: number) {
     frame=0;
@@ -113,13 +127,17 @@ export function initStoreOrbit(): void {
     last=now;
     if(!navigation)zoom=still()?1:1+(zoom-1)*Math.exp(-delta/100);
     const city=cities.find(c=>c.name===selected);
-    if(city&&navigation){
+    if(city&&navigation&&!pendingEntry){
       const camera=journey(city,still()?5400:now-focusAt);
       zoom=camera.zoom;angle=(camera.lon-90)*Math.PI/180;
       orientation=[0,0,0,1];rotate(0,-camera.lat*Math.PI/180);
       section!.dataset.geoStage=camera.label;
       const message=`${camera.label} · ${city.name}, ${city.state}`;
       if(caption.textContent!==message)caption.textContent=message;
+      if(mapAfterJourney&&(still()||now-focusAt>=4200)){
+        mapAfterJourney=false;navigation=false;zoom=1;
+        window.dispatchEvent(new CustomEvent('belle:city-map',{detail:city.id}));
+      }
       if(still()||now-focusAt>=5200){navigation=false;zoom=1;}
     }
     const dpr=Math.min(devicePixelRatio||1,mobile ? 1.15 : 1.5), w=canvas!.clientWidth;
@@ -138,12 +156,13 @@ export function initStoreOrbit(): void {
     glow.addColorStop(0,'rgba(255,255,255,0)');glow.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,w);
     ctx.save();ctx.beginPath();ctx.arc(w/2,w/2,w*.46,0,Math.PI*2);
-    ctx.fillStyle='#fffdf8';ctx.fill();ctx.strokeStyle='rgba(173,137,78,.3)';ctx.lineWidth=1;ctx.stroke();ctx.clip();
+    const surface=ctx.createRadialGradient(w*.4,w*.35,0,w*.5,w*.5,w*.46);surface.addColorStop(0,'#46331c');surface.addColorStop(.72,'#211c15');surface.addColorStop(1,'#211c15');
+    ctx.fillStyle=surface;ctx.fill();ctx.strokeStyle='rgba(255,195,70,.7)';ctx.lineWidth=1;ctx.stroke();ctx.clip();
     {
     const projected=points.map(p=>project(p,w*.44));
     ctx.globalAlpha=zoom>2?.7:1;
-    ctx.globalCompositeOperation='source-over';
-    ctx.fillStyle='rgba(255,176,66,.42)';ctx.beginPath();
+    ctx.globalCompositeOperation='lighter';
+    ctx.fillStyle='rgba(255,176,66,.5)';ctx.beginPath();
     for (const p of inner) { const q=project(p,w*.44); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
     ctx.fill();
     const hovering=pointerX>-999, pulseLife=Math.max(0,1-(now-pulseAt)/1100);
@@ -157,9 +176,9 @@ export function initStoreOrbit(): void {
       const level=Math.min(7,Math.floor((.08+depth*.28+hover*.45+click*.35)*8));
       const path=paths[level]!;path.moveTo(p.x,p.y);path.lineTo(q.x,q.y);
     }
-    ctx.lineWidth=.8;
-    paths.forEach((path,i)=>{ctx.strokeStyle=`rgba(168,${95+i*9},${25+i*4},${.07+i*.09})`;ctx.stroke(path);});
-    projected.forEach((p,i)=>{const depth=(p.z+1)/2;const pulse=.6+.4*Math.sin(angle*5+i*.17)**2; const hover=hovering ? Math.max(0,1-Math.hypot(p.x-pointerX,p.y-pointerY)/(w*.23)) : 0;ctx.fillStyle=`rgba(190,${Math.round(110+depth*45)},${Math.round(20+depth*30)},${Math.min(1,(.34+depth*.66)*pulse+hover*.4)})`;ctx.beginPath();ctx.arc(p.x,p.y,.6+depth*1.05,0,Math.PI*2);ctx.fill();});
+    ctx.lineWidth=mobile?.7:.85;
+    paths.forEach((path,i)=>{ctx.strokeStyle=`rgba(255,${150+i*12},${35+i*14},${.16+i*.1})`;ctx.shadowColor='#ffb800';ctx.shadowBlur=i>3?5:0;ctx.stroke(path);ctx.shadowBlur=0;});
+    projected.forEach((p,i)=>{const depth=(p.z+1)/2;const pulse=.6+.4*Math.sin((still()?0:now*.0015)+i*.17)**2; const hover=hovering ? Math.max(0,1-Math.hypot(p.x-pointerX,p.y-pointerY)/(w*.23)) : 0;ctx.fillStyle=`rgba(255,${Math.round(170+depth*80)},${Math.round(65+depth*110)},${Math.min(1,(.34+depth*.66)*pulse+hover*.4)})`;ctx.beginPath();ctx.arc(p.x,p.y,.6+depth*1.05,0,Math.PI*2);ctx.fill();});
     // A few quiet light impulses travel through the network like signals between cities.
     if (!still()) for(let i=0;i<14;i++) {
       const edge=edges[(i*311)%edges.length]; if(!edge) continue;
@@ -183,15 +202,16 @@ export function initStoreOrbit(): void {
         }
       }
       ctx.lineWidth=border.kind==='state'?1.8:1;
-      ctx.strokeStyle=border.kind==='state'?'rgba(153,112,37,.65)':'rgba(125,103,63,.25)';ctx.stroke();
+      ctx.strokeStyle=border.kind==='state'?'rgba(255,218,135,.85)':'rgba(218,181,107,.22)';ctx.stroke();
     }
     if(zoom>2){
       for(const region of [{name:'Minas Gerais',lat:-18.5,lon:-44.6},{name:'Goiás',lat:-15.8,lon:-49.6}]){
         const p=project(spherePoint(region.lat,region.lon));
-        if(p.z>0){ctx.font='12px sans-serif';ctx.fillStyle='#80663e';ctx.textAlign='center';ctx.fillText(region.name,p.x,p.y);}
+        if(p.z>0){ctx.font='12px sans-serif';ctx.fillStyle='#f1d7a1';ctx.textAlign='center';ctx.fillText(region.name,p.x,p.y);}
       }
     }
     // Geographic anchors with separated callouts: cities are close on a world globe.
+    markerButtons.forEach(b=>{b.hidden=true;});
     cities.forEach((city,i)=>{
       if(selected && city.name!==selected)return;
       const lat=city.lat*Math.PI/180,lon=city.lon*Math.PI/180;
@@ -200,10 +220,14 @@ export function initStoreOrbit(): void {
       const side=i%2?1:-1, split=still()?1:Math.max(0,Math.min(1,(arrival-.85)/.15));
       const labelX=selected?p.x:p.x+side*28*split;
       const labelY=selected?p.y-38:p.y+(i<2?48:-48)*split;
-      ctx.strokeStyle='rgba(149,102,34,.55)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(labelX,labelY+12);ctx.stroke();
+      const marker=markerButtons[i]!;
+      if(labelX>20&&labelX<w-20&&labelY>35&&labelY<w-25){
+        marker.hidden=false;marker.style.left=`${labelX/w*100}%`;marker.style.top=`${labelY-10}px`;
+      }
+      ctx.strokeStyle='rgba(219,177,94,.75)' ;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(labelX,labelY+12);ctx.stroke();
       ctx.fillStyle='#ad791d';ctx.beginPath();ctx.arc(p.x,p.y,3+(still()?0:Math.sin(now*.003+i)*1.2),0,Math.PI*2);ctx.fill();
       if(bagImage.complete&&bagImage.naturalWidth)ctx.drawImage(bagImage,labelX-17,labelY-30,34,34);
-      ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#594323';ctx.fillText(city.name,labelX,labelY+23);
+      ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillStyle='#fff0cd';ctx.fillText(city.name,labelX,labelY+23);
     });
     ctx.restore();
     if (!still()) frame=requestAnimationFrame(draw);
@@ -222,7 +246,7 @@ export function initStoreOrbit(): void {
   canvas.addEventListener('pointerleave',()=>{ if(!dragging){pointerX=-9999;pointerY=-9999;if(still())wake();} });
   canvas.addEventListener('pointerdown',event=>{
     if(dragging || (event.pointerType==='mouse' && event.button!==0)) return;
-    navigation=false;dragging=true;activePointer=event.pointerId;previousX=event.clientX;previousY=event.clientY;
+    navigation=false;mapAfterJourney=false;dragging=true;activePointer=event.pointerId;previousX=event.clientX;previousY=event.clientY;
     velocityX=0;velocityY=0;lastDragTime=performance.now();canvas.setPointerCapture(event.pointerId);
   });
   function release(event:PointerEvent) {
@@ -236,7 +260,7 @@ export function initStoreOrbit(): void {
   canvas.addEventListener('lostpointercapture',release);
   new MutationObserver(()=>{cancelAnimationFrame(frame);frame=0;wake();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-intensity']});
   if ('IntersectionObserver' in window) {
-    const observer=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible)wake();else {cancelAnimationFrame(frame);frame=0;}},{rootMargin:'100px'});
+    const observer=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible){if(pendingEntry){pendingEntry=false;focusAt=performance.now();}wake();}else {cancelAnimationFrame(frame);frame=0;}},{rootMargin:'100px'});
     observer.observe(canvas);
   } else { visible=true; wake(); }document.addEventListener('visibilitychange',wake);reduce.addEventListener('change',()=>{cancelAnimationFrame(frame);frame=0;wake()});window.addEventListener('resize',wake,{passive:true});
 }

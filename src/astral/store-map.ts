@@ -29,6 +29,11 @@ export function initStoreMap(): void {
     const store=STORES[city.id];
     open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${store.address}, ${store.city} ${store.state}`)}`,enter);
   });
+  window.addEventListener('belle:city-map',((event:CustomEvent<string>)=>{
+    const city=CITIES.find(c=>c.id===event.detail);if(!city||city.name!==commerceApi()?.storeCity())return;
+    const store=STORES[city.id];
+    open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${store.address}, ${store.city} ${store.state}`)}`,enter);
+  }) as EventListener);
   function sync(){enter.hidden=!commerceApi()?.hasStore();if(dialog.open)dialog.close();}
   queueMicrotask(()=>{sync();commerceApi()?.onChange(sync);});
   dialog.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();dialog.close();}});
