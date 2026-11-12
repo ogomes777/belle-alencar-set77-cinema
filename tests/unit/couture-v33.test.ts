@@ -5,7 +5,7 @@ describe('Belle V33 · full-viewport couture transitions',()=>{
   it('targets every major content chapter without creating a route or replacing the hero',()=>{
     expect(COUTURE_TRANSITIONS).toHaveLength(8);
     expect(new Set(COUTURE_TRANSITIONS.map(x=>x.selector)).size).toBe(8);
-    expect(COUTURE_TRANSITIONS.some(x=>x.selector==='#filme')).toBe(false);
+    expect(COUTURE_TRANSITIONS.map(x=>x.selector)).not.toContain('#filme');
   });
   it('has eight distinct wipe motifs and no top-strip-only scene type',()=>{
     expect(new Set(COUTURE_TRANSITIONS.map(x=>x.motif)).size).toBe(8);
