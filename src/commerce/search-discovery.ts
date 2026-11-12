@@ -41,7 +41,7 @@ export function rankProducts(products:readonly Product[],query:string):Product[]
     const occasion=searchKey(occWords[p.occasion]||p.occasion);
     const sku=searchKey(p.sku);
     const all=title+' '+categoryWords+' '+description+' '+occasion+' '+sku;
-    const scoreToken=(t:string)=>{
+    const scoreToken=(t:string):number=>{
       if(t==='acessorios' && ['bolsas','aneis','pulseiras'].includes(p.category))return 32;
       if(category===t || categoryWords.split(' ').includes(t))return 38;
       if(title===t)return 75;
