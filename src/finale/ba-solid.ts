@@ -73,7 +73,7 @@ export function initFinaleSolid():void {
   const stop=()=>{if(raf)cancelAnimationFrame(raf);raf=0;last=0;};
   const measure=()=>{
     if(!renderer||!camera)return;
-    const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);
+    const w=Math.max(1,host!.clientWidth),h=Math.max(1,host!.clientHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<560?1.35:1.65));
     renderer.setSize(w,h,false);
     camera.aspect=w/h;camera.updateProjectionMatrix();
@@ -87,12 +87,12 @@ export function initFinaleSolid():void {
     model.rotation.x=Math.sin(now*.00038)*.068;
     model.position.y=Math.sin(now*.001)*.016;
     renderer.render(scene,camera);
-    if(!ready){ready=true;host.classList.add('is-3d-ready');}
+    if(!ready){ready=true;host!.classList.add('is-3d-ready');}
     raf=requestAnimationFrame(draw);
   };
   const resume=()=>{
     if(!active)return;
-    if(isStill()){stop();host.classList.remove('is-3d-ready');return;}
+    if(isStill()){stop();host!.classList.remove('is-3d-ready');return;}
     if(document.hidden||!visible){stop();return;}
     if(!renderer&&!loading){void boot();return;}
     if(renderer&&!raf)raf=requestAnimationFrame(draw);
@@ -133,21 +133,21 @@ export function initFinaleSolid():void {
         }
       });
       resize=new ResizeObserver(measure);
-      resize.observe(host);measure();
-      canvas.addEventListener('webglcontextlost',event=>{
-        event.preventDefault();stop();host.classList.remove('is-3d-ready');
+      resize.observe(host!);measure();
+      canvas!.addEventListener('webglcontextlost',event=>{
+        event.preventDefault();stop();host!.classList.remove('is-3d-ready');
       },{passive:false});
       resume();
     }catch(error){
       console.warn('Belle BA: WebGL indisponível; imagem oficial mantida.',error);
-      stop();host.classList.remove('is-3d-ready');
+      stop();host!.classList.remove('is-3d-ready');
     }finally{loading=false;}
   }
   const observer=new IntersectionObserver(entries=>{
     visible=entries.some(e=>e.isIntersecting);
     if(!visible)stop();else resume();
   },{rootMargin:'200px 0px'});
-  observer.observe(host);
+  observer.observe(host!);
   const mode=new MutationObserver(resume);
   mode.observe(document.documentElement,{attributes:true,attributeFilter:['data-intensity']});
   const visibility=()=>{if(document.hidden)stop();else resume();};
