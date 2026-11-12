@@ -42,6 +42,10 @@ try{
     await page.locator('#colecao .collection__handoff').evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
     await page.waitForTimeout(320);
   }
+  await page.waitForFunction(()=>{
+    const el=document.getElementById('colecao');
+    return Number(el?.style.getPropertyValue('--collection-bridge')||0)>=.1;
+  },null,{timeout:3000});
   const seam=await page.evaluate(()=>{
     const a=document.querySelector('#colecao').getBoundingClientRect();
     const b=document.querySelector('#como-comprar').getBoundingClientRect();
