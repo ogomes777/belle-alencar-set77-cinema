@@ -67,6 +67,27 @@ function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
   const suffix=by[3] === ' da sacola'?({en:' from bag',es:' de la bolsa',it:' dalla borsa'}[to]):by[3] === ' dos favoritos'?({en:' from favorites',es:' de favoritos',it:' dai preferiti'}[to]):'';
   return translated[by[1]! as keyof typeof translated]+' '+translate(by[2]!,to)+suffix;
  }
+ const moved=source.match(/^Levar as peças para (.+)$/);
+ if(moved)return translate('Levar as peças para',to)+' '+moved[1]!;
+ const kept=source.match(/^Manter a sacola de (.+) e começar outra$/);
+ if(kept)return translate('Manter a sacola de',to)+' '+kept[1]+' '+translate('e começar outra',to);
+ const continueCity=source.match(/^Continuar em (.+)$/);
+ if(continueCity)return translate('Continuar em',to)+' '+continueCity[1]!;
+ const otherBags=source.match(/^Você também tem peças salvas na sacola de (.+)\.$/);
+ if(otherBags)return translate('Você também tem peças salvas na sacola de',to)+' '+otherBags[1]+'.';
+ const bagHeading=source.match(/^Sua sacola de (.+)$/);
+ if(bagHeading)return ({en:'Your bag for ',es:'Tu bolsa de ',it:'La tua borsa di '}[to])+bagHeading[1]!;
+ const bagCount=source.match(/^tem (\d+) (peça|peças)\.$/);
+ if(bagCount)return ({en:'has ',es:'tiene ',it:'contiene '}[to])+bagCount[1]+' '+translate(bagCount[2]!,to)+'.';
+ const inBag=source.match(/^(.+) \((.+)\) está na sacola de (.+)\.$/);
+ if(inBag)return translate(inBag[1]!,to)+' ('+translate(inBag[2]!,to)+') '+({en:'is in your ',es:'está en tu bolsa de ',it:'è nella tua borsa di '}[to])+inBag[3]+({en:' bag.',es:'.',it:'.'}[to]);
+ const itemBag=source.match(/^(.+), tamanho (.+), (adicionado à sacola|está na sacola de (.+))\.$/);
+ if(itemBag){
+  const intro=translate(itemBag[1]!,to)+', '+translate('Tamanho',to).toLowerCase()+' '+translate(itemBag[2]!,to);
+  return itemBag[3]==='adicionado à sacola'?
+    intro+({en:', added to bag.',es:', añadido a la bolsa.',it:', aggiunto alla borsa.'}[to]):
+    intro+({en:', in the ',es:', en la bolsa de ',it:', nella borsa di '}[to])+itemBag[4]+({en:' bag.',es:'.',it:'.'}[to]);
+ }
  const unique=source.match(/^Tamanho (PP|P|M|G|GG|Único)$/);
  if(unique)return translate('Tamanho',to)+' '+translate(unique[1]!,to);
  const seeDemo=source.match(/^Ver (.+), produto demonstrativo$/);
