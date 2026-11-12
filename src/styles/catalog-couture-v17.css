@@ -235,9 +235,6 @@ html[data-intensity='essential'] #colecao .collection__handoff *{
 
 /* V30 · A short curated preview, not 48 eagerly mounted cards. The
    physical catalogue opens only when invited, with all existing filters. */
-/* Dynamic insertion below the eight-piece preview must not move the
-   document scroll position by anchoring to the disappearing CTA location. */
-#colecao .catalog { overflow-anchor:none; }
 #colecao .catalog-more {
   max-width:1280px;
   margin:clamp(34px,5vw,66px) auto clamp(12px,2vw,28px);
