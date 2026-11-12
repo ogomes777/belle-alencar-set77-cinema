@@ -1,24 +1,18 @@
-# V37 · propriedade de movimento (revisão Claude sobre o piloto Codex)
+# V37.1 · revelações de passagem (propriedade de movimento)
 
-Base: `fix/belle-v36-remove-decorative-overlays` @ `712591e` → piloto Codex `fix/belle-v37-editorial-boundary-reveals` @ `ddf620c` → esta branch `claude/wonderful-meitner-kt2rnw`. Nada de V33/V35/Motion Director V8 foi religado (`src/motion/director.ts` e `couture-transitions-v33.ts` continuam sem import).
+**Mudança de direção pedida pelo cliente (12/11):** em vez de micro-detalhes discretos, revelações visíveis estilo transição de página da Promptfly em **toda** separação de seção, usando várias cores da paleta. Isso substitui os efeitos de título/foto da V37 (para manter um efeito por fronteira).
 
-**Um único controlador** (`src/motion/editorial-boundaries.ts`): um rAF agendado por scroll passivo, leituras antes de escritas, escreve só `--v37-entry`, `--v37-light` e as classes `v37-boundary`/`v37-done` na `<section>`. Mede uma âncora que nunca é transformada. Ao concluir (`v37-done`) todas as máscaras saem do CSS; ao subir, a fronteira reentra (reversível). Reduced-motion, intensidade essencial, save-data e memória ≤2GB → nenhuma classe, conteúdo estático integral.
+Arquitetura: um único controlador rAF (`src/motion/editorial-boundaries.ts`) mede o topo de cada seção e escreve `--v37-entry` (0→1, reversível). Cada seção recebe um `div.v37-veil` decorativo (`aria-hidden`, sem texto) **dentro dela**: `position:absolute; inset:0`, seção com `isolation:isolate` (fica sempre abaixo do header), `pointer-events:none`. O véu cobre a seção quando ela entra pela base da tela e se abre até 38% da viewport; com `.v37-done` ele recebe `display:none`. Nunca `position:fixed`. Sem JS, movimento reduzido, modo essencial, economia de dados ou memória baixa → sem véu.
 
-| Fronteira | Dono original (intocado) | V37 · efeito | Nó que o V37 estiliza | Âncora de medição |
-|---|---|---|---|---|
-| Intro + 7 capítulos | `film.ts` | **nenhum** | — | — |
-| Filme → Passarela | `runway.ts` (modelos, drag, controles) | **Cortina** — lettering descoberto de baixo p/ cima | `.runway__intro` (clip-path) | `#passarela` |
-| Passarela → Ocasiões | `occasions/carousel.ts` (transform/opacity dos cards) | **Colunas** — moldura sobe em 3 colunas escalonadas; ao voltar, a da direita recua primeiro | `.occ-round` wrapper (mask) — nunca os cards | `.occ-round` |
-| Ocasiões → Coleção | `collection-reveal.ts` (cards, filtros) | **Varredura** — máscara dir→esq no título + empurrão 16px + fio de luz | `#colecaoTitle` (mask/translate), `.section-head::after` | `#colecao` |
-| Coleção → Como comprar | `how-film.ts` (scrub MP4, 4 cartas) | **nenhum** | — | — |
-| Como comprar → Lojas | `stores-champagne.ts` (copy/cards), `astral/*` (globo) | **Círculo** — íris de luz champagne atrás do conteúdo, nasce e some | `#lojas::before` (z-index −1, isolado) | `#lojas` |
-| Lojas → Atendimento | sem controlador | **Cortina lateral** na própria foto + título com atraso | `.concierge__media img` (clip-path), `#conciergeTitle` (translate) | `#atendimento` |
-| Atendimento → Dúvidas | `<details>` nativo | **Dobra** — eixo diagonal (canto inf. dir. → sup. esq.) só no título | `#faqTitle` | `#duvidas` |
-| Dúvidas → Finale | `finale/ba-solid.ts` | **Veludo** — tom de fundo aprofunda a partir da direita | `.finale::before` (z-index −1, isolado) | `.finale` |
+| Passagem | Família | Cor (paleta Belle) | Como abre |
+|---|---|---|---|
+| Filme → Passarela | Cortina | champagne → champagne profundo, fio ouro | sobe e sai pelo topo |
+| Passarela → Ocasiões | Colunas | ouro / marfim / ouro claro / marfim / ouro escuro | 5 colunas sobem em sequência; na volta, a da direita primeiro |
+| Ocasiões → Coleção | Varredura | noite `#1c1814`, borda ouro claro | atravessa da direita para a esquerda |
+| Coleção → Como comprar | Dobra | rosé / rosé profundo, sombra vinho na dobra | vira do canto inferior direito ao superior esquerdo |
+| Como comprar → Lojas | Círculo | noite com anel dourado | íris abre a partir do globo |
+| Lojas → Atendimento | Cortina lateral | areia → champagne, fio ouro | recolhe para a direita |
+| Atendimento → Dúvidas | Fatias | papel / ouro claro alternados | 6 faixas recolhem alternando os lados |
+| Dúvidas → Finale | Veludo | vinho com pregas, fio ouro | abre para a direita revelando o BA |
 
-Moldura e Digitação: **não implementadas** (ganho visual pequeno; teste de sobriedade). Rasgo/Pixels/Fatias/Cubo/Tinta/Queima/Retícula/Espiral/Canal/Partículas: catalogadas, não implementadas.
-
-### Divergências em relação ao piloto Codex (e por quê)
-- Codex descartou Colunas/Círculo/Veludo. Reintroduzi os três **sem segundo dono de propriedade**: Colunas mascara o wrapper (o carrossel continua único dono do transform dos cards); Círculo e Veludo vivem em pseudo-elemento de fundo dentro de seção isolada (não cobrem globo/CTA/selo; Codex observou corretamente que no Veludo um overlay ficaria invisível sob o gradiente — o pseudo com `z-index:-1` + `isolation` resolve, desenhando acima do fundo e abaixo do conteúdo).
-- Direções corrigidas para o que a Promptfly descreve/mostra ao vivo (ver REFERENCE_OBSERVATIONS).
-- Adicionado estado `v37-done` (nenhuma máscara persiste após a passagem) e âncora explícita por fronteira.
+O filme 3D (7 capítulos) não recebe camada. Controladores originais (`film.ts`, `runway.ts`, `occasions/carousel.ts`, `collection-reveal.ts`, `how-film.ts`, `stores-champagne.ts`, `finale/ba-solid.ts`) não foram alterados.

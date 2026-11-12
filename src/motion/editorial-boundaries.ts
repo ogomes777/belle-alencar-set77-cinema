@@ -23,17 +23,20 @@ export interface Boundary {
   start?: number;
   /** Viewport fraction travelled to complete. */
   span?: number;
+  /** Decorative reveal veil family (aria-hidden, removed on destroy). */
+  veil?: string;
 }
 
 /** Fronteiras V37: uma por passagem, ver docs/qa-v37/MOTION_OWNERSHIP.md. */
 export const BOUNDARIES: Boundary[] = [
-  { section: '#passarela' },                                  // Cortina
-  { section: '#ocasioes', anchor: '.occ-round', span: .42 },  // Colunas
-  { section: '#colecao' },                                    // Varredura
-  { section: '#lojas', span: .5 },                            // Círculo (luz local)
-  { section: '#atendimento' },                                // Cortina lateral
-  { section: '#duvidas' },                                    // Dobra
-  { section: '.finale', span: .5 },                           // Veludo
+  { section: '#passarela', veil: 'cortina' },     // champagne sobe
+  { section: '#ocasioes', veil: 'colunas' },      // ouro/marfim em colunas
+  { section: '#colecao', veil: 'varredura' },     // noite varre dir→esq
+  { section: '#como-comprar', veil: 'dobra' },    // rosé vira do canto
+  { section: '#lojas', veil: 'circulo' },         // noite abre em íris
+  { section: '#atendimento', veil: 'lateral' },   // areia abre lateral
+  { section: '#duvidas', veil: 'fatias' },        // marfim/ouro em faixas
+  { section: '.finale', veil: 'veludo' },         // vinho com pregas
 ];
 
 /** Smoothstep progress; complete while the anchor still sits in the lower viewport. */
@@ -43,7 +46,7 @@ export function boundaryProgress(top: number, height: number, start = .98, span 
   return p * p * (3 - 2 * p);
 }
 
-interface Live { section: HTMLElement; anchor: HTMLElement; start: number; span: number; value: number }
+interface Live { section: HTMLElement; anchor: HTMLElement; start: number; span: number; value: number; veil?: HTMLElement }
 
 export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => void {
   const root = document.documentElement;
@@ -53,7 +56,14 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
     const section = document.querySelector<HTMLElement>(b.section);
     if (!section) continue;
     const anchor = (b.anchor && section.querySelector<HTMLElement>(b.anchor)) || section;
-    live.push({ section, anchor, start: b.start ?? .98, span: b.span ?? .34, value: -1 });
+    let veil: HTMLElement | undefined;
+    if (b.veil) {
+      veil = document.createElement('div');
+      veil.className = `v37-veil v37-veil--${b.veil}`;
+      veil.setAttribute('aria-hidden', 'true');
+      section.appendChild(veil);
+    }
+    live.push({ section, anchor, start: b.start ?? .98, span: b.span ?? .6, value: -1, veil });
   }
   let frame = 0, disposed = false;
   const device = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
@@ -102,6 +112,7 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
     document.removeEventListener('focusin', schedule);
     reduced.removeEventListener('change', schedule);
     live.forEach(clear);
+    live.forEach(item => item.veil?.remove());
   };
   if (import.meta.hot) import.meta.hot.dispose(destroy);
   return destroy;

@@ -1,94 +1,123 @@
-/* V37 · editorial boundary reveals. One effect per boundary, local to real
-   elements. `--v37-entry` 0→1 (scroll-derived, reversible); `--v37-light` is
-   sin(πp): a light that rises and vanishes. `.v37-done` drops every mask so
-   nothing remains over content once the passage is complete.
-   Guardrail: no position:fixed, no new full-viewport layer, no commerce node. */
+/* V37.1 · revelações de passagem entre seções (estilo transição de página).
+   Cada seção de entrada recebe UM véu decorativo (div aria-hidden, injetado
+   pelo JS) que a cobre com uma cor da paleta Belle e se abre conforme o
+   scroll: --v37-entry 0 → 1, reversível. Ao concluir (.v37-done) o véu some
+   (display:none), então nada fica sobre produto, botão ou foto.
+   O véu vive DENTRO da seção (absolute, inset:0, seção isolada): nunca é
+   position:fixed e sempre fica abaixo do header. Sem JS = sem véu. */
 
-/* 1 · Filme → Passarela · CORTINA. The real lettering is uncovered bottom→top
-   (observed: the Promptfly panel rises); models, controls and drag are never masked. */
-#passarela.v37-boundary:not(.v37-done) .runway__intro{
-  clip-path:inset(calc((1 - var(--v37-entry))*100%) 0 0 0);
+.v37-boundary{isolation:isolate}
+.v37-boundary:not(#lojas):not(.finale){position:relative}
+.v37-veil{
+  position:absolute;inset:0;z-index:300;pointer-events:none;
+  display:none;contain:strict;
+  --p:var(--v37-entry,1);
+  --q:calc(1 - var(--p));
 }
+.v37-boundary:not(.v37-done)>.v37-veil{display:block}
 
-/* 2 · Passarela → Ocasiões · COLUNAS. The existing carousel FRAME (wrapper,
-   not the cards the carousel transforms) rises in three staggered columns. */
-#ocasioes.v37-boundary:not(.v37-done) .occ-round{
-  --c1:clamp(0, var(--v37-entry) * 1.6, 1);
-  --c2:clamp(0, var(--v37-entry) * 1.6 - .3, 1);
-  --c3:clamp(0, var(--v37-entry) * 1.6 - .6, 1);
-  -webkit-mask:linear-gradient(#000 0 0) 0 100%/33.4% calc(var(--c1)*100%) no-repeat,
-               linear-gradient(#000 0 0) 50% 100%/33.4% calc(var(--c2)*100%) no-repeat,
-               linear-gradient(#000 0 0) 100% 100%/33.4% calc(var(--c3)*100%) no-repeat;
-          mask:linear-gradient(#000 0 0) 0 100%/33.4% calc(var(--c1)*100%) no-repeat,
-               linear-gradient(#000 0 0) 50% 100%/33.4% calc(var(--c2)*100%) no-repeat,
-               linear-gradient(#000 0 0) 100% 100%/33.4% calc(var(--c3)*100%) no-repeat;
-}
-
-/* 3 · Ocasiões → Coleção · VARREDURA. A soft mask sweeps the heading right to
-   left (observed direction) with a short 16px push while a thin light rides its edge; finishes before filters/cards. */
-#colecao.v37-boundary>.section-head{position:relative}
-#colecao.v37-boundary:not(.v37-done)>.section-head>.display{
-  -webkit-mask:linear-gradient(270deg,#000 calc(var(--v37-entry)*120% - 20%),transparent calc(var(--v37-entry)*120%));
-  translate:calc((1 - var(--v37-entry))*16px) 0;
-          mask:linear-gradient(270deg,#000 calc(var(--v37-entry)*120% - 20%),transparent calc(var(--v37-entry)*120%));
-  translate:calc((1 - var(--v37-entry))*16px) 0;
-}
-#colecao.v37-boundary>.section-head::after{
-  content:"";position:absolute;left:0;bottom:-12px;height:1px;width:min(180px,34%);pointer-events:none;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  transform-origin:right;transform:scaleX(var(--v37-entry));opacity:calc(.7 * var(--v37-light));
+/* Paleta Belle usada nos véus */
+.v37-veil{
+  --champagne:#e9d6b0;--champagne-deep:#cfae74;
+  --wine:#5a2a2e;--wine-deep:#3b1a1d;
+  --blush:#ead2c8;--blush-deep:#d9b2a3;
 }
 
-/* 4 · Como comprar → Lojas · CÍRCULO. A champagne iris of light opens behind
-   the content (z-index:-1 inside an isolated section) and fades to nothing.
-   Globe, pins, store cards and CTAs are never masked. */
-#lojas.v37-boundary{isolation:isolate}
-#lojas.v37-boundary:not(.v37-done)::before{
-  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(circle at 72% 46%,color-mix(in srgb,var(--gold) 26%,transparent),transparent 62%);
-  clip-path:circle(calc(var(--v37-entry)*85%) at 72% 46%);
-  opacity:var(--v37-light);
+/* 01 · CORTINA (Filme → Passarela): painel champagne sobe e sai pelo topo. */
+.v37-veil--cortina{
+  background:linear-gradient(180deg,var(--champagne) 0%,var(--champagne-deep) 100%);
+  clip-path:inset(0 0 calc(var(--p)*100%) 0);
+  box-shadow:inset 0 -2px 0 var(--gold);
 }
 
-/* 5 · Lojas → Atendimento · CORTINA LATERAL on the photograph itself, copy
-   follows with a short offset. WhatsApp/Instagram buttons never move. */
-#atendimento.v37-boundary:not(.v37-done) .concierge__media img{
-  clip-path:inset(0 calc((1 - var(--v37-entry))*100%) 0 0);
-}
-#atendimento.v37-boundary:not(.v37-done) #conciergeTitle{
-  translate:calc((1 - clamp(0, var(--v37-entry) * 1.25 - .25, 1))*16px) 0;
-}
-
-/* 6 · Atendimento → Dúvidas · DOBRA on the editorial heading only. Native
-   <details>/<summary> receive no styles. */
-#duvidas.v37-boundary:not(.v37-done) #faqTitle{
-  transform-origin:0 0;
-  transform:perspective(900px) rotate3d(1,-1,0,calc((1 - var(--v37-entry))*12deg));
-  translate:0 calc((1 - var(--v37-entry))*12px);
-}
-
-/* 7 · Dúvidas → Finale · VELUDO. Only the local background tone deepens like
-   light settling into velvet; it is a background, behind the BA mark. */
-.finale.v37-boundary{isolation:isolate}
-.finale.v37-boundary::before{
-  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(120% 90% at 100% 50%,color-mix(in srgb,var(--gold) 20%,transparent),transparent 70%);
-  opacity:var(--v37-entry);
+/* 02 · COLUNAS (Passarela → Ocasiões): cinco colunas ouro/marfim sobem uma
+   depois da outra; na volta a da direita desce primeiro. */
+.v37-veil--colunas{
+  --c1:clamp(0, var(--p) * 1.8, 1);
+  --c2:clamp(0, var(--p) * 1.8 - .2, 1);
+  --c3:clamp(0, var(--p) * 1.8 - .4, 1);
+  --c4:clamp(0, var(--p) * 1.8 - .6, 1);
+  --c5:clamp(0, var(--p) * 1.8 - .8, 1);
+  background:
+    linear-gradient(var(--gold),var(--gold)) 0% 0%/20.2% calc((1 - var(--c1))*100%) no-repeat,
+    linear-gradient(var(--ivory),var(--sand)) 25% 0%/20.2% calc((1 - var(--c2))*100%) no-repeat,
+    linear-gradient(var(--gold-light),var(--gold-light)) 50% 0%/20.2% calc((1 - var(--c3))*100%) no-repeat,
+    linear-gradient(var(--ivory),var(--sand)) 75% 0%/20.2% calc((1 - var(--c4))*100%) no-repeat,
+    linear-gradient(var(--gold-deep),var(--gold-deep)) 100% 0%/20.2% calc((1 - var(--c5))*100%) no-repeat;
 }
 
+/* 03 · VARREDURA (Ocasiões → Coleção): painel noite atravessa da direita
+   para a esquerda, com fio dourado na borda de ataque. */
+.v37-veil--varredura{
+  background:linear-gradient(90deg,var(--gold-light) 0 3px,var(--night) 3px);
+  transform:translateX(calc(var(--p)*-101%));
+}
+
+/* 04 · DOBRA (Coleção → Como comprar): folha rosé vira do canto inferior
+   direito ao superior esquerdo, com o verso mais escuro na dobra. */
+.v37-veil--dobra{
+  background:linear-gradient(135deg,var(--blush) 0%,var(--blush) 55%,var(--blush-deep) 100%);
+  clip-path:polygon(0 0,calc(var(--q)*200%) 0,0 calc(var(--q)*200%));
+}
+.v37-veil--dobra::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent calc(var(--q)*100% - 6%),rgba(90,42,46,.22) calc(var(--q)*100%),transparent calc(var(--q)*100% + .5%));
+}
+
+/* 05 · CÍRCULO (Como comprar → Lojas): cortina noite abre num círculo que
+   nasce no ponto do globo, com anel dourado. */
+.v37-veil--circulo{
+  --r:calc(var(--p)*150%);
+  background:var(--night);
+  -webkit-mask:radial-gradient(circle at 72% 40%,transparent var(--r),#000 calc(var(--r) + 1px));
+          mask:radial-gradient(circle at 72% 40%,transparent var(--r),#000 calc(var(--r) + 1px));
+}
+.v37-veil--circulo::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 72% 40%,transparent calc(var(--r) - 2px),var(--gold-light) calc(var(--r) - 1px),var(--gold) calc(var(--r) + 3px),transparent calc(var(--r) + 4px));
+}
+
+/* 06 · CORTINA LATERAL (Lojas → Atendimento): painel areia/champagne recolhe
+   para a direita como cortina de provador. */
+.v37-veil--lateral{
+  background:linear-gradient(90deg,var(--sand) 0%,var(--champagne) 100%);
+  clip-path:inset(0 0 0 calc(var(--p)*100%));
+  box-shadow:inset 3px 0 0 var(--gold);
+}
+
+/* 07 · FATIAS (Atendimento → Dúvidas): faixas marfim e ouro se recolhem
+   alternando para os lados, como persiana. */
+.v37-veil--fatias{
+  --s:calc(var(--q)*100%);
+  background:
+    linear-gradient(var(--paper),var(--paper)) 0 0/var(--s) 16.8% no-repeat,
+    linear-gradient(var(--gold-light),var(--gold-light)) 100% 16.66%/var(--s) 16.8% no-repeat,
+    linear-gradient(var(--paper),var(--paper)) 0 33.33%/var(--s) 16.8% no-repeat,
+    linear-gradient(var(--gold-light),var(--gold-light)) 100% 50%/var(--s) 16.8% no-repeat,
+    linear-gradient(var(--paper),var(--paper)) 0 66.66%/var(--s) 16.8% no-repeat,
+    linear-gradient(var(--gold-light),var(--gold-light)) 100% 83.33%/var(--s) 16.8% no-repeat;
+}
+
+/* 08 · VELUDO (Dúvidas → Finale): cortina vinho com pregas abre para a
+   direita revelando a assinatura BA. */
+.v37-veil--veludo{
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.35),transparent 18%),
+    repeating-linear-gradient(90deg,var(--wine) 0 22px,var(--wine-deep) 34px,var(--wine) 46px),
+    var(--wine);
+  transform:translateX(calc(var(--p)*101%));
+  box-shadow:inset 4px 0 0 var(--gold);
+}
+
+/* Mobile: mesmas famílias, círculo nasce no centro alto. */
 @media(max-width:700px){
-  #lojas.v37-boundary:not(.v37-done)::before{
-    background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--gold) 24%,transparent),transparent 65%);
-    clip-path:circle(calc(var(--v37-entry)*95%) at 50% 30%);
+  .v37-veil--circulo{
+    -webkit-mask:radial-gradient(circle at 50% 30%,transparent var(--r),#000 calc(var(--r) + 1px));
+            mask:radial-gradient(circle at 50% 30%,transparent var(--r),#000 calc(var(--r) + 1px));
   }
-  #atendimento.v37-boundary:not(.v37-done) #conciergeTitle{translate:calc((1 - clamp(0, var(--v37-entry) * 1.25 - .25, 1))*8px) 0}
-  #duvidas.v37-boundary:not(.v37-done) #faqTitle{transform:perspective(700px) rotate3d(1,-1,0,calc((1 - var(--v37-entry))*8deg))}
+  .v37-veil--circulo::after{background:radial-gradient(circle at 50% 30%,transparent calc(var(--r) - 2px),var(--gold) calc(var(--r) + 1px),transparent calc(var(--r) + 3px))}
+  .v37-veil--veludo{background:linear-gradient(90deg,rgba(0,0,0,.35),transparent 18%),repeating-linear-gradient(90deg,var(--wine) 0 14px,var(--wine-deep) 22px,var(--wine) 30px)}
 }
 
-/* Belt and braces: JS already clears state in these modes. */
-@media(prefers-reduced-motion:reduce){
-  .v37-boundary *, .v37-boundary{ -webkit-mask:none !important; mask:none !important }
-  .v37-boundary .runway__intro,.v37-boundary .concierge__media img{clip-path:none !important}
-  .v37-boundary #conciergeTitle,.v37-boundary #faqTitle{transform:none !important;translate:none !important}
-  #lojas.v37-boundary::before,#colecao.v37-boundary>.section-head::after{display:none}
-}
+/* Movimento reduzido: nada de véu (o JS também não ativa). */
+@media(prefers-reduced-motion:reduce){.v37-veil{display:none!important}}

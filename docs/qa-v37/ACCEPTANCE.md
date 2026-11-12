@@ -1,6 +1,6 @@
 # V37 · aceite
 
-Data 12/11/2026 · branch `claude/wonderful-meitner-kt2rnw` · produção **não** publicada.
+Data 12/11/2026 (V37.1: véus visíveis em 8 passagens) · branch `claude/wonderful-meitner-kt2rnw` · produção **não** publicada.
 
 ## Testes
 | Comando | Resultado |
