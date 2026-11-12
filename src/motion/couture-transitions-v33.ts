@@ -33,7 +33,7 @@ function horizontal(p:number,fromRight=false):string{
 }
 function setMask(el:HTMLElement,mask:string){if(el.style.clipPath!==mask)el.style.clipPath=mask;}
 function masks(panels:HTMLElement[],motif:TransitionMotif,p:number){
-  const [a,b,c]=panels;
+  const [a,b,c]=[panels[0]!,panels[1]!,panels[2]!];
   if(motif==='curtain'){setMask(a,vertical(p));return;}
   if(motif==='iris'){
     const r=p<=.5?p*320:(1-p)*320;
@@ -52,9 +52,10 @@ function masks(panels:HTMLElement[],motif:TransitionMotif,p:number){
   }
   const delays=motif==='columns'?[0,.042,.084]:motif==='fold'?[.07,0,.045]:[.025,.072,0];
   for(let i=0;i<3;i++){
-    const shifted=clamp((p-delays[i])/(1-delays[i]));
+    const delay=delays[i]??0;
+    const shifted=clamp((p-delay)/(1-delay));
     const reverse=motif==='shutter'?i===1:motif==='fold'?i===2:false;
-    setMask(panels[i],vertical(shifted,!reverse));
+    setMask(panels[i]!,vertical(shifted,!reverse));
   }
 }
 function createOverlay(){
