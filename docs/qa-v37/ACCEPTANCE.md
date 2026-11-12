@@ -1,6 +1,6 @@
 # V37 · aceite
 
-Data 12/11/2026 (V37.3: cartelas de capítulo, cores fortes, véus só por transform) · branch `claude/wonderful-meitner-kt2rnw` · produção **não** publicada.
+Data 12/11/2026 (V37.4: 7 passagens, desempenho, e2e 105/105) · branch `claude/wonderful-meitner-kt2rnw` · produção **não** publicada.
 
 ## Testes
 | Comando | Resultado |
@@ -52,3 +52,7 @@ Data 12/11/2026 (V37.3: cartelas de capítulo, cores fortes, véus só por trans
 | Finale | 60/72 · 57/68 | 62/75 · 63/81 |
 
 A V37.2 fica dentro da variação da V36. Os picos de Dúvidas/Finale existem na V36 (canvas do BA e carrossel). Os números valem só para este ambiente headless, não para um aparelho real.
+
+## V37.4
+- `npm test` 67/67 · `npm run build` ✅ · `npm run e2e` **105/105** (primeira vez sem falhas; V36 tinha 104/105) · `qa/v37-modes.mjs` 8/8.
+- Desempenho: ver `PERFORMANCE.md`.

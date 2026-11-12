@@ -125,12 +125,16 @@ export function initFilm(director: Director): void {
   // ---------- scroll → progresso ----------
   // Static/painter mode and large reverse jumps cannot wait for a delayed RAF:
   // the chapter poster, rail and debug state must reflect scrollY right away.
-  let ticking=false,lastScrollPosition=scrollY;
+  let ticking=false,lastScrollPosition=scrollY,lastInFilm:boolean|null=null;
   function applyScrollPosition():void{
     const previous=progress;
-    progress=clamp((scrollY-filmTop)/range,0,1);
-    document.documentElement.classList.toggle('in-film',
-      scrollY>=filmTop-innerHeight*.3&&scrollY<=filmTop+range+innerHeight*.15);
+    const sy=scrollY;
+    progress=clamp((sy-filmTop)/range,0,1);
+    const inFilm=sy>=filmTop-innerHeight*.3&&sy<=filmTop+range+innerHeight*.15;
+    // V37 perf: no DOM writes while nothing changed (e.g. scrolling the shop).
+    if(progress===previous&&inFilm===lastInFilm)return;
+    lastInFilm=inFilm;
+    document.documentElement.classList.toggle('in-film',inFilm);
     debug.progress=progress;
     if(bar)bar.style.setProperty('--p',progress.toFixed(4));
     world?.setProgress(progress,Math.abs(progress-previous)>.16);
@@ -142,7 +146,9 @@ export function initFilm(director: Director): void {
     const current=scrollY;
     const jumped=Math.abs(current-lastScrollPosition)>innerHeight*.65;
     lastScrollPosition=current;
-    if(jumped||tier==='static'||!world){applyScrollPosition();return;}
+    // V37 perf: always coalesce to one frame (static tier too); only a large
+    // jump applies synchronously so anchors land on the right chapter.
+    if(jumped){applyScrollPosition();return;}
     if(ticking)return;
     ticking=true;
     requestAnimationFrame(()=>{

@@ -1,5 +1,6 @@
 /** Belle Alencar | Scroll Couture. Progressive video scrubbing, sem scroll hijack. */
 import type { Director } from './shell/director';
+import { docBox, scrollTop } from './core/scroll-geometry';
 
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
 const smooth = (a: number, b: number, n: number) => {
@@ -63,9 +64,10 @@ export function initHowFilm(director: Director): () => void {
   const render = () => {
     frame = 0;
     if (!enhanced || destroyed) return;
-    const rect = section.getBoundingClientRect();
-    const maxScroll = Math.max(1, section.offsetHeight - window.innerHeight);
-    const progress = clamp(-rect.top / maxScroll);
+    // V37 perf: cached geometry, no forced layout per frame (section is not sticky).
+    const box = docBox(section);
+    const maxScroll = Math.max(1, box.height - window.innerHeight);
+    const progress = clamp(-(box.top - scrollTop()) / maxScroll);
     if (Math.abs(progress - lastProgress) < 0.0005) return;
     lastProgress = progress;
 

@@ -2,15 +2,15 @@
  {
   "run": "360",
   "ok": true,
-  "active": 32,
+  "active": 28,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
   "overflowX": false,
-  "boundaryCount": 8,
+  "boundaryCount": 7,
   "jumps": {
    "duvidas": {
-    "entry": "1.0000",
+    "entry": "static",
     "done": true
    },
    "atendimento": {
@@ -32,15 +32,15 @@
  {
   "run": "390",
   "ok": true,
-  "active": 30,
+  "active": 26,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
   "overflowX": false,
-  "boundaryCount": 8,
+  "boundaryCount": 7,
   "jumps": {
    "duvidas": {
-    "entry": "1.0000",
+    "entry": "static",
     "done": true
    },
    "atendimento": {
@@ -67,10 +67,10 @@
   "reversible": true,
   "bigFixed": [],
   "overflowX": false,
-  "boundaryCount": 8,
+  "boundaryCount": 7,
   "jumps": {
    "duvidas": {
-    "entry": "1.0000",
+    "entry": "static",
     "done": true
    },
    "atendimento": {
@@ -92,15 +92,15 @@
  {
   "run": "1440",
   "ok": true,
-  "active": 23,
+  "active": 20,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
   "overflowX": false,
-  "boundaryCount": 8,
+  "boundaryCount": 7,
   "jumps": {
    "duvidas": {
-    "entry": "1.0000",
+    "entry": "static",
     "done": true
    },
    "atendimento": {
@@ -122,15 +122,15 @@
  {
   "run": "1440-dark",
   "ok": true,
-  "active": 23,
+  "active": 20,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
   "overflowX": false,
-  "boundaryCount": 8,
+  "boundaryCount": 7,
   "jumps": {
    "duvidas": {
-    "entry": "1.0000",
+    "entry": "static",
     "done": true
    },
    "atendimento": {
@@ -152,15 +152,15 @@
  {
   "run": "390-rose",
   "ok": true,
-  "active": 30,
+  "active": 26,
   "monotonic": true,
   "reversible": true,
   "bigFixed": [],
   "overflowX": false,
-  "boundaryCount": 8,
+  "boundaryCount": 7,
   "jumps": {
    "duvidas": {
-    "entry": "1.0000",
+    "entry": "static",
     "done": true
    },
    "atendimento": {

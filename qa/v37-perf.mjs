@@ -9,7 +9,7 @@ const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile
 const OFF = process.env.VEILS === 'off';
 await ctx.addInitScript(() => sessionStorage.setItem('belle:v4:intro', '1'));
 const p = await ctx.newPage();
-await p.goto(base + '/?tier=static', { waitUntil: 'load' });
+await p.goto(base + '/' + (process.env.Q || '?tier=static'), { waitUntil: 'load' });
 await p.waitForTimeout(1000);
 // VEILS=off hides only the V37 veils (same build, same JS), isolating their render cost.
 if (OFF) await p.addStyleTag({ content: '.v37-veil{display:none!important}' });

@@ -13,6 +13,7 @@
  * dropped, so nothing persists over content; scrolling back re-enters it.
  */
 import '../styles/editorial-boundaries.css';
+import { viewTop, onGeometryChange } from '../core/scroll-geometry';
 
 export interface Boundary {
   /** Section that receives the state (classes + custom properties). */
@@ -32,7 +33,7 @@ export interface Boundary {
 }
 
 /** Number of compositor-only panels each veil family is cut into. */
-const PIECES: Record<string, number> = { colunas: 5, fatias: 6 };
+const PIECES: Record<string, number> = { colunas: 5 };
 
 /** Fronteiras V37: uma por passagem, ver docs/qa-v37/MOTION_OWNERSHIP.md. */
 export const BOUNDARIES: Boundary[] = [
@@ -42,8 +43,7 @@ export const BOUNDARIES: Boundary[] = [
   { section: '#como-comprar', veil: 'dobra', chapter: '04 · Como comprar', title: ['Do clique', ' à loja.'] },
   { section: '#lojas', veil: 'circulo', chapter: '05 · Lojas', title: ['Quatro cidades', '.'] },
   { section: '#atendimento', veil: 'lateral', chapter: '06 · Atendimento', title: ['Com', ' você.'] },
-  { section: '#duvidas', veil: 'fatias', chapter: '07 · Dúvidas', title: ['Antes de', ' escolher.'] },
-  { section: '.finale', veil: 'veludo', chapter: '08 · Assinatura', title: ['Belle', ' Alencar.'] },
+  { section: '.finale', veil: 'veludo', chapter: '07 · Assinatura', title: ['Belle', ' Alencar.'] },
 ];
 
 /** Smoothstep progress; complete while the anchor still sits in the lower viewport. */
@@ -116,7 +116,7 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
     const vh = innerHeight;
     // Reads first, then writes: no layout thrash.
     const next = live.map(item => {
-      const top = item.anchor.getBoundingClientRect().top;
+      const top = viewTop(item.anchor); // cached: no forced layout per frame
       // A menu/hash jump lands with the section already revealed; the skip
       // ends once the section is scrolled back below the viewport.
       if (item.skip && top > vh) item.skip = false;
@@ -155,6 +155,7 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
   window.addEventListener('hashchange', onHash);
   document.addEventListener('click', onClick, true);
   onHash();
+  const offGeometry = onGeometryChange(schedule);
   const modes = new MutationObserver(schedule);
   modes.observe(root, { attributes: true, attributeFilter: ['data-intensity'] });
   const winEvents = ['scroll', 'resize', 'pageshow', 'hashchange'] as const;
@@ -165,7 +166,7 @@ export function initEditorialBoundaries(list: Boundary[] = BOUNDARIES): () => vo
   update();
 
   const destroy = () => {
-    disposed = true; cancelAnimationFrame(frame); modes.disconnect();
+    disposed = true; cancelAnimationFrame(frame); modes.disconnect(); offGeometry();
     winEvents.forEach(e => window.removeEventListener(e, schedule));
     document.removeEventListener('visibilitychange', schedule);
     document.removeEventListener('focusin', schedule);

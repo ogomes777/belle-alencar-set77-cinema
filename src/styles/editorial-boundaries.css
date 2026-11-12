@@ -113,17 +113,7 @@
   transform:translate3d(calc(var(--e) * 101%),0,0);
 }
 
-/* 07 · FATIAS · → Dúvidas — seis faixas ouro/café recolhem alternando. */
-.v37-veil--fatias .v37-veil__piece{
-  bottom:auto;height:16.9%;top:calc(var(--i) * 16.666%);
-  --c:clamp(0, var(--o) * 1.5 - var(--i) * .1, 1);
-  --dir:-1;
-  transform:translate3d(calc(var(--dir) * var(--c) * var(--c) * (3 - 2 * var(--c)) * 101%),0,0);
-  background:var(--gold-deep);
-}
-.v37-veil--fatias .v37-veil__piece:nth-child(even){--dir:1;background:var(--espresso)}
-
-/* 08 · VELUDO · → Finale — veludo dourado com pregas abre para a direita
+/* 07 · VELUDO · → Finale — veludo dourado com pregas abre para a direita
    revelando o BA. */
 .v37-veil--veludo .v37-veil__piece{
   background:

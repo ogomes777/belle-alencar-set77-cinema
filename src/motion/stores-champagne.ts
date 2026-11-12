@@ -1,5 +1,6 @@
 /** Belle Alencar V22 · reversible scroll copy for stores only. Never touches the globe. */
 import '../styles/stores-champagne-v22.css';
+import { viewTop, onGeometryChange } from '../core/scroll-geometry';
 
 const clamp=(x:number):number=>Math.max(0,Math.min(1,x));
 
@@ -23,6 +24,8 @@ export function initStoresChampagne():()=>void {
   if(!targets.length)return ()=>{};
   let frame=0,disposed=false;
   const values=Array<number>(targets.length).fill(-1);
+  let offsets:number[]|null=null,offsetsVersion=-1,geometryVersion=0;
+  const offGeometry=onGeometryChange(()=>{geometryVersion++;schedule();});
   const staticMode=()=>reduced.matches||root.dataset.intensity==='essential';
   const draw=()=>{
     frame=0;
@@ -32,20 +35,24 @@ export function initStoresChampagne():()=>void {
     // vertical position. Unlike V22, the reveal FINISHES as that element
     // reaches ~62-68% viewport height, never near the next chapter.
     // offsetTop is layout-only and immune to the transform being animated.
-    const sectionTop=section.getBoundingClientRect().top;
+    // V37 perf: cached geometry (no getBoundingClientRect/offsetTop per frame).
+    const sectionTop=viewTop(section);
     const vh=Math.max(1,innerHeight);
-    const topWithinSection=(element:HTMLElement):number=>{
-      let offset=0;
-      let current:HTMLElement|null=element;
-      while(current && current!==section){
-        offset+=current.offsetTop;
-        current=current.offsetParent as HTMLElement|null;
-      }
-      return current===section ? offset : element.offsetTop;
-    };
-    const next=targets.map((node,i)=>{
+    if(!offsets||offsetsVersion!==geometryVersion){
+      offsets=targets.map(element=>{
+        let offset=0;
+        let current:HTMLElement|null=element;
+        while(current && current!==section){
+          offset+=current.offsetTop;
+          current=current.offsetParent as HTMLElement|null;
+        }
+        return current===section ? offset : element.offsetTop;
+      });
+      offsetsVersion=geometryVersion;
+    }
+    const next=targets.map((_node,i)=>{
       const stagger=i<=2?i*.009:.022+(i-3)*.008;
-      return storesRevealAt(sectionTop+topWithinSection(node),vh,stagger);
+      return storesRevealAt(sectionTop+offsets![i]!,vh,stagger);
     });
     for(let i=0;i<targets.length;i++){
       const value=next[i]!;
@@ -55,7 +62,7 @@ export function initStoresChampagne():()=>void {
     }
     section.classList.add('stores--scrubbed');
   };
-  const schedule=()=>{if(!frame&&!disposed&&!document.hidden)frame=requestAnimationFrame(draw);};
+  function schedule(){if(!frame&&!disposed&&!document.hidden)frame=requestAnimationFrame(draw);}
   let observer:IntersectionObserver|null=null;
   if('IntersectionObserver'in window){
     observer=new IntersectionObserver(entries=>{
@@ -77,7 +84,7 @@ export function initStoresChampagne():()=>void {
   reduced.addEventListener?.('change',onModeChange);
   draw();
   return ()=>{
-    disposed=true;if(frame)cancelAnimationFrame(frame);
+    disposed=true;offGeometry();if(frame)cancelAnimationFrame(frame);
     observer?.disconnect();modes.disconnect();
     window.removeEventListener('scroll',schedule);
     window.removeEventListener('resize',schedule);

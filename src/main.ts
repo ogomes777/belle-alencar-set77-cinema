@@ -26,8 +26,10 @@ import { initFilm } from './film';
 import { initSections } from './sections';
 import { initHowFilm } from './how-film';
 import { initStoresChampagne } from './motion/stores-champagne';
+import { initPerfGuard } from './core/perf-guard';
 
 
+initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
 initHeader();

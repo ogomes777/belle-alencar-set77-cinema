@@ -1,4 +1,5 @@
 import { CITIES, spherePoint, journey } from './geography';
+import { docBox, scrollTop } from '../core/scroll-geometry';
 import { commerceApi } from '../commerce/api';
 import { clampGlobeZoom, wheelGlobeZoom, pinchGlobeZoom, easeGlobeZoom } from './gestures';
 /** Original lightweight decorative approximation; not React Bits Astral Shell. */
@@ -74,11 +75,16 @@ export function initStoreOrbit(): void {
     flightFrame=0;
     const how=document.querySelector<HTMLElement>('#como-comprar');
     if(!how||still()){flight.hidden=true;arrival=1;return;}
-    const rect=how.getBoundingClientRect(),target=canvas!.getBoundingClientRect();
-    const start=scrollY+rect.top+Math.max(0,rect.height-innerHeight)*.61;
-    const finish=scrollY+target.top+target.height*.5-innerHeight*.55;
-    const p=Math.max(0,Math.min(1,(scrollY-start)/Math.max(1,finish-start)));
-    flight.hidden=p<=0||p>=1;arrival=p;
+    // V37 perf: cached document geometry; live reads only while the bag flies.
+    const howBox=docBox(how),canvasBox=docBox(canvas!),sy=scrollTop();
+    const start=howBox.top+Math.max(0,howBox.height-innerHeight)*.61;
+    const finish=canvasBox.top+canvasBox.height*.5-innerHeight*.55;
+    const p=Math.max(0,Math.min(1,(sy-start)/Math.max(1,finish-start)));
+    const idle=p<=0||p>=1;
+    if(flight.hidden!==idle)flight.hidden=idle;
+    arrival=p;
+    if(idle)return;
+    const target=canvas!.getBoundingClientRect();
     const card=how.querySelector<HTMLElement>('.how__steps li')?.getBoundingClientRect();
     const originX=card?card.left+card.width*.5:innerWidth*.5;
     const originY=card?card.top+card.height*.3:innerHeight*.5;

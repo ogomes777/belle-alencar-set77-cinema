@@ -1,0 +1,25 @@
+/* V37 · modo leve adaptativo (html.perf-lite). Liga só em aparelho fraco ou
+   quando quadros lentos são medidos no scroll. Troca o vidro desfocado
+   (re-desfocado a cada quadro) por superfícies quase opacas do mesmo tom. */
+html.perf-lite{--lite-base:#f4ede1;--lite-card:rgba(248,243,234,.9)}
+html.perf-lite[data-belle-theme="dark"]{--lite-base:#1f1a15;--lite-card:rgba(31,26,21,.9)}
+html.perf-lite[data-belle-theme="rose"]{--lite-base:#f3e4dc;--lite-card:rgba(246,233,226,.9)}
+html.perf-lite *,html.perf-lite *::before,html.perf-lite *::after{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+html.perf-lite .site-header{
+  background:linear-gradient(var(--ba-nav-bg,transparent),var(--ba-nav-bg,transparent)),var(--lite-base)!important;
+}
+html.perf-lite .chapter__card,
+html.perf-lite .wish-btn,
+html.perf-lite .belle-settings,
+html.perf-lite .search-atelier,
+html.perf-lite .how__steps li{background-color:var(--lite-card)!important}
+/* drop-shadow em recortes que se movem no scroll é re-rasterizado a cada
+   quadro; no modo leve a sombra filtrada sai (o produto não muda). */
+html.perf-lite .editorial-product-image,
+html.perf-lite .editorial-cutout,
+html.perf-lite .occ-card__model,
+html.perf-lite .stores__flight,
+html.perf-lite .pcard img,
+html.perf-lite .runway img{filter:none!important}

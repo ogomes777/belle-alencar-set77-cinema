@@ -1,5 +1,6 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
 import {initEditorialBoundaries} from '../../src/motion/editorial-boundaries';
+import {invalidateGeometry} from '../../src/core/scroll-geometry';
 
 afterEach(()=>{vi.unstubAllGlobals();document.body.replaceChildren();delete document.documentElement.dataset.intensity;});
 function fixture(reduced=false){
@@ -11,7 +12,7 @@ function fixture(reduced=false){
   vi.stubGlobal('matchMedia',()=>({matches:reduced,addEventListener:()=>{},removeEventListener:()=>{}}));
   vi.stubGlobal('requestAnimationFrame',(fn:FrameRequestCallback)=>{callback=fn;return 1;});
   vi.stubGlobal('cancelAnimationFrame',()=>{callback=undefined;});
-  return {section,move(value:number){top=value;window.dispatchEvent(new Event('scroll'));callback?.(0);}};
+  return {section,move(value:number){top=value;invalidateGeometry();window.dispatchEvent(new Event('scroll'));callback?.(0);}};
 }
 describe('V37 boundary integration',()=>{
   it('reverses without touching commercial controls and destroys its enhancement',()=>{

@@ -29,3 +29,8 @@ O filme 3D (7 capítulos) não recebe camada. Controladores originais (`film.ts`
 - **Abertura com ease in-out** (smoothstep na 2ª metade) — começa suave, corta decidida.
 - **Compositor**: véus cortados em peças (`.v37-veil__piece`: 5 colunas, 6 faixas, 1 nas demais) animadas só por `transform`; a Dobra usa recorte estático + translação diagonal. Única repintura: a íris do Círculo.
 - Medição isolada (`VEILS=off|on node qa/v37-perf.mjs`, mesmo build, 3 rodadas intercaladas, 390px CPU 4×): custo dos véus entre 0 e ~4ms/quadro. O custo base dessas seções (~45–65ms/quadro nesse perfil, ~17ms em modo essencial) vem dos efeitos pré-existentes (carrossel 3D, BA 3D, globo), não das transições.
+
+## V37.4 (cliente, 12/11): Dúvidas sem transição + desempenho
+- Removida a transição Atendimento → Dúvidas (Fatias) a pedido. Restam 7 passagens; o Finale vira "07 · Assinatura".
+- Trabalho de desempenho em módulos pré-existentes (geometria em cache, coleção sem gsap.set por quadro, filme sem escrita redundante, BA aquecido antes) e modo leve adaptativo. Ver `PERFORMANCE.md`.
+- Acessibilidade: botão "Escolher loja" com área de toque 44×44 em telas ≤370 px (antes 38×36; era a única falha e2e herdada da V36).
