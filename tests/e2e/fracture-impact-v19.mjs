@@ -38,27 +38,30 @@ try{
    },{id,p});
    await page.waitForTimeout(170);
   };
-  // Bracket a fully open and fully closed state, then find the exact
-  // intermediate position by browser geometry. Tablet layouts can change
-  // card height after images settle, so a guessed fixed scroll offset is not
-  // a meaningful validation of the real reversible transition.
-  await move(1.25);
-  await page.waitForTimeout(130);
-  let high=await page.evaluate(()=>scrollY);
-  await page.evaluate(()=>document.querySelector('#colecao .pgrid')?.scrollIntoView({block:'start',behavior:'instant'}));
-  await page.waitForTimeout(180);
-  let low=await page.evaluate(()=>scrollY);
+  // Sweep the actual card's document-space entry interval in small
+  // scroll increments. This samples the complete opening rather than
+  // assuming a single fixed offset, which varies after mobile image decode.
+  const span=await page.evaluate(id=>{
+    const grid=document.querySelector('#colecao .pgrid');
+    const card=grid?.querySelector('[data-product="'+id+'"]');
+    if(!grid||!card)return {from:0,to:0};
+    const absolute=scrollY+grid.getBoundingClientRect().top+card.offsetTop;
+    return {
+      from:Math.max(0,absolute-innerHeight*1.22),
+      to:Math.max(0,absolute-innerHeight*.08)
+    };
+  },id);
   let mid=await cssCard(page,id);
-  for(let attempt=0;attempt<10;attempt++){
-    const target=(high+low)*.5;
+  const samples=[];
+  for(let step=0;step<=24;step++){
+    const target=span.from+(span.to-span.from)*(step/24);
     await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),target);
-    await page.waitForTimeout(145);
+    await page.waitForTimeout(76);
     mid=await cssCard(page,id);
+    samples.push({step,opacity:mid.opacity,clip:mid.clip.slice(0,18),shear:mid.shear});
     if(mid.staged&&mid.opacity>.07&&mid.opacity<.95&&mid.shear>.01)break;
-    if(mid.revealed||mid.opacity>=.95)high=target;
-    else low=target;
   }
-  check(mid.staged&&mid.opacity>.07&&mid.opacity<.95,width+': one product appears partially fractured during scrolling '+JSON.stringify(mid));
+  check(mid.staged&&mid.opacity>.07&&mid.opacity<.95,width+': one product appears partially fractured during scrolling '+JSON.stringify({span,mid,samples}));
   check(mid.clip.startsWith('polygon('),width+': actual jagged CSS clip mask exposed mid-entrance');
   check(mid.transform!=='none',width+': product shifts/rotates while reassembling');
   check(mid.shear>.01,width+': golden fracture seam follows the visible edge');
