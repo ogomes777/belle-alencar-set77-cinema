@@ -148,6 +148,11 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
         // its existing MutationObserver and stays reversible.
         const offset = grid.children.length;
         const wished = ctx.commerce.get().wishlist;
+        // Move keyboard focus off the button before it travels to the end
+        // of the enlarged grid. Otherwise browsers scroll thousands of
+        // pixels to keep that moving focused button on screen.
+        grid.tabIndex = -1;
+        grid.focus({ preventScroll: true });
         grid.append(...filteredProducts.slice(offset).map((p, i) => productCard(p, wished.includes(p.id), offset + i)));
         expanded = true;
       } else {
