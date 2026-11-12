@@ -7,7 +7,7 @@ describe('Belle BA finale V28 — single physically extruded brand',()=>{
    expect(BA_FOIL_CONTOURS.length).toBe(4);
    const shape=buildBAShape(THREE);
    expect(shape.holes).toHaveLength(3);
-   expect(THREE.ShapeUtils.isClockWise(shape.extractPoints().shape)).toBe(true);
+   expect(THREE.ShapeUtils.isClockWise(shape.extractPoints(12).shape)).toBe(true);
  });
  it('has non-zero real thickness and front/back faces',()=>{
    const g=new THREE.ExtrudeGeometry(buildBAShape(THREE),{
