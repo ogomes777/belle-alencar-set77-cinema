@@ -3,10 +3,11 @@
  * Works with existing DOM and commerce mutations; original pt-BR kept in memory.
  */
 import { phrasePairs } from './copy';
+import { productPairs } from './catalog-copy';
 export type BelleLocale='pt'|'en'|'es'|'it';
 const languages: BelleLocale[]=['pt','en','es','it'];
 const dictionary:Record<'en'|'es'|'it',Record<string,string>>={en:{},es:{},it:{}};
-for(const [pt,en,es,it] of phrasePairs){
+for(const [pt,en,es,it] of [...phrasePairs,...productPairs]){
  dictionary.en[pt]=en;dictionary.es[pt]=es;dictionary.it[pt]=it;
 }
 const storeKey='belle:v31:locale';
