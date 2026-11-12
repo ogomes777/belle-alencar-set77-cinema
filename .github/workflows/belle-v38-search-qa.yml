@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - feat/belle-v38-search-intelligence-gb
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
 permissions:
   contents: read
 jobs:
