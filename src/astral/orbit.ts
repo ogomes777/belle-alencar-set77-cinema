@@ -253,9 +253,14 @@ export function initStoreOrbit(): void {
     if(navigation){zoom=1;manualZoom=manualZoomTarget=1;}
     navigation=false;mapAfterJourney=false;pendingEntry=false;
   };
-  canvas.addEventListener('wheel',event=>{
+  section.addEventListener('wheel',event=>{
     if(still()||!visible)return;
-    // Captura a roda apenas SOBRE o globo; scroll normal fora dele.
+    // Os marcadores são overlays sobre o canvas. Capturar no ancestral
+    // restringe o wheel à esfera inclusive quando o alvo é uma sacolinha.
+    const rect=canvas.getBoundingClientRect();
+    if(event.clientX<rect.left||event.clientX>rect.right||
+       event.clientY<rect.top||event.clientY>rect.bottom||
+       canvas.parentElement?.classList.contains('is-map'))return;
     event.preventDefault();
     manualControl();velocityX=velocityY=0;
     manualZoomTarget=wheelGlobeZoom(manualZoomTarget,event.deltaY);
