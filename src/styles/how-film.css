@@ -171,3 +171,137 @@ body.is-how-visible #floatCta{visibility:hidden!important;opacity:0;pointer-even
     backdrop-filter:none;-webkit-backdrop-filter:none;
   }
 }
+
+/* ================================================================
+   V18 · GILDED IMPACT
+   Choreography tied to the existing video scrub, not a second RAF loop.
+   Golden impact is light and depth, never a noisy particle canvas.
+   ================================================================ */
+#como-comprar.how--couture {
+  --impact-gold:#c2965a;
+  --impact-champagne:#f2d49d;
+  --impact-ink:#2e261d;
+}
+/* Gracefully approach the dark stores section; eliminate the hard beige cut. */
+#como-comprar.how--couture::after{
+  height:clamp(94px,15vw,190px);
+  background:linear-gradient(180deg,
+    rgba(28,24,20,0) 0%,
+    rgba(107,72,37,.10) 22%,
+    rgba(80,56,37,.45) 59%,
+    #1c1814 100%);
+}
+#lojas.stores {
+  background:
+    radial-gradient(ellipse 75% 180px at 50% 0,rgba(194,151,80,.115),transparent 86%),
+    #1c1814;
+}
+.how--couture.how--enhanced .how__gold-veil{
+  background:
+    radial-gradient(ellipse 58% 85% at 65% 46%,
+      rgba(240,187,106,.56),
+      rgba(241,204,148,.24) 53%,
+      rgba(241,204,148,0) 84%),
+    linear-gradient(135deg,
+      rgba(251,245,232,.80),
+      rgba(249,224,181,.80) 58%,
+      rgba(239,199,139,.80));
+  opacity:calc(var(--how-wash,0) * .93);
+}
+.how--couture .how__bottom .how__steps{
+  perspective:1050px;
+  transform-style:preserve-3d;
+}
+.how--couture .how__steps li {
+  background:
+    linear-gradient(141deg,#fffdf7 0%,#f8ebd3 48%,#efdbb9 100%);
+  border:1px solid rgba(180,133,69,.55);
+  box-shadow:
+    0 20px 42px -31px rgba(80,49,18,.48),
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 0 0 1px rgba(226,192,140,.10);
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+.how--couture .how__steps li::before{
+  left:0;right:0;top:0;height:100%;
+  border-radius:inherit;
+  background:
+    radial-gradient(circle at 14% 0%,rgba(255,255,255,.77),transparent 53%),
+    linear-gradient(110deg,transparent 28%,rgba(255,255,255,.11) 57%,transparent 81%);
+  opacity:.75;
+  pointer-events:none;
+}
+.how--couture .how__steps li::after{
+  content:"";position:absolute;inset:0;width:auto;height:auto;
+  border:1px solid rgba(199,151,79,.12);
+  border-radius:inherit;
+  background:radial-gradient(ellipse at 63% 0,
+    rgba(250,206,133,.40),
+    rgba(255,245,225,0) 68%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.53);
+  opacity:var(--how-card-glow,1);
+  pointer-events:none;
+}
+/* Cards stay opaque and dimensional while landing. The tiny alpha ramp only
+   reveals their entrance; depth/scale make the actual impact. */
+.how--couture.how--enhanced .how__steps li {
+  opacity:var(--how-card-opacity,0);
+  transform:
+    translate3d(var(--how-card-x,0px),var(--how-card-y,0px),var(--how-card-z,0px))
+    rotateY(var(--how-card-rotation,0deg))
+    scale(var(--how-card-scale,1));
+  transform-origin:50% 82%;
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+  box-shadow:
+    0 30px 60px -39px rgba(89,53,17,.44),
+    0 0 calc(var(--how-card-glow,0)*21px) rgba(227,176,95,calc(var(--how-card-glow,0)*.18)),
+    inset 0 1px 0 rgba(255,255,255,.91);
+}
+/* The CTA waits until the final card lands. Both reveal and removal follow
+   the direction of native scrolling. */
+.how--couture.how--enhanced .how__foot{
+  opacity:var(--how-foot,0);
+  transform:translate3d(0,calc((1 - var(--how-foot,0))*16px),0);
+}
+.how--couture .how__foot .btn{
+  border-radius:9px;
+  box-shadow:0 10px 20px -17px rgba(39,27,14,.35);
+}
+.how--couture .how__foot .btn--solid{
+  background:linear-gradient(130deg,#32271d,#5b4228);
+  border-color:#705233;
+}
+@media(min-width:901px){
+ .how--couture.how--enhanced .how__steps li{
+   min-height:clamp(167px,12vw,200px);
+   justify-content:flex-start;
+ }
+ .how--couture.how--enhanced .how__steps h3{
+   font-size:clamp(.96rem,1.2vw,1.18rem);
+ }
+}
+@media(max-width:600px){
+  .how--couture .how__bottom .how__steps{perspective:720px}
+  .how--couture.how--enhanced .how__steps li{
+    border-radius:13px;
+    box-shadow:0 16px 26px -19px rgba(89,53,17,.31),
+      inset 0 1px 0 rgba(255,255,255,.96);
+  }
+  .how--couture .how__steps li::after{
+    background:radial-gradient(ellipse at 58% 0,
+      rgba(250,207,141,.21),transparent 75%);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .how--couture.how--enhanced .how__steps li,
+  .how--couture .how__steps li,
+  .how--couture.how--enhanced .how__foot{
+    opacity:1!important;transform:none!important;
+  }
+}
+html[data-intensity='essential'] .how--couture .how__steps li,
+html[data-intensity='essential'] .how--couture .how__foot{
+  opacity:1!important;transform:none!important;
+}

@@ -73,13 +73,32 @@ export function initHowFilm(director: Director): () => void {
     // Word-mask / editorial reveal follows the same scroll progress as video.
     section.style.setProperty('--how-title',String(smooth(0.0,0.19,progress)));
     section.style.setProperty('--how-intro', String(1 - smooth(0.24, 0.50, progress)));
-    section.style.setProperty('--how-wash', String(smooth(0.75, 0.94, progress)));
-    section.style.setProperty('--how-bottom', String(smooth(0.72, 0.86, progress)));
+    // The dress arrives first; four solid cards follow in a measured
+    // golden cascade. Every number is derived from progress, so returning
+    // upward automatically reverses the animation without a second timeline.
+    section.style.setProperty('--how-wash', String(smooth(0.59, 0.94, progress)));
+    section.style.setProperty('--how-bottom', String(smooth(0.61, 0.71, progress)));
+    section.style.setProperty('--how-foot', String(smooth(0.90, 0.975, progress)));
+    section.style.setProperty('--how-gold', String(smooth(0.56, 0.96, progress)));
+    const mobile = window.innerWidth <= 600;
     cards.forEach((card, i) => {
-      card.style.setProperty('--how-card', String(smooth(0.74 + i * 0.035, 0.87 + i * 0.035, progress)));
+      const a = 0.665 + i * 0.056;
+      const reveal = smooth(a, a + 0.117, progress);
+      const sign = i % 2 === 0 ? -1 : 1;
+      const settle = smooth(0, 0.91, reveal);
+      const overshoot = Math.sin(Math.PI * reveal) * 0.075;
+      const scale = 0.57 + 0.43 * settle + overshoot;
+      card.style.setProperty('--how-card', String(reveal));
+      card.style.setProperty('--how-card-opacity', String(smooth(0, 0.23, reveal)));
+      card.style.setProperty('--how-card-x', `${(sign * (mobile ? 38 : 105) * (1 - reveal)).toFixed(2)}px`);
+      card.style.setProperty('--how-card-y', `${((mobile ? 78 : 140) * (1 - reveal)).toFixed(2)}px`);
+      card.style.setProperty('--how-card-z', `${((mobile ? -40 : -145) * (1 - reveal)).toFixed(2)}px`);
+      card.style.setProperty('--how-card-rotation', `${(sign * (mobile ? 9 : 17) * (1 - reveal)).toFixed(2)}deg`);
+      card.style.setProperty('--how-card-scale', scale.toFixed(4));
+      card.style.setProperty('--how-card-glow', String(smooth(0.38, 0.94, reveal)));
     });
 
-    const interactive = progress >= 0.96;
+    const interactive = progress >= 0.95;
     if (interactive !== lastInteractive) {
       lastInteractive = interactive;
       bottom.inert = !interactive;
@@ -110,8 +129,12 @@ export function initHowFilm(director: Director): () => void {
     enhanced = false;
     bottom.inert = false;
     section.classList.remove('how--enhanced', 'how--interactive', 'how--video-ready');
-    for (const key of ['--how-title', '--how-intro', '--how-wash', '--how-bottom']) section.style.removeProperty(key);
-    cards.forEach(card => card.style.removeProperty('--how-card'));
+    for (const key of ['--how-title', '--how-intro', '--how-wash', '--how-bottom', '--how-foot', '--how-gold']) section.style.removeProperty(key);
+    cards.forEach(card => {
+      for (const name of ['--how-card', '--how-card-opacity', '--how-card-x',
+        '--how-card-y', '--how-card-z', '--how-card-rotation', '--how-card-scale',
+        '--how-card-glow']) card.style.removeProperty(name);
+    });
     lastProgress = -1;
     seeking = false;
     video.pause();

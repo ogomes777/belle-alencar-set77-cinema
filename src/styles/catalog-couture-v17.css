@@ -211,3 +211,23 @@ html[data-intensity='essential'] #colecao .section-head *,
 html[data-intensity='essential'] #colecao .collection__handoff *{
   opacity:1!important;transform:none!important;clip-path:none!important;
 }
+
+/* V18: a light from the dress continues into the collection / next chapter.
+   The same scroll variables reverse on upward motion, avoiding abrupt cuts. */
+#colecao .collection__handoff {
+  background:
+    radial-gradient(ellipse 65% 75% at 76% 96%,rgba(231,184,103,.20),transparent 76%),
+    linear-gradient(180deg,rgba(248,245,240,0),rgba(244,234,214,.80) 44%,#f3dfbb 81%,#e8f0f1 100%);
+}
+#colecao .collection__handoff::before {
+  background:linear-gradient(90deg,transparent,rgba(181,140,70,.37),transparent);
+}
+#colecao .collection__handoff h2 em {color:#947040}
+#colecao.is-cine-story .collection__handoff {
+  --bridge-light:var(--collection-bridge,1);
+}
+@media(max-width:600px){
+  #colecao .collection__handoff{
+    background:linear-gradient(180deg,rgba(248,245,240,0),rgba(241,226,199,.83) 64%,#e8f0f1 100%);
+  }
+}
