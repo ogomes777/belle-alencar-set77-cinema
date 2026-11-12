@@ -23,3 +23,9 @@ Refino posterior: halo sutil, pulsos de luz ao longo das conexões, redução do
 Em desktop, os quatro cards estão em grade compacta à esquerda e o globo à direita. Em larguras menores, a composição fica em coluna para preservar os botões. Uma camada interna de pontos sugere mais profundidade. A rotação por arraste foi acelerada e aceita mouse e toque horizontal, enquanto `touch-action: pan-y` preserva o scroll vertical. A renderização agrupa conexões por intensidade e reduz a densidade e a resolução do canvas em telas pequenas; o modo essencial e movimento reduzido continuam respeitados.
 
 QA local: typecheck, 34 testes unitários e build aprovados; Chromium em 390/768/1440 sem overflow, com quatro botões e resposta visual ao ponteiro; posição lateral confirmada em 1440. Em uma amostra local de 2,01 s com touch emulado foram observados 118 quadros de `requestAnimationFrame` e cinco eventos de movimento do ponteiro. É uma medição de laboratório, não garantia de FPS ou validação de toque em aparelhos físicos. A esfera continua uma representação estilizada, não um mapa fiel nem o componente React Bits Pro licenciado.
+
+## Rotação livre nos dois eixos
+
+O arraste do mouse esquerdo ou do dedo atualiza uma orientação acumulada sem limite nos polos. Após soltar, uma inércia limitada e amortecida continua o movimento; movimento reduzido desativa a inércia. O gesto sobre o globo controla os dois eixos, portanto a rolagem vertical deve ser iniciada fora do canvas. Cancelamento do toque encerra o arraste.
+
+Validação local: TypeScript, build, 34 testes unitários; `tests/e2e/globe-rotation.cjs` verificou mudança visual nos dois eixos com mouse e touch emulado. Layout sem overflow e quatro controles em 390/768/1440 px. Uma amostra de 2,01 s em Chromium com celular emulado registrou 109 quadros e cinco movimentos de toque; não é garantia de taxa em aparelhos físicos. Safari e dispositivos físicos permanecem pendentes.

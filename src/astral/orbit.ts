@@ -40,25 +40,47 @@ export function initStoreOrbit(): void {
     nearest.forEach(q=>edges.push([i,q.j]));
   });
   let frame = 0, visible = false, angle = 0, last = 0, size = 0;
-  let pointerX = -9999, pointerY = -9999, dragging = false, previousX = 0;
+  // Quaternion keeps both axes free through repeated full turns, without pole limits.
+  let orientation: [number,number,number,number] = [0,0,0,1];
+  let velocityX=0, velocityY=0, lastDragTime=0, activePointer=-1;
+  let pointerX = -9999, pointerY = -9999, dragging = false, previousX = 0, previousY = 0;
+  function rotate(dx:number,dy:number) {
+    const ax=dy*.5, ay=dx*.5, sx=Math.sin(ax), cx=Math.cos(ax), sy=Math.sin(ay), cy=Math.cos(ay);
+    const [x,y,z,w]=orientation, qx=sx*cy, qy=cx*sy, qz=sx*sy, qw=cx*cy;
+    const nx=qw*x+qx*w+qy*z-qz*y, ny=qw*y-qx*z+qy*w+qz*x;
+    const nz=qw*z+qx*y-qy*x+qz*w, nw=qw*w-qx*x-qy*y-qz*z;
+    const n=Math.hypot(nx,ny,nz,nw)||1; orientation=[nx/n,ny/n,nz/n,nw/n];
+  }
   let pulseX = -9999, pulseY = -9999, pulseAt = 0;
   function draw(now: number) {
     frame=0;
     if (!visible || document.hidden) return;
-    if (!still() && last) angle += Math.min(40,now-last)*.00042;
+    if (!still() && last) {
+      const dt=Math.min(40,now-last); angle += dt*.00042;
+      if (!dragging && (Math.abs(velocityX)+Math.abs(velocityY)>.00001)) {
+        rotate(velocityX*dt,velocityY*dt);const damping=Math.exp(-dt/420);velocityX*=damping;velocityY*=damping;
+      }
+    }
     last=now;
     const dpr=Math.min(devicePixelRatio||1,mobile ? 1.15 : 1.5), w=canvas!.clientWidth;
     if (size!==w || canvas!.width!==Math.round(w*dpr)) {size=w;canvas!.width=Math.round(w*dpr);canvas!.height=Math.round(w*dpr);}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,w);
     const radius=w*.37, c=Math.cos(angle), s=Math.sin(angle);
+    const [qx,qy,qz,qw]=orientation;
+    function project(p:{x:number;y:number;z:number}) {
+      const x=p.x*c+p.z*s,z=-p.x*s+p.z*c,y=p.y;
+      const tx=2*(qy*z-qz*y),ty=2*(qz*x-qx*z),tz=2*(qx*y-qy*x);
+      return {x:w/2+(x+qw*tx+qy*tz-qz*ty)*radius,
+        y:w/2+(y+qw*ty+qz*tx-qx*tz)*radius,z:z+qw*tz+qx*ty-qy*tx};
+    }
     // A restrained atmospheric halo gives the network a sense of light in space.
     const glow=ctx.createRadialGradient(w/2,w/2,radius*.18,w/2,w/2,radius*1.3);
     glow.addColorStop(0,'rgba(119,65,12,.08)');glow.addColorStop(.72,'rgba(155,88,16,.10)');glow.addColorStop(1,'rgba(155,88,16,0)');
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,w);
-    const projected=points.map(p=>{const x=p.x*c+p.z*s,z=-p.x*s+p.z*c;return {x:w/2+x*radius,y:w/2+p.y*radius,z};});
+    const projected=points.map(project);
     ctx.globalCompositeOperation='lighter';
     ctx.fillStyle='rgba(255,176,66,.42)';ctx.beginPath();
-    for (const p of inner) { const x=p.x*c+p.z*s; const x2=w/2+x*radius, y2=w/2+p.y*radius; ctx.moveTo(x2+.65,y2);ctx.arc(x2,y2,.65,0,Math.PI*2); }
+    for (const p of inner) { const q=project(p); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
     ctx.fill();
     const hovering=pointerX>-999, pulseLife=Math.max(0,1-(now-pulseAt)/1100);
     // Batch paths by brightness: a handful of strokes instead of thousands per frame.
@@ -87,13 +109,28 @@ export function initStoreOrbit(): void {
   const wake=()=>{last=0;if(visible&&!document.hidden&&!frame) frame=requestAnimationFrame(draw)};
   canvas.addEventListener('pointermove', event => {
     const rect=canvas.getBoundingClientRect(); pointerX=event.clientX-rect.left; pointerY=event.clientY-rect.top;
-    if (dragging && !still()) angle+=(event.clientX-previousX)*.018;
-    previousX=event.clientX; if(still()) wake();
+    if (dragging && event.pointerId===activePointer) {
+      const dx=(event.clientX-previousX)*.018,dy=(event.clientY-previousY)*.018;
+      const now=performance.now(),dt=Math.max(8,now-lastDragTime);
+      rotate(dx,dy);velocityX=Math.max(-.012,Math.min(.012,dx/dt));velocityY=Math.max(-.012,Math.min(.012,dy/dt));lastDragTime=now;
+    }
+    previousX=event.clientX;previousY=event.clientY;if(still())wake();
   }, {passive:true});
-  canvas.addEventListener('pointerleave',()=>{ pointerX=-9999;pointerY=-9999;dragging=false;if(still())wake(); });
-  canvas.addEventListener('pointerdown',event=>{ dragging=true;previousX=event.clientX;if(event.pointerType==='mouse')canvas.setPointerCapture(event.pointerId) });
-  canvas.addEventListener('pointercancel',()=>{dragging=false;pointerX=-9999;pointerY=-9999;});
-  canvas.addEventListener('pointerup',event=>{ dragging=false;const rect=canvas.getBoundingClientRect();pulseX=event.clientX-rect.left;pulseY=event.clientY-rect.top;pulseAt=performance.now();wake(); });
+  canvas.addEventListener('pointerleave',()=>{ if(!dragging){pointerX=-9999;pointerY=-9999;if(still())wake();} });
+  canvas.addEventListener('pointerdown',event=>{
+    if(dragging || (event.pointerType==='mouse' && event.button!==0)) return;
+    dragging=true;activePointer=event.pointerId;previousX=event.clientX;previousY=event.clientY;
+    velocityX=0;velocityY=0;lastDragTime=performance.now();canvas.setPointerCapture(event.pointerId);
+  });
+  function release(event:PointerEvent) {
+    if(event.pointerId!==activePointer) return;
+    dragging=false;activePointer=-1;
+    if(still() || event.type==='pointercancel' || performance.now()-lastDragTime>100){velocityX=0;velocityY=0;}
+    const rect=canvas!.getBoundingClientRect();pulseX=event.clientX-rect.left;pulseY=event.clientY-rect.top;pulseAt=performance.now();wake();
+  }
+  canvas.addEventListener('pointerup',release);
+  canvas.addEventListener('pointercancel',release);
+  canvas.addEventListener('lostpointercapture',release);
   new MutationObserver(()=>{cancelAnimationFrame(frame);frame=0;wake();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-intensity']});
   if ('IntersectionObserver' in window) {
     const observer=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible)wake();else {cancelAnimationFrame(frame);frame=0;}},{rootMargin:'100px'});

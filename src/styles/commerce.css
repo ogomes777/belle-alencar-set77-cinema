@@ -339,7 +339,7 @@ html.is-locked { overflow: hidden; }
 .pcard__ill--cutout img,.qv__ill--cutout img{object-fit:contain;max-width:100%;max-height:100%;}
 
 /* Decorative store orbit; does not capture store or scroll interactions. */
-.stores__orbit { display:block; width:min(480px, 85vw); aspect-ratio:1; margin:clamp(-30px,-2vw,0px) auto clamp(30px,4vw,60px); touch-action:pan-y; cursor:grab; }
+.stores__orbit { display:block; width:min(480px, 85vw); aspect-ratio:1; margin:clamp(-30px,-2vw,0px) auto clamp(30px,4vw,60px); touch-action:none; cursor:grab; }
 /* A coluna de lojas e o globo compartilham a mesma cena. */
 @media (min-width: 960px) {
   .stores { display:grid; grid-template-columns:minmax(0, 670px) minmax(300px, 480px); grid-template-areas:'title globe' 'list globe' 'note globe'; column-gap:clamp(32px,5vw,80px); justify-content:center; align-items:center; }
@@ -352,3 +352,5 @@ html.is-locked { overflow: hidden; }
   .stores .stores__orbit { grid-area:globe; width:100%; margin:0; }
 }
 @media (max-width:959px) { .stores__orbit { width:min(420px,85vw); } }
+
+.stores__orbit:active { cursor:grabbing; }
