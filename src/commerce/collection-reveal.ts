@@ -38,7 +38,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   let trigger:ScrollTrigger|null=null,storyTrigger:ScrollTrigger|null=null;
   let mutation:MutationObserver|null=null,resize:ResizeObserver|null=null;
 
-  function display(entry:Entry, progress:number){
+  function display(entry:Entry, progress:number, close=true){
     const el=entry.element;
     if(!el.isConnected || Math.abs(entry.progress-progress)<.003)return;
     entry.progress=progress;
@@ -55,7 +55,6 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     el.classList.add('is-collection-staged');
     const p=ease(progress),remaining=1-p;
     const mobile=innerWidth<=820;
-    const close=el.getBoundingClientRect().top<innerHeight*1.6;
     gsap.set(el,{
       opacity:.20+.8*p,
       x:entry.direction*(mobile?17:30)*remaining,
@@ -78,7 +77,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
       const cardY=gridY+entry.top;
       const focused=entry.element.contains(document.activeElement);
       const p=focused?1:clamp((viewport*.94-cardY-entry.offset)/travel);
-      display(entry,p);
+      display(entry,p,cardY>-viewport&&cardY<viewport*1.6);
     }
   }
 
