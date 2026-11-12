@@ -24,10 +24,48 @@ beforeAll(async () => {
 describe('initCommerce (DOM)', () => {
   it('renderiza um card por peça demonstrativa, com selo e sem preço', () => {
     const cards = document.querySelectorAll('#catalogMount .pcard');
-    expect(cards).toHaveLength(DEMO_CATALOG.length);
+    expect(cards).toHaveLength(8);
     expect(document.querySelector('.pcard .badge')?.textContent).toMatch(/Packshot sintético/);
     expect(document.querySelector('.pcard__price')?.textContent).toBe('Preço sob consulta');
     expect(document.querySelector('#catalogMount noscript')).not.toBeNull();
+  });
+
+  it('prévia mostra oito peças e VER TUDO expande todas, com reversão acessível', () => {
+    const cards = () => document.querySelectorAll('#catalogMount .pcard');
+    const button = document.querySelector<HTMLButtonElement>('#catalogMount [data-catalog-toggle]')!;
+    const area = document.querySelector<HTMLElement>('#catalogMount .catalog-more')!;
+    expect(area.hidden).toBe(false);
+    expect(cards()).toHaveLength(8);
+    expect(button.textContent).toContain('VER TUDO');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(button.getAttribute('aria-controls')).toBe('catalogGrid');
+    const first = cards()[0];
+    button.click();
+    expect(cards()).toHaveLength(DEMO_CATALOG.length);
+    expect(cards()[0]).toBe(first); // no remount of selected favorites/quick view
+    expect(button.textContent).toContain('VER MENOS');
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    button.click();
+    expect(cards()).toHaveLength(8);
+    expect(cards()[0]).toBe(first);
+    expect(button.textContent).toContain('VER TUDO');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('ocasião aplica a prévia aos resultados filtrados e expande sem perder filtros', () => {
+    const noite = DEMO_CATALOG.filter(p => p.active && p.occasion === 'noite');
+    (document.querySelector('#catalogMount [data-occ="noite"]') as HTMLElement).click();
+    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(Math.min(8, noite.length));
+    const more = document.querySelector<HTMLButtonElement>('#catalogMount [data-catalog-toggle]')!;
+    expect((document.querySelector<HTMLElement>('#catalogMount .catalog-more'))!.hidden).toBe(noite.length <= 8);
+    if (noite.length > 8) {
+      more.click();
+      expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(noite.length);
+    }
+    expect(document.querySelector('#catalogMount [data-occ="noite"]')?.getAttribute('aria-pressed')).toBe('true');
+    (document.querySelector('#catalogMount [data-occ="todas"]') as HTMLElement).click();
+    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(8);
+    expect(more.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('?cidade= legado define a loja sem abrir diálogo e reescreve para ?loja=', () => {
@@ -41,7 +79,7 @@ describe('initCommerce (DOM)', () => {
     expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(6);
     expect(location.search).toContain('categoria=bolsas');
     (document.querySelector('[data-clear]') as HTMLElement).click();
-    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(DEMO_CATALOG.length);
+    expect(document.querySelectorAll('#catalogMount .pcard')).toHaveLength(8);
   });
 
   it('quick view: exige tamanho, adiciona à sacola de Frutal e atualiza o contador', async () => {
@@ -104,6 +142,8 @@ describe('initCommerce (DOM)', () => {
   });
 
   it('favoritos atualizam contador e persistem', () => {
+    // Rings are below the curated preview, but their original actions remain.
+    (document.querySelector('#catalogMount [data-catalog-toggle]') as HTMLElement).click();
     (document.querySelector('[data-wish="belle-demo-aneis-02"]') as HTMLElement).click();
     const c = document.querySelector('[data-wishlist-count]') as HTMLElement;
     expect(c.hidden).toBe(false);
