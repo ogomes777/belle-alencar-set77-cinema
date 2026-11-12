@@ -1,5 +1,6 @@
 import { CITIES, spherePoint, journey } from './geography';
 import { commerceApi } from '../commerce/api';
+import { clampGlobeZoom, wheelGlobeZoom, pinchGlobeZoom, easeGlobeZoom } from './gestures';
 /** Original lightweight decorative approximation; not React Bits Astral Shell. */
 export function initStoreOrbit(): void {
   const section = document.querySelector<HTMLElement>('#lojas');
@@ -59,6 +60,10 @@ export function initStoreOrbit(): void {
   fetch('/geo/boundaries.json').then(r=>{if(!r.ok)throw Error('geo');return r.json();}).then((data:Border[])=>{borders=data.map(b=>({...b,rings:b.rings.map(r=>r.map(p=>spherePoint(p[1]!,p[0]!)))}));wake();}).catch(()=>{caption.textContent='Arraste para girar · escolha sua loja abaixo';});
   let navigation=true, mapAfterJourney=false, pendingEntry=false;
   let selected:string|null=null, zoom=1, focusAt=0, arrival=1;
+  let manualZoom=1, manualZoomTarget=1;
+  const touches=new Map<number,{x:number;y:number}>();
+  let pinchDistance=0, dragTravel=0;
+  const span=():number=>{const p=[...touches.values()];return p.length<2?0:Math.hypot(p[0]!.x-p[1]!.x,p[0]!.y-p[1]!.y);};
   // Scroll-derived arrival is reversible and does not intercept page scrolling.
   const flight=document.createElement('span');flight.className='stores__flight';flight.setAttribute('aria-hidden','true');
   flight.innerHTML='<img src="/brand/belle-bag.webp" width="76" height="76" alt="">';
@@ -90,6 +95,7 @@ export function initStoreOrbit(): void {
     const next=commerceApi()?.storeCity()??null;
     if(next===selected)return;
     selected=next;mapAfterJourney=false;flight.hidden=true;arrival=1;focusAt=performance.now();velocityX=velocityY=0;
+    manualZoom=manualZoomTarget=1;
     const city=cities.find(c=>c.name===selected);
     if(city){
       // Face the actual city coordinates toward the camera before the two-stage approach.
@@ -109,6 +115,7 @@ export function initStoreOrbit(): void {
       await commerceApi()?.selectStore(city.id,button);
       if(commerceApi()?.storeCity()!==city.name)return;
       selected=city.name;navigation=true;pendingEntry=false;focusAt=performance.now();mapAfterJourney=true;
+      manualZoom=manualZoomTarget=1;
       velocityX=velocityY=0;wake();
     });
     queueMicrotask(()=>canvas!.parentElement!.append(button));return button;
@@ -117,15 +124,21 @@ export function initStoreOrbit(): void {
   function draw(now: number) {
     frame=0;
     if (!visible || document.hidden) return;
-    if (!still() && last) {
-      const dt=Math.min(40,now-last); if(!selected && arrival<.85) angle += dt*.00004;
-      if (!dragging && (Math.abs(velocityX)+Math.abs(velocityY)>.00001)) {
-        rotate(velocityX*dt,velocityY*dt);const damping=Math.exp(-dt/420);velocityX*=damping;velocityY*=damping;
-      }
-    }
     const delta=Math.min(40,Math.max(1,now-last||16));
+    if (!still() && last && !dragging && touches.size<2 && !navigation) {
+      // Rotação 360° contínua nos dois eixos; gestos adicionam inércia.
+      rotate(delta*.00024,delta*.000072);
+      if (Math.abs(velocityX)+Math.abs(velocityY)>.00003) {
+        rotate(velocityX*delta,velocityY*delta);
+        const damping=Math.exp(-delta/660);
+        velocityX*=damping;velocityY*=damping;
+      } else {velocityX=0;velocityY=0;}
+    }
     last=now;
-    if(!navigation)zoom=still()?1:1+(zoom-1)*Math.exp(-delta/100);
+    if(!navigation) {
+      manualZoom=still()?1:easeGlobeZoom(manualZoom,manualZoomTarget,delta);
+      zoom=manualZoom;
+    }
     const city=cities.find(c=>c.name===selected);
     if(city&&navigation&&!pendingEntry){
       const camera=journey(city,still()?5400:now-focusAt);
@@ -151,19 +164,22 @@ export function initStoreOrbit(): void {
       return {x:w/2+(x+qw*tx+qy*tz-qz*ty)*scale,
         y:w/2+(y+qw*ty+qz*tx-qx*tz)*scale,z:z+qw*tz+qx*ty-qy*tx};
     }
-    // A restrained atmospheric halo gives the network a sense of light in space.
-    const glow=ctx.createRadialGradient(w/2,w/2,radius*.18,w/2,w/2,radius*1.3);
-    glow.addColorStop(0,'rgba(255,255,255,0)');glow.addColorStop(1,'rgba(255,255,255,0)');
-    ctx.fillStyle=glow;ctx.fillRect(0,0,w,w);
+    // Superfície profunda, sem anel preto nem stroke rígido no contorno.
+    // O alpha cai até zero na borda; a própria malha luminosa define a esfera.
     ctx.save();ctx.beginPath();ctx.arc(w/2,w/2,w*.46,0,Math.PI*2);
-    const surface=ctx.createRadialGradient(w*.4,w*.35,0,w*.5,w*.5,w*.46);surface.addColorStop(0,'#46331c');surface.addColorStop(.72,'#211c15');surface.addColorStop(1,'#211c15');
-    ctx.fillStyle=surface;ctx.fill();ctx.strokeStyle='rgba(255,195,70,.7)';ctx.lineWidth=1;ctx.stroke();ctx.clip();
+    const surface=ctx.createRadialGradient(w*.42,w*.35,w*.01,w*.5,w*.5,w*.46);
+    surface.addColorStop(0,'rgba(68,48,31,.98)');
+    surface.addColorStop(.70,'rgba(36,27,21,.96)');
+    surface.addColorStop(.88,'rgba(31,25,19,.76)');
+    surface.addColorStop(1,'rgba(31,25,19,0)');
+    ctx.fillStyle=surface;ctx.fill();ctx.clip();
     {
-    const projected=points.map(p=>project(p,w*.44));
+    const networkRadius=w*.44*Math.min(2.05,manualZoom);
+    const projected=points.map(p=>project(p,networkRadius));
     ctx.globalAlpha=zoom>2?.7:1;
     ctx.globalCompositeOperation='lighter';
     ctx.fillStyle='rgba(255,176,66,.5)';ctx.beginPath();
-    for (const p of inner) { const q=project(p,w*.44); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
+    for (const p of inner) { const q=project(p,networkRadius); ctx.moveTo(q.x+.65,q.y);ctx.arc(q.x,q.y,.65,0,Math.PI*2); }
     ctx.fill();
     const hovering=pointerX>-999, pulseLife=Math.max(0,1-(now-pulseAt)/1100);
     // Batch paths by brightness: a handful of strokes instead of thousands per frame.
@@ -177,7 +193,7 @@ export function initStoreOrbit(): void {
       const path=paths[level]!;path.moveTo(p.x,p.y);path.lineTo(q.x,q.y);
     }
     ctx.lineWidth=mobile?.7:.85;
-    paths.forEach((path,i)=>{ctx.strokeStyle=`rgba(255,${150+i*12},${35+i*14},${.16+i*.1})`;ctx.shadowColor='#ffb800';ctx.shadowBlur=i>3?5:0;ctx.stroke(path);ctx.shadowBlur=0;});
+    paths.forEach((path,i)=>{ctx.strokeStyle=`rgba(255,${150+i*12},${35+i*14},${.16+i*.1})`;ctx.shadowColor='#ffb800';ctx.shadowBlur=mobile?0:(i>3?4:0);ctx.stroke(path);ctx.shadowBlur=0;});
     projected.forEach((p,i)=>{const depth=(p.z+1)/2;const pulse=.6+.4*Math.sin((still()?0:now*.0015)+i*.17)**2; const hover=hovering ? Math.max(0,1-Math.hypot(p.x-pointerX,p.y-pointerY)/(w*.23)) : 0;ctx.fillStyle=`rgba(255,${Math.round(170+depth*80)},${Math.round(65+depth*110)},${Math.min(1,(.34+depth*.66)*pulse+hover*.4)})`;ctx.beginPath();ctx.arc(p.x,p.y,.6+depth*1.05,0,Math.PI*2);ctx.fill();});
     // A few quiet light impulses travel through the network like signals between cities.
     if (!still()) for(let i=0;i<14;i++) {
@@ -233,31 +249,90 @@ export function initStoreOrbit(): void {
     if (!still()) frame=requestAnimationFrame(draw);
   }
   const wake=()=>{last=0;if(visible&&!document.hidden&&!frame) frame=requestAnimationFrame(draw)};
+  const manualControl=()=>{
+    if(navigation){zoom=1;manualZoom=manualZoomTarget=1;}
+    navigation=false;mapAfterJourney=false;pendingEntry=false;
+  };
+  canvas.addEventListener('wheel',event=>{
+    if(still()||!visible)return;
+    // Captura a roda apenas SOBRE o globo; scroll normal fora dele.
+    event.preventDefault();
+    manualControl();velocityX=velocityY=0;
+    manualZoomTarget=wheelGlobeZoom(manualZoomTarget,event.deltaY);
+    caption.textContent='Aproxime com a roda ou dois dedos · arraste para girar · explore a cidade no mapa';
+    wake();
+  },{passive:false});
   canvas.addEventListener('pointermove', event => {
-    const rect=canvas.getBoundingClientRect(); pointerX=event.clientX-rect.left; pointerY=event.clientY-rect.top;
-    if (dragging && event.pointerId===activePointer) {
-      const sensitivity=.018/Math.max(1,zoom);
-      const dx=(event.clientX-previousX)*sensitivity,dy=(event.clientY-previousY)*sensitivity;
-      const now=performance.now(),dt=Math.max(8,now-lastDragTime);
-      rotate(dx,dy);velocityX=Math.max(-.012,Math.min(.012,dx/dt));velocityY=Math.max(-.012,Math.min(.012,dy/dt));lastDragTime=now;
+    const rect=canvas.getBoundingClientRect();
+    pointerX=event.clientX-rect.left;pointerY=event.clientY-rect.top;
+    if(touches.has(event.pointerId))touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    if(touches.size>=2){
+      const distance=span();
+      if(pinchDistance>0&&!still()){
+        manualControl();
+        manualZoomTarget=pinchGlobeZoom(manualZoomTarget,distance,pinchDistance);
+      }
+      pinchDistance=distance;wake();return;
     }
-    previousX=event.clientX;previousY=event.clientY;if(still())wake();
-  }, {passive:true});
-  canvas.addEventListener('pointerleave',()=>{ if(!dragging){pointerX=-9999;pointerY=-9999;if(still())wake();} });
-  canvas.addEventListener('pointerdown',event=>{
-    if(dragging || (event.pointerType==='mouse' && event.button!==0)) return;
-    navigation=false;mapAfterJourney=false;dragging=true;activePointer=event.pointerId;previousX=event.clientX;previousY=event.clientY;
-    velocityX=0;velocityY=0;lastDragTime=performance.now();canvas.setPointerCapture(event.pointerId);
+    if(dragging && event.pointerId===activePointer){
+      const pixelX=event.clientX-previousX,pixelY=event.clientY-previousY;
+      dragTravel+=Math.hypot(pixelX,pixelY);
+      const sensitivity=.014/Math.max(1,manualZoom*.62);
+      const dx=pixelX*sensitivity,dy=pixelY*sensitivity;
+      const now=performance.now(),dt=Math.max(8,now-lastDragTime);
+      rotate(dx,dy);
+      velocityX=Math.max(-.016,Math.min(.016,dx/dt));
+      velocityY=Math.max(-.016,Math.min(.016,dy/dt));
+      lastDragTime=now;
+    }
+    previousX=event.clientX;previousY=event.clientY;
+    if(still())wake();
+  },{passive:true});
+  canvas.addEventListener('pointerleave',()=>{
+    if(!dragging&&touches.size===0){pointerX=-9999;pointerY=-9999;if(still())wake();}
   });
-  function release(event:PointerEvent) {
-    if(event.pointerId!==activePointer) return;
+  canvas.addEventListener('pointerdown',event=>{
+    if(event.pointerType==='mouse'&&event.button!==0)return;
+    if(event.pointerType==='touch'){
+      touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+      if(touches.size===2){
+        manualControl();dragging=false;activePointer=-1;pinchDistance=span();
+        velocityX=velocityY=0;
+        canvas.setPointerCapture(event.pointerId);wake();return;
+      }
+    }
+    if(dragging)return;
+    manualControl();dragging=true;activePointer=event.pointerId;
+    previousX=event.clientX;previousY=event.clientY;dragTravel=0;
+    velocityX=velocityY=0;lastDragTime=performance.now();
+    canvas.setPointerCapture(event.pointerId);wake();
+  });
+  function release(event:PointerEvent){
+    if(event.pointerType==='touch')touches.delete(event.pointerId);
+    if(pinchDistance>0){
+      if(touches.size<2){pinchDistance=0;dragging=false;activePointer=-1;}
+      wake();return;
+    }
+    if(event.pointerId!==activePointer)return;
     dragging=false;activePointer=-1;
-    if(still() || event.type==='pointercancel' || performance.now()-lastDragTime>100){velocityX=0;velocityY=0;}
-    const rect=canvas!.getBoundingClientRect();pulseX=event.clientX-rect.left;pulseY=event.clientY-rect.top;pulseAt=performance.now();wake();
+    if(still()||event.type==='pointercancel'){
+      velocityX=velocityY=0;
+    }else if(dragTravel<6){
+      // Um toque breve dá impulso, sem impedir um clique nos marcadores.
+      velocityX=.004;velocityY=.0013;
+    }else if(performance.now()-lastDragTime>120){
+      velocityX=velocityY=0;
+    }
+    const rect=canvas!.getBoundingClientRect();
+    pulseX=event.clientX-rect.left;pulseY=event.clientY-rect.top;
+    pulseAt=performance.now();wake();
   }
   canvas.addEventListener('pointerup',release);
   canvas.addEventListener('pointercancel',release);
   canvas.addEventListener('lostpointercapture',release);
+  canvas.addEventListener('dblclick',()=>{
+    manualZoomTarget=clampGlobeZoom(1);wake();
+  });
   new MutationObserver(()=>{cancelAnimationFrame(frame);frame=0;wake();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-intensity']});
   if ('IntersectionObserver' in window) {
     const observer=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible){if(pendingEntry){pendingEntry=false;focusAt=performance.now();}wake();}else {cancelAnimationFrame(frame);frame=0;}},{rootMargin:'100px'});
