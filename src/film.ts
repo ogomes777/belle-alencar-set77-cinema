@@ -246,9 +246,9 @@ export function initFilm(director: Director): void {
         });
       }
       await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
-      if(serial!==startSerial || tier==='static')return;
+      if(serial!==startSerial || (tier as Tier)==='static')return;
       const mod = await import('./experience');
-      if(serial!==startSerial || tier==='static')return;
+      if(serial!==startSerial || (tier as Tier)==='static')return;
       const created = await mod.createWorld({
         container: canvasHost!,
         tier,
@@ -278,7 +278,7 @@ export function initFilm(director: Director): void {
           showPoster(active);
         },
       });
-      if(serial!==startSerial || tier==='static'){
+      if(serial!==startSerial || (tier as Tier)==='static'){
         created.destroy();
         return;
       }
