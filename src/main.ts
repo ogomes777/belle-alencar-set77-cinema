@@ -1,3 +1,4 @@
+import { initConciergeReveal } from './concierge-reveal';
 import { initEditorialBoundaries } from './motion/editorial-boundaries';
 import { initStoreMap } from './astral/store-map';
 import './styles/city-globe.css';
@@ -35,6 +36,7 @@ initCommerce();
 initBelleI18n();
 initBelleSettings();
 initSections();
+initConciergeReveal();
 // V36 CLEAN: no global transition compositor and no second scene director.
 // Leave the original 3D film, runway, carousel, video scrub, collections,
 // city globe and all their own scroll-based interactions undisturbed.

@@ -8,7 +8,7 @@
 /* Sweep completes before catalogue controls enter the viewport. */
 #colecao.v37-boundary>.section-head>.display{translate:calc((1 - var(--v37-entry,1))*12px) 0}
 /* Lateral reveal uses the actual photograph, leaving WhatsApp/focus untouched. */
-#atendimento.v37-boundary .concierge__media img{clip-path:inset(0 calc((1 - var(--v37-entry,1))*12%) 0 0)}
+#atendimento.v37-boundary .concierge__media:not(.style-reveal) img{clip-path:inset(0 calc((1 - var(--v37-entry,1))*12%) 0 0)}
 #atendimento.v37-boundary #conciergeTitle{translate:calc((1 - var(--v37-entry,1))*12px) 0}
 /* The editorial heading folds gently; native FAQ controls have no new styles. */
 #duvidas.v37-boundary #faqTitle{transform-origin:left bottom;transform:perspective(900px) rotateX(calc((1 - var(--v37-entry,1))*3deg));translate:0 calc((1 - var(--v37-entry,1))*12px)}
@@ -18,6 +18,6 @@
  #atendimento.v37-boundary #conciergeTitle{translate:calc((1 - var(--v37-entry,1))*8px) 0}
 }
 @media(prefers-reduced-motion:reduce){
- #passarela.v37-boundary .runway__intro,#atendimento.v37-boundary .concierge__media img{clip-path:none;translate:none}
+ #passarela.v37-boundary .runway__intro,#atendimento.v37-boundary .concierge__media:not(.style-reveal) img{clip-path:none;translate:none}
  #colecao.v37-boundary>.section-head>.display,#atendimento.v37-boundary #conciergeTitle,#duvidas.v37-boundary #faqTitle{transform:none;translate:none}
 }
