@@ -59,24 +59,35 @@
   box-shadow:0 0 0 1px rgba(168,116,44,.18),0 0 19px rgba(201,152,71,.13);
 }
 #lojas.stores :focus-visible{outline-color:#94671e;outline-offset:3px}
-/* Quick, visible entry: content stays legible even before the reveal completes.
-   Animation is now tied to the chapter's arrival, not each card's late position.
-   Reverse scroll simply rewinds the subtle mask. */
+/* Solid reversible reveal paced by each element crossing the viewport.
+   Starts slightly before each element enters, finishes by the lower middle;
+   unlike V23 the text is not already revealed before it becomes visible. */
 #lojas.stores.stores--scrubbed .section-head .eyebrow,
 #lojas.stores.stores--scrubbed .section-head .display,
 #lojas.stores.stores--scrubbed .section-head .lede,
 #lojas.stores.stores--scrubbed .store-card,
 #lojas.stores.stores--scrubbed .stores__note{
-  opacity:calc(.78 + var(--stores-reveal,1)*.22);
-  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*15px),0);
+  opacity:calc(.18 + var(--stores-reveal,1)*.82);
+  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*28px),0);
 }
-/* No full-width clipping of the store cards or commercial buttons.
-   Only the heading gets a restrained 18% word-mask. */
+/* The editorial heading sweeps left-to-right as it enters.
+   Each store card receives a slightly shorter mask so its CTA is revealed
+   while the entire card is still comfortably within the viewport. */
 #lojas.stores.stores--scrubbed .section-head .display{
-  clip-path:inset(0 calc((1 - var(--stores-reveal,1))*18%) 0 0);
+  clip-path:inset(0 calc((1 - var(--stores-reveal,1))*98%) 0 0);
+}
+#lojas.stores.stores--scrubbed .store-card:not(:focus-within){
+  clip-path:inset(0 calc((1 - var(--stores-reveal,1))*76%) 0 0);
+}
+#lojas.stores.stores--scrubbed .store-card:focus-within{
+  opacity:1;transform:none;clip-path:none;
+}
+#lojas.stores.stores--scrubbed .store-card .btn--line,
+#lojas.stores.stores--scrubbed .store-card .store-card__map{
+  opacity:calc(.20 + var(--stores-reveal,1)*.80);
 }
 #lojas.stores.stores--scrubbed .stores__note{
-  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*8px),0);
+  transform:translate3d(0,calc((1 - var(--stores-reveal,1))*14px),0);
 }
 @media(max-width:959px){
   #lojas.stores{
@@ -84,7 +95,7 @@
       #e9dac1 0%,#dcc6a3 50%,#c3a684 100%);
   }
   #lojas.stores.stores--scrubbed .store-card{
-    transform:translate3d(0,calc((1 - var(--stores-reveal,1))*12px),0);
+    transform:translate3d(0,calc((1 - var(--stores-reveal,1))*20px),0);
   }
 }
 @media(prefers-reduced-motion:reduce){

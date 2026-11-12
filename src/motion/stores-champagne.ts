@@ -5,7 +5,7 @@ const clamp=(x:number):number=>Math.max(0,Math.min(1,x));
 
 /** Monotonic reveal, recomputed from scroll geometry so upwards scroll reverses it. */
 export function storesRevealAt(top:number,viewportHeight:number,delay=0):number {
-  const vh=Math.max(1,viewportHeight), start=vh*(1.08-delay),finish=vh*(.72-delay);
+  const vh=Math.max(1,viewportHeight), start=vh*(1.04-delay),finish=vh*(.68-delay);
   const t=clamp((start-top)/(start-finish));
   return t*t*(3-2*t);
 }
@@ -28,14 +28,25 @@ export function initStoresChampagne():()=>void {
     frame=0;
     if(disposed||document.hidden)return;
     if(staticMode()){section.classList.remove('stores--scrubbed');return;}
-    // The whole chapter reveals EARLY as it approaches the viewport.
-    // Use one section measurement instead of each card's vertical offset, which
-    // delayed the last two cities until the next section was already visible.
-    // Small independent stagger preserves editorial rhythm without hiding CTAs.
-    const top=section.getBoundingClientRect().top,vh=Math.max(1,innerHeight);
-    const next=targets.map((_,i)=>storesRevealAt(
-      top,vh,i<=2?i*.009:.035+(i-3)*.014
-    ));
+    // V24: each heading, paragraph, city and CTA follows its OWN actual
+    // vertical position. Unlike V22, the reveal FINISHES as that element
+    // reaches ~62-68% viewport height, never near the next chapter.
+    // offsetTop is layout-only and immune to the transform being animated.
+    const sectionTop=section.getBoundingClientRect().top;
+    const vh=Math.max(1,innerHeight);
+    const topWithinSection=(element:HTMLElement):number=>{
+      let offset=0;
+      let current:HTMLElement|null=element;
+      while(current && current!==section){
+        offset+=current.offsetTop;
+        current=current.offsetParent as HTMLElement|null;
+      }
+      return current===section ? offset : element.offsetTop;
+    };
+    const next=targets.map((node,i)=>{
+      const stagger=i<=2?i*.009:.022+(i-3)*.008;
+      return storesRevealAt(sectionTop+topWithinSection(node),vh,stagger);
+    });
     for(let i=0;i<targets.length;i++){
       const value=next[i]!;
       if(Math.abs(value-values[i]!)<.002)continue;
