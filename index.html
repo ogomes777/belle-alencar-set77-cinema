@@ -34,6 +34,13 @@
   },3400);
 </script>
 <script type="module" src="/src/main.ts"></script>
+  <script>
+    /* Apply saved palette before first paint; original light theme remains default. */
+    try {
+      const selected = localStorage.getItem('belle:v31:theme');
+      if (selected === 'dark' || selected === 'rose') document.documentElement.dataset.belleTheme = selected;
+    } catch (_) {}
+  </script>
 </head>
 <body>
 <a class="skip-link" href="#colecao">Pular para a coleção</a>
