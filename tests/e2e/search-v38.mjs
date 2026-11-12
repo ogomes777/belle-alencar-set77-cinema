@@ -34,6 +34,15 @@ try{
       panel:p.scrollWidth-p.clientWidth};
   });
   assert(overflow.window<=1&&overflow.panel<=1,'overflow '+width+' '+JSON.stringify(overflow));
+  const compact=await page.evaluate(()=>{
+    const card=document.querySelector('#searchDialog .search-hit--product');
+    const art=card.querySelector('.ba-search-product-image').getBoundingClientRect();
+    const info=card.querySelector('.ba-search-product-description').getBoundingClientRect();
+    const style=getComputedStyle(card);
+    return {display:style.display,direction:style.flexDirection,dy:Math.abs(art.top-info.top),dx:info.left-art.left};
+  });
+  assert(compact.display==='flex'&&compact.direction==='row'&&compact.dx>25&&compact.dy<28,
+    'product results not a compact horizontal row '+width+' '+JSON.stringify(compact));
   await page.screenshot({path:'artifacts/belle-search-v38/default-'+width+'.png',animations:'disabled'});
   await search.locator('#searchInput').fill('vestido preto');
   const matched=search.locator('.search-hit--product');
@@ -62,6 +71,18 @@ try{
         overflow:panel.scrollWidth-panel.clientWidth};
     });
     assert(state.background!=='rgba(0, 0, 0, 0)'&&state.overflow<=1,theme+' invalid '+width+' '+JSON.stringify(state));
+    const visible=await page.evaluate(()=>{
+      const el=document.querySelector('#searchDialog .ov__panel');
+      const rect=el.getBoundingClientRect();
+      const css=getComputedStyle(el);
+      const root=document.querySelector('#searchDialog');
+      return {open:root.classList.contains('is-open'),hidden:root.hidden,opacity:Number(css.opacity),
+        visibility:css.visibility,top:rect.top,left:rect.left,width:rect.width,height:rect.height,
+        center:document.elementFromPoint(innerWidth/2,innerHeight/2)?.className};
+    });
+    assert(visible.open&&!visible.hidden&&visible.opacity>.98&&visible.visibility==='visible'&&visible.width>=width*.92&&visible.height>=760,
+      theme+' search panel became hidden '+width+' '+JSON.stringify(visible));
+
     if(width===390||width===1440)
       await page.screenshot({path:'artifacts/belle-search-v38/'+theme+'-'+width+'.png',animations:'disabled'});
   }
