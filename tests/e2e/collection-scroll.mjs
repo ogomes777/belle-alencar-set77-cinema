@@ -41,6 +41,23 @@ try{
         Number.parseFloat(getComputedStyle(card).opacity)>=.99;
     },id,{timeout:5500});
     check(await grid.locator('.pcard[data-product="'+id+'"] .pcard__media').isVisible(),width+': product appears fully as scroll passes');
+    // V18: scroll reversibility is intentional. A piece that already entered
+    // must fold back below the viewport when the customer scrolls upward,
+    // then return completely when they scroll down again.
+    await page.evaluate(()=>document.querySelector('#colecao .pgrid')?.scrollIntoView({block:'start',behavior:'instant'}));
+    await page.waitForFunction(id=>{
+      const card=document.querySelector('.pcard[data-product="'+id+'"]');
+      return card?.classList.contains('is-collection-staged') &&
+        Number.parseFloat(getComputedStyle(card).opacity)<.55;
+    },id,{timeout:6500});
+    check(true,width+': scrolling upward reverses the product reveal');
+    await next.scrollIntoViewIfNeeded();
+    await page.waitForFunction(id=>{
+      const card=document.querySelector('.pcard[data-product="'+id+'"]');
+      return card?.classList.contains('is-collection-revealed') &&
+        Number.parseFloat(getComputedStyle(card).opacity)>=.99;
+    },id,{timeout:6500});
+    check(true,width+': scrolling down restores the fully revealed product');
     check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),width+': no horizontal overflow after scroll reveal');
 
     await page.locator('#catalogMount [data-occ="noite"]').click();
