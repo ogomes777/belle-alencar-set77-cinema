@@ -38,15 +38,25 @@ try{
    },{id,p});
    await page.waitForTimeout(170);
   };
-  await move(.45);
+  // Bracket a fully open and fully closed state, then find the exact
+  // intermediate position by browser geometry. Tablet layouts can change
+  // card height after images settle, so a guessed fixed scroll offset is not
+  // a meaningful validation of the real reversible transition.
+  await move(1.25);
+  await page.waitForTimeout(130);
+  let high=await page.evaluate(()=>scrollY);
+  await page.evaluate(()=>scrollBy({top:-Math.round(innerHeight*1.45),behavior:'instant'}));
+  await page.waitForTimeout(160);
+  let low=await page.evaluate(()=>scrollY);
   let mid=await cssCard(page,id);
-  // At tablet breakpoints the sticky filter and scroll restoration can
-  // complete after the first direct jump. Adjust upward only when needed
-  // and prove the actual intermediate mask instead of relying on one frame.
-  for(let attempt=0;attempt<3&&(!mid.staged||mid.clip==='none');attempt++){
-    await page.evaluate(()=>scrollBy({top:-Math.round(innerHeight*.24),behavior:'instant'}));
-    await page.waitForTimeout(190);
+  for(let attempt=0;attempt<10;attempt++){
+    const target=(high+low)*.5;
+    await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),target);
+    await page.waitForTimeout(145);
     mid=await cssCard(page,id);
+    if(mid.staged&&mid.opacity>.07&&mid.opacity<.95&&mid.shear>.01)break;
+    if(mid.revealed||mid.opacity>=.95)high=target;
+    else low=target;
   }
   check(mid.staged&&mid.opacity>.07&&mid.opacity<.95,width+': one product appears partially fractured during scrolling '+JSON.stringify(mid));
   check(mid.clip.startsWith('polygon('),width+': actual jagged CSS clip mask exposed mid-entrance');
