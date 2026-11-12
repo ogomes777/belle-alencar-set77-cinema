@@ -21,7 +21,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright@1.58.0 install --with-deps chromium
+      - run: npm install --no-save playwright@1.58.0
+      - run: npx playwright install --with-deps chromium
       - run: npm run test
       - run: npm run build
       - name: Start preview and exercise all scroll motifs
