@@ -12,6 +12,7 @@
  */
 import '@fontsource-variable/bodoni-moda/wght.css';
 import '../styles/couture-menu.css';
+import { getBelleLocale, translateBelleText } from '../preferences/i18n';
 
 const OPEN_MS = 900;
 const CLOSE_MS = 975;
@@ -63,14 +64,36 @@ export function initCoutureMenu(): void {
   if (!button || !panel) return;
   const root = document.documentElement;
 
-  panel.querySelectorAll<HTMLElement>('[data-split]').forEach(el => splitLetters(el));
-  button.querySelectorAll<HTMLElement>('[data-roll]').forEach(el => splitLetters(el));
-  panel.querySelectorAll<HTMLElement>('.couture-nav__link').forEach(link => {
-    const marker = document.createElement('span');
-    marker.className = 'couture-nav__marker';
-    marker.setAttribute('aria-hidden', 'true');
-    link.append(marker);
-  });
+  // Letter wrapping intentionally happens BEFORE the translation engine mounts.
+  // Keep the unsplit Portuguese source, rebuild the same animated character spans
+  // on every locale change, including when a saved locale is restored at boot.
+  const labels = [
+    ...Array.from(panel.querySelectorAll<HTMLElement>('[data-split]')),
+    ...Array.from(button.querySelectorAll<HTMLElement>('[data-roll]')),
+  ].map(el => ({ el, original: (el.textContent || '').trim() }));
+  button.dataset.i18nSkip = ''; // aria-label and rolling letters are managed here.
+  for (const item of labels) item.el.dataset.i18nSkip = '';
+  const updateLabels = () => {
+    const selected = getBelleLocale();
+    for (const { el, original } of labels) {
+      const localized = translateBelleText(original, selected);
+      el.removeAttribute('data-split-done');
+      el.replaceChildren(document.createTextNode(localized));
+      if (el.tagName === 'A') el.setAttribute('aria-label', localized);
+      splitLetters(el);
+      if (el.classList.contains('couture-nav__link')) {
+        const marker = document.createElement('span');
+        marker.className = 'couture-nav__marker';
+        marker.setAttribute('aria-hidden', 'true');
+        el.append(marker);
+      }
+    }
+    button.setAttribute('aria-label', translateBelleText(
+      button.getAttribute('aria-expanded') === 'true' ? 'Fechar menu' : 'Abrir menu', selected
+    ));
+  };
+  updateLabels();
+  window.addEventListener('belle:localechange', updateLabels);
 
   let open = false, timer = 0, lastFocus: HTMLElement | null = null;
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -86,7 +109,7 @@ export function initCoutureMenu(): void {
     open = next;
     window.clearTimeout(timer);
     button!.setAttribute('aria-expanded', String(next));
-    button!.setAttribute('aria-label', next ? 'Fechar menu' : 'Abrir menu');
+    button!.setAttribute('aria-label', translateBelleText(next ? 'Fechar menu' : 'Abrir menu'));
     header?.classList.toggle('is-nav-open', next);
     panel!.setAttribute('aria-hidden', String(!next));
     if (next) {
