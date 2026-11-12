@@ -1,0 +1,43 @@
+name: Belle V38 | Intelligent Search QA
+on:
+  push:
+    branches:
+      - feat/belle-v38-search-intelligence-gb
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  search-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save playwright@1.58.0
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run build
+      - name: Chromium QA and responsive search screenshots
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-search.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/search-v38.mjs
+      - name: Attach actual browser screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: belle-search-v38-screenshots
+          path: artifacts/belle-search-v38/*.png
+          if-no-files-found: ignore
+          retention-days: 7
