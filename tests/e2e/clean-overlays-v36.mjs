@@ -59,6 +59,7 @@ try{
     const first=page.locator('#colecao .pcard__title [data-qv]').first();
     await first.scrollIntoViewIfNeeded();
     await first.click({timeout:6000});
+    await page.locator('.qv').waitFor({state:'visible',timeout:8000});
     if(!(await page.locator('.qv').isVisible()))fail(width+' quick view blocked');
     await page.keyboard.press('Escape');
     if(errors.length)fail(width+' javascript errors: '+errors.join(' | '));
