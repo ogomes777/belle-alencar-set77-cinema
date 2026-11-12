@@ -25,6 +25,7 @@ import { initFilm } from './film';
 import { initSections } from './sections';
 import { initHowFilm } from './how-film';
 import { initMotionDirector } from './motion/director';
+import { initCinematicV32 } from './motion/cinematic-v32';
 import { initStoresChampagne } from './motion/stores-champagne';
 
 
@@ -36,6 +37,7 @@ initBelleI18n();
 initBelleSettings();
 initSections();
 initMotionDirector();
+initCinematicV32(); // Reversible themed portals and post-loader silk opening.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
 const director = initDirector();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
