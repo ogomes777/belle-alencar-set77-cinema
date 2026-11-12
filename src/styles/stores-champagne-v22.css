@@ -8,12 +8,25 @@
 }
 #lojas.stores{
   --stores-edge:rgba(133,95,41,.23);
-  background:linear-gradient(105deg,
-    #e9dac1 0%,#e0ccad 38%,#cdb38c 67%,#ad9274 100%);
+  /* Ivory on the editorial 60%, bronze depth behind the existing globe.
+     Two broad linear gradients, no radial blur, shadow blob, or extra canvas. */
+  background:
+    linear-gradient(180deg,
+      rgba(247,236,214,.92) 0%,
+      rgba(247,236,214,.36) 10%,
+      rgba(247,236,214,0) 24%),
+    linear-gradient(96deg,
+      #f8f5ee 0%,
+      #f8f5ee 28%,
+      #f3ecde 45%,
+      #e8d9be 59%,
+      #baa180 69%,
+      #80634b 81%,
+      #634b3b 100%);
   color:#392b20;
 }
-/* A continuous latte-to-taupe gradient creates contrast behind the original
-   gold globe with NO large brown vignette, blur or radial shadow. */
+/* The unchanged gold globe gains contrast from the directional bronze part
+   of the full-bleed section, never from a localized blurred shadow. */
 #lojas.stores .section-head .eyebrow{color:#87612b;letter-spacing:.24em}
 #lojas.stores .section-head .lede{color:#62513b;text-wrap:pretty}
 #lojas.stores .section-head .display{
@@ -91,8 +104,16 @@
 }
 @media(max-width:959px){
   #lojas.stores{
-    background:linear-gradient(173deg,
-      #e9dac1 0%,#dcc6a3 50%,#c3a684 100%);
+    /* Vertical chapter: ivory copy, natural bronze behind the globe,
+       returning to champagne for the store buttons below. No dark vignette. */
+    background:linear-gradient(180deg,
+      #f8f5ee 0%,
+      #f0e4d1 20%,
+      #d6be9b 33%,
+      #95765a 48%,
+      #8c7055 56%,
+      #d3bb9a 75%,
+      #f4e9d8 100%);
   }
   #lojas.stores.stores--scrubbed .store-card{
     transform:translate3d(0,calc((1 - var(--stores-reveal,1))*20px),0);
