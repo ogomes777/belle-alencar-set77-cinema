@@ -145,3 +145,13 @@ html.couture-nav-open .float-cta{opacity:0;visibility:hidden;pointer-events:none
   .couture-nav__item::before,.couture-toggle__label,.couture-toggle__diamond,.couture-toggle__close{transition:none!important}
   .couture-nav .cn-ch__in{transform:none}
 }
+
+/* V38.1 · Desktop: os links foram para o menu, então a cápsula do header se
+   ajusta ao conteúdo (sem faixa vazia) e continua centralizada. */
+@media(min-width:861px){
+  html body .site-header,html body .site-header.is-compact{
+    width:auto;max-width:calc(100% - 28px);gap:0;
+    padding-left:clamp(14px,1.3vw,22px);padding-right:clamp(8px,.8vw,12px);
+  }
+  html body .site-header .site-actions{margin-left:clamp(28px,3.2vw,56px)}
+}

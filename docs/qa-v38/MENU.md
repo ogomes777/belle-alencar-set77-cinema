@@ -23,3 +23,6 @@ QA: `npm test` 67/67 · `npm run e2e` 105/105 · `tests/e2e/header-glass.mjs` 12
 ## Produção (12/11/2026, autorizada: "SOBE")
 - `dpl_5i6rDve7QAoYEQhQr8cdS7eRk8Td`, commit `d984e07`. Contra produção: `header-glass.mjs` 122/122, `qa/v37-modes.mjs` 8/8.
 - Rollback: V37.5 `dpl_seoQAzQUNYvCiZnUS8HZqEoTMaRu`.
+
+## V38.1 · largura do header no desktop
+Com os links movidos para o menu, a cápsula de 1120px ficava com ~370px vazios. Acima de 860px ela agora se ajusta ao conteúdo (≈780px em 1440), centralizada, com respiro de 28–56px entre marca e ações. Celular inalterado. `header-glass.mjs` 122/122; e2e 104/105 (única falha: teste instável "Para sair", também falha na V36).
