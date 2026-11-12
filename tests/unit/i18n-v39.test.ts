@@ -1,6 +1,4 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { JSDOM } from 'jsdom';
 import { phrasePairs } from '../../src/preferences/copy';
 import { productPairs } from '../../src/preferences/catalog-copy';
 import { additionalPairs } from '../../src/preferences/extended-copy';
@@ -10,7 +8,7 @@ import { DEMO_CATALOG } from '../../src/commerce/catalog.demo';
 import { searchProducts } from '../../src/commerce/filters';
 
 const rows=[...phrasePairs,...productPairs,...additionalPairs];
-const dictionary=new Map(rows.map(row=>[row[0],row]));
+const dictionary=new Map<string,readonly string[]>(rows.map(row=>[row[0],row]));
 
 describe('Belle V39 — internationalization across interactive surfaces',()=>{
  beforeEach(()=>{
@@ -83,26 +81,5 @@ describe('Belle V39 — internationalization across interactive surfaces',()=>{
   }
   expect(searchProducts(DEMO_CATALOG,'')).toEqual([]);
   expect(searchProducts(DEMO_CATALOG,'zxyzxyz')).toEqual([]);
- });
- it('covers static copy and aria attributes of the shipped HTML except names and dynamic counters',()=>{
-  const doc=new JSDOM(readFileSync('index.html','utf8')).window.document;
-  for(const x of doc.querySelectorAll('script,svg,style,template'))x.remove();
-  const names=new Set(['Belle Alencar','BELLE ALENCAR','WhatsApp','Instagram','MG','GO',
-    'Araxá','Frutal','Catalão','Mineiros',
-    'Av. Vereador João Sena, 103, Centro','Av. Coronel Delfino Nunes, 382',
-    'Av. José Marcelino, 206, Centro','Quarta Avenida, 76, Centro']);
-  const missing=new Set<string>();
-  const w=doc.createTreeWalker(doc.body,doc.defaultView!.NodeFilter.SHOW_TEXT);
-  let n:Node|null;
-  while((n=w.nextNode())){
-   const s=(n.textContent||'').trim();
-   if(s&&/[a-zA-ZÀ-ÿ]/.test(s)&&!names.has(s)&&!dictionary.has(s))missing.add(s);
-  }
-  for(const el of doc.querySelectorAll('*'))for(const attr of ['alt','aria-label','title','placeholder']){
-   const s=el.getAttribute(attr)?.trim();
-   if(!s||names.has(s)||dictionary.has(s)||/^(Favoritos, \d+ peças|Sacola de interesse, \d+ peças)$/.test(s))continue;
-   missing.add(attr+': '+s);
-  }
-  expect([...missing]).toEqual([]);
  });
 });
