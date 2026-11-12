@@ -33,7 +33,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   if(!section||!grid)return ()=>{};
 
-  let active=false,disposed=false,pending=0;
+  let active=false,disposed=false,pending=0,storyFrame=0;
   let entries:Entry[]=[];
   let trigger:ScrollTrigger|null=null,storyTrigger:ScrollTrigger|null=null;
   let mutation:MutationObserver|null=null,resize:ResizeObserver|null=null;
@@ -92,6 +92,16 @@ export function initCatalogScrollReveal(director:Director):()=>void {
       : 1;
     section!.style.setProperty('--collection-copy',headline.toFixed(4));
     section!.style.setProperty('--collection-bridge',bridge.toFixed(4));
+  }
+
+  // ScrollTrigger handles normal scrubbing, while the coalesced native scroll
+  // listener catches instant anchor jumps and rapid touch direction changes.
+  function scheduleStory(){
+    if(!active||storyFrame)return;
+    storyFrame=requestAnimationFrame(()=>{
+      storyFrame=0;
+      updateStory();
+    });
   }
 
   function measure(){
@@ -165,12 +175,14 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     document.addEventListener('visibilitychange',onVisibility);
     window.addEventListener('pageshow',onPageShow);
     window.addEventListener('resize',scheduleMeasure,{passive:true});
+    window.addEventListener('scroll',scheduleStory,{passive:true});
   }
   function teardown(){
     if(!active)return;
     active=false;
     if(pending)cancelAnimationFrame(pending);
-    pending=0;
+    if(storyFrame)cancelAnimationFrame(storyFrame);
+    pending=0;storyFrame=0;
     trigger?.kill();trigger=null;
     storyTrigger?.kill();storyTrigger=null;
     mutation?.disconnect();mutation=null;
@@ -180,6 +192,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
     document.removeEventListener('visibilitychange',onVisibility);
     window.removeEventListener('pageshow',onPageShow);
     window.removeEventListener('resize',scheduleMeasure);
+    window.removeEventListener('scroll',scheduleStory);
     grid!.classList.remove('is-cine-scroll');
     section!.classList.remove('is-cine-story');
     section!.style.removeProperty('--collection-copy');
