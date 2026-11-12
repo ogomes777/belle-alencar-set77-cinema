@@ -49,6 +49,7 @@ export function initFilm(director: Director): void {
   let tier: Tier = posterMode ? 'cinema' : resolveTier(caps, director.get(), forced);
   let world: World | null = null;
   let loading = false;
+  let startSerial = 0;
   let spans: Span[] = [];
   let progress = 0;
   let active: ChapterId = 'vitrine';
@@ -159,12 +160,17 @@ export function initFilm(director: Director): void {
   }
 
   addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', () => requestAnimationFrame(measure), { passive: true });
-  if ('fonts' in document) document.fonts.ready.then(measure).catch(() => undefined);
+  let measurementFrame=0;
+  const scheduleMeasure=()=>{
+    if(measurementFrame)return;
+    measurementFrame=requestAnimationFrame(()=>{measurementFrame=0;measure();});
+  };
+  addEventListener('resize', scheduleMeasure, { passive: true });
+  if ('fonts' in document) document.fonts.ready.then(scheduleMeasure).catch(() => undefined);
   // Product previews can change chapter heights after font/image readiness.
   // Recompute normalized spans whenever the real document geometry changes.
   if (typeof ResizeObserver !== 'undefined') {
-    const geometryObserver = new ResizeObserver(measure);
+    const geometryObserver = new ResizeObserver(scheduleMeasure);
     geometryObserver.observe(film);
     articles.forEach(article => geometryObserver.observe(article));
   }
@@ -217,17 +223,33 @@ export function initFilm(director: Director): void {
   async function startWorld(): Promise<void> {
     if (world || loading || tier === 'static') return;
     loading = true;
+    const serial=++startSerial;
     stage!.classList.add('is-loading');
     try {
-      // Critical: do not initialize WebGL or compile shaders while the short
-      // opening curtain is on screen. Poster paints immediately without stalling.
-      if (!posterMode) {
-        await new Promise<void>(resolve => window.setTimeout(resolve, 1050));
-        if ((tier as Tier) === 'static') { stage!.classList.remove('is-loading'); return; }
+      // The original 1.05s hard wait was additive to 1.5s font + 2s brand
+      // preflight and delayed camera updates until every product loaded.
+      // Wait for the ACTUAL short intro if playing, never a blind extra delay.
+      if (!posterMode && document.documentElement.classList.contains('intro-playing')) {
+        await new Promise<void>(resolve=>{
+          const root=document.documentElement;
+          let settled=false;
+          let timeout=0;
+          const observer=new MutationObserver(()=>{
+            if(root.classList.contains('intro-done'))finish();
+          });
+          const finish=()=>{
+            if(settled)return;
+            settled=true;observer.disconnect();clearTimeout(timeout);resolve();
+          };
+          observer.observe(root,{attributes:true,attributeFilter:['class']});
+          timeout=window.setTimeout(finish,2900);
+        });
       }
+      await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+      if(serial!==startSerial || tier==='static')return;
       const mod = await import('./experience');
-      if ((tier as Tier) === 'static') return;
-      world = await mod.createWorld({
+      if(serial!==startSerial || tier==='static')return;
+      const created = await mod.createWorld({
         container: canvasHost!,
         tier,
         poster: !!posterMode,
@@ -235,11 +257,17 @@ export function initFilm(director: Director): void {
         onFirstFrame: () => {
           // A first GPU frame can precede alpha textures: avoid empty facade windows.
           const current=world;
-          void current?.readyEntranceMedia().then(()=>{
-            if(world!==current)return;
+          // Entrance media should win; on a slow connection the poster must
+          // not hold the first usable 3D scene hostage indefinitely.
+          if(!current)return;
+          void Promise.race([
+            current.readyEntranceMedia().catch(()=>undefined),
+            new Promise<void>(resolve=>setTimeout(resolve,1950)),
+          ]).then(()=>{
+            if(world!==current||tier==='static')return;
             stage!.classList.remove('is-loading');
             stage!.classList.add('is-live');
-          }).catch(()=>stage!.classList.remove('is-loading'));
+          });
         },
         onFail: (reason) => {
           console.warn('[belle] 3D desativado, usando pôsteres:', reason);
@@ -250,14 +278,25 @@ export function initFilm(director: Director): void {
           showPoster(active);
         },
       });
-      world.setSpans(spans);
-      world.setDress(dressParams);
-      await world.readyMedia();
-      world.setProgress(progress, true);
-      world.setRailEngaged(active === 'sala');
+      if(serial!==startSerial || tier==='static'){
+        created.destroy();
+        return;
+      }
+      world=created;
+      created.setSpans(spans);
+      created.setDress(dressParams);
+      // The camera must be synced BEFORE product textures complete.
+      // Awaiting every image previously left it frozen at frame zero then
+      // abruptly jumped to scroll progress after multiple seconds.
+      created.setProgress(progress, true);
+      created.setRailEngaged(active === 'sala');
+      const rect=film!.getBoundingClientRect();
+      created.setVisible(rect.bottom>0&&rect.top<innerHeight);
       roomRail.refresh();
       mod.initReveals(film!);
       if (posterMode) {
+        await created.readyMedia();
+        if(serial!==startSerial||world!==created)return;
         const sp = spans.find((s) => s.id === posterMode);
         const p = sp ? sp.s + (sp.e - sp.s) * (posterMode === 'vestido' ? 0.95 : posterMode === 'provador' ? 0.35 : 0.5) : 0;
         if (posterMode === 'provador') world.setProgress(p, true);
@@ -275,6 +314,7 @@ export function initFilm(director: Director): void {
     }
   }
   function stopWorld(): void {
+    startSerial++;
     world?.destroy();
     world = null;
     roomRail.refresh();
@@ -285,9 +325,22 @@ export function initFilm(director: Director): void {
   // visibilidade do palco → liga/desliga o render loop
   new IntersectionObserver((entries) => {
     const vis = entries.some((e) => e.isIntersecting);
-    world?.setVisible(vis);
+    if(vis){
+      // Landing revisits and BFCache restores must pick up at the CURRENT
+      // scroll chapter rather than easing across the entire forgotten scene.
+      progress=clamp((scrollY-filmTop)/range,0,1);
+      world?.setProgress(progress,true);
+      if(world)world.setVisible(true);
+    }else world?.setVisible(false);
   }, { rootMargin: '0px' }).observe(film);
 
+  window.addEventListener('pageshow',(event)=>{
+    if(!event.persisted)return;
+    scheduleMeasure();
+    progress=clamp((scrollY-filmTop)/range,0,1);
+    world?.setProgress(progress,true);
+    if(tier!=='static'&&!world&&!loading)void startWorld();
+  });
   if (posterMode) {
     document.documentElement.classList.add('poster-mode', 'intro-seen');
     startWorld();
