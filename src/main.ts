@@ -24,8 +24,6 @@ import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
 import { initHowFilm } from './how-film';
-import { initMotionDirector } from './motion/director';
-import { initCoutureV35 } from './motion/couture-transitions-v35';
 import { initStoresChampagne } from './motion/stores-champagne';
 
 
@@ -36,8 +34,9 @@ initCommerce();
 initBelleI18n();
 initBelleSettings();
 initSections();
-initMotionDirector();
-initCoutureV35(); // V35: 22 cinematic scroll-reversible micro-intros; zero section spacers.
+// V36 CLEAN: no global transition compositor and no second scene director.
+// Leave the original 3D film, runway, carousel, video scrub, collections,
+// city globe and all their own scroll-based interactions undisturbed.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
 const director = initDirector();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
