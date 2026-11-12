@@ -27,7 +27,7 @@ try{
   await search.locator('.ba-v38-suggest-card').first().waitFor({state:'visible'});
   assert(await search.locator('.ba-v38-suggest-card').count()===4,'four references '+width);
   assert(await search.locator('.search-hit--product').count()===8,'eight product starters '+width);
-  assert(await search.locator('input#searchInput').isFocused(),'autofocus '+width);
+  assert(await search.locator('input#searchInput').evaluate(el=>document.activeElement===el),'autofocus '+width);
   const overflow=await page.evaluate(()=>{
     const p=document.querySelector('#searchDialog .ov__panel');
     return {window:document.documentElement.scrollWidth-document.documentElement.clientWidth,
@@ -43,7 +43,7 @@ try{
   assert(await page.locator('#quickView .qv__title').isVisible(),'quickView missing '+width);
   await page.keyboard.press('Escape');
   await page.keyboard.press('Control+k');
-  await search.locator('#searchInput').waitFor({state:'focused'});
+  await page.waitForFunction(()=>document.activeElement?.id==='searchInput');
   await search.locator('#searchInput').fill('catalao');
   assert(await search.locator('[data-hit-store="catalao"]').count()===1,'store search failed '+width);
   await search.locator('#searchInput').fill('zzzznonsense');
