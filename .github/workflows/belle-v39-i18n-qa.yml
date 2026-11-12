@@ -23,6 +23,8 @@ jobs:
       - run: npm ci
       - name: Test four-language coverage and reversible translations
         run: npm test
+      - name: Audit all static HTML strings and accessibility labels
+        run: node scripts/i18n-audit-v39.mjs
       - name: TypeScript strict + production build
         run: npm run build
       - name: Install headless Chromium
