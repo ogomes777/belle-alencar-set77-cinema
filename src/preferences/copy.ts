@@ -910,5 +910,497 @@ export const phrasePairs = [
     "Motion: cinema",
     "Movimiento: cine",
     "Movimento: cinema"
+  ],
+  [
+    "Todas",
+    "All",
+    "Todas",
+    "Tutte"
+  ],
+  [
+    "Todos",
+    "All",
+    "Todos",
+    "Tutti"
+  ],
+  [
+    "Toda ocasião",
+    "All occasions",
+    "Todas las ocasiones",
+    "Ogni occasione"
+  ],
+  [
+    "Categoria",
+    "Category",
+    "Categoría",
+    "Categoria"
+  ],
+  [
+    "Ocasião",
+    "Occasion",
+    "Ocasión",
+    "Occasione"
+  ],
+  [
+    "Tamanho",
+    "Size",
+    "Talla",
+    "Taglia"
+  ],
+  [
+    "Tamanhos",
+    "Sizes",
+    "Tallas",
+    "Taglie"
+  ],
+  [
+    "Único",
+    "One size",
+    "Talla única",
+    "Taglia unica"
+  ],
+  [
+    "Packshot sintético · demonstração",
+    "Synthetic product image · demo",
+    "Imagen sintética · demostración",
+    "Immagine sintetica · demo"
+  ],
+  [
+    " — ilustração demonstrativa, ver detalhes",
+    " — demo illustration, view details",
+    " — ilustración demostrativa, ver detalles",
+    " — illustrazione dimostrativa, vedi dettagli"
+  ],
+  [
+    "VER PEÇA ↗",
+    "VIEW ITEM ↗",
+    "VER PRENDA ↗",
+    "VEDI ARTICOLO ↗"
+  ],
+  [
+    "VER TUDO",
+    "VIEW ALL",
+    "VER TODO",
+    "VEDI TUTTO"
+  ],
+  [
+    "VER MENOS",
+    "SHOW LESS",
+    "VER MENOS",
+    "VEDI MENO"
+  ],
+  [
+    "Limpar filtros",
+    "Clear filters",
+    "Limpiar filtros",
+    "Cancella filtri"
+  ],
+  [
+    "Limpar",
+    "Clear",
+    "Limpiar",
+    "Cancella"
+  ],
+  [
+    "Peças da coleção",
+    "Collection items",
+    "Prendas de la colección",
+    "Capi della collezione"
+  ],
+  [
+    "Nenhuma peça com essa combinação.",
+    "No items match these filters.",
+    "Ninguna prenda coincide con estos filtros.",
+    "Nessun capo corrisponde ai filtri."
+  ],
+  [
+    "Tente outro tamanho ou ocasião, ou fale com a loja: a seleção real é maior que esta prévia.",
+    "Try another size or occasion, or contact the boutique: the real selection is larger than this preview.",
+    "Prueba con otra talla u ocasión, o consulta con la tienda: la colección real es más amplia que esta vista previa.",
+    "Prova un'altra taglia o occasione, oppure contatta il negozio: la selezione reale è più ampia di questa anteprima."
+  ],
+  [
+    "Preço sob consulta",
+    "Price on request",
+    "Precio a consultar",
+    "Prezzo su richiesta"
+  ],
+  [
+    "Ampliar",
+    "Enlarge",
+    "Ampliar",
+    "Ingrandisci"
+  ],
+  [
+    "Escolha um tamanho para continuar.",
+    "Choose a size to continue.",
+    "Elige una talla para continuar.",
+    "Scegli una taglia per continuare."
+  ],
+  [
+    "Adicionar à sacola de interesse",
+    "Add to your bag",
+    "Añadir a tu bolsa",
+    "Aggiungi alla borsa"
+  ],
+  [
+    "Adicionado à sacola ✓",
+    "Added to bag ✓",
+    "Añadido a la bolsa ✓",
+    "Aggiunto alla borsa ✓"
+  ],
+  [
+    "Estudo sintético demonstrativo. Não representa uma peça real, grade disponível ou estoque da Belle. O provador é uma apresentação frontal; não simula vestir nem giro 360°.",
+    "Synthetic demonstration. Not a real item, available size run or Belle inventory. The fitting room is a front-view presentation; it does not simulate wearing or a 360° view.",
+    "Demostración sintética. No representa una prenda real, tallas disponibles ni existencias de Belle. El probador solo muestra la vista frontal; no simula vestir ni girar 360°.",
+    "Dimostrazione sintetica. Non rappresenta un capo reale, taglie disponibili o stock Belle. Il camerino mostra soltanto la vista frontale; non simula la prova né la rotazione a 360°."
+  ],
+  [
+    "Sacola de interesse",
+    "Your selection bag",
+    "Bolsa de selección",
+    "Borsa della selezione"
+  ],
+  [
+    "trocar loja",
+    "change store",
+    "cambiar tienda",
+    "cambia negozio"
+  ],
+  [
+    "Cada loja tem a própria sacola e o próprio estoque. Escolha a sua para começar.",
+    "Every boutique has its own bag and stock. Choose yours to get started.",
+    "Cada tienda tiene su propia bolsa y existencias. Elige la tuya para empezar.",
+    "Ogni negozio ha la propria borsa e disponibilità. Scegli il tuo per iniziare."
+  ],
+  [
+    "Mensagem para a loja",
+    "Message to the boutique",
+    "Mensaje para la tienda",
+    "Messaggio al negozio"
+  ],
+  [
+    "Abrir o WhatsApp de novo",
+    "Open WhatsApp again",
+    "Abrir WhatsApp de nuevo",
+    "Apri di nuovo WhatsApp"
+  ],
+  [
+    "Checkout online",
+    "Online checkout",
+    "Pago en línea",
+    "Pagamento online"
+  ],
+  [
+    "Favoritos",
+    "Favorites",
+    "Favoritos",
+    "Preferiti"
+  ],
+  [
+    "Salvos neste navegador.",
+    "Saved in this browser.",
+    "Guardados en este navegador.",
+    "Salvati in questo browser."
+  ],
+  [
+    "Toque no coração de uma peça para guardar aqui.",
+    "Tap the heart on an item to save it here.",
+    "Toca el corazón de una prenda para guardarla aquí.",
+    "Tocca il cuore su un capo per salvarlo qui."
+  ],
+  [
+    "Ver detalhes",
+    "View details",
+    "Ver detalles",
+    "Vedi dettagli"
+  ],
+  [
+    "Vestidos, bolsas, acessórios…",
+    "Dresses, bags, accessories…",
+    "Vestidos, bolsos, accesorios…",
+    "Abiti, borse, accessori…"
+  ],
+  [
+    "Buscas populares",
+    "Popular searches",
+    "Búsquedas populares",
+    "Ricerche popolari"
+  ],
+  [
+    "ENCONTRE POR CATEGORIA",
+    "EXPLORE BY CATEGORY",
+    "BUSCA POR CATEGORÍA",
+    "ESPLORA PER CATEGORIA"
+  ],
+  [
+    "Limpar busca",
+    "Clear search",
+    "Borrar búsqueda",
+    "Cancella ricerca"
+  ],
+  [
+    "BELLE ALENCAR · DESCUBRA SUA PRÓXIMA PEÇA",
+    "BELLE ALENCAR · DISCOVER YOUR NEXT PIECE",
+    "BELLE ALENCAR · DESCUBRE TU PRÓXIMA PRENDA",
+    "BELLE ALENCAR · SCOPRI IL TUO PROSSIMO CAPO"
+  ],
+  [
+    "Encontre o seu look.",
+    "Find your look.",
+    "Encuentra tu look.",
+    "Trova il tuo look."
+  ],
+  [
+    "Uma busca simples por peças, acessórios e estilo.",
+    "A simple search for clothing, accessories and style.",
+    "Una búsqueda sencilla de prendas, accesorios y estilo.",
+    "Una ricerca semplice di capi, accessori e stile."
+  ],
+  [
+    "O que você procura?",
+    "What are you looking for?",
+    "¿Qué estás buscando?",
+    "Cosa stai cercando?"
+  ],
+  [
+    "VER COLEÇÃO COMPLETA",
+    "VIEW FULL COLLECTION",
+    "VER COLECCIÓN COMPLETA",
+    "VEDI TUTTA LA COLLEZIONE"
+  ],
+  [
+    "Imagens e produtos desta prévia são demonstrativos. Confirme o acervo e os detalhes com a loja.",
+    "Images and products in this preview are illustrative. Confirm the actual collection and details with the boutique.",
+    "Las imágenes y productos son demostrativos. Confirma el catálogo y los detalles con la tienda.",
+    "Immagini e prodotti sono dimostrativi. Verifica la collezione e i dettagli con il negozio."
+  ],
+  [
+    "Produto demonstrativo · ver detalhes",
+    "Demo item · view details",
+    "Producto demostrativo · ver detalles",
+    "Articolo dimostrativo · vedi dettagli"
+  ],
+  [
+    "Explorar na landing",
+    "Explore on the page",
+    "Explorar en la página",
+    "Esplora sulla pagina"
+  ],
+  [
+    "Não encontramos essa peça.",
+    "We couldn't find that piece.",
+    "No encontramos esa prenda.",
+    "Non abbiamo trovato quel capo."
+  ],
+  [
+    "Experimente buscar por vestido, bolsa, anel ou pela cidade da sua loja.",
+    "Try searching for a dress, bag, ring or your boutique's city.",
+    "Prueba a buscar un vestido, bolso, anillo o la ciudad de tu tienda.",
+    "Prova a cercare un abito, una borsa, un anello o la città del tuo negozio."
+  ],
+  [
+    "Sua loja Belle",
+    "Your Belle boutique",
+    "Tu tienda Belle",
+    "Il tuo negozio Belle"
+  ],
+  [
+    "A sacola e a disponibilidade seguem a loja escolhida. Você pode trocar quando quiser.",
+    "Your bag and availability are linked to your chosen store. Switch whenever you wish.",
+    "Tu bolsa y la disponibilidad dependen de la tienda elegida. Puedes cambiarla cuando quieras.",
+    "La borsa e la disponibilità dipendono dal negozio selezionato. Puoi cambiarlo quando vuoi."
+  ],
+  [
+    "Preferência salva somente neste navegador. Não criamos conta nem pedimos dados pessoais.",
+    "Preference saved only in this browser. No account or personal information is required.",
+    "Preferencia guardada solo en este navegador. No creamos una cuenta ni pedimos datos personales.",
+    "Preferenza salvata solo in questo browser. Non creiamo un account né richiediamo dati personali."
+  ],
+  [
+    "Sua loja",
+    "Your store",
+    "Tu tienda",
+    "Il tuo negozio"
+  ],
+  [
+    "Sua loja ✓",
+    "Your store ✓",
+    "Tu tienda ✓",
+    "Il tuo negozio ✓"
+  ],
+  [
+    "Trocar de loja",
+    "Change store",
+    "Cambiar de tienda",
+    "Cambia negozio"
+  ],
+  [
+    "Fechar",
+    "Close",
+    "Cerrar",
+    "Chiudi"
+  ],
+  [
+    "Encontre sua Belle",
+    "Find your Belle",
+    "Encuentra tu Belle",
+    "Trova la tua Belle"
+  ],
+  [
+    "Seu destino, sua experiência.",
+    "Your destination, your experience.",
+    "Tu destino, tu experiencia.",
+    "La tua destinazione, la tua esperienza."
+  ],
+  [
+    "Quatro cidades conectadas · arraste para girar",
+    "Four connected cities · drag to rotate",
+    "Cuatro ciudades conectadas · arrastra para girar",
+    "Quattro città collegate · trascina per ruotare"
+  ],
+  [
+    "Voltar ao globo",
+    "Back to globe",
+    "Volver al globo",
+    "Torna al globo"
+  ],
+  [
+    "Explorar esta cidade no Google Maps",
+    "Explore this city on Google Maps",
+    "Explorar esta ciudad en Google Maps",
+    "Esplora questa città su Google Maps"
+  ],
+  [
+    "Abrir rotas no Google Maps",
+    "Open directions in Google Maps",
+    "Abrir rutas en Google Maps",
+    "Apri indicazioni su Google Maps"
+  ],
+  [
+    "Sua escolha",
+    "Your choice",
+    "Tu elección",
+    "La tua scelta"
+  ],
+  [
+    "Noite",
+    "Evening",
+    "Noche",
+    "Sera"
+  ],
+  [
+    "Dia",
+    "Day",
+    "Día",
+    "Giorno"
+  ],
+  [
+    "Celebrar",
+    "Celebration",
+    "Celebrar",
+    "Festa"
+  ],
+  [
+    "Cor",
+    "Color",
+    "Color",
+    "Colore"
+  ],
+  [
+    "Branco",
+    "White",
+    "Blanco",
+    "Bianco"
+  ],
+  [
+    "Azul claro",
+    "Light blue",
+    "Azul claro",
+    "Azzurro"
+  ],
+  [
+    "Preto",
+    "Black",
+    "Negro",
+    "Nero"
+  ],
+  [
+    "Vinho",
+    "Burgundy",
+    "Burdeos",
+    "Bordeaux"
+  ],
+  [
+    "Areia",
+    "Sand",
+    "Arena",
+    "Sabbia"
+  ],
+  [
+    "Verde oliva",
+    "Olive green",
+    "Verde oliva",
+    "Verde oliva"
+  ],
+  [
+    "Marfim",
+    "Ivory",
+    "Marfil",
+    "Avorio"
+  ],
+  [
+    "Dourado",
+    "Gold",
+    "Dorado",
+    "Oro"
+  ],
+  [
+    "Pérola",
+    "Pearl",
+    "Perla",
+    "Perla"
+  ],
+  [
+    "Creme",
+    "Cream",
+    "Crema",
+    "Crema"
+  ],
+  [
+    "Chocolate",
+    "Chocolate",
+    "Chocolate",
+    "Cioccolato"
+  ],
+  [
+    "Rosa floral",
+    "Floral pink",
+    "Rosa floral",
+    "Rosa floreale"
+  ],
+  [
+    "Rosé e dourado",
+    "Rosé and gold",
+    "Rosé y dorado",
+    "Rosé e oro"
+  ],
+  [
+    "Preto e dourado",
+    "Black and gold",
+    "Negro y dorado",
+    "Nero e oro"
+  ],
+  [
+    "Off-white e dourado",
+    "Off-white and gold",
+    "Blanco roto y dorado",
+    "Avorio e oro"
+  ],
+  [
+    "Dourado e cristal",
+    "Gold and crystal",
+    "Dorado y cristal",
+    "Oro e cristallo"
   ]
 ] as const;
