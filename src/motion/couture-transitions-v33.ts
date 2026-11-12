@@ -138,10 +138,9 @@ export function initCoutureTransitions():()=>void{
       }
     }
     if(!current||progress<=.012||progress>=.989){clear();return;}
-    if(active!==current){
-      active=current;overlay.dataset.motif=current.motif;
-      title.textContent=current.section.querySelector('h2')?.textContent?.replace(/\s+/g,' ').trim()||'Belle Alencar';
-    }
+    if(active!==current){active=current;overlay.dataset.motif=current.motif;}
+    const label=current.section.querySelector('h2')?.textContent?.replace(/\s+/g,' ').trim()||'Belle Alencar';
+    if(title.textContent!==label)title.textContent=label;
     overlay.dataset.active='true';
     overlay.style.setProperty('--ct33-progress',progress.toFixed(4));
     masks(panels,current.motif,progress);
