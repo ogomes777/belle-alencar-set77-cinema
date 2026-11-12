@@ -83,6 +83,8 @@ describe('initCommerce (DOM)', () => {
   });
 
   it('quick view: exige tamanho, adiciona à sacola de Frutal e atualiza o contador', async () => {
+    // Deep-catalog garments are available after user chooses to see all.
+    (document.querySelector('#catalogMount [data-catalog-toggle]') as HTMLElement).click();
     const title = document.querySelector('.pcard[data-product="belle-demo-vestidos-01"] .pcard__title button') as HTMLElement;
     title.click();
     await flush();
