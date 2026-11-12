@@ -23,6 +23,15 @@ export type CoutureScene = {
   copyStyle?:'curtain'|'type'|'iris'|'fold'|'sweep';
 };
 export const COUTURE_SCENES:readonly CoutureScene[] = [
+  // The existing seven WebGL chapters keep their own camera/timelines.
+  // These passes add a visual threshold only, never mask the film's 3D DOM.
+  {selector:'#inicio',      motifs:['moldura']},
+  {selector:'#porta',       motifs:['cortina']},
+  {selector:'#sala',        motifs:['fatias']},
+  {selector:'#vestido',     motifs:['tinta']},
+  {selector:'#detalhe',     motifs:['reticula']},
+  {selector:'#categorias',  motifs:['circulo']},
+  {selector:'#provador',    motifs:['pilha']},
   {selector:'#passarela',   motifs:['cortina','fatias','carrossel'],  copy:'.runway__intro h2',copyStyle:'curtain'},
   {selector:'#ocasioes',    motifs:['colunas','pilha','cubo'],         copy:'#ocasioesTitle',copyStyle:'iris'},
   {selector:'#colecao',     motifs:['rasgo','pixels','varredura'],    copy:'.section-head .eyebrow',copyStyle:'sweep'},
@@ -36,10 +45,10 @@ export const COUTURE_SCENES:readonly CoutureScene[] = [
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const ease=(p:number)=>p*p*(3-2*p);
 
-/** 0 at 96vh, 1 by 38vh. No artificial page height or pinning. */
+/** 0 at 98vh, 1 by 17vh. No artificial page height or pinning. */
 export function boundaryProgress(top:number,viewport:number):number{
   const h=Math.max(320,viewport);
-  return clamp((h*.96-top)/(h*.58));
+  return clamp((h*.98-top)/(h*.81));
 }
 export function resolveMotif(motifs:readonly MicroMotif[],p:number){
   const t=clamp(p);
@@ -101,7 +110,7 @@ export function initCoutureV35():()=>void {
     current=null;
     lastMotif=null;
   };
-  const eligible=()=>!document.hidden&&!reduced.matches&&root.dataset.intensity!=='essential';
+  const eligible=()=>!document.hidden&&!reduced.matches&&root.dataset.intensity!=='essential'&&!root.classList.contains('intro-playing');
   const update=()=>{
     frame=0;
     if(disposed)return;
@@ -116,7 +125,7 @@ export function initCoutureV35():()=>void {
       const top=scene.node.getBoundingClientRect().top;
       const p=boundaryProgress(top,height);
       // Only the scene touching the viewport entrance is allowed to paint.
-      if(top<=height*.96&&top>=height*.38 && p>.008&&p<.992){
+      if(top<=height*.98&&top>=height*.17 && p>.008&&p<.992){
         if(!candidate||Math.abs(p-.5)<Math.abs(progress-.5)){
           candidate=scene;progress=p;
         }
@@ -125,7 +134,8 @@ export function initCoutureV35():()=>void {
         const rect=scene.copy.getBoundingClientRect();
         const focused=scene.copy.contains(document.activeElement);
         const reveal=focused?1:clamp((height*.91-rect.top)/(height*.31));
-        const cut=((1-ease(reveal))*100).toFixed(2)+'%';
+        const finalReveal=scene.copy.dataset.bm35Style==='type' ? Math.floor(ease(reveal)*22)/22 : ease(reveal);
+        const cut=((1-finalReveal)*100).toFixed(2)+'%';
         if(scene.copy.style.getPropertyValue('--bm35-cut')!==cut)
           scene.copy.style.setProperty('--bm35-cut',cut);
       }
