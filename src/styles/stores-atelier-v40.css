@@ -1,0 +1,322 @@
+/*
+ * BELLE V40 · CITY ATELIER
+ * Only the store selection UI. Leave globe, intro, scroll, transitions
+ * and the rest of the website untouched.
+ * Transparent city entries replace the theme-specific boxed backgrounds.
+ */
+#lojas.stores{
+  --city-ink:#35281e;
+  --city-secondary:#625344;
+  --city-note:#705d4b;
+  --city-kicker:#805728;
+  --city-link:#67441f;
+  --city-rule:rgba(117,82,46,.23);
+  --city-button-line:rgba(150,105,52,.55);
+  --city-button-fg:#42301f;
+  --city-button-fill:linear-gradient(115deg,rgba(255,253,249,.82),rgba(244,226,199,.55));
+  --city-button-hover:#71502f;
+  --city-button-hover-fg:#fff8ec;
+  --city-button-active:linear-gradient(120deg,#dfc18b,#f6dfb5);
+  --city-button-active-fg:#42301f;
+  --city-focus:#9c6933;
+}
+html[data-belle-theme="dark"] #lojas.stores{
+  --city-ink:#f9ead7;
+  --city-secondary:#e3d1bc;
+  --city-note:#dcc8b2;
+  --city-kicker:#edc891;
+  --city-link:#f4d6a7;
+  --city-rule:rgba(232,201,159,.29);
+  --city-button-line:rgba(226,185,128,.70);
+  --city-button-fg:#f7e8d3;
+  --city-button-fill:linear-gradient(115deg,rgba(215,170,113,.10),rgba(255,233,194,.035));
+  --city-button-hover:#d9b47c;
+  --city-button-hover-fg:#302017;
+  --city-button-active:linear-gradient(115deg,#cca46d,#f1d5a5);
+  --city-button-active-fg:#281d18;
+  --city-focus:#f1d4a1;
+}
+html[data-belle-theme="rose"] #lojas.stores{
+  --city-ink:#492c3a;
+  --city-secondary:#715160;
+  --city-note:#795663;
+  --city-kicker:#98556c;
+  --city-link:#8e4e63;
+  --city-rule:rgba(134,75,96,.23);
+  --city-button-line:rgba(151,84,106,.48);
+  --city-button-fg:#603448;
+  --city-button-fill:linear-gradient(115deg,rgba(255,252,251,.72),rgba(242,210,223,.48));
+  --city-button-hover:#85485f;
+  --city-button-hover-fg:#fff5f6;
+  --city-button-active:linear-gradient(115deg,#ab6784,#d39aaa);
+  --city-button-active-fg:#fff8fa;
+  --city-focus:#9a5675;
+}
+
+/* Chapter title and explanation are quieter in layout, stronger in contrast. */
+#lojas.stores .section-head{
+  min-width:0;
+  margin-bottom:clamp(30px,3.7vw,52px);
+}
+#lojas.stores .section-head .eyebrow{
+  margin-bottom:14px;
+  color:var(--city-kicker)!important;
+  font-family:var(--sans);
+  font-size:clamp(.70rem,.8vw,.81rem);
+  line-height:1.4;
+  font-weight:800;
+  letter-spacing:.17em;
+}
+#lojas.stores .section-head .display{
+  font-family:"Bodoni Moda Variable",Georgia,serif;
+  font-weight:550;
+  font-size:clamp(2.9rem,4.25vw,4.85rem);
+  line-height:1.09;
+  letter-spacing:-.046em;
+  text-wrap:balance;
+}
+#lojas.stores .section-head .lede{
+  color:var(--city-secondary)!important;
+  max-width:45ch;
+  margin-top:clamp(14px,1.7vw,22px);
+  font-family:var(--sans);
+  font-weight:540;
+  font-size:clamp(.95rem,1.03vw,1.07rem);
+  line-height:1.65;
+  text-wrap:pretty;
+}
+
+/* NO cards, panels or background boxes in any theme. */
+html body #lojas.stores .store-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(18px,2.5vw,36px);
+  width:100%;
+  min-width:0;
+  margin:0;
+  padding:0;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+html body #lojas.stores .store-list .store-card,
+html[data-belle-theme="dark"] #lojas.stores .store-list .store-card,
+html[data-belle-theme="rose"] #lojas.stores .store-list .store-card{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto auto minmax(42px,1fr) auto 56px;
+  align-content:stretch;
+  align-items:start;
+  gap:clamp(7px,.9vw,10px);
+  min-width:0;
+  min-height:232px;
+  padding:clamp(18px,2vw,24px) 0 clamp(23px,2.3vw,28px);
+  margin:0;
+  background:none!important;
+  background-color:transparent!important;
+  border:0!important;
+  border-bottom:1px solid var(--city-rule)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+#lojas.stores .store-card::before{
+  top:-1px;
+  height:2px;
+  width:0;
+  background:linear-gradient(90deg,var(--city-kicker),transparent);
+  transition:width .5s cubic-bezier(.22,1,.36,1);
+}
+#lojas.stores .store-card:hover::before,
+#lojas.stores .store-card:focus-within::before,
+#lojas.stores .store-card.is-active::before{width:min(78px,45%)}
+#lojas.stores .store-card__uf{
+  margin:0;
+  color:var(--city-kicker)!important;
+  font-family:var(--sans);
+  font-weight:800;
+  font-size:.73rem;
+  line-height:1.2;
+  letter-spacing:.18em;
+}
+html body #lojas.stores .store-card h3{
+  margin:0;
+  color:var(--city-ink)!important;
+  font-family:"Bodoni Moda Variable",Georgia,serif;
+  font-size:clamp(1.8rem,2.1vw,2.27rem);
+  line-height:1.17;
+  font-weight:550;
+  letter-spacing:-.045em;
+}
+#lojas.stores .store-card__addr,
+#lojas.stores .store-card__addr.is-pending{
+  margin:0;
+  min-height:0;
+  max-width:30ch;
+  color:var(--city-secondary)!important;
+  font-family:var(--sans);
+  font-size:clamp(.78rem,.93vw,.92rem);
+  line-height:1.48;
+  font-style:normal;
+  font-weight:550;
+  overflow-wrap:break-word;
+}
+#lojas.stores .store-card__map{
+  justify-self:start;
+  align-self:end;
+  min-height:30px;
+  margin:0 0 1px;
+  padding:4px 0;
+  color:var(--city-link)!important;
+  text-decoration-thickness:1px;
+  text-decoration-color:currentColor!important;
+  text-underline-offset:5px;
+  font-family:var(--sans);
+  font-size:clamp(.75rem,.81vw,.83rem);
+  line-height:1.45;
+  font-weight:760;
+  letter-spacing:.015em;
+  transition:color .25s ease,text-decoration-thickness .25s ease;
+}
+#lojas.stores .store-card__map:hover{
+  text-decoration-thickness:2px;
+}
+#lojas.stores .store-card .btn--line{
+  --fill:var(--city-button-hover);
+  isolation:isolate;
+  position:relative;
+  display:flex;
+  align-self:end;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:56px;
+  min-height:56px;
+  max-width:none;
+  margin:0;
+  padding:8px 28px 8px 14px;
+  overflow:hidden;
+  border:1px solid var(--city-button-line)!important;
+  border-radius:11px!important;
+  background:var(--city-button-fill)!important;
+  color:var(--city-button-fg)!important;
+  font-family:var(--sans);
+  font-size:clamp(.70rem,.85vw,.78rem);
+  line-height:1.28;
+  font-weight:780;
+  letter-spacing:.065em;
+  text-align:center;
+  text-wrap:balance;
+  box-shadow:0 10px 22px -17px rgba(72,47,28,.45),inset 0 1px 0 rgba(255,255,255,.20)!important;
+  transition:color .3s ease,border-color .3s ease,box-shadow .35s ease,transform .35s cubic-bezier(.22,1,.36,1);
+}
+#lojas.stores .store-card .btn--line::before{
+  z-index:-1;
+  background:var(--city-button-hover);
+  transform:scaleY(0);
+  transform-origin:bottom;
+}
+#lojas.stores .store-card .btn--line::after{
+  content:"›";
+  position:absolute;
+  right:11px;
+  top:50%;
+  color:currentColor;
+  font-family:Georgia,serif;
+  font-size:1.38rem;
+  line-height:1;
+  font-weight:700;
+  opacity:.76;
+  transform:translateY(-53%);
+  transition:transform .3s ease,opacity .3s ease;
+  pointer-events:none;
+}
+#lojas.stores .store-card .btn--line:hover,
+#lojas.stores .store-card .btn--line:focus-visible{
+  color:var(--city-button-hover-fg)!important;
+  border-color:var(--city-button-hover)!important;
+  box-shadow:0 15px 30px -18px rgba(72,47,28,.55),inset 0 1px 0 rgba(255,255,255,.25)!important;
+  transform:translateY(-2px);
+}
+#lojas.stores .store-card .btn--line:hover::before,
+#lojas.stores .store-card .btn--line:focus-visible::before{transform:scaleY(1)}
+#lojas.stores .store-card .btn--line:hover::after,
+#lojas.stores .store-card .btn--line:focus-visible::after{
+  opacity:1;
+  transform:translate(2px,-53%);
+}
+#lojas.stores .store-card .btn--line[aria-pressed="true"]{
+  background:var(--city-button-active)!important;
+  color:var(--city-button-active-fg)!important;
+  border-color:var(--city-button-line)!important;
+  box-shadow:0 12px 25px -16px rgba(72,47,28,.46),inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+#lojas.stores .store-card .btn--line[aria-pressed="true"]::before{display:none}
+#lojas.stores .store-card .btn--line[aria-pressed="true"]::after{content:"✦";font-size:.83rem;opacity:.85}
+#lojas.stores .store-card .btn--line:active{transform:translateY(0) scale(.99)}
+#lojas.stores .store-card .btn--line:focus-visible,
+#lojas.stores .store-card__map:focus-visible{
+  outline:2px solid var(--city-focus)!important;
+  outline-offset:4px!important;
+}
+#lojas.stores .stores__note{
+  color:var(--city-note)!important;
+  max-width:46ch;
+  margin-top:clamp(26px,3vw,38px);
+  font-family:var(--sans);
+  font-size:clamp(.76rem,.87vw,.88rem);
+  line-height:1.65;
+  font-weight:550;
+  text-wrap:pretty;
+}
+
+/* Tablet: globe stage and animations remain unchanged; city grid stays legible. */
+@media(min-width:600px) and (max-width:959px){
+  html body #lojas.stores .store-list{max-width:min(100%,760px);margin-inline:auto}
+  html body #lojas.stores .store-list .store-card{min-height:232px}
+  #lojas.stores .stores__note{margin-inline:auto;max-width:760px}
+}
+/* Narrow mobile: one clean row per city, no mini-cards or cramped double column. */
+@media(max-width:599px){
+  html body #lojas.stores .store-list{
+    grid-template-columns:minmax(0,1fr);
+    max-width:520px;
+    margin-inline:auto;
+    gap:0;
+  }
+  #lojas.stores .section-head{margin-bottom:34px}
+  #lojas.stores .section-head .display{font-size:clamp(2.85rem,10vw,4rem)}
+  #lojas.stores .section-head .lede{font-size:1rem;line-height:1.62}
+  html body #lojas.stores .store-list .store-card{
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-rows:auto auto auto 56px;
+    grid-template-areas:"uf map" "city map" "addr addr" "cta cta";
+    align-items:center;
+    min-height:0;
+    padding:24px 0 27px;
+    column-gap:10px;
+    row-gap:7px;
+  }
+  #lojas.stores .store-card__uf{grid-area:uf}
+  html body #lojas.stores .store-card h3{grid-area:city;font-size:2.04rem}
+  #lojas.stores .store-card__addr{grid-area:addr;margin-top:2px;max-width:none;font-size:.91rem}
+  #lojas.stores .store-card__map{grid-area:map;align-self:center;justify-self:end;white-space:nowrap;font-size:.78rem}
+  #lojas.stores .store-card .btn--line{grid-area:cta;font-size:.78rem}
+  #lojas.stores .stores__note{margin:28px auto 0;max-width:520px;font-size:.86rem}
+}
+@media(max-width:350px){
+  #lojas.stores .store-card__map{font-size:.72rem}
+  html body #lojas.stores .store-card h3{font-size:1.8rem}
+}
+@media(hover:none){
+  #lojas.stores .store-card .btn--line:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  #lojas.stores .store-card::before,
+  #lojas.stores .store-card .btn--line,
+  #lojas.stores .store-card .btn--line::before,
+  #lojas.stores .store-card .btn--line::after{transition:none!important}
+  #lojas.stores .store-card .btn--line:hover{transform:none}
+}

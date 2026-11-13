@@ -16,6 +16,7 @@ import './styles/header-glass.css';
 import './styles/search-atelier.css';
 import './styles/catalog-couture-v17.css';
 import './styles/preferences-v31.css';
+import './styles/stores-atelier-v40.css'; // V40: city selection only, globe/scroll unchanged.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
