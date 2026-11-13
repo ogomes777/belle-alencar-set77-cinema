@@ -82,7 +82,7 @@ body :is(input,textarea,select,.search-field,.search-input,
 html body #searchDialog.ba-search input.search-input,
 html body #searchDialog.ba-search input#searchInput {
  font-family:var(--v51-gebuk)!important;
- font-weight:400;
+ font-weight:700;
  letter-spacing:.012em;
 }
 body :is(#inicio .display,#porta .display,#vestido .display,
