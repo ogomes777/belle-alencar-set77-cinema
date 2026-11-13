@@ -105,9 +105,14 @@ try{
    await page.locator('#searchDialog .search-hit--product').first().click();
    await page.locator('#quickView.is-open').waitFor({timeout:10000});
    await page.keyboard.press('Escape');
-   if(await page.locator('#searchDialog .ov__close').isVisible()){
-     await page.locator('#searchDialog .ov__close').click({timeout:5000});
+   // Opening a product quick view uses closeAll() on the search overlay.
+   // Its 380ms exit transition can briefly leave the close button visible
+   // but already non-interactable. Wait for the real overlay to finish.
+   if(await page.locator('#searchDialog.is-open').count()){
+     await page.keyboard.press('Escape');
    }
+   await page.waitForFunction(()=>document.getElementById('searchDialog').hidden,
+     null,{timeout:6000});
    check(errors.length===0,'Runtime exception '+nkey+': '+errors.join(' | '));
    console.log('PASS V47 nav/search',nkey,'glass, real tabs, store, products, quickview');
   }
