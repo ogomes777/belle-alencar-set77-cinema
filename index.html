@@ -412,11 +412,12 @@
   <!-- 10 · MINHA BELLE: lojas -->
   <section class="stores" id="lojas" aria-labelledby="lojasTitle">
     <header class="section-head section-head--light">
-      <p class="eyebrow">Quatro cidades, uma Belle</p>
+      <p class="eyebrow">Seis cidades, uma Belle</p>
       <h2 class="display" id="lojasTitle">A Belle <em>da sua cidade.</em></h2>
       <p class="lede">Escolha sua loja. Sua sacola e suas preferências ficam salvas neste navegador e você pode trocar quando quiser.</p>
     </header>
     <canvas class="stores__orbit" aria-hidden="true"></canvas>
+    <nav class="stores__geo-trail" aria-label="Navegação geográfica das lojas" data-geo-trail></nav>
     <ul class="store-list" id="storeList">
       <li class="store-card" data-store-card="araxa">
         <p class="store-card__uf">MG</p>
@@ -442,6 +443,21 @@
         <h3>Mineiros</h3>
         <p class="store-card__addr">Quarta Avenida, 76, Centro</p><a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Quarta%20Avenida%2C%2076%2C%20Centro%2C%20Mineiros%20GO" target="_blank" rel="noopener noreferrer">Ver no mapa ↗</a>
         <button type="button" class="btn btn--line" data-select-store="mineiros">Definir como minha loja</button>
+      </li>
+
+      <li class="store-card" data-store-card="ibia">
+        <p class="store-card__uf">MG</p>
+        <h3>Ibiá</h3>
+        <p class="store-card__addr is-pending">Endereço da unidade a confirmar</p>
+        <a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Ibi%C3%A1%2C%20Minas%20Gerais%2C%20Brasil" target="_blank" rel="noopener noreferrer" aria-label="Ver Ibiá em Minas Gerais no Google Maps (cidade, não endereço da loja)">Ver cidade no mapa ↗</a>
+        <button type="button" class="btn btn--line" data-select-store="ibia">Definir como minha loja</button>
+      </li>
+      <li class="store-card" data-store-card="franca">
+        <p class="store-card__uf">SP</p>
+        <h3>Franca</h3>
+        <p class="store-card__addr is-pending">Endereço da unidade a confirmar</p>
+        <a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Franca%2C%20S%C3%A3o%20Paulo%2C%20Brasil" target="_blank" rel="noopener noreferrer" aria-label="Ver Franca em São Paulo no Google Maps (cidade, não endereço da loja)">Ver cidade no mapa ↗</a>
+        <button type="button" class="btn btn--line" data-select-store="franca">Definir como minha loja</button>
       </li>
     </ul>
     <p class="stores__note">Atendimento por WhatsApp pelo canal oficial da Belle. Contatos individuais de cada unidade ainda estão sendo confirmados.</p>
