@@ -26,6 +26,18 @@ export const STORES: Record<StoreId, Store> = {
     id: 'mineiros', slug: 'mineiros', city: 'Mineiros', state: 'GO',
     address: 'Quarta Avenida, 76, Centro', addressSource: 'bio do Instagram enviada pelo cliente em 12/11/2026', active: true, contact, openingHours: null, fulfillmentRules: null,
   },
+  ibia: {
+    id: 'ibia', slug: 'ibia', city: 'Ibiá', state: 'MG',
+    address: null, addressSource: null, active: true,
+    contact: {...contact, instagramUrl: 'https://www.instagram.com/bellealencar.ibia/'},
+    openingHours: null, fulfillmentRules: null,
+  },
+  franca: {
+    id: 'franca', slug: 'franca', city: 'Franca', state: 'SP',
+    address: null, addressSource: null, active: true,
+    contact: {...contact, instagramUrl: 'https://www.instagram.com/bellealencar.franca/'},
+    openingHours: null, fulfillmentRules: null,
+  },
 };
 
 export const STORE_LIST: Store[] = STORE_IDS.map((id) => STORES[id]);
