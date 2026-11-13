@@ -1,0 +1,352 @@
+/* Belle V41 · narrative only: original Billie reveal / WebGL / chapter scroll remain untouched. */
+#atendimento.concierge--brand-story{
+  --story-rule:rgba(118,83,46,.24);
+  --story-ink:#372b22;
+  --story-body:#62554b;
+  --story-accent:#9a7341;
+}
+html[data-belle-theme="dark"] #atendimento.concierge--brand-story{
+  --story-rule:rgba(233,199,158,.25);
+  --story-ink:#f8eee3;
+  --story-body:#dfcfc2;
+  --story-accent:#e5bb86;
+}
+html[data-belle-theme="rose"] #atendimento.concierge--brand-story{
+  --story-rule:rgba(154,89,119,.23);
+  --story-ink:#492c3b;
+  --story-body:#705362;
+  --story-accent:#a76177;
+}
+#atendimento.concierge--brand-story .concierge__body{
+  min-width:0;
+  padding:clamp(54px,6.5vw,108px) clamp(28px,5.5vw,94px);
+}
+#atendimento.concierge--brand-story .brand-story .eyebrow{
+  margin-bottom:clamp(21px,2.9vw,38px);
+  color:var(--story-accent);
+  font-size:clamp(.71rem,.77vw,.81rem);
+  letter-spacing:.18em;
+  font-weight:800;
+}
+#atendimento.concierge--brand-story .brand-story .display{
+  font-family:"Bodoni Moda Variable",var(--serif);
+  color:var(--story-ink);
+  font-size:clamp(3.1rem,4.15vw,5.1rem);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  font-weight:530;
+  max-width:12ch;
+  margin:0 0 24px;
+  text-wrap:balance;
+}
+#atendimento.concierge--brand-story .brand-story .display em{
+  color:var(--story-accent);
+  font-weight:460;
+}
+#atendimento.concierge--brand-story .brand-story__signature{
+  margin:0 0 clamp(15px,2vw,23px);
+  font-family:var(--sans);
+  font-size:.70rem;
+  font-weight:780;
+  line-height:1.5;
+  color:var(--story-accent);
+  letter-spacing:.16em;
+}
+#atendimento.concierge--brand-story .brand-story__lead{
+  margin:0 0 16px;
+  max-width:36ch;
+  color:var(--story-ink);
+  font-family:"Bodoni Moda Variable",var(--serif);
+  font-size:clamp(1.35rem,1.55vw,1.76rem);
+  line-height:1.32;
+  letter-spacing:-.024em;
+  font-weight:510;
+}
+#atendimento.concierge--brand-story .brand-story__paragraph{
+  max-width:55ch;
+  margin:0 0 13px;
+  color:var(--story-body);
+  font-family:var(--sans);
+  font-size:clamp(.88rem,.97vw,1rem);
+  font-weight:540;
+  line-height:1.68;
+  text-wrap:pretty;
+}
+#atendimento.concierge--brand-story .brand-story__presence{
+  margin-top:clamp(25px,3.5vw,40px);
+  padding-top:clamp(19px,2.5vw,28px);
+  border-top:1px solid var(--story-rule);
+}
+#atendimento.concierge--brand-story .brand-story__presence-label{
+  color:var(--story-accent);
+  margin:0 0 11px;
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+#atendimento.concierge--brand-story .brand-story__cities{
+  color:var(--story-ink);
+  margin:0;
+  max-width:40ch;
+  font-family:"Bodoni Moda Variable",var(--serif);
+  font-size:clamp(1.15rem,1.38vw,1.42rem);
+  font-weight:570;
+  line-height:1.65;
+  text-wrap:pretty;
+}
+#atendimento.concierge--brand-story .brand-story__cities span{color:var(--story-accent);padding:0 .1em}
+#atendimento.concierge--brand-story .brand-story__social{
+  min-height:48px;
+  display:inline-flex;
+  align-items:center;
+  gap:17px;
+  margin-top:clamp(18px,2.5vw,26px);
+  padding:9px 2px;
+  border-bottom:1px solid var(--story-accent);
+  color:var(--story-ink);
+  font-family:var(--sans);
+  font-size:clamp(.82rem,.96vw,.96rem);
+  line-height:1.4;
+  font-weight:750;
+  text-align:left;
+  transition:color .25s ease,gap .25s ease;
+}
+#atendimento.concierge--brand-story .brand-story__social:hover{color:var(--story-accent);gap:22px}
+#atendimento.concierge--brand-story .brand-story__social:focus-visible{outline:2px solid var(--story-accent);outline-offset:4px}
+
+/* The EXISTING gold monogram keeps its canvas geometry and animation. */
+.finale .finale__copy{--final-ink:var(--ink);--final-soft:var(--ink-soft);--final-accent:var(--gold-deep);--final-rule:var(--line-strong)}
+.finale .finale__copy .display{
+  margin-bottom:clamp(28px,3.2vw,41px);
+}
+.finale .finale__consult{
+  scroll-margin-top:calc(var(--header-h) + 22px);
+  width:100%;
+  max-width:490px;
+  padding-top:clamp(22px,2.5vw,30px);
+  border-top:1px solid var(--final-rule);
+}
+.finale .finale__consult-kicker{
+  margin:0 0 12px;
+  color:var(--final-accent);
+  font-family:var(--sans);
+  font-size:.75rem;
+  line-height:1.4;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.finale .finale__consult h3{
+  margin:0 0 13px;
+  color:var(--final-ink);
+  font-family:"Bodoni Moda Variable",var(--serif);
+  font-weight:510;
+  font-size:clamp(1.85rem,2.1vw,2.55rem);
+  line-height:1.14;
+  letter-spacing:-.032em;
+  text-wrap:balance;
+}
+.finale .finale__consult h3 em{font-weight:440;color:var(--final-accent)}
+.finale .finale__consult-desc{
+  max-width:45ch;
+  margin:0 0 clamp(20px,2.3vw,25px);
+  color:var(--final-soft);
+  font-size:clamp(.86rem,.94vw,.97rem);
+  font-weight:530;
+  line-height:1.65;
+}
+.finale .finale__actions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  max-width:490px;
+  margin:0;
+}
+.finale .finale__actions>.btn{
+  width:100%;
+  min-height:51px;
+  padding:10px 13px;
+  font-size:clamp(.72rem,.77vw,.82rem);
+  line-height:1.4;
+  letter-spacing:.035em;
+  font-weight:750;
+  text-align:center;
+  text-wrap:balance;
+  border-radius:10px;
+}
+.finale .finale__instagram-link{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  min-height:44px;
+  margin-top:13px;
+  padding:4px 0;
+  border-bottom:1px solid var(--final-accent);
+  color:var(--final-accent);
+  font-size:.84rem;
+  font-weight:740;
+  letter-spacing:.02em;
+}
+.finale .finale__instagram-link:hover{gap:15px}
+.finale .finale__fineprint{
+  max-width:52ch;
+  margin:16px 0 0;
+  color:var(--final-soft);
+  font-size:.75rem;
+  line-height:1.5;
+}
+
+/* Focused native dialog. Instagram destinations are real links, not JS redirects. */
+.belle-ig-dialog{
+  --ig-ground:#fffaf2;
+  --ig-ink:#3c2b22;
+  --ig-muted:#796658;
+  --ig-accent:#967045;
+  --ig-border:rgba(130,92,58,.26);
+  position:fixed;
+  inset:0;
+  width:min(720px,calc(100vw - 32px));
+  max-height:min(88dvh,920px);
+  margin:auto;
+  padding:0;
+  border:1px solid var(--ig-border);
+  border-radius:20px;
+  background:var(--ig-ground);
+  color:var(--ig-ink);
+  box-shadow:0 32px 90px rgba(32,22,16,.27);
+  overscroll-behavior:contain;
+}
+html[data-belle-theme="dark"] .belle-ig-dialog{
+  --ig-ground:#241f22;
+  --ig-ink:#f8ebd9;
+  --ig-muted:#cbb9ab;
+  --ig-accent:#e8c28a;
+  --ig-border:rgba(230,194,147,.32);
+}
+html[data-belle-theme="rose"] .belle-ig-dialog{
+  --ig-ground:#fff2f5;
+  --ig-ink:#533444;
+  --ig-muted:#805d6d;
+  --ig-accent:#9c5b76;
+  --ig-border:rgba(156,86,113,.30);
+}
+.belle-ig-dialog::backdrop{background:rgba(17,13,13,.72);backdrop-filter:blur(8px)}
+.belle-ig-dialog__inner{
+  max-height:min(88dvh,920px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:clamp(22px,3.9vw,39px);
+}
+.belle-ig-dialog__header{display:flex;gap:18px;justify-content:space-between;align-items:flex-start}
+.belle-ig-dialog__header>div{min-width:0}
+.belle-ig-dialog__eyebrow,
+.belle-ig-dialog__group-label{
+  color:var(--ig-accent);
+  font-family:var(--sans);
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.belle-ig-dialog__eyebrow{margin:0 0 13px}
+.belle-ig-dialog__header h2{
+  margin:0 0 8px;
+  font-family:"Bodoni Moda Variable",var(--serif);
+  font-size:clamp(2.5rem,5vw,3.65rem);
+  letter-spacing:-.042em;
+  font-weight:520;
+  line-height:1.04;
+  text-wrap:balance;
+}
+.belle-ig-dialog__header h2 em{color:var(--ig-accent);font-weight:440}
+.belle-ig-dialog__header #belleIgDesc{margin:0;line-height:1.54;color:var(--ig-muted);font-size:.9rem}
+.belle-ig-dialog__close{
+  flex:0 0 40px;
+  display:grid;place-items:center;
+  width:40px;height:40px;
+  border:1px solid var(--ig-border);
+  border-radius:50%;
+  color:var(--ig-ink);
+  font-size:1.55rem;
+  line-height:1;
+}
+.belle-ig-dialog__group-label{margin:31px 0 11px}
+.belle-ig-dialog__group-label--secondary{margin-top:24px}
+.belle-ig-dialog__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.belle-ig-dialog__grid a{
+  position:relative;
+  display:flex;flex-direction:column;justify-content:center;
+  min-width:0;
+  min-height:80px;
+  padding:12px 37px 12px 16px;
+  border:1px solid var(--ig-border);
+  border-radius:11px;
+  color:var(--ig-ink);
+  text-decoration:none;
+  background:transparent;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.belle-ig-dialog__grid a:hover,
+.belle-ig-dialog__grid a:focus-visible{
+  background:color-mix(in srgb,var(--ig-accent) 9%,transparent);
+  border-color:var(--ig-accent);
+  transform:translateY(-2px);
+}
+.belle-ig-dialog__grid a>span{
+  display:block;
+  font-family:"Bodoni Moda Variable",var(--serif);
+  font-size:1.5rem;
+  font-weight:530;
+  line-height:1.2;
+}
+.belle-ig-dialog__grid a small{
+  margin-top:4px;
+  color:var(--ig-muted);
+  font-family:var(--sans);
+  font-size:.77rem;
+  line-height:1.4;
+  font-weight:600;
+  overflow-wrap:anywhere;
+}
+.belle-ig-dialog__grid a b{
+  position:absolute;
+  top:50%;right:14px;
+  transform:translateY(-50%);
+  color:var(--ig-accent);
+  font-size:1rem;
+  font-weight:650;
+}
+.belle-ig-dialog__note{
+  color:var(--ig-muted);
+  border-top:1px solid var(--ig-border);
+  padding-top:16px;
+  margin:25px 0 0;
+  font-size:.73rem;
+  line-height:1.6;
+}
+@media(max-width:959px){
+  #atendimento.concierge--brand-story .concierge__body{padding:clamp(40px,6vw,70px) clamp(24px,6vw,80px)}
+  #atendimento.concierge--brand-story .brand-story .display{font-size:clamp(3rem,5.4vw,4.4rem)}
+}
+@media(max-width:820px){
+  .finale .finale__consult{margin:0 auto;text-align:left}
+  .finale .finale__copy .display{margin-bottom:32px}
+}
+@media(max-width:540px){
+  #atendimento.concierge--brand-story .brand-story .display{font-size:clamp(2.9rem,10.6vw,3.7rem)}
+  #atendimento.concierge--brand-story .brand-story__cities{font-size:1.24rem}
+  .finale .finale__consult h3{font-size:clamp(1.95rem,7.6vw,2.5rem)}
+  .finale .finale__actions{grid-template-columns:1fr}
+  .finale .finale__actions>.btn{min-height:52px}
+  .belle-ig-dialog{width:calc(100vw - 20px);max-height:88dvh;border-radius:15px}
+  .belle-ig-dialog__inner{padding:22px 18px;max-height:88dvh}
+  .belle-ig-dialog__grid{grid-template-columns:1fr;gap:8px}
+  .belle-ig-dialog__grid a{min-height:65px}
+  .belle-ig-dialog__header h2{font-size:2.65rem}
+  .belle-ig-dialog__group-label{margin-top:23px}
+}
+@media(prefers-reduced-motion:reduce){
+  #atendimento.concierge--brand-story .brand-story__social,
+  .belle-ig-dialog__grid a{transition:none}
+}
