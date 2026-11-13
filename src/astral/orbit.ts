@@ -85,7 +85,7 @@ export function initStoreOrbit(): void {
         manualZoom=manualZoomTarget=1;zoom=1;
         angle=-2.42;orientation=[0,0,0,1];rotate(0,.34);
         caption.textContent='Brasil · Minas Gerais, Goiás e São Paulo · seis cidades';
-        section.dataset.geoStage='Brasil';
+        section!.dataset.geoStage='Brasil';
         updateGeoTrail();wake();
       });
       geoTrail.replaceChildren(root,reset);
