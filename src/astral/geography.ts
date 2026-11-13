@@ -3,6 +3,14 @@ export const CITIES = [
   {id:'frutal',name:'Frutal',lat:-20.025,lon:-48.935,state:'Minas Gerais',stateLat:-18.5,stateLon:-44.6},
   {id:'catalao',name:'Catalão',lat:-18.165,lon:-47.946,state:'Goiás',stateLat:-15.8,stateLon:-49.6},
   {id:'mineiros',name:'Mineiros',lat:-17.565,lon:-52.554,state:'Goiás',stateLat:-15.8,stateLon:-49.6},
+  // City center coordinates (WGS84); store entrance coordinates unconfirmed.
+  {id:'ibia',name:'Ibiá',lat:-19.4749,lon:-46.5474,state:'Minas Gerais',stateLat:-18.5,stateLon:-44.6},
+  {id:'franca',name:'Franca',lat:-20.5386,lon:-47.4008,state:'São Paulo',stateLat:-22.5,stateLon:-48.5},
+] as const;
+export const REGIONS = [
+  {code:'MG',name:'Minas Gerais',lat:-18.5,lon:-44.6},
+  {code:'GO',name:'Goiás',lat:-15.8,lon:-49.6},
+  {code:'SP',name:'São Paulo',lat:-22.5,lon:-48.5},
 ] as const;
 export const spherePoint=(lat:number,lon:number)=>{
   const a=lat*Math.PI/180,b=lon*Math.PI/180;
