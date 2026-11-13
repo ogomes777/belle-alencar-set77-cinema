@@ -22,6 +22,8 @@ import './styles/belle-signature-neon-v42.css'; // Only final WhatsApp/Instagram
 import './styles/geo-six-v44.css'; // Same canvas globe, six-location hierarchy and maps neon CTA.
 import './styles/store-card-visibility-v45.css'; // Fix clipped store buttons and mobile layout, existing globe untouched.
 import './styles/couture-glass-collection-v46.css'; // Four post-throw glass cards + collection CTA only; scroll logic untouched.
+import './styles/liquid-glass-nav-v47.css'; // Navigation glass, tactile icon buttons and theme overrides.
+import './styles/editorial-search-v47.css'; // Full search atelier redesign; semantic live result filters.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';

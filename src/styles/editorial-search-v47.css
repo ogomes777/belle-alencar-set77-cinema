@@ -1,0 +1,567 @@
+/* Belle V47 · Editorial Search Lab
+ * A complete search experience: distinctive fashion typography, active
+ * interactive scopes, light-catching discovery cards and accessible input.
+ * Original commerce data, product quick-view, store & section handlers stay.
+ * Search-only selectors beat old V31 global dark/rose opaque overlay rules.
+ */
+#searchDialog.ba-search{
+ --v47-paper:#f8f2e9;--v47-surface:#fffaf4;
+ --v47-ink:#2c241f;--v47-sub:#6b5546;--v47-faint:#876f5b;
+ --v47-gold:#a37b48;--v47-line:rgba(132,95,57,.25);
+ --v47-glass:rgba(255,252,246,.61);--v47-glass-edge:rgba(255,255,255,.77);
+ --v47-card:#fffaf3;--v47-card-copy:#392a24;
+ --v47-backdrop:rgba(35,23,21,.42);
+ --v47-sheen:rgba(255,255,255,.42);
+}
+html[data-belle-theme='dark'] #searchDialog.ba-search{
+ --v47-paper:#181517;--v47-surface:#272024;
+ --v47-ink:#f9eedd;--v47-sub:#d6bca5;--v47-faint:#b79c85;
+ --v47-gold:#e1b984;--v47-line:rgba(230,196,151,.24);
+ --v47-glass:rgba(39,31,32,.71);--v47-glass-edge:rgba(234,198,156,.39);
+ --v47-card:rgba(48,37,40,.91);--v47-card-copy:#fcf0e3;
+ --v47-backdrop:rgba(7,5,8,.69);
+ --v47-sheen:rgba(252,227,200,.15);
+}
+html[data-belle-theme='rose'] #searchDialog.ba-search{
+ --v47-paper:#faeff2;--v47-surface:#fff7f8;
+ --v47-ink:#422935;--v47-sub:#785062;--v47-faint:#976e7c;
+ --v47-gold:#ac7188;--v47-line:rgba(168,103,130,.27);
+ --v47-glass:rgba(255,243,248,.63);--v47-glass-edge:rgba(255,255,255,.82);
+ --v47-card:#fff7f8;--v47-card-copy:#503442;
+ --v47-backdrop:rgba(80,41,60,.42);
+ --v47-sheen:rgba(255,255,255,.54);
+}
+html body #searchDialog.ba-search .ov__backdrop{
+ background:var(--v47-backdrop);
+ -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+}
+html body #searchDialog.ba-search .ov__panel{
+ color:var(--v47-ink)!important;
+ background:
+  radial-gradient(ellipse 56% 43% at 91% -11%,rgba(184,137,83,.18),transparent 84%),
+  radial-gradient(ellipse 50% 70% at -17% 65%,rgba(186,135,115,.085),transparent 76%),
+  linear-gradient(153deg,var(--v47-surface),var(--v47-paper) 82%)!important;
+ border:0;
+ box-shadow:inset 0 1px 0 var(--v47-glass-edge);
+}
+html[data-belle-theme='dark'] body #searchDialog.ba-search .ov__panel{
+ background:
+  radial-gradient(ellipse 63% 50% at 92% -8%,rgba(161,97,58,.17),transparent 81%),
+  linear-gradient(155deg,#252024,var(--v47-paper) 77%)!important;
+}
+html[data-belle-theme='rose'] body #searchDialog.ba-search .ov__panel{
+ background:
+  radial-gradient(ellipse 75% 56% at 100% -11%,rgba(222,140,158,.19),transparent 82%),
+  linear-gradient(145deg,#fff8f7,var(--v47-paper) 77%)!important;
+}
+html body #searchDialog.ba-search .ov__body{
+ background-color:transparent!important;
+ color:var(--v47-ink)!important;
+ max-width:1350px;
+ padding:clamp(83px,8.5vw,127px) clamp(20px,4.8vw,74px) 110px;
+}
+/* The close button always stays reachable and has a real glass bezel. */
+html body #searchDialog.ba-search .ov__close{
+ top:clamp(10px,1.5vw,18px);
+ right:0;float:right;margin:12px 20px -62px 0;
+ border-radius:15px;border:1px solid var(--v47-glass-edge);
+ background:linear-gradient(145deg,var(--v47-sheen),transparent),var(--v47-glass);
+ color:var(--v47-ink);
+ -webkit-backdrop-filter:blur(18px) saturate(1.35);
+ backdrop-filter:blur(18px) saturate(1.35);
+ box-shadow:0 9px 25px rgba(37,23,19,.12),inset 0 1px 0 rgba(255,255,255,.42);
+}
+html body #searchDialog.ba-search .ov__close:hover{
+ background:var(--v47-surface);color:var(--v47-gold);
+ border-color:var(--v47-gold);
+}
+/* Vogue-like editorial heading, H&M-level clarity, original Belle signature. */
+html body #searchDialog.ba-search .ba-search-intro{
+ position:relative;max-width:1010px;
+ margin:0 0 clamp(34px,4.8vw,61px);
+ padding:0 0 0 clamp(0px,2.6vw,32px);
+ border-left:clamp(0px,.16vw,2px) solid var(--v47-line);
+}
+html body #searchDialog.ba-search .ba-search-kicker{
+ font:800 clamp(.67rem,.72vw,.77rem)/1.4 var(--sans);
+ letter-spacing:.20em;
+ color:var(--v47-gold);
+ margin-bottom:clamp(17px,2vw,26px);
+}
+html body #searchDialog.ba-search .ba-search-title{
+ color:var(--v47-ink);
+ max-width:14ch;
+ font-family:"Bodoni Moda Variable","Bodoni Moda",var(--serif);
+ font-size:clamp(3.55rem,7vw,7.3rem);
+ line-height:.87;
+ letter-spacing:-.055em;
+ font-weight:520;
+ text-wrap:balance;
+}
+html body #searchDialog.ba-search .ba-search-subtitle{
+ color:var(--v47-sub);
+ font:550 clamp(.96rem,1.15vw,1.15rem)/1.56 var(--sans);
+ margin-top:clamp(18px,2vw,24px);
+ letter-spacing:.001em;
+}
+html body #searchDialog.ba-search .search-label{
+ display:flex;align-items:center;gap:13px;
+ color:var(--v47-gold);
+ font:850 .73rem/1.4 var(--sans);
+ letter-spacing:.16em;
+ margin:0 0 12px;
+ text-transform:uppercase;
+}
+html body #searchDialog.ba-search .search-label::after{
+ content:"";height:1px;max-width:170px;flex:1;
+ background:linear-gradient(90deg,var(--v47-line),transparent);
+}
+html body #searchDialog.ba-search .ba-search-field{
+ position:relative;
+ border-radius:clamp(17px,1.7vw,24px);
+ border:1px solid var(--v47-glass-edge);
+ background:
+  radial-gradient(ellipse 76% 180% at 8% -55%,var(--v47-sheen),transparent 70%),
+  linear-gradient(147deg,var(--v47-glass),var(--v47-surface));
+ -webkit-backdrop-filter:blur(20px) saturate(1.43);
+ backdrop-filter:blur(20px) saturate(1.43);
+ box-shadow:
+  0 19px 44px -27px rgba(48,25,18,.27),
+  0 5px 14px rgba(59,36,25,.055),
+  inset 0 1px 0 rgba(255,255,255,.77),
+  inset 0 -1px 0 var(--v47-line);
+ min-height:clamp(70px,7.8vw,92px);
+ padding:12px clamp(17px,2.3vw,29px);
+ gap:clamp(10px,1.4vw,18px);
+ transition:border-color .23s ease,box-shadow .25s ease,transform .23s ease;
+}
+html body #searchDialog.ba-search .ba-search-field:focus-within{
+ background:
+  radial-gradient(ellipse 74% 160% at 12% -60%,var(--v47-sheen),transparent 75%),
+  linear-gradient(150deg,var(--v47-glass),var(--v47-surface));
+ border-color:var(--v47-gold);
+ box-shadow:0 0 0 3px color-mix(in srgb,var(--v47-gold) 13%,transparent),
+  0 21px 50px -24px rgba(59,35,25,.26),
+  inset 0 1px 0 var(--v47-glass-edge);
+}
+html body #searchDialog.ba-search .ba-search-field__icon{
+ width:clamp(23px,2.2vw,29px);height:clamp(23px,2.2vw,29px);
+ color:var(--v47-gold);
+ filter:drop-shadow(0 1px 0 var(--v47-sheen));
+}
+html body #searchDialog.ba-search input.search-input{
+ display:block;min-width:0;flex:1;
+ border:0!important;background:transparent!important;box-shadow:none!important;
+ color:var(--v47-ink)!important;
+ font-family:var(--sans);
+ font-size:clamp(1.27rem,2.4vw,2.22rem);
+ font-weight:720;
+ letter-spacing:-.04em;
+ line-height:1.3;
+ padding:12px 0;
+ caret-color:var(--v47-gold);
+ text-overflow:ellipsis;
+}
+html body #searchDialog.ba-search input.search-input::placeholder{
+ color:var(--v47-faint)!important;
+ opacity:1;
+ font-weight:690;
+ letter-spacing:-.045em;
+}
+html body #searchDialog.ba-search .ba-search-clear{
+ min-height:43px;min-width:64px;
+ border:1px solid var(--v47-line);
+ background:var(--v47-glass);
+ color:var(--v47-ink);
+ border-radius:12px;
+ font:750 .79rem/1 var(--sans);
+}
+html body #searchDialog.ba-search .ba-search-clear:hover{
+ border-color:var(--v47-gold);background:var(--v47-sheen);
+}
+/* Meaningful fashion categories, not unverified trending claims. */
+html body #searchDialog.ba-search .ba-search-popular{
+ margin:21px 0 clamp(43px,5.8vw,71px);gap:12px 24px;
+}
+html body #searchDialog.ba-search .ba-search-popular__label{
+ color:var(--v47-faint);
+ font:800 .66rem/1.35 var(--sans);
+ letter-spacing:.16em;
+}
+html body #searchDialog.ba-search .ba-search-chips{gap:8px;flex-wrap:wrap}
+html body #searchDialog.ba-search .ba-search-chip{
+ min-height:40px;
+ padding:9px 16px;
+ border:1px solid var(--v47-line);
+ border-radius:999px;
+ background:linear-gradient(140deg,var(--v47-sheen),transparent 70%),var(--v47-glass);
+ color:var(--v47-ink);
+ font:720 clamp(.75rem,.80vw,.88rem)/1.2 var(--sans);
+ box-shadow:inset 0 1px 0 var(--v47-glass-edge);
+ transition:border-color .25s,box-shadow .25s,transform .25s,background .25s;
+}
+html body #searchDialog.ba-search .ba-search-chip:hover,
+html body #searchDialog.ba-search .ba-search-chip:focus-visible{
+ transform:translateY(-2px);
+ background:var(--v47-surface);
+ border-color:var(--v47-gold);
+ box-shadow:0 8px 20px -12px rgba(63,35,18,.31),
+  inset 0 1px 0 var(--v47-glass-edge);
+}
+/* Interactive search result scopes, with accurate counts from actual products,
+ * stores and site chapters. All 4 are live buttons in the TS component. */
+html body #searchDialog.ba-search .ba-search-explore-bar{
+ display:grid;grid-template-columns:minmax(185px,.8fr) minmax(0,1.8fr);
+ align-items:end;gap:20px;
+ padding:0 0 clamp(17px,2.4vw,27px);
+ margin-bottom:0;
+ border-bottom:1px solid var(--v47-line);
+}
+.ba-search-explore-bar__intro{display:flex;flex-direction:column;gap:7px;min-width:0}
+html body #searchDialog.ba-search .ba-search-explore-bar__eyebrow{
+ color:var(--v47-gold);
+ font:800 .64rem/1.3 var(--sans);letter-spacing:.17em;
+}
+html body #searchDialog.ba-search .ba-search-explore-bar__headline{
+ color:var(--v47-ink);
+ font:540 clamp(1.75rem,2.5vw,2.75rem)/1.05 var(--serif);
+ letter-spacing:-.035em;text-wrap:balance;
+}
+html body #searchDialog.ba-search .ba-search-views{
+ display:flex;gap:6px;align-items:center;justify-content:flex-end;
+ min-width:0;flex-wrap:wrap;
+}
+html body #searchDialog.ba-search .ba-search-view{
+ position:relative;display:inline-flex;align-items:center;gap:8px;
+ min-height:44px;padding:9px 14px;
+ color:var(--v47-sub);
+ background:transparent;
+ border:1px solid transparent;
+ border-radius:12px;
+ font:760 clamp(.72rem,.84vw,.88rem)/1.2 var(--sans);
+ letter-spacing:.005em;
+ cursor:pointer;
+ transition:color .22s,background .24s,border-color .24s,box-shadow .24s;
+}
+html body #searchDialog.ba-search .ba-search-view__count{
+ min-width:22px;min-height:20px;
+ padding:2px 5px;
+ display:inline-flex;justify-content:center;align-items:center;
+ border-radius:7px;
+ color:var(--v47-faint);
+ font:750 .70rem/1 var(--sans);
+ background:color-mix(in srgb,var(--v47-gold) 9%,transparent);
+}
+html body #searchDialog.ba-search .ba-search-view:hover{
+ color:var(--v47-ink);background:var(--v47-glass);
+}
+html body #searchDialog.ba-search .ba-search-view[aria-pressed='true']{
+ color:var(--v47-ink);
+ background:var(--v47-glass);
+ border-color:var(--v47-glass-edge);
+ box-shadow:inset 0 1px 0 var(--v47-sheen),0 5px 14px -11px rgba(60,36,22,.27);
+}
+html body #searchDialog.ba-search .ba-search-view[aria-pressed='true']::after{
+ content:"";position:absolute;bottom:-13px;left:13px;right:13px;height:2px;
+ background:var(--v47-gold);border-radius:3px;
+}
+html body #searchDialog.ba-search .ba-search-result-summary{
+ margin-top:0;padding:21px 0 18px;
+ border-top:0;border-bottom:0;
+ color:var(--v47-faint);
+}
+html body #searchDialog.ba-search .search-count{
+ color:var(--v47-faint);
+ font:780 .69rem/1.4 var(--sans);letter-spacing:.13em;
+}
+html body #searchDialog.ba-search .ba-search-go-collection{
+ display:inline-flex;align-items:center;
+ color:var(--v47-gold);
+ font:850 .72rem/1.4 var(--sans);letter-spacing:.06em;
+ border-bottom:1px solid var(--v47-gold);padding:7px 0;
+}
+html body #searchDialog.ba-search .ba-search-go-collection::after{
+ content:"";width:6px;height:6px;margin-left:10px;
+ border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;
+ transform:rotate(45deg);transition:transform .2s;
+}
+html body #searchDialog.ba-search .ba-search-go-collection:hover::after{
+ transform:translateX(4px) rotate(45deg);
+}
+/* Editorial discovery: asymmetric first product on desktop, real catalog
+ * imagery in clean frames with consistent premium caption hierarchy. */
+html body #searchDialog.ba-search .search-group{margin:clamp(21px,2.8vw,34px) 0 0}
+html body #searchDialog.ba-search .search-group h3{
+ font:540 clamp(1.92rem,3.15vw,3rem)/1.02 var(--serif);
+ letter-spacing:-.037em;color:var(--v47-ink);
+ margin:0 0 19px;
+}
+html body #searchDialog.ba-search .search-group--products ul{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:clamp(13px,1.5vw,22px);align-items:stretch;
+}
+html body #searchDialog.ba-search .search-hit--product{
+ position:relative;isolation:isolate;
+ background:var(--v47-card)!important;
+ border:1px solid var(--v47-line);
+ border-radius:clamp(12px,1.2vw,17px);
+ box-shadow:0 14px 33px -23px rgba(43,25,16,.26),
+  inset 0 1px 0 var(--v47-glass-edge);
+ padding:0 0 clamp(14px,1.2vw,19px);
+ text-align:left;
+ overflow:hidden;
+ transition:transform .33s cubic-bezier(.22,1,.36,1),
+  box-shadow .28s ease,border-color .28s ease;
+}
+html body #searchDialog.ba-search .search-hit--product:hover,
+html body #searchDialog.ba-search .search-hit--product:focus-visible{
+ transform:translateY(-4px);
+ border-color:var(--v47-gold);
+ box-shadow:0 20px 39px -17px rgba(45,23,20,.30),
+  0 0 0 1px var(--v47-line);
+}
+html body #searchDialog.ba-search .ba-search-product-image{
+ position:relative;
+ aspect-ratio:4/4.65;
+ background:
+  radial-gradient(ellipse 90% 72% at 50% 35%,rgba(255,255,255,.68),transparent 74%),
+  linear-gradient(160deg,#f9efe5,#e9dbc8);
+ border-bottom:1px solid var(--v47-line);
+}
+html[data-belle-theme='dark'] body #searchDialog.ba-search .ba-search-product-image{
+ background:radial-gradient(ellipse 90% 80% at 50% 33%,#66534b,#292123);
+}
+html[data-belle-theme='rose'] body #searchDialog.ba-search .ba-search-product-image{
+ background:radial-gradient(ellipse 90% 80% at 50% 33%,#fff5f3,#f0dce3);
+}
+html body #searchDialog.ba-search .ba-search-product-image::after{
+ content:"";position:absolute;pointer-events:none;inset:1px;
+ border-radius:inherit;
+ border:1px solid rgba(255,255,255,.16);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.28);
+}
+html body #searchDialog.ba-search .ba-search-product-image img{
+ object-fit:contain;padding:7%;
+ filter:drop-shadow(0 18px 15px rgba(51,29,18,.14));
+ transition:transform .55s cubic-bezier(.22,1,.36,1);
+}
+html body #searchDialog.ba-search .ba-search-product-description{
+ padding:clamp(12px,1.35vw,18px) clamp(12px,1.3vw,18px) 2px;gap:7px;
+}
+html body #searchDialog.ba-search .ba-search-product-category{
+ color:var(--v47-gold);
+ font:830 .67rem/1.3 var(--sans);letter-spacing:.15em;
+}
+html body #searchDialog.ba-search .ba-search-product-title{
+ color:var(--v47-card-copy)!important;
+ font:520 clamp(1.35rem,1.77vw,1.85rem)/1.08 var(--serif);
+ min-height:2.16em;letter-spacing:-.027em;
+}
+html body #searchDialog.ba-search .ba-search-product-note{
+ color:var(--v47-faint);
+ font:650 .7rem/1.4 var(--sans);
+}
+/* Only a large screen gets the atelier-cover tile. The mobile catalog stays
+ * two-up for fast browsing and comparable product scale. */
+@media(min-width:1050px){
+ html body #searchDialog.ba-search .search-group--products li:first-child{grid-column:span 2}
+ html body #searchDialog.ba-search .search-group--products li:first-child .ba-search-product-image{
+   aspect-ratio:1.43
+ }
+ html body #searchDialog.ba-search .search-group--products li:first-child .ba-search-product-title{
+   font-size:clamp(1.65rem,2.18vw,2.35rem);
+   min-height:0;
+ }
+}
+html body #searchDialog.ba-search .search-hit--store,
+html body #searchDialog.ba-search .search-hit--chapter{
+ color:var(--v47-ink)!important;
+ border:1px solid var(--v47-line);
+ border-radius:15px;min-height:83px;
+ background:linear-gradient(135deg,var(--v47-sheen),transparent 78%),var(--v47-glass)!important;
+ -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+ box-shadow:inset 0 1px 0 var(--v47-glass-edge);
+ transition:transform .26s ease,border-color .26s ease,box-shadow .26s ease;
+}
+html body #searchDialog.ba-search .search-hit--store:hover,
+html body #searchDialog.ba-search .search-hit--chapter:hover{
+ transform:translateY(-2px);
+ border-color:var(--v47-gold);
+ box-shadow:0 10px 24px -16px rgba(40,22,18,.28),inset 0 1px 0 var(--v47-glass-edge);
+}
+html body #searchDialog.ba-search .search-hit--store span,
+html body #searchDialog.ba-search .search-hit--chapter span{
+ color:var(--v47-ink);font-weight:580;
+}
+html body #searchDialog.ba-search .search-hit--store small,
+html body #searchDialog.ba-search .search-hit--chapter small{
+ color:var(--v47-faint);font-weight:630;font-size:.75rem;
+}
+html body #searchDialog.ba-search .ba-search-empty{
+ position:relative;
+ padding:clamp(28px,4vw,56px);
+ border:1px solid var(--v47-line);
+ border-radius:22px;
+ background:
+  radial-gradient(ellipse 70% 50% at 80% -10%,var(--v47-sheen),transparent 80%),
+  var(--v47-glass);
+ color:var(--v47-ink);
+}
+html body #searchDialog.ba-search .ba-search-empty__symbol{
+ display:block;font:440 clamp(2rem,4vw,4rem)/1 var(--serif);
+ color:var(--v47-gold);margin-bottom:18px;
+}
+html body #searchDialog.ba-search .ba-search-empty h3{
+ color:var(--v47-ink);font-size:clamp(2rem,3vw,3.4rem);
+ font-weight:520;margin:0 0 14px;
+}
+html body #searchDialog.ba-search .ba-search-empty p{
+ color:var(--v47-sub);font:540 1rem/1.6 var(--sans);
+}
+html body #searchDialog.ba-search .ba-search-empty__return{
+ min-height:44px;margin-top:22px;padding:9px 17px;
+ border:1px solid var(--v47-gold);border-radius:12px;
+ color:var(--v47-ink);background:var(--v47-glass);
+ font:760 .84rem/1.3 var(--sans);
+}
+html body #searchDialog.ba-search .ba-search-disclaimer{
+ border-top:1px solid var(--v47-line);
+ color:var(--v47-faint);
+ font-size:.74rem;font-weight:560;letter-spacing:.01em;
+ margin:clamp(41px,5vw,66px) 0 0;padding-top:21px;
+}
+html body #searchDialog.ba-search :focus-visible{
+ outline:2px solid var(--v47-gold);outline-offset:3px;
+}
+/* Tablet and phone: legible 16px+ input (avoids iOS zoom), sensible touch
+ * targets, scope tab rail scrolls rather than squeezing/clipping controls. */
+@media(max-width:1000px){
+ html body #searchDialog.ba-search .search-group--products ul{
+  grid-template-columns:repeat(3,minmax(0,1fr))
+ }
+ html body #searchDialog.ba-search .ba-search-explore-bar{
+  grid-template-columns:1fr;gap:15px;
+ }
+ html body #searchDialog.ba-search .ba-search-views{justify-content:flex-start}
+}
+@media(max-width:650px){
+ html body #searchDialog.ba-search .ov__body{
+  padding:87px 15px 78px;
+ }
+ html body #searchDialog.ba-search .ov__close{
+  top:8px;margin:10px 12px -54px 0;width:45px;height:45px;border-radius:13px;
+ }
+ html body #searchDialog.ba-search .ba-search-intro{
+  padding-left:0;border:0;
+  padding-right:30px;margin-bottom:29px;
+ }
+ html body #searchDialog.ba-search .ba-search-kicker{
+  font-size:.64rem;margin:0 0 15px;
+  letter-spacing:.15em;
+ }
+ html body #searchDialog.ba-search .ba-search-title{
+  font-size:clamp(3.4rem,13.8vw,5.4rem);
+  line-height:.90;letter-spacing:-.055em;
+ }
+ html body #searchDialog.ba-search .ba-search-subtitle{
+  margin-top:15px;font-size:.93rem;line-height:1.45;
+ }
+ html body #searchDialog.ba-search .ba-search-field{
+  min-height:68px;gap:10px;padding:9px 13px;border-radius:16px;
+  -webkit-backdrop-filter:blur(12px) saturate(1.25);
+  backdrop-filter:blur(12px) saturate(1.25);
+ }
+ html body #searchDialog.ba-search .ba-search-field__icon{
+  width:22px;height:22px;
+ }
+ html body #searchDialog.ba-search input.search-input{
+  font-size:clamp(1.05rem,4.7vw,1.34rem);
+  font-weight:750;letter-spacing:-.048em;
+  padding:10px 0;
+ }
+ html body #searchDialog.ba-search input.search-input::placeholder{font-weight:720}
+ html body #searchDialog.ba-search .ba-search-clear{
+  min-width:51px;padding:7px;font-size:.72rem;
+ }
+ html body #searchDialog.ba-search .ba-search-popular{
+  margin:17px 0 38px;gap:10px;
+ }
+ html body #searchDialog.ba-search .ba-search-popular__label{width:100%}
+ html body #searchDialog.ba-search .ba-search-chips{
+  flex-wrap:nowrap;width:100%;overflow-x:auto;padding:0 0 5px;
+  scroll-snap-type:x proximity;overscroll-behavior-x:contain;
+ }
+ html body #searchDialog.ba-search .ba-search-chip{
+  flex:0 0 auto;min-height:43px;padding:10px 14px;scroll-snap-align:start;
+ }
+ html body #searchDialog.ba-search .ba-search-explore-bar{
+  display:block;padding-bottom:16px;
+ }
+ html body #searchDialog.ba-search .ba-search-explore-bar__intro{
+  gap:5px;margin-bottom:16px;
+ }
+ html body #searchDialog.ba-search .ba-search-explore-bar__headline{
+  font-size:clamp(2rem,7.2vw,2.6rem)
+ }
+ html body #searchDialog.ba-search .ba-search-views{
+  width:100%;display:flex;flex-wrap:nowrap;
+  gap:5px;overflow-x:auto;padding-bottom:6px;
+  scrollbar-width:none;justify-content:flex-start;
+  overscroll-behavior-x:contain;
+ }
+ html body #searchDialog.ba-search .ba-search-views::-webkit-scrollbar{display:none}
+ html body #searchDialog.ba-search .ba-search-view{
+  flex:0 0 auto;min-height:43px;padding:9px 11px;
+  font-size:.76rem;gap:5px;
+ }
+ html body #searchDialog.ba-search .ba-search-view[aria-pressed='true']::after{bottom:-7px}
+ html body #searchDialog.ba-search .ba-search-result-summary{
+  gap:8px;padding:17px 0;
+ }
+ html body #searchDialog.ba-search .search-count{
+  font-size:.64rem;letter-spacing:.05em;max-width:58%;
+ }
+ html body #searchDialog.ba-search .ba-search-go-collection{
+  font-size:.67rem;letter-spacing:0;min-height:44px;
+ }
+ html body #searchDialog.ba-search .search-group--products ul{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(9px,3vw,14px);
+ }
+ html body #searchDialog.ba-search .search-hit--product{
+  border-radius:12px;padding-bottom:12px;
+ }
+ html body #searchDialog.ba-search .ba-search-product-description{
+  padding:11px 9px 0;gap:4px;
+ }
+ html body #searchDialog.ba-search .ba-search-product-category{
+  font-size:.61rem;
+ }
+ html body #searchDialog.ba-search .ba-search-product-title{
+  font-size:clamp(1.19rem,4.7vw,1.5rem);
+ }
+ html body #searchDialog.ba-search .ba-search-product-note{font-size:.65rem}
+ html body #searchDialog.ba-search .search-group h3{font-size:2.1rem}
+ html body #searchDialog.ba-search .search-group--stores ul,
+ html body #searchDialog.ba-search .search-group--chapters ul{
+  grid-template-columns:1fr;gap:10px;
+ }
+}
+@media(max-width:360px){
+ html body #searchDialog.ba-search .ov__body{padding-inline:11px}
+ html body #searchDialog.ba-search .ba-search-title{font-size:3.25rem}
+ html body #searchDialog.ba-search .ba-search-go-collection{font-size:.63rem}
+}
+@media(prefers-reduced-motion:reduce){
+ html body #searchDialog.ba-search .search-hit--product,
+ html body #searchDialog.ba-search .ba-search-chip,
+ html body #searchDialog.ba-search .ba-search-view,
+ html body #searchDialog.ba-search .ba-search-field{
+  animation:none!important;transition:none!important;
+ }
+}
+html[data-intensity='essential'] body #searchDialog.ba-search .ba-search-field,
+html[data-intensity='essential'] body #searchDialog.ba-search .search-hit--store,
+html[data-intensity='essential'] body #searchDialog.ba-search .search-hit--chapter{
+ -webkit-backdrop-filter:none;backdrop-filter:none;
+}
