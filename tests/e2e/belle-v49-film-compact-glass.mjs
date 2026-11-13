@@ -1,4 +1,4 @@
-/** BELLE V49 · Real Chromium geometry + theme + motion QA.
+/** BELLE V50 · Real Chromium geometry + theme + motion QA.
  * Structural/cross-theme assertions do not claim subjective visual approval.
  */
 import {createRequire} from 'node:module';
@@ -83,7 +83,7 @@ try{
    check(result.gridCols===2,'category grid must have 2 columns '+label);
    for(const c of result.cards){
      const key=label+' #'+c.id;
-     const maxWidth=mobile?333:c.id==='inicio'?500:c.id==='provador'?435:405;
+     const maxWidth=mobile?(width<=359?272:286):c.id==='inicio'?500:c.id==='provador'?435:405;
      check(c.rect.width<=maxWidth,'card too wide '+key+' '+c.rect.width);
      check(c.rect.width>140,'card too narrow '+key);
      check(c.radius>=(mobile?20:23),'not rounded '+key+' '+c.radius);
@@ -91,7 +91,7 @@ try{
      check(c.blur.includes('blur'),'old opaque flat panel not replaced '+key);
      check(c.base.includes('rgba('),'surface lacks transparency '+key);
      if(mobile){
-       const ratio=c.id==='inicio'?.46:c.id==='provador'?.49:.43;
+       const ratio=c.id==='inicio'?.37:c.id==='provador'?.40:.33;
        check(c.rect.height<=height*ratio+2,'card obscures film '+key+' h='+c.rect.height);
        check(c.scrollHeight>=c.clientHeight,'overflow content not reachable '+key);
      }
@@ -122,7 +122,9 @@ try{
  await page.waitForFunction(()=>document.querySelector('#porta .chapter__card').classList.contains('is-glass-appeared'),null,{timeout:15000});
  let active=await card.evaluate(el=>el.getAnimations().some(a=>a instanceof Animation &&
     a.effect instanceof KeyframeEffect && a.effect.getKeyframes().length===3));
- check(active,'V49 three-step cinematic WAAPI entrance not triggered');
+ check(active,'V50 three-step cinematic WAAPI entrance not triggered');
+ const opticalImpact=await card.evaluate(el=>getComputedStyle(el,'::after').animationName);
+ check(opticalImpact.includes('belleV50ImpactWave'),'V50 optical pulse absent '+opticalImpact);
  await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'}));
  await page.waitForFunction(()=>!document.querySelector('#porta .chapter__card').classList.contains('is-glass-appeared'),null,{timeout:15000});
  await page.evaluate(()=>document.getElementById('porta').scrollIntoView({block:'center',behavior:'instant'}));
@@ -141,6 +143,8 @@ try{
    glint:getComputedStyle(el.querySelector('.chapter__glint')).animationName
  }));
  check(staticEffect.own===0&&staticEffect.glint==='none','reduced motion should have no landing/glint animation '+JSON.stringify(staticEffect));
+ const reducedWave=await reducedPage.locator('#porta .chapter__card').evaluate(el=>getComputedStyle(el,'::after').animationName);
+ check(reducedWave==='none','reduced motion must disable optical pulse '+reducedWave);
  console.log('PASS V49 reduced motion');
  await reduced.close();
 }finally{await browser.close()}

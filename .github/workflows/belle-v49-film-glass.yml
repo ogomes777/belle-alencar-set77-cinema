@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat/belle-v49-film-compact-optical-glass
+      - claude/wonderful-meitner-kt2rnw
   pull_request:
     branches:
       - claude/wonderful-meitner-kt2rnw

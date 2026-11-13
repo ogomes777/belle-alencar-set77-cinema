@@ -232,9 +232,9 @@ export function initFilm(director: Director): void {
       },{passive:true});
     }
   });
-  // V49: an editorial lens landing, not a generic fade. Use the existing
-  // observer and CSS glint, but re-arm ONLY after the card actually leaves the
-  // viewport so reverse scroll also feels intentional. No extra scroll handler.
+  // V50: a short, tightly-controlled optical impact. The reveal re-arms
+  // after exiting the viewport, including reverse scroll, with no new scroll
+  // handler, particles, extra canvas, or filters animated on the GPU.
   const lastGlassReveal=new WeakMap<HTMLElement,number>();
   const glassObserver=new IntersectionObserver(entries=>{
     for(const entry of entries){
@@ -246,21 +246,23 @@ export function initFilm(director: Director): void {
       if(card.classList.contains('is-glass-appeared'))continue;
       card.classList.add('is-glass-appeared');
       const now=performance.now();
-      if(now-(lastGlassReveal.get(card)??-Infinity)<850)continue;
+      if(now-(lastGlassReveal.get(card)??-Infinity)<440)continue;
       lastGlassReveal.set(card,now);
       if(reducedGlass.matches ||
          document.documentElement.classList.contains('poster-mode') ||
          document.documentElement.classList.contains('perf-lite'))continue;
       const narrow=innerWidth<=899;
+      // The "explosion" is a three-frame scale/rotation overshoot,
+      // not an expensive particle system. Opacity/transform only.
       card.animate([
-        {offset:0,opacity:narrow?0.20:0.10,
-         transform:narrow?'translate3d(0,24px,0) scale(.93)':
-                          'translate3d(0,42px,0) scale(.90)'},
-        {offset:.69,opacity:1,
-         transform:narrow?'translate3d(0,-3px,0) scale(1.012)':
-                          'translate3d(0,-6px,0) scale(1.022)'},
-        {offset:1,opacity:1,transform:'translate3d(0,0,0) scale(1)'}
-      ],{duration:narrow?760:970,easing:'cubic-bezier(.16,1,.30,1)'});
+        {offset:0,opacity:narrow?.08:.06,
+         transform:narrow?'translate3d(0,48px,0) rotate(-5deg) scale(.72)':
+                          'translate3d(0,64px,0) rotate(-4deg) scale(.76)'},
+        {offset:.64,opacity:1,
+         transform:narrow?'translate3d(0,-7px,0) rotate(1.2deg) scale(1.065)':
+                          'translate3d(0,-10px,0) rotate(1.5deg) scale(1.08)'},
+        {offset:1,opacity:1,transform:'translate3d(0,0,0) rotate(0deg) scale(1)'}
+      ],{duration:narrow?700:850,easing:'cubic-bezier(.16,1,.30,1)'});
     }
   },{threshold:0.12,rootMargin:'0px 0px -5% 0px'});
   glassCards.forEach(card=>glassObserver.observe(card));
