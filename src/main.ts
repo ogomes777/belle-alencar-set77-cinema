@@ -28,6 +28,7 @@ import './styles/prismatic-search-v48.css'; // Search-only left-to-right reveal,
 import './styles/film-optical-glass-v49.css'; // Seven compact optical film captions, warm dark glass and mobile-safe bounds.
 import './styles/film-mobile-impact-v50.css'; // Compact mobile cards and one-shot optical impact reveal.
 import './styles/editorial-typography-v51.css'; // Full-page five-role editorial typography and accessible theme contrast.
+import './styles/contrast-readable-film-v52.css'; // Keep bright how-film readable in dark theme; legible compact film cards.
 import { initTypographyCinema } from './motion/editorial-typography-v51';
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';

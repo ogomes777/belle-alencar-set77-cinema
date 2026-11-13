@@ -36,5 +36,7 @@ jobs:
             sleep 1
           done
           node tests/e2e/belle-v51-editorial-typography.mjs
+      - name: V52 high contrast how-film + seven compact film captions
+        run: node tests/e2e/belle-v52-contrast-readable.mjs
       - name: Preserve film mobile glass and cinematic reveal
         run: node tests/e2e/belle-v49-film-compact-glass.mjs
