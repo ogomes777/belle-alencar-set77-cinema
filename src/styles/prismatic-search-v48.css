@@ -1,0 +1,238 @@
+/* BELLE ALENCAR · V48 · PRISMATIC SEARCH
+ * Only the existing search overlay. No changes to navigation, scroll,
+ * commerce, 3D, catalog or the six-city globe.
+ * Original text stays in DOM for accessibility and i18n.
+ */
+#searchDialog.ba-search{
+ --v48-title-ink:#30231f;
+ --v48-title-bronze:#9d6636;
+ --v48-title-glow:#d7aa6e;
+ --v48-title-soft:#665044;
+ --v48-field-haze:rgba(255,253,248,.51);
+ --v48-field-edge:rgba(255,255,255,.90);
+ --v48-field-inner:rgba(255,255,255,.76);
+ --v48-field-rim:rgba(167,115,66,.22);
+ --v48-field-shadow:rgba(94,57,30,.17);
+ --v48-field-spark:rgba(223,175,104,.23);
+}
+html[data-belle-theme='dark'] #searchDialog.ba-search{
+ --v48-title-ink:#fff5e7;
+ --v48-title-bronze:#cb9363;
+ --v48-title-glow:#f1d7ad;
+ --v48-title-soft:#cbb4a0;
+ --v48-field-haze:rgba(43,35,38,.48);
+ --v48-field-edge:rgba(243,207,168,.45);
+ --v48-field-inner:rgba(255,235,213,.22);
+ --v48-field-rim:rgba(227,171,122,.21);
+ --v48-field-shadow:rgba(0,0,0,.32);
+ --v48-field-spark:rgba(232,178,111,.13);
+}
+html[data-belle-theme='rose'] #searchDialog.ba-search{
+ --v48-title-ink:#4c2c3c;
+ --v48-title-bronze:#a45b7d;
+ --v48-title-glow:#e6a78f;
+ --v48-title-soft:#735066;
+ --v48-field-haze:rgba(255,239,248,.52);
+ --v48-field-edge:rgba(255,255,255,.88);
+ --v48-field-inner:rgba(255,255,255,.74);
+ --v48-field-rim:rgba(179,100,133,.23);
+ --v48-field-shadow:rgba(108,56,77,.19);
+ --v48-field-spark:rgba(241,167,184,.20);
+}
+/* A masked, left-to-right entrance resets every time the overlay reopens.
+ * Opacity, translation and clip-path share a single entrance keyframe.
+ * Gradient animation runs separately and NEVER affects the DOM text itself.
+ */
+html body #searchDialog.ba-search .ba-search-title{
+ color:var(--v48-title-ink);
+ text-shadow:0 1px 0 rgba(255,255,255,.10);
+ transform:translate3d(0,0,0);
+}
+#searchDialog.ba-search.is-open .ba-search-title{
+ color:var(--v48-title-ink);
+ background-image:linear-gradient(
+  105deg,
+  var(--v48-title-ink) 0%,
+  var(--v48-title-ink) 24%,
+  var(--v48-title-bronze) 36%,
+  var(--v48-title-glow) 44%,
+  var(--v48-title-ink) 54%,
+  var(--v48-title-bronze) 71%,
+  var(--v48-title-ink) 84%,
+  var(--v48-title-ink) 100%
+ );
+ background-size:260% 100%;
+ background-position:96% 50%;
+ -webkit-background-clip:text;
+ background-clip:text;
+ -webkit-text-fill-color:transparent;
+ animation:
+   baV48TitleIn 1040ms cubic-bezier(.16,1,.3,1) 70ms both,
+   baV48TitlePrism 6.6s ease-in-out 1090ms infinite alternate;
+ will-change:auto;
+}
+@keyframes baV48TitleIn{
+ 0%{clip-path:inset(-6% 101% -8% 0);opacity:0;transform:translate3d(-39px,0,0);filter:brightness(.93)}
+ 45%{opacity:1}
+ 100%{clip-path:inset(-6% 0% -8% 0);opacity:1;transform:translate3d(0,0,0);filter:brightness(1)}
+}
+@keyframes baV48TitlePrism{
+ 0%,8%{background-position:96% 50%}
+ 45%,55%{background-position:28% 50%}
+ 90%,100%{background-position:0% 50%}
+}
+/* Smaller supporting copy uses the same directional storytelling, once,
+ * not perpetual animations across cards or the rest of the website. */
+#searchDialog.ba-search.is-open .ba-search-kicker{
+ animation:baV48SupportingIn 630ms cubic-bezier(.2,1,.3,1) 30ms both;
+}
+#searchDialog.ba-search.is-open .ba-search-subtitle{
+ animation:baV48SupportingIn 700ms cubic-bezier(.2,1,.3,1) 370ms both;
+}
+@keyframes baV48SupportingIn{
+ from{opacity:0;transform:translate3d(-17px,0,0)}
+ to{opacity:1;transform:translate3d(0,0,0)}
+}
+/* A real glass lens, not a solid white rectangle with a border. */
+html body #searchDialog.ba-search .ba-search-field{
+ position:relative;
+ isolation:isolate;
+ border-radius:999px;
+ overflow:hidden;
+ border:1px solid var(--v48-field-edge);
+ background:
+  radial-gradient(ellipse 62% 150% at 12% -40%,var(--v48-field-inner),transparent 78%),
+  linear-gradient(120deg,rgba(255,255,255,.25),transparent 44%,var(--v48-field-spark) 100%),
+  var(--v48-field-haze);
+ -webkit-backdrop-filter:blur(28px) saturate(1.75) contrast(1.06);
+ backdrop-filter:blur(28px) saturate(1.75) contrast(1.06);
+ box-shadow:
+   0 24px 58px -28px var(--v48-field-shadow),
+   0 10px 26px -17px var(--v48-field-shadow),
+   0 4px 9px rgba(68,41,22,.045),
+   inset 0 2px 0 var(--v48-field-inner),
+   inset 0 -2px 0 var(--v48-field-rim),
+   inset 1px 0 0 rgba(255,255,255,.22);
+ min-height:clamp(74px,8.25vw,97px);
+ padding:12px clamp(21px,2.5vw,34px);
+ gap:clamp(11px,1.5vw,19px);
+ transition:border-color .3s ease,box-shadow .35s ease,background-color .3s ease;
+}
+html body #searchDialog.ba-search .ba-search-field::before{
+ content:"";position:absolute;inset:2px;
+ border-radius:inherit;pointer-events:none;
+ border:1px solid var(--v48-field-rim);
+ background:linear-gradient(172deg,rgba(255,255,255,.10),transparent 34%);
+ opacity:.77;
+}
+html body #searchDialog.ba-search .ba-search-field::after{
+ content:"";pointer-events:none;position:absolute;inset:0;
+ border-radius:inherit;
+ background:linear-gradient(112deg,transparent 24%,rgba(255,255,255,.45) 49%,transparent 73%);
+ opacity:0;transform:translate3d(-88%,0,0);
+}
+#searchDialog.ba-search.is-open .ba-search-field{
+ animation:baV48FieldAppear 700ms cubic-bezier(.2,1,.3,1) 410ms both;
+}
+@keyframes baV48FieldAppear{
+ from{opacity:0;transform:translate3d(0,14px,0)}
+ to{opacity:1;transform:translate3d(0,0,0)}
+}
+html body #searchDialog.ba-search .ba-search-field:hover{
+ border-color:color-mix(in srgb,var(--v47-gold) 46%,var(--v48-field-edge));
+ box-shadow:
+   0 26px 58px -25px var(--v48-field-shadow),
+   0 11px 27px -15px var(--v48-field-shadow),
+   inset 0 2px 0 var(--v48-field-inner),
+   inset 0 -2px 0 var(--v48-field-rim);
+}
+html body #searchDialog.ba-search .ba-search-field:focus-within{
+ border-color:var(--v47-gold);
+ background:
+  radial-gradient(ellipse 62% 150% at 12% -40%,var(--v48-field-inner),transparent 78%),
+  linear-gradient(120deg,rgba(255,255,255,.24),transparent 43%,var(--v48-field-spark)),
+  var(--v48-field-haze);
+ box-shadow:
+  0 0 0 3px color-mix(in srgb,var(--v47-gold) 11%,transparent),
+  0 26px 62px -25px var(--v48-field-shadow),
+  0 12px 28px -14px var(--v48-field-shadow),
+  inset 0 2px 0 var(--v48-field-inner),
+  inset 0 -2px 0 var(--v48-field-rim);
+}
+html body #searchDialog.ba-search .ba-search-field:focus-within::after{
+ animation:baV48FieldSheen 1350ms cubic-bezier(.22,1,.36,1) 1 both;
+}
+@keyframes baV48FieldSheen{
+ 0%{opacity:0;transform:translate3d(-88%,0,0)}
+ 25%{opacity:.43}
+ 100%{opacity:0;transform:translate3d(90%,0,0)}
+}
+/* Keep the already-approved bold sans-serif, original placeholder and all
+ * input events. Visible focus and clear button now share pill geometry. */
+html body #searchDialog.ba-search .ba-search-field__icon{
+ color:var(--v47-gold);
+ filter:drop-shadow(0 1px 1px var(--v48-field-spark));
+}
+html body #searchDialog.ba-search input.search-input{
+ position:relative;z-index:1;min-width:0;
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ color:var(--v47-ink)!important;
+}
+html body #searchDialog.ba-search .ba-search-clear{
+ position:relative;z-index:2;
+ border-radius:999px;
+ border:1px solid var(--v48-field-rim);
+ background:color-mix(in srgb,var(--v48-field-haze) 72%,transparent);
+ -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+ box-shadow:inset 0 1px 0 var(--v48-field-inner);
+}
+html body #searchDialog.ba-search .search-label{
+ color:var(--v47-gold);
+}
+/* Retain 44px minimum hit targets, text legibility and focus ring. */
+@media(max-width:650px){
+ html body #searchDialog.ba-search .ba-search-title{
+  max-width:100%;
+ }
+ html body #searchDialog.ba-search .ba-search-field{
+  min-height:69px;border-radius:999px;
+  padding:10px 15px;gap:10px;
+  -webkit-backdrop-filter:blur(15px) saturate(1.4);
+  backdrop-filter:blur(15px) saturate(1.4);
+  box-shadow:0 12px 33px -19px var(--v48-field-shadow),
+   0 4px 9px rgba(46,23,18,.05),
+   inset 0 2px 0 var(--v48-field-inner),
+   inset 0 -2px 0 var(--v48-field-rim);
+ }
+ html body #searchDialog.ba-search .ba-search-clear{
+  min-width:50px;min-height:44px;
+ }
+}
+@media(max-width:360px){
+ html body #searchDialog.ba-search .ba-search-field{padding-inline:11px}
+}
+/* Motion-sensitivity: preserve full title, readable fixed gradient and static
+ * glass field. No reveal opacity delay or endless shimmer. */
+@media(prefers-reduced-motion:reduce){
+ html body #searchDialog.ba-search .ba-search-title,
+ html body #searchDialog.ba-search.is-open .ba-search-title{
+  animation:none!important;
+  transform:none!important;opacity:1!important;
+  clip-path:none!important;filter:none!important;
+  background-position:50% 50%;
+ }
+ html body #searchDialog.ba-search.is-open .ba-search-kicker,
+ html body #searchDialog.ba-search.is-open .ba-search-subtitle,
+ html body #searchDialog.ba-search.is-open .ba-search-field,
+ html body #searchDialog.ba-search .ba-search-field:focus-within::after{
+  animation:none!important;
+  transform:none!important;opacity:1!important;
+ }
+ html body #searchDialog.ba-search .ba-search-field{transition:none!important}
+}
+/* Non-glass browser fallback to an opaque themed surface. */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+ html body #searchDialog.ba-search .ba-search-field{background:var(--v47-surface)}
+}
