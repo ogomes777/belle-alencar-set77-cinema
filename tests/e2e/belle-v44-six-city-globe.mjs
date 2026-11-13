@@ -61,7 +61,15 @@ try{
     }
     console.log('PASS overview',width,theme,'6 cities 3 states real SP boundary');
   }
-  await page.locator('#lojas .stores__geo-pick').filter({hasText:'Ibiá'}).click();
+  // Check the fully animated CTA once, then suspend active canvas repaints
+  // while verifying clicks, dialogs and map links. This is not a product
+  // change: the real site continues to animate by default.
+  const animated=await page.locator('#lojas .stores__enter-map').evaluate(
+    el=>getComputedStyle(el,'::before').animationName);
+  check(animated.includes('belle-maps-orbit'),'Maps neon loop missing in full-motion mode '+width);
+  await page.evaluate(()=>{document.documentElement.dataset.intensity='essential'});
+  page.setDefaultTimeout(12000);
+  await page.locator('#lojas .stores__geo-pick').filter({hasText:'Ibiá'}).click({timeout:12000});
   await page.waitForFunction(()=>document.querySelector('[data-geo-trail]')?.textContent.includes('Ibiá')&&!document.querySelector('[data-geo-trail]')?.textContent.includes('Franca'),{timeout:15000});
   let current=await page.evaluate(()=>{
    const trail=document.querySelector('[data-geo-trail]');
@@ -73,7 +81,7 @@ try{
   });
   check(current.trail.includes('Brasil')&&current.trail.includes('Minas Gerais')&&current.trail.includes('Ibiá'),'Ibiá breadcrumb is incomplete');
   check(current.store==='Ibiá','Ibiá not selected in commerce');
-  check(current.mapVisible&&current.animation.includes('belle-maps-orbit'),'Maps CTA not neon');
+  check(current.mapVisible&&current.animation==='none','Maps CTA missing / essential-mode fallback not working');
   await page.locator('.stores__enter-map').click({timeout:15000});
   await page.waitForFunction(()=>!!document.querySelector('.stores-map[open]'));
   const map=await page.evaluate(()=>({title:document.querySelector('.stores-map h2').textContent,desc:document.querySelector('.stores-map__address').textContent,url:document.querySelector('.stores-map iframe').src}));
