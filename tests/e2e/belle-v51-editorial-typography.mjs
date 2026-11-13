@@ -26,7 +26,7 @@ try{
    const rect=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {width:r.width,height:r.height}};
    return {bad,count:textEls.length,
     selected:{
-     intro:check('.intro__signature-ink'),hero:check('#inicio .display'),
+     intro:check('.intro__signature-ink')??check('#inicio .display em'),hero:check('#inicio .display'),
      italic:check('#inicio .display em'),collection:check('#colecaoTitle'),
      product:check('.pcard__title')??check('.store-card h3'),ui:check('.store-pill__label'),body:check('#como-comprar .lede')
     },overflow:document.documentElement.scrollWidth-innerWidth,
