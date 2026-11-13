@@ -42,7 +42,26 @@ export function createSearch(ctx: Ctx) {
     enterkeyhint: 'search', 'aria-describedby': 'searchCount'
   }) as HTMLInputElement;
   const count = h('p', { class: 'search-count', id: 'searchCount', 'aria-live': 'polite' });
-  const results = h('div', { class: 'search-results' });
+  const results = h('div', { class: 'search-results', id: 'baSearchResults' });
+  // V47 · Real search scopes, not decorative tabs. Every tab filters the
+  // catalog/city/chapter matches already supplied by the commerce engine.
+  type View = 'all' | 'products' | 'stores' | 'chapters';
+  const views: ReadonlyArray<{id:View;label:string}> = [
+    {id:'all',label:'Tudo'}, {id:'products',label:'Peças'},
+    {id:'stores',label:'Lojas'}, {id:'chapters',label:'Experiência'},
+  ];
+  let currentView:View='all';
+  const viewTabs=h('div',{
+    class:'ba-search-views',role:'group','aria-label':'Filtrar resultados da busca'
+  },...views.map(v=>h('button',{
+      type:'button',class:'ba-search-view','data-search-view':v.id,
+      'aria-pressed':v.id==='all'?'true':'false',
+      'aria-controls':'baSearchResults'
+    },
+    h('span',{class:'ba-search-view__name',text:v.label}),
+    h('span',{class:'ba-search-view__count','aria-hidden':'true',text:'0'})
+  )));
+
   const chips = h('div', { class: 'ba-search-chips', role: 'group', 'aria-label': 'Buscas populares' },
     ...QUICK_SEARCHES.map((label) =>
       h('button', { type: 'button', class: 'ba-search-chip', 'data-search-term': label, text: label })));
@@ -64,6 +83,13 @@ export function createSearch(ctx: Ctx) {
     h('label', { class: 'search-label', for: 'searchInput', text: 'O que você procura?' }),
     inputWrap,
     quick,
+    h('div', { class: 'ba-search-explore-bar' },
+      h('div', { class: 'ba-search-explore-bar__intro' },
+        h('span', { class: 'ba-search-explore-bar__eyebrow', text: 'CURADORIA BELLE' }),
+        h('strong', { class: 'ba-search-explore-bar__headline', text: 'Sua próxima descoberta.' }),
+      ),
+      viewTabs,
+    ),
     h('div', { class: 'ba-search-result-summary' }, count,
       h('button', { type: 'button', class: 'ba-search-go-collection', 'data-hit-anchor': 'colecao', text: 'VER COLEÇÃO COMPLETA' })),
     results,
@@ -113,27 +139,56 @@ export function createSearch(ctx: Ctx) {
     }, h('span', { text: c.label }),
       h('small', { text: 'Explorar na landing' })));
 
-    const groups = [
-      group(n ? 'Peças encontradas' : 'Explore algumas peças', productItems, 'products'),
-      group('Lojas Belle', storeItems, 'stores'),
-      group('Na experiência', chapterItems, 'chapters'),
-    ].filter((g): g is HTMLElement => !!g);
-    if (n && !prods.length && !stores.length && !chapters.length) {
-      results.replaceChildren(h('div', { class: 'ba-search-empty' },
-        h('h3', { text: 'Não encontramos essa peça.' }),
-        h('p', { text: 'Experimente buscar por vestido, bolsa, anel ou pela cidade da sua loja.' })));
-    } else {
-      results.replaceChildren(...groups);
+    const amounts:Record<Exclude<View,'all'>,number>={
+      products:prods.length, stores:stores.length, chapters:chapters.length
+    };
+    const total=amounts.products+amounts.stores+amounts.chapters;
+    for(const tab of viewTabs.querySelectorAll<HTMLButtonElement>('[data-search-view]')){
+      const view=tab.dataset.searchView as View;
+      tab.setAttribute('aria-pressed',String(view===currentView));
+      const badge=tab.querySelector<HTMLElement>('.ba-search-view__count');
+      if(badge)badge.textContent=String(view==='all'?total:amounts[view]);
     }
-    const total = prods.length + stores.length + chapters.length;
-    count.textContent = n
-      ? (total ? plural(total, 'resultado', 'resultados') : 'Nenhum resultado')
-      : 'SELEÇÃO DE PEÇAS · ESTUDO EDITORIAL';
-    quick.hidden = Boolean(n);
-    clear.hidden = !n;
+    const groups = [
+      currentView==='all'||currentView==='products'
+        ?group(n?'Peças encontradas':'Explore algumas peças',productItems,'products'):null,
+      currentView==='all'||currentView==='stores'
+        ?group('Lojas Belle',storeItems,'stores'):null,
+      currentView==='all'||currentView==='chapters'
+        ?group('Na experiência',chapterItems,'chapters'):null
+    ].filter((g):g is HTMLElement=>!!g);
+    const shown=currentView==='all'?total:amounts[currentView];
+    if(!shown){
+      const title=!n&&currentView==='stores'
+        ? 'Encontre sua Belle.'
+        :!n&&currentView==='chapters'
+          ?'Explore a experiência.'
+          :'Não encontramos essa peça.';
+      const detail=!n&&currentView==='stores'
+        ?'Digite o nome da cidade para encontrar sua loja.'
+        :!n&&currentView==='chapters'
+          ?'Pesquise por uma parte da experiência, como provador ou coleção.'
+          :'Experimente buscar por vestido, bolsa, anel ou pela cidade da sua loja.';
+      results.replaceChildren(h('div',{class:'ba-search-empty'},
+        h('span',{class:'ba-search-empty__symbol','aria-hidden':'true',text:'✧'}),
+        h('h3',{text:title}),h('p',{text:detail}),
+        h('button',{type:'button',class:'ba-search-empty__return',
+          'data-search-reset':true,text:'Recomeçar busca'})));
+    }else results.replaceChildren(...groups);
+    count.textContent=n
+      ?(shown?plural(shown,'resultado','resultados'):'Nenhum resultado')
+      :'SELEÇÃO DE PEÇAS · ESTUDO EDITORIAL';
+    quick.hidden=Boolean(n);
+    clear.hidden=!n;
   }
 
-  input.addEventListener('input', render);
+  input.addEventListener('input',render);
+  viewTabs.addEventListener('click',event=>{
+    const button=(event.target as HTMLElement).closest<HTMLButtonElement>('[data-search-view]');
+    if(!button)return;
+    currentView=button.dataset.searchView as View;
+    render();
+  });
   clear.addEventListener('click', () => {
     input.value = '';
     render();
@@ -149,6 +204,10 @@ export function createSearch(ctx: Ctx) {
   ov.body.addEventListener('click', (e) => {
     const t = (e.target as HTMLElement).closest<HTMLElement>('button');
     if (!t) return;
+    if(t.hasAttribute('data-search-reset')){
+      input.value='';currentView='all';render();
+      input.focus({preventScroll:true});return;
+    }
     const origin = document.getElementById('searchButton');
     if (t.dataset.hitProduct) ctx.openQuickView(t.dataset.hitProduct, origin);
     else if (t.dataset.hitStore) {
@@ -162,6 +221,7 @@ export function createSearch(ctx: Ctx) {
 
   return {
     open(trigger?: HTMLElement | null) {
+      currentView='all';
       render();
       ov.open(trigger, { focus: input });
     },
