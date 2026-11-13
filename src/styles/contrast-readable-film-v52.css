@@ -98,7 +98,4 @@ html #filme .chapter__card .scroll-cue {font-size:.75rem;}
   html #filme .film__chapters .chapter__card .portal-list button span {
     font-size:.67rem;
   }
-  html #filme .film__chapters .chapter__card {
-    overscroll-behavior-y:contain;
-  }
 }
