@@ -17,6 +17,7 @@ import './styles/search-atelier.css';
 import './styles/catalog-couture-v17.css';
 import './styles/preferences-v31.css';
 import './styles/stores-atelier-v40.css'; // V40: city selection only, globe/scroll unchanged.
+import './styles/brand-story-v41.css'; // Only #atendimento narrative, finale service, profile modal.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
@@ -27,6 +28,7 @@ import { initDirector } from './shell/director';
 import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
+import { initBelleInstagramDirectory } from './social/instagram-directory';
 import { initHowFilm } from './how-film';
 import { initStoresChampagne } from './motion/stores-champagne';
 import { initPerfGuard } from './core/perf-guard';
@@ -41,6 +43,7 @@ initCommerce();
 initBelleI18n();
 initBelleSettings();
 initSections();
+initBelleInstagramDirectory(); // Accessible Instagram profile selector; no changes to existing navigation.
 initConciergeReveal(); // Codex: local pointer/touch reveal in concierge only.
 // V36 CLEAN: no global transition compositor and no second scene director.
 // Leave the original 3D film, runway, carousel, video scrub, collections,
