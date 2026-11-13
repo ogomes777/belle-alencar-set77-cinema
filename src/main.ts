@@ -24,6 +24,7 @@ import './styles/store-card-visibility-v45.css'; // Fix clipped store buttons an
 import './styles/couture-glass-collection-v46.css'; // Four post-throw glass cards + collection CTA only; scroll logic untouched.
 import './styles/liquid-glass-nav-v47.css'; // Navigation glass, tactile icon buttons and theme overrides.
 import './styles/editorial-search-v47.css'; // Full search atelier redesign; semantic live result filters.
+import './styles/prismatic-search-v48.css'; // Search-only left-to-right reveal, prismatic type and pill glass.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
