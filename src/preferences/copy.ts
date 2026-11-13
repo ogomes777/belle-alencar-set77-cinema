@@ -6,7 +6,6 @@ export const phrasePairs = [
     "Vai alla collezione"
   ],
   [
-    "Uma assinatura. Uma presença.",
     "Seu estilo deixa assinatura.",
     "Your style leaves a signature.",
     "Tu estilo deja huella.",
@@ -151,7 +150,6 @@ export const phrasePairs = [
     "tuo."
   ],
   [
-    "Araxá, Frutal, Catalão e Mineiros. Role para entrar na loja ou vá direto ao que procura.",
     "Entre na Belle, explore a coleção e escolha sua loja para consultar suas peças favoritas.",
     "Step into Belle, explore the collection and choose your boutique to ask about your favorites.",
     "Entra en Belle, explora la colección y elige tu tienda para consultar tus favoritos.",
@@ -194,7 +192,6 @@ export const phrasePairs = [
     "Mettiti a tuo agio."
   ],
   [
-    "A porta abre no seu ritmo. É só continuar.",
     "Siga a experiência e encontre a peça que combina com você.",
     "Keep exploring and find a piece that feels like you.",
     "Sigue explorando y encuentra una prenda que vaya contigo.",
@@ -219,7 +216,6 @@ export const phrasePairs = [
     "l'appendiabiti."
   ],
   [
-    "Deslize para os lados, traga uma peça para perto e clique para ver. Gostou? Ela voa para a sua sacola.",
     "Deslize entre as peças, toque na sua favorita e salve na sacola. A loja confirma a disponibilidade.",
     "Browse the pieces, tap your favorite and save it in your bag. The boutique confirms availability.",
     "Desliza entre las prendas, toca tu favorita y guárdala en la bolsa. La tienda confirma la disponibilidad.",
@@ -484,7 +480,6 @@ export const phrasePairs = [
     "il tuo programma?"
   ],
   [
-    "Comece pelo momento. A gente mostra as peças que combinam com ele.",
     "Escolha a ocasião e descubra os looks que combinam com ela.",
     "Choose the occasion and discover looks made for that moment.",
     "Elige la ocasión y descubre los looks que mejor combinan.",
@@ -557,14 +552,12 @@ export const phrasePairs = [
     "La collezione"
   ],
   [
-    "Escolha com calma.",
     "Encontre sua favorita.",
     "Find your favorite.",
     "Encuentra tu favorita.",
     "Trova il tuo preferito."
   ],
   [
-    "A loja confirma o resto.",
     "Confirme com a Belle.",
     "Confirm it with Belle.",
     "Confírmalo con Belle.",
@@ -637,7 +630,6 @@ export const phrasePairs = [
     "A modo tuo."
   ],
   [
-    "Descubra peças, monte sua seleção e conte com a Belle da sua cidade para cuidar dos detalhes.",
     "Explore a coleção, monte sua sacola de interesse e fale com a sua unidade para confirmar tamanho e disponibilidade.",
     "Explore the collection, save your favorites and contact your boutique to confirm sizes and availability.",
     "Explora la colección, guarda tus favoritos y habla con tu tienda para confirmar tallas y disponibilidad.",
@@ -722,7 +714,6 @@ export const phrasePairs = [
     "nella tua città."
   ],
   [
-    "Escolha sua loja. Sua sacola e suas preferências ficam salvas neste navegador e você pode trocar quando quiser.",
     "Escolha sua unidade e continue com seus favoritos. A sacola fica salva neste navegador, mesmo se você trocar de loja.",
     "Choose your boutique and keep your favorites. Your bag stays saved in this browser, even if you switch stores.",
     "Elige tu tienda y conserva tus favoritos. Tu bolsa queda guardada en este navegador aunque cambies de tienda.",
@@ -765,7 +756,6 @@ export const phrasePairs = [
     "Chiedi a Belle."
   ],
   [
-    "Tamanho, combinação, ocasião: mande uma mensagem e a equipe ajuda você a escolher.",
     "Quer ajuda para escolher? Pergunte sobre tamanhos, combinações e disponibilidade diretamente à Belle.",
     "Need help choosing? Ask Belle about sizes, styling and availability.",
     "¿Necesitas ayuda para elegir? Consulta con Belle tallas, combinaciones y disponibilidad.",
