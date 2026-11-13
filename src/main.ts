@@ -21,6 +21,7 @@ import './styles/brand-story-v41.css'; // Only #atendimento narrative, finale se
 import './styles/belle-signature-neon-v42.css'; // Only final WhatsApp/Instagram CTAs and story typography.
 import './styles/geo-six-v44.css'; // Same canvas globe, six-location hierarchy and maps neon CTA.
 import './styles/store-card-visibility-v45.css'; // Fix clipped store buttons and mobile layout, existing globe untouched.
+import './styles/couture-glass-collection-v46.css'; // Four post-throw glass cards + collection CTA only; scroll logic untouched.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
