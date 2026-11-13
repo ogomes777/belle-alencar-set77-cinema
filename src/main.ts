@@ -18,6 +18,7 @@ import './styles/catalog-couture-v17.css';
 import './styles/preferences-v31.css';
 import './styles/stores-atelier-v40.css'; // V40: city selection only, globe/scroll unchanged.
 import './styles/brand-story-v41.css'; // Only #atendimento narrative, finale service, profile modal.
+import './styles/belle-signature-neon-v42.css'; // Only final WhatsApp/Instagram CTAs and story typography.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';

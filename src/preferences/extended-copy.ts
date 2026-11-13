@@ -1,4 +1,4 @@
-/** V39-V41 · user-facing strings for dynamic boutique UI and editorial stories. */
+/** Additional user-facing four-language copy (v39–v42). */
 export const additionalPairs = [
   [
     "Menu",
@@ -833,5 +833,29 @@ export const additionalPairs = [
     "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)",
     "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)",
     "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)"
+  ],
+  [
+    "assinatura.",
+    "signature.",
+    "firma.",
+    "firma."
+  ],
+  [
+    "Mais do que vestir, a Belle traduz presença, personalidade e escolha.",
+    "More than getting dressed, Belle expresses presence, personality and choice.",
+    "Más que vestir, Belle expresa presencia, personalidad y elección.",
+    "Più che vestire, Belle esprime presenza, personalità e scelta."
+  ],
+  [
+    "Na trajetória de Gislayne de Alencar em Araxá, moda feminina e acessórios se encontram em uma curadoria que valoriza a expressão de cada mulher.",
+    "In Gislayne de Alencar's journey in Araxá, women's fashion and accessories come together in a selection that values each woman's individuality.",
+    "En la trayectoria de Gislayne de Alencar en Araxá, moda femenina y accesorios se unen en una selección que valora la expresión de cada mujer.",
+    "Nel percorso di Gislayne de Alencar ad Araxá, moda femminile e accessori si incontrano in una selezione che valorizza l'espressione di ogni donna."
+  ],
+  [
+    "Para o dia a dia, para celebrar e para os momentos que merecem ser lembrados: cada look carrega um pouco de quem o escolhe.",
+    "For everyday life, celebrations and moments worth remembering: every look carries something of the person who chooses it.",
+    "Para el día a día, las celebraciones y los momentos dignos de recordar: cada look refleja algo de quien lo elige.",
+    "Per ogni giorno, per le feste e per i momenti da ricordare: ogni look racconta qualcosa di chi lo sceglie."
   ]
 ] as const;
