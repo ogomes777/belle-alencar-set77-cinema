@@ -74,8 +74,12 @@ try{
    assert(v.wa.color===v.ig.color,'Inconsistent contrast '+width+'/'+theme);
    assert(v.wa.border!==v.ig.border,'Both neon glows have the same color '+width+'/'+theme);
    assert(v.overflow<=2,'Unexpected horizontal overflow '+width+'/'+theme+': '+v.overflow);
-   await page.locator('#atendimento .brand-story').screenshot({path:'artifacts/belle-v42/story-'+width+'-'+theme+'.png',animations:'disabled',timeout:25000});
-   await page.locator('.finale__copy').screenshot({path:'artifacts/belle-v42/finale-'+width+'-'+theme+'.png',animations:'disabled',timeout:25000});
+   // Browser viewport captures don't wait for the scroll-linked section to become
+   // geometrically stable. The actual scene continues moving in desktop cinematic mode.
+   await page.evaluate(()=>document.querySelector('#atendimento .brand-story')?.scrollIntoView({behavior:'instant',block:'center'}));
+   await page.screenshot({path:'artifacts/belle-v42/story-'+width+'-'+theme+'.png',animations:'disabled',timeout:35000});
+   await page.evaluate(()=>document.querySelector('.finale__copy')?.scrollIntoView({behavior:'instant',block:'center'}));
+   await page.screenshot({path:'artifacts/belle-v42/finale-'+width+'-'+theme+'.png',animations:'disabled',timeout:35000});
    console.log('PASS',width,theme,'Billie unchanged, readable type, 2 neon CTAs, aligned buttons');
   }
   await page.locator('.finale__actions [data-instagram-directory]').click({timeout:15000});
