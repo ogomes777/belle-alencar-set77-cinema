@@ -1,4 +1,4 @@
-/** V39 · missing user-facing strings after adding animated menu and concierge. */
+/** V39-V41 · user-facing strings for dynamic boutique UI and editorial stories. */
 export const additionalPairs = [
   [
     "Menu",
@@ -725,5 +725,113 @@ export const additionalPairs = [
     "Ask the store in",
     "Consultar con la tienda de",
     "Chiedi al negozio di"
+  ],
+  [
+    "A história por trás da Belle",
+    "The story behind Belle",
+    "La historia detrás de Belle",
+    "La storia dietro Belle"
+  ],
+  [
+    "Moda com",
+    "Fashion with",
+    "Moda con",
+    "Moda con"
+  ],
+  [
+    "identidade.",
+    "identity.",
+    "identidad.",
+    "identità."
+  ],
+  [
+    "BELLE ALENCAR · MODA & ACESSÓRIOS",
+    "BELLE ALENCAR · FASHION & ACCESSORIES",
+    "BELLE ALENCAR · MODA Y ACCESORIOS",
+    "BELLE ALENCAR · MODA E ACCESSORI"
+  ],
+  [
+    "Uma marca com nome, personalidade e um olhar próprio sobre o vestir.",
+    "A brand with a name, personality and its own point of view on style.",
+    "Una marca con nombre, personalidad y una visión propia de la moda.",
+    "Un marchio con un nome, una personalità e una visione propria dello stile."
+  ],
+  [
+    "A empreendedora Gislayne de Alencar faz parte da trajetória da Belle em Araxá. Uma história ligada à moda feminina, aos acessórios e à liberdade de cada mulher expressar o seu estilo.",
+    "Entrepreneur Gislayne de Alencar is part of Belle's story in Araxá. A journey connected to women's fashion, accessories and every woman's freedom to express her style.",
+    "La emprendedora Gislayne de Alencar forma parte de la historia de Belle en Araxá. Una trayectoria ligada a la moda femenina, los accesorios y la libertad de cada mujer para expresar su estilo.",
+    "L'imprenditrice Gislayne de Alencar fa parte della storia di Belle ad Araxá. Un percorso legato alla moda femminile, agli accessori e alla libertà di ogni donna di esprimere il proprio stile."
+  ],
+  [
+    "Do cotidiano às ocasiões especiais, a Belle propõe escolhas que acompanham diferentes momentos, corpos e maneiras de ser.",
+    "From everyday life to special occasions, Belle offers choices for different moments, bodies and ways of being.",
+    "Del día a día a las ocasiones especiales, Belle propone opciones que acompañan distintos momentos, cuerpos y formas de ser.",
+    "Dalla vita di tutti i giorni alle occasioni speciali, Belle propone scelte per momenti, corpi e modi di essere diversi."
+  ],
+  [
+    "Uma identidade. Diferentes cidades.",
+    "One identity. Different cities.",
+    "Una identidad. Diferentes ciudades.",
+    "Un'identità. Diverse città."
+  ],
+  [
+    "Conheça o universo Belle no Instagram",
+    "Explore the Belle universe on Instagram",
+    "Descubre el universo Belle en Instagram",
+    "Scopri il mondo Belle su Instagram"
+  ],
+  [
+    "O UNIVERSO BELLE ALENCAR",
+    "THE BELLE ALENCAR UNIVERSE",
+    "EL UNIVERSO BELLE ALENCAR",
+    "IL MONDO BELLE ALENCAR"
+  ],
+  [
+    "De qual Belle",
+    "Which Belle are",
+    "¿De qué Belle",
+    "Di quale Belle"
+  ],
+  [
+    "você é?",
+    "you part of?",
+    "eres?",
+    "fai parte?"
+  ],
+  [
+    "Encontre a unidade ou o perfil que mais combina com você.",
+    "Find the location or profile that suits you best.",
+    "Encuentra la tienda o el perfil que más va contigo.",
+    "Trova il negozio o il profilo più adatto a te."
+  ],
+  [
+    "Lojas e coleções",
+    "Stores and collections",
+    "Tiendas y colecciones",
+    "Negozi e collezioni"
+  ],
+  [
+    "Pessoas e ocasiões",
+    "People and occasions",
+    "Personas y ocasiones",
+    "Persone e occasioni"
+  ],
+  [
+    "Perfis indicados pela marca. Atendimento, endereços e disponibilidade devem ser confirmados diretamente em cada unidade.",
+    "Profiles provided by the brand. Confirm service, addresses and availability directly with each location.",
+    "Perfiles indicados por la marca. Confirma la atención, las direcciones y la disponibilidad directamente con cada tienda.",
+    "Profili indicati dal marchio. Conferma assistenza, indirizzi e disponibilità direttamente con ogni negozio."
+  ],
+  [
+    "Fechar seleção de Instagram",
+    "Close Instagram selection",
+    "Cerrar selección de Instagram",
+    "Chiudi la selezione Instagram"
+  ],
+  [
+    "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)",
+    "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)",
+    "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)",
+    "Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)"
   ]
 ] as const;
