@@ -49,16 +49,6 @@ try{
     check(state.mapSvg&&state.mapLabel.includes('Google Maps'),'Missing real map icon/button');
     check(state.pending.length===2&&state.pending.every(x=>!x.includes('null')),'Incorrect street address gap');
     check(state.overflow<=2,'Horizontal overflow '+width+' '+theme+': '+state.overflow);
-    // The real 2D globe continuously repaints. A full-page screenshot can
-    // stall in headless SwiftShader while the active globe never settles.
-    // The geometry + responsive + semantic assertions above are mandatory;
-    // visual snapshot is optional and only attempted once on desktop.
-    if(width===1440&&theme==='light'){
-      try{
-        await page.evaluate(()=>document.querySelector('#lojas')?.scrollIntoView({block:'center',behavior:'instant'}));
-        await page.screenshot({path:'artifacts/belle-v44/overview-'+width+'-'+theme+'.png',animations:'disabled',timeout:8000});
-      }catch(e){console.warn('Optional globe screenshot skipped:',String(e).slice(0,100));}
-    }
     console.log('PASS overview',width,theme,'6 cities 3 states real SP boundary');
   }
   // Check the fully animated CTA once, then suspend active canvas repaints
@@ -97,10 +87,8 @@ try{
   const franca=await page.evaluate(()=>({text:document.querySelector('.stores-map__address').textContent,url:document.querySelector('.stores-map iframe').src}));
   check(franca.text.includes('Franca')&&!franca.text.includes('null'),'Franca address must not be fabricated');
   check(decodeURIComponent(franca.url).includes('Franca')&&decodeURIComponent(franca.url).includes('São Paulo'),'Franca map outside correct state');
-  if(width===1440){
-    try{await page.screenshot({path:'artifacts/belle-v44/franca-'+width+'.png',animations:'disabled',timeout:8000});}
-    catch(e){console.warn('Optional Franca screenshot skipped:',String(e).slice(0,100));}
-  }
+  // Geometry + real iframe URL were asserted; snapshots of the live canvas
+  // are intentionally omitted to avoid GPU compositor stalls in Chromium CI.
   await page.locator('.stores-map form button').click();
   check(errors.length===0,'Runtime exceptions '+width+': '+errors.join(' | '));
   console.log('PASS interactive',width,'Ibiá/Franca selection, correct maps, overview reset');
