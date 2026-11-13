@@ -449,17 +449,20 @@
 
 
   <!-- ATENDIMENTO DE ESTILO -->
-  <section class="concierge" id="atendimento" aria-labelledby="conciergeTitle">
+  <section class="concierge concierge--brand-story" id="historia-belle" aria-labelledby="conciergeTitle">
     <div class="concierge__media style-reveal" data-concierge-reveal role="img" aria-label="Billie, da Belle Alencar. Passe o cursor ou arraste para revelar uma composição editorial com vestido champagne."><div class="style-reveal__figure"><img class="style-reveal__original" src="/concierge/billie-original.webp" alt="Billie com óculos escuros, blusa branca e short jeans" loading="lazy" decoding="async" width="768" height="1152"><canvas class="style-reveal__canvas" aria-hidden="true"></canvas></div><p class="style-reveal__hint">Passe o cursor para revelar o vestido</p></div>
-    <div class="concierge__body">
-      <p class="eyebrow">Atendimento de estilo</p>
-      <h2 class="display" id="conciergeTitle" data-reveal>Ficou na dúvida?<br><em>Pergunte para a Belle.</em></h2>
-      <p class="lede">Tamanho, combinação, ocasião: mande uma mensagem e a equipe ajuda você a escolher.</p>
-      <div class="cta-row">
-        <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
-        <a class="btn btn--line" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Novidades no Instagram</a>
+    <div class="concierge__body brand-story">
+      <p class="eyebrow">A história por trás da Belle</p>
+      <h2 class="display" id="conciergeTitle" data-reveal>Moda com <em>identidade.</em></h2>
+      <p class="brand-story__signature">BELLE ALENCAR · MODA &amp; ACESSÓRIOS</p>
+      <p class="brand-story__lead">Uma marca com nome, personalidade e um olhar próprio sobre o vestir.</p>
+      <p class="brand-story__paragraph">A empreendedora Gislayne de Alencar faz parte da trajetória da Belle em Araxá. Uma história ligada à moda feminina, aos acessórios e à liberdade de cada mulher expressar o seu estilo.</p>
+      <p class="brand-story__paragraph">Do cotidiano às ocasiões especiais, a Belle propõe escolhas que acompanham diferentes momentos, corpos e maneiras de ser.</p>
+      <div class="brand-story__presence">
+        <p class="brand-story__presence-label">Uma identidade. Diferentes cidades.</p>
+        <p class="brand-story__cities">Araxá <span>·</span> Frutal <span>·</span> Catalão <span>·</span> Mineiros <span>·</span> Ibiá <span>·</span> Franca</p>
       </div>
-      <p class="fineprint">Canal oficial da Belle. Contatos individuais de cada unidade em confirmação.</p>
+      <button class="brand-story__social" type="button" data-instagram-directory>Conheça o universo Belle no Instagram <span aria-hidden="true">↗</span></button>
     </div>
   </section>
 
@@ -489,9 +492,16 @@
       <div class="finale__copy">
         <span class="finale__edition">BELLE ALENCAR · ASSINATURA</span>
         <h2 class="display" id="finaleTitle">A próxima escolha<br><em>é sua.</em></h2>
-        <div class="cta-row cta-row--center">
-          <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar com a Belle</a>
-          <a class="btn btn--line" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
+        <div class="finale__consult" id="atendimento" aria-labelledby="finaleConsultTitle">
+          <p class="finale__consult-kicker">Atendimento de estilo</p>
+          <h3 id="finaleConsultTitle">Ficou na dúvida?<br><em>Pergunte para a Belle.</em></h3>
+          <p class="finale__consult-desc">Tamanho, combinação, ocasião: mande uma mensagem e a equipe ajuda você a escolher.</p>
+          <div class="finale__actions">
+            <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+            <button type="button" class="btn btn--line" data-instagram-directory>Novidades no Instagram</button>
+          </div>
+          <button class="finale__instagram-link" type="button" data-instagram-directory>Ver Instagram <span aria-hidden="true">↗</span></button>
+          <p class="finale__fineprint">Canal oficial da Belle. Contatos individuais de cada unidade em confirmação.</p>
         </div>
       </div>
     </div>
@@ -500,7 +510,7 @@
 
 <footer class="site-footer">
   <div class="site-footer__brand" role="img" aria-label="Belle Alencar, Moda e Acessórios"><span data-monogram="footer" aria-hidden="true"></span></div>
-  <p>Araxá · Frutal (MG) · Catalão · Mineiros (GO)</p>
+  <p>Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)</p>
   <p class="site-footer__legal">Pré-lançamento digital. Ilustrações e estudo 3D são demonstrativos e não representam estoque. Disponibilidade, preço e atendimento são confirmados diretamente com a loja. Direção e engenharia: SET77 Labs.</p>
   <button type="button" class="director" id="directorToggle" aria-pressed="false">
     <span class="director__dot" aria-hidden="true"></span><span data-director-label>Movimento: cinema</span>
@@ -509,5 +519,33 @@
 
 <a class="float-cta" id="floatCta" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span>Falar com a Belle</span></a>
 <div id="overlays"></div>
+<dialog id="belleInstagramDialog" class="belle-ig-dialog" aria-labelledby="belleIgTitle" aria-describedby="belleIgDesc">
+  <div class="belle-ig-dialog__inner">
+    <div class="belle-ig-dialog__header">
+      <div>
+        <p class="belle-ig-dialog__eyebrow">O UNIVERSO BELLE ALENCAR</p>
+        <h2 id="belleIgTitle">De qual Belle <em>você é?</em></h2>
+        <p id="belleIgDesc">Encontre a unidade ou o perfil que mais combina com você.</p>
+      </div>
+      <form method="dialog"><button type="submit" class="belle-ig-dialog__close" aria-label="Fechar seleção de Instagram">×</button></form>
+    </div>
+    <p class="belle-ig-dialog__group-label">Lojas e coleções</p>
+    <div class="belle-ig-dialog__grid">
+      <a href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer"><span>Araxá</span><small>@belle.alencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/frutal.bellealencar/" target="_blank" rel="noopener noreferrer"><span>Frutal</span><small>@frutal.bellealencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/catalao.bellealencar/" target="_blank" rel="noopener noreferrer"><span>Catalão</span><small>@catalao.bellealencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar.mineiros/" target="_blank" rel="noopener noreferrer"><span>Mineiros</span><small>@bellealencar.mineiros</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar.ibia/" target="_blank" rel="noopener noreferrer"><span>Ibiá</span><small>@bellealencar.ibia</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar.franca/" target="_blank" rel="noopener noreferrer"><span>Franca</span><small>@bellealencar.franca</small><b aria-hidden="true">↗</b></a>
+    </div>
+    <p class="belle-ig-dialog__group-label belle-ig-dialog__group-label--secondary">Pessoas e ocasiões</p>
+    <div class="belle-ig-dialog__grid belle-ig-dialog__grid--secondary">
+      <a href="https://www.instagram.com/gislayne.alencar/" target="_blank" rel="noopener noreferrer"><span>Gislayne Alencar</span><small>@gislayne.alencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar_eventos/" target="_blank" rel="noopener noreferrer"><span>Belle Eventos</span><small>@bellealencar_eventos</small><b aria-hidden="true">↗</b></a>
+    </div>
+    <p class="belle-ig-dialog__note">Perfis indicados pela marca. Atendimento, endereços e disponibilidade devem ser confirmados diretamente em cada unidade.</p>
+  </div>
+</dialog>
+
 </body>
 </html>
