@@ -16,6 +16,9 @@ const doc=new JSDOM(readFileSync('index.html','utf8')).window.document;
 for(const x of doc.querySelectorAll('script,svg,style,template'))x.remove();
 const names=new Set(['Belle Alencar','BELLE ALENCAR','WhatsApp','Instagram','MG','GO',
   'Araxá','Frutal','Catalão','Mineiros',
+  'Ibiá','Franca','Gislayne Alencar','Belle Eventos',
+  '@belle.alencar','@frutal.bellealencar','@catalao.bellealencar','@bellealencar.mineiros',
+  '@bellealencar.ibia','@bellealencar.franca','@gislayne.alencar','@bellealencar_eventos',
   'Av. Vereador João Sena, 103, Centro','Av. Coronel Delfino Nunes, 382',
   'Av. José Marcelino, 206, Centro','Quarta Avenida, 76, Centro']);
 const missing=new Set();
