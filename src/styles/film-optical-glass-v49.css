@@ -109,7 +109,7 @@ html #filme .film__chapters .chapter__card:focus-within{
   inset 0 -1px 0 var(--v49-inner);
 }
 html #filme .film__chapters .chapter__card .display{
- color:var(--v49-ink);
+ color:var(--v49-ink)!important;
  line-height:.97;
  letter-spacing:-.035em;
  font-size:clamp(2rem,1.17rem + 2.55vw,3.43rem);
@@ -119,12 +119,12 @@ html #filme .film__chapters .chapter--hero .display{
 }
 html #filme .film__chapters .chapter__card .display em,
 html #filme .film__chapters .chapter__card .fitting__selection{
- color:var(--v49-highlight);
+ color:var(--v49-highlight)!important;
 }
 html #filme .film__chapters .chapter__card .lede,
 html #filme .film__chapters .chapter__card .fineprint,
 html #filme .film__chapters .chapter__card .fitting__hint{
- color:var(--v49-copy);
+ color:var(--v49-copy)!important;
 }
 html #filme .film__chapters .chapter__card .lede{
  font-size:clamp(.82rem,.91vw,.96rem);line-height:1.46;
@@ -132,7 +132,7 @@ html #filme .film__chapters .chapter__card .lede{
 }
 html #filme .film__chapters .chapter__card .eyebrow,
 html #filme .film__chapters .chapter__card legend{
- color:var(--v49-highlight);
+ color:var(--v49-highlight)!important;
 }
 html #filme .film__chapters .chapter__card .fineprint{
  font-size:clamp(.62rem,.7vw,.73rem);line-height:1.45;
