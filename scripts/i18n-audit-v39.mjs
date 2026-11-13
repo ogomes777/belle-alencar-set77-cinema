@@ -14,7 +14,7 @@ for(const path of ['src/preferences/copy.ts','src/preferences/catalog-copy.ts','
 }
 const doc=new JSDOM(readFileSync('index.html','utf8')).window.document;
 for(const x of doc.querySelectorAll('script,svg,style,template'))x.remove();
-const names=new Set(['Belle Alencar','BELLE ALENCAR','WhatsApp','Instagram','MG','GO',
+const names=new Set(['×','Belle Alencar','BELLE ALENCAR','WhatsApp','Instagram','MG','GO',
   'Araxá','Frutal','Catalão','Mineiros',
   'Ibiá','Franca','Gislayne Alencar','Belle Eventos',
   '@belle.alencar','@frutal.bellealencar','@catalao.bellealencar','@bellealencar.mineiros',
