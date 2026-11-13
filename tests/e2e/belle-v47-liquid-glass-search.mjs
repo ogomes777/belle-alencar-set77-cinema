@@ -49,6 +49,11 @@ try{
    check(nav.overflow<=2,'Nav horizontal overflow '+nkey+': '+nav.overflow);
    await page.locator('#searchButton').click();
    await page.locator('#searchDialog .search-input').waitFor({state:'visible',timeout:15000});
+   // Reopening the overlay intentionally preserves prior typed queries.
+   // Normalize each theme run back to discovery mode before assertions.
+   if(await page.locator('#searchDialog .ba-search-clear').isVisible()){
+     await page.locator('#searchDialog .ba-search-clear').click();
+   }
    const ui=await page.evaluate(()=>{
      const root=document.getElementById('searchDialog');
      const field=root.querySelector('.ba-search-field');
