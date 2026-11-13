@@ -71,7 +71,15 @@ try{
   });
   for(let i=0;i<2;i++){
    await page.locator('#searchButton').click();
-   await page.waitForTimeout(160);
+   await page.locator('#searchDialog.is-open .ba-search-title').waitFor({state:'visible'});
+   await page.waitForTimeout(720);
+   const anim=await page.evaluate(()=>{
+    const e=document.querySelector('#searchDialog .ba-search-title');
+    return {events:window.__belleV48Starts,
+      name:getComputedStyle(e).animationName,
+      active:e.getAnimations().map(a=>({currentTime:a.currentTime,playState:a.playState}))};
+   });
+   console.log('V48 REOPEN '+width+' iteration='+i+' '+JSON.stringify(anim));
    await page.keyboard.press('Escape');
    await page.waitForFunction(()=>document.getElementById('searchDialog').hidden,null,{timeout:6000});
   }
