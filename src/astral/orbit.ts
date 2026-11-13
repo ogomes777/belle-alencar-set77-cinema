@@ -1,4 +1,4 @@
-import { CITIES, spherePoint, journey } from './geography';
+import { CITIES, REGIONS, spherePoint, journey } from './geography';
 import { docBox, scrollTop } from '../core/scroll-geometry';
 import { commerceApi } from '../commerce/api';
 import { clampGlobeZoom, wheelGlobeZoom, pinchGlobeZoom, easeGlobeZoom } from './gestures';
@@ -61,6 +61,55 @@ export function initStoreOrbit(): void {
   fetch('/geo/boundaries.json').then(r=>{if(!r.ok)throw Error('geo');return r.json();}).then((data:Border[])=>{borders=data.map(b=>({...b,rings:b.rings.map(r=>r.map(p=>spherePoint(p[1]!,p[0]!)))}));wake();}).catch(()=>{caption.textContent='Arraste para girar · escolha sua loja abaixo';});
   let navigation=true, mapAfterJourney=false, pendingEntry=false;
   let selected:string|null=null, zoom=1, focusAt=0, arrival=1;
+  // The existing planet is the only projection engine. This compact
+  // geographic navigator lists the six real city centers, never imaginary
+  // shop entrances, and narrows to one city after selection.
+  const geoTrail=section.querySelector<HTMLElement>('[data-geo-trail]');
+  let overview=false;
+  const geoUi=(tag:string,cls:string,label:string):HTMLElement=>{
+    const el=document.createElement(tag);el.className=cls;el.textContent=label;return el;
+  };
+  function updateGeoTrail(){
+    if(!geoTrail)return;
+    const city=cities.find(c=>c.name===selected);
+    const root=geoUi('div','stores__geo-hierarchy','');
+    root.append(geoUi('strong','stores__geo-country','Brasil'));
+    if(city&&!overview){
+      const state=geoUi('span','stores__geo-state',city.state);
+      const leaf=geoUi('strong','stores__geo-city',city.name);
+      root.append(geoUi('span','stores__geo-chevron','›'),state,geoUi('span','stores__geo-chevron','›'),leaf);
+      const reset=document.createElement('button');reset.type='button';
+      reset.className='stores__geo-reset';reset.textContent='Ver todas as cidades';
+      reset.addEventListener('click',()=>{
+        overview=true;navigation=false;mapAfterJourney=false;
+        manualZoom=manualZoomTarget=1;zoom=1;
+        angle=-2.42;orientation=[0,0,0,1];rotate(0,.34);
+        caption.textContent='Brasil · Minas Gerais, Goiás e São Paulo · seis cidades';
+        section!.dataset.geoStage='Brasil';
+        updateGeoTrail();wake();
+      });
+      geoTrail.replaceChildren(root,reset);
+      return;
+    }
+    const groups=geoUi('div','stores__geo-groups','');
+    for(const region of REGIONS){
+      const subset=cities.filter(c=>c.state===region.name);
+      const group=geoUi('div','stores__geo-group','');
+      group.append(geoUi('strong','stores__geo-state',region.code));
+      for(const c of subset){
+        const button=document.createElement('button');button.type='button';
+        button.className='stores__geo-pick';button.textContent=c.name;
+        button.setAttribute('aria-label','Selecionar Belle '+c.name);
+        button.addEventListener('click',()=>{
+          if(selected===c.name){overview=false;updateGeoTrail();wake();return;}
+          void commerceApi()?.selectStore(c.id,button);
+        });
+        group.append(button);
+      }
+      groups.append(group);
+    }
+    geoTrail.replaceChildren(root,groups);
+  }
   let manualZoom=1, manualZoomTarget=1;
   const touches=new Map<number,{x:number;y:number}>();
   let pinchDistance=0, dragTravel=0;
@@ -95,12 +144,12 @@ export function initStoreOrbit(): void {
   window.addEventListener('scroll',()=>{if(!flightFrame)flightFrame=requestAnimationFrame(updateFlight);},{passive:true});
   flight.hidden=true;
   const caption=document.createElement('p'); caption.className='stores__globe-caption';
-  caption.setAttribute('role','status'); caption.textContent='Quatro cidades conectadas · arraste para girar';
+  caption.setAttribute('role','status'); caption.textContent='Brasil · Minas Gerais, Goiás e São Paulo · seis cidades';
   canvas.insertAdjacentElement('afterend',caption);
   function syncCity(userChange=false){
     const next=commerceApi()?.storeCity()??null;
     if(next===selected)return;
-    selected=next;mapAfterJourney=false;flight.hidden=true;arrival=1;focusAt=performance.now();velocityX=velocityY=0;
+    selected=next;overview=!next;mapAfterJourney=false;flight.hidden=true;arrival=1;focusAt=performance.now();velocityX=velocityY=0;
     manualZoom=manualZoomTarget=1;
     const city=cities.find(c=>c.name===selected);
     if(city){
@@ -108,11 +157,11 @@ export function initStoreOrbit(): void {
       navigation=true;pendingEntry=!visible;
       const rect=canvas!.getBoundingClientRect();
       if(userChange&&(rect.bottom<80||rect.top>innerHeight-80))canvas!.scrollIntoView({behavior:still()?'auto':'smooth',block:'center'});
-      caption.textContent=`${city.state} → ${city.name} · Ver no mapa para o endereço da loja`;
+      caption.textContent=`Brasil → ${city.state} → ${city.name} · ver no Google Maps`;
     }
-    wake();
+    updateGeoTrail();wake();
   }
-  queueMicrotask(()=>{syncCity();commerceApi()?.onChange(()=>syncCity(true));});
+  queueMicrotask(()=>{updateGeoTrail();syncCity();commerceApi()?.onChange(()=>syncCity(true));});
   rotate(0,.34);
   const markerButtons=cities.map(city=>{
     const button=document.createElement('button');button.type='button';button.className='stores__city-hit';
@@ -120,9 +169,9 @@ export function initStoreOrbit(): void {
     button.addEventListener('click',async()=>{
       await commerceApi()?.selectStore(city.id,button);
       if(commerceApi()?.storeCity()!==city.name)return;
-      selected=city.name;navigation=true;pendingEntry=false;focusAt=performance.now();mapAfterJourney=true;
+      selected=city.name;overview=false;navigation=true;pendingEntry=false;focusAt=performance.now();mapAfterJourney=true;
       manualZoom=manualZoomTarget=1;
-      velocityX=velocityY=0;wake();
+      velocityX=velocityY=0;updateGeoTrail();wake();
     });
     queueMicrotask(()=>canvas!.parentElement!.append(button));return button;
   });
@@ -151,7 +200,7 @@ export function initStoreOrbit(): void {
       zoom=camera.zoom;angle=(camera.lon-90)*Math.PI/180;
       orientation=[0,0,0,1];rotate(0,-camera.lat*Math.PI/180);
       section!.dataset.geoStage=camera.label;
-      const message=`${camera.label} · ${city.name}, ${city.state}`;
+      const message=`Brasil → ${city.state} → ${city.name}`;
       if(caption.textContent!==message)caption.textContent=message;
       if(mapAfterJourney&&(still()||now-focusAt>=4200)){
         mapAfterJourney=false;navigation=false;zoom=1;
@@ -227,7 +276,7 @@ export function initStoreOrbit(): void {
       ctx.strokeStyle=border.kind==='state'?'rgba(255,218,135,.85)':'rgba(218,181,107,.22)';ctx.stroke();
     }
     if(zoom>2){
-      for(const region of [{name:'Minas Gerais',lat:-18.5,lon:-44.6},{name:'Goiás',lat:-15.8,lon:-49.6}]){
+      for(const region of REGIONS){
         const p=project(spherePoint(region.lat,region.lon));
         if(p.z>0){ctx.font='12px sans-serif';ctx.fillStyle='#f1d7a1';ctx.textAlign='center';ctx.fillText(region.name,p.x,p.y);}
       }
@@ -235,13 +284,18 @@ export function initStoreOrbit(): void {
     // Geographic anchors with separated callouts: cities are close on a world globe.
     markerButtons.forEach(b=>{b.hidden=true;});
     cities.forEach((city,i)=>{
-      if(selected && city.name!==selected)return;
+      if(selected && !overview && city.name!==selected)return;
       const lat=city.lat*Math.PI/180,lon=city.lon*Math.PI/180;
       const p=project({x:Math.cos(lat)*Math.cos(lon),y:-Math.sin(lat),z:Math.cos(lat)*Math.sin(lon)});
       if(p.z<-.12)return;
-      const side=i%2?1:-1, split=still()?1:Math.max(0,Math.min(1,(arrival-.85)/.15));
-      const labelX=selected?p.x:p.x+side*28*split;
-      const labelY=selected?p.y-38:p.y+(i<2?48:-48)*split;
+      // Callout lanes stay clear even when Ibiá and Araxá occupy adjacent
+      // real-world coordinates. Pins remain anchored to their true lat/lon.
+      const lanes=[[-84,-72],[84,-72],[-100,0],[100,0],[-76,69],[92,69]] as const;
+      const lane=lanes[i]??[0,0];
+      const split=still()?1:Math.max(0,Math.min(1,(arrival-.35)/.3));
+      const focused=!!selected&&!overview;
+      const labelX=focused?p.x:p.x+lane[0]*split;
+      const labelY=focused?p.y-38:p.y+lane[1]*split;
       const marker=markerButtons[i]!;
       if(labelX>20&&labelX<w-20&&labelY>35&&labelY<w-25){
         marker.hidden=false;marker.style.left=`${labelX/w*100}%`;marker.style.top=`${labelY-10}px`;

@@ -1,4 +1,4 @@
-/** Additional user-facing four-language copy (v39–v42). */
+/** Additional user-facing four-language copy (v39–v44). */
 export const additionalPairs = [
   [
     "Menu",
@@ -857,5 +857,47 @@ export const additionalPairs = [
     "For everyday life, celebrations and moments worth remembering: every look carries something of the person who chooses it.",
     "Para el día a día, las celebraciones y los momentos dignos de recordar: cada look refleja algo de quien lo elige.",
     "Per ogni giorno, per le feste e per i momenti da ricordare: ogni look racconta qualcosa di chi lo sceglie."
+  ],
+  [
+    "Seis cidades, uma Belle",
+    "Six cities, one Belle",
+    "Seis ciudades, una Belle",
+    "Sei città, una Belle"
+  ],
+  [
+    "Endereço da unidade a confirmar",
+    "Store address to be confirmed",
+    "Dirección de la tienda por confirmar",
+    "Indirizzo del negozio da confermare"
+  ],
+  [
+    "Ver cidade no mapa ↗",
+    "View city on map ↗",
+    "Ver la ciudad en el mapa ↗",
+    "Vedi la città sulla mappa ↗"
+  ],
+  [
+    "Ver Ibiá em Minas Gerais no Google Maps (cidade, não endereço da loja)",
+    "View Ibiá in Minas Gerais on Google Maps (city, not store address)",
+    "Ver Ibiá en Minas Gerais en Google Maps (ciudad, no dirección de la tienda)",
+    "Vedi Ibiá nel Minas Gerais su Google Maps (città, non indirizzo del negozio)"
+  ],
+  [
+    "Ver Franca em São Paulo no Google Maps (cidade, não endereço da loja)",
+    "View Franca in São Paulo on Google Maps (city, not store address)",
+    "Ver Franca en São Paulo en Google Maps (ciudad, no dirección de la tienda)",
+    "Vedi Franca a San Paolo su Google Maps (città, non indirizzo del negozio)"
+  ],
+  [
+    "Navegação geográfica das lojas",
+    "Stores geographic navigation",
+    "Navegación geográfica de las tiendas",
+    "Navigazione geografica dei negozi"
+  ],
+  [
+    "Ver todas as cidades",
+    "View all cities",
+    "Ver todas las ciudades",
+    "Vedi tutte le città"
   ]
 ] as const;
