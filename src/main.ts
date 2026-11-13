@@ -25,6 +25,7 @@ import './styles/couture-glass-collection-v46.css'; // Four post-throw glass car
 import './styles/liquid-glass-nav-v47.css'; // Navigation glass, tactile icon buttons and theme overrides.
 import './styles/editorial-search-v47.css'; // Full search atelier redesign; semantic live result filters.
 import './styles/prismatic-search-v48.css'; // Search-only left-to-right reveal, prismatic type and pill glass.
+import './styles/film-optical-glass-v49.css'; // Seven compact optical film captions, warm dark glass and mobile-safe bounds.
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
