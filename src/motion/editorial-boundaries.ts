@@ -42,8 +42,10 @@ export const BOUNDARIES: Boundary[] = [
   { section: '#colecao', veil: 'varredura', chapter: '03 · Coleção', title: ['A coleção', '.'] },
   { section: '#como-comprar', veil: 'dobra', chapter: '04 · Como comprar', title: ['Do clique', ' à loja.'] },
   { section: '#lojas', veil: 'circulo', chapter: '05 · Lojas', title: ['Quatro cidades', '.'] },
-  { section: '#atendimento', veil: 'lateral', chapter: '06 · Atendimento', title: ['Com', ' você.'] },
-  { section: '.finale', veil: 'veludo', chapter: '07 · Assinatura', title: ['Belle', ' Alencar.'] },
+  // V43: permuta de micro-intros. Identidades visuais, não os blocos de conteúdo.
+  // O capítulo 06 segue antes do 07 para manter a ordem narrativa.
+  { section: '#atendimento', veil: 'veludo', chapter: '06 · Assinatura', title: ['Belle', ' Alencar.'] },
+  { section: '.finale', veil: 'lateral', chapter: '07 · Atendimento', title: ['Com', ' você.'] },
 ];
 
 /** Smoothstep progress; complete while the anchor still sits in the lower viewport. */
