@@ -19,13 +19,16 @@ try{
    const own=e=>[...e.childNodes].some(n=>n.nodeType===3&&n.textContent?.trim());
    const textEls=[...document.body.querySelectorAll('*')].filter(e=>e instanceof HTMLElement && own(e));
    const bad=textEls.filter(el=>!names.some(name=>getComputedStyle(el).fontFamily.includes(name))).slice(0,8).map(el=>el.outerHTML.slice(0,160));
-   const check=selector=>getComputedStyle(document.querySelector(selector)).fontFamily;
+   const check=selector=>{
+    const el=document.querySelector(selector);
+    return el?getComputedStyle(el).fontFamily:null;
+   };
    const rect=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {width:r.width,height:r.height}};
    return {bad,count:textEls.length,
     selected:{
      intro:check('.intro__signature-ink'),hero:check('#inicio .display'),
      italic:check('#inicio .display em'),collection:check('#colecaoTitle'),
-     product:check('.pcard__title'),ui:check('.store-pill__label'),body:check('#como-comprar .lede')
+     product:check('.pcard__title')??check('.store-card h3'),ui:check('.store-pill__label'),body:check('#como-comprar .lede')
     },overflow:document.documentElement.scrollWidth-innerWidth,
     film:rect('#inicio .chapter__card'),mobile:innerWidth<900
    };
@@ -36,7 +39,7 @@ try{
   assert(results.selected.hero.includes('Wasted Vindey'),'Editorial hero family');
   assert(results.selected.italic.includes('Allesya'),'Calligraphic phrase');
   assert(results.selected.collection.includes('Savage Roses'),'Campaign serif family');
-  assert(results.selected.product.includes('Playfair Display'),'Product serif family');
+  assert(results.selected.product?.includes('Playfair Display'),'Catalog/store serif family');
   assert(results.selected.ui.includes('Gebuk'),'CTA family');
   assert(results.selected.body.includes('Playfair Display'),'Body reading family');
   assert(results.overflow<=3,'Horizontal overflow '+width+' '+results.overflow);
