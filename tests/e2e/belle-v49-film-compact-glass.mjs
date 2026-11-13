@@ -52,6 +52,15 @@ try{
          cardInk:getComputedStyle(c).getPropertyValue('--v49-ink'),
          titleInk:getComputedStyle(h).getPropertyValue('--v49-ink'),
          titleStyle:h.getAttribute('style'),
+         titleMatches:h.matches('html #filme .film__chapters .chapter__card .display'),
+         titleTransition:getComputedStyle(h).transition,
+         titleAnimation:getComputedStyle(h).animationName,
+         titleAnimations:h.getAnimations().map(a=>({
+           playState:a.playState,
+           animationType:a.constructor.name,
+           effectFrames:a.effect&&'getKeyframes' in a.effect
+            ?a.effect.getKeyframes().map(f=>Object.keys(f)).slice(0,3):[]
+         })),
          scrollHeight:c.scrollHeight,clientHeight:c.clientHeight,
          maxHeight:st.maxHeight,
          categories:[...c.querySelectorAll('.portal-list button')].map(x=>({
@@ -89,7 +98,7 @@ try{
      if(theme==='dark'){
        check(c.base.includes('25, 15, 19')||c.base.includes('25,15,19'),
          'dark card must be warm smoke not gray '+key+' '+c.base);
-       check(c.text.includes('255, 241, 226'),'dark text lost contrast '+key+' '+c.text+' root='+result.rootTheme+' var='+result.filmResolvedInk+' cardInk='+c.cardInk+' titleInk='+c.titleInk+' inline='+c.titleStyle+' match='+result.darkRuleMatches+' bg='+c.base);
+       check(c.text.includes('255, 241, 226'),'dark text lost contrast '+key+' '+c.text+' root='+result.rootTheme+' var='+result.filmResolvedInk+' cardInk='+c.cardInk+' titleInk='+c.titleInk+' inline='+c.titleStyle+' titleMatch='+c.titleMatches+' trans='+c.titleTransition+' animation='+c.titleAnimation+' actualAnimations='+JSON.stringify(c.titleAnimations)+' match='+result.darkRuleMatches+' bg='+c.base);
      }
    }
    check(result.cards.find(x=>x.id==='categorias').categories.length===8,
