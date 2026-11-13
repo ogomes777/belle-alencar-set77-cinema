@@ -104,11 +104,15 @@ try{
  const page=await ctx.newPage();
  const locales={pt:'Explorar a coleção',en:'Explore the collection',
   es:'Explorar la colección',it:'Scopri la collezione'};
+ // Set one locale at a time. page.addInitScript calls accumulate across
+ // navigations; a previous locale would overwrite the later one.
+ await page.goto(base+'/?tier=static#como-comprar',{waitUntil:'domcontentloaded'});
  for(const [locale,expected] of Object.entries(locales)){
-   await page.addInitScript(locale=>{
-     try{localStorage.setItem('belle:v31:locale',locale);sessionStorage.setItem('belle:v4:intro','1')}catch{}
+   await page.evaluate(locale=>{
+     localStorage.setItem('belle:v31:locale',locale);
+     sessionStorage.setItem('belle:v4:intro','1');
    },locale);
-   await page.goto(base+'/?tier=static#como-comprar',{waitUntil:'domcontentloaded'});
+   await page.reload({waitUntil:'domcontentloaded'});
    await page.waitForFunction(locale=>document.documentElement.lang.startsWith(locale),locale,{timeout:16000});
    const d=await page.locator('#como-comprar .how__collection-cta').evaluate(el=>({
       text:el.querySelector('.how__collection-cta__label')?.textContent.trim(),
