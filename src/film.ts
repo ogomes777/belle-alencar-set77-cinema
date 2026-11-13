@@ -232,20 +232,37 @@ export function initFilm(director: Director): void {
       },{passive:true});
     }
   });
+  // V49: an editorial lens landing, not a generic fade. Use the existing
+  // observer and CSS glint, but re-arm ONLY after the card actually leaves the
+  // viewport so reverse scroll also feels intentional. No extra scroll handler.
+  const lastGlassReveal=new WeakMap<HTMLElement,number>();
   const glassObserver=new IntersectionObserver(entries=>{
     for(const entry of entries){
-      if(!entry.isIntersecting)continue;
       const card=entry.target as HTMLElement;
-      card.classList.add('is-glass-appeared');
-      glassObserver.unobserve(card);
-      if(!reducedGlass.matches && !document.documentElement.classList.contains('poster-mode')){
-        card.animate([
-          {opacity:0.62,transform:'translate3d(0,22px,0) scale(.985)'},
-          {opacity:1,transform:'translate3d(0,0,0) scale(1)'}
-        ],{duration:720,easing:'cubic-bezier(.16,1,.3,1)'});
+      if(!entry.isIntersecting){
+        card.classList.remove('is-glass-appeared');
+        continue;
       }
+      if(card.classList.contains('is-glass-appeared'))continue;
+      card.classList.add('is-glass-appeared');
+      const now=performance.now();
+      if(now-(lastGlassReveal.get(card)??-Infinity)<850)continue;
+      lastGlassReveal.set(card,now);
+      if(reducedGlass.matches ||
+         document.documentElement.classList.contains('poster-mode') ||
+         document.documentElement.classList.contains('perf-lite'))continue;
+      const narrow=innerWidth<=899;
+      card.animate([
+        {offset:0,opacity:narrow?0.20:0.10,
+         transform:narrow?'translate3d(0,24px,0) scale(.93)':
+                          'translate3d(0,42px,0) scale(.90)'},
+        {offset:.69,opacity:1,
+         transform:narrow?'translate3d(0,-3px,0) scale(1.012)':
+                          'translate3d(0,-6px,0) scale(1.022)'},
+        {offset:1,opacity:1,transform:'translate3d(0,0,0) scale(1)'}
+      ],{duration:narrow?760:970,easing:'cubic-bezier(.16,1,.30,1)'});
     }
-  },{threshold:0.13,rootMargin:'0px 0px -6% 0px'});
+  },{threshold:0.12,rootMargin:'0px 0px -5% 0px'});
   glassCards.forEach(card=>glassObserver.observe(card));
 
   // ---------- 3D sob demanda ----------
