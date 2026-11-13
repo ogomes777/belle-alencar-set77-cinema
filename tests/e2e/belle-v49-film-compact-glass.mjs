@@ -24,6 +24,9 @@ try{
   await page.locator('#filme #provador .chapter__card').waitFor({state:'attached',timeout:17000});
   await page.evaluate(()=>document.fonts?.ready);
   for(const theme of ['light','dark','rose']){
+   // Theme transitions can animate color for a few frames. Sample the stable
+   // rendered state rather than immediately after changing the root data attr.
+   await page.waitForTimeout(850);
    const result=await page.evaluate(theme=>{
     document.documentElement.dataset.belleTheme=theme;
     const cards=[...document.querySelectorAll('#filme .film__chapters .chapter__card')];
