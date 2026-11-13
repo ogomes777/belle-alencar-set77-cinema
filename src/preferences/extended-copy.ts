@@ -1,4 +1,4 @@
-/** Additional user-facing four-language copy (v39–v44). */
+/** Additional user-facing four-language copy (v39–v47). */
 export const additionalPairs = [
   [
     "Menu",
@@ -899,5 +899,71 @@ export const additionalPairs = [
     "View all cities",
     "Ver todas las ciudades",
     "Vedi tutte le città"
+  ],
+  [
+    "Tudo",
+    "All",
+    "Todo",
+    "Tutto"
+  ],
+  [
+    "Peças",
+    "Pieces",
+    "Prendas",
+    "Capi"
+  ],
+  [
+    "Experiência",
+    "Experience",
+    "Experiencia",
+    "Esperienza"
+  ],
+  [
+    "Sua próxima descoberta.",
+    "Your next discovery.",
+    "Tu próximo descubrimiento.",
+    "La tua prossima scoperta."
+  ],
+  [
+    "CURADORIA BELLE",
+    "BELLE CURATION",
+    "SELECCIÓN BELLE",
+    "SELEZIONE BELLE"
+  ],
+  [
+    "Filtrar resultados da busca",
+    "Filter search results",
+    "Filtrar resultados de búsqueda",
+    "Filtra i risultati di ricerca"
+  ],
+  [
+    "Encontre sua Belle.",
+    "Find your Belle store.",
+    "Encuentra tu tienda Belle.",
+    "Trova il tuo negozio Belle."
+  ],
+  [
+    "Explore a experiência.",
+    "Explore the experience.",
+    "Explora la experiencia.",
+    "Esplora l'esperienza."
+  ],
+  [
+    "Digite o nome da cidade para encontrar sua loja.",
+    "Type a city name to find your store.",
+    "Escribe una ciudad para encontrar tu tienda.",
+    "Digita il nome di una città per trovare il tuo negozio."
+  ],
+  [
+    "Pesquise por uma parte da experiência, como provador ou coleção.",
+    "Search an experience section, such as fitting room or collection.",
+    "Busca una parte de la experiencia, como probador o colección.",
+    "Cerca una sezione dell'esperienza, come camerino o collezione."
+  ],
+  [
+    "Recomeçar busca",
+    "Start a new search",
+    "Iniciar otra búsqueda",
+    "Ricomincia la ricerca"
   ]
 ] as const;
