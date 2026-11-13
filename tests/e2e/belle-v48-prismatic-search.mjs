@@ -72,7 +72,10 @@ try{
   for(let i=0;i<2;i++){
    await page.locator('#searchButton').click();
    await page.locator('#searchDialog.is-open .ba-search-title').waitFor({state:'visible'});
-   await page.waitForTimeout(720);
+   // Headless Chromium can defer its first rAF on graphics-heavy viewports;
+   // wait for the actual CSS animationstart instead of assuming wall-clock time.
+   await page.waitForFunction(expected=>window.__belleV48Starts>=expected,
+     i+1,{timeout:15000});
    const anim=await page.evaluate(()=>{
     const e=document.querySelector('#searchDialog .ba-search-title');
     return {events:window.__belleV48Starts,
