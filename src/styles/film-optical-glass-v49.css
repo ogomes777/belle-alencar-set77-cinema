@@ -137,6 +137,17 @@ html #filme .film__chapters .chapter__card legend{
 html #filme .film__chapters .chapter__card .fineprint{
  font-size:clamp(.62rem,.7vw,.73rem);line-height:1.45;
 }
+/* Theme switching must not leave old dark glyphs over an already updated
+ * glass surface. Previous global transitions made color catch up after paint.
+ * The reveal animations target the card/word masks, not these color values. */
+html #filme .film__chapters .chapter__card .display,
+html #filme .film__chapters .chapter__card .display em,
+html #filme .film__chapters .chapter__card .lede,
+html #filme .film__chapters .chapter__card .eyebrow,
+html #filme .film__chapters .chapter__card .fineprint,
+html #filme .film__chapters .chapter__card .fitting__hint{
+ transition:none!important;
+}
 /* The 8 categories were a tall vertical list. Four paired rows reduce
  * obstruction without dropping actions or changing their attributes. */
 html #filme .film__chapters .chapter__card .portal-list{
