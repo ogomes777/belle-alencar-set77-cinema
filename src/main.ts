@@ -27,6 +27,8 @@ import './styles/editorial-search-v47.css'; // Full search atelier redesign; sem
 import './styles/prismatic-search-v48.css'; // Search-only left-to-right reveal, prismatic type and pill glass.
 import './styles/film-optical-glass-v49.css'; // Seven compact optical film captions, warm dark glass and mobile-safe bounds.
 import './styles/film-mobile-impact-v50.css'; // Compact mobile cards and one-shot optical impact reveal.
+import './styles/editorial-typography-v51.css'; // Full-page five-role editorial typography and accessible theme contrast.
+import { initTypographyCinema } from './motion/editorial-typography-v51';
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
@@ -51,6 +53,7 @@ initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
+initTypographyCinema(); // Lightweight scroll-based editorial text reveals, separate from film.
 initSections();
 initBelleInstagramDirectory(); // Accessible Instagram profile selector; no changes to existing navigation.
 initConciergeReveal(); // Codex: local pointer/touch reveal in concierge only.

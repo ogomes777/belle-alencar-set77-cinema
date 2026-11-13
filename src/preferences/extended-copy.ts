@@ -842,9 +842,10 @@ export const additionalPairs = [
   ],
   [
     "Mais do que vestir, a Belle traduz presença, personalidade e escolha.",
-    "More than getting dressed, Belle expresses presence, personality and choice.",
-    "Más que vestir, Belle expresa presencia, personalidad y elección.",
-    "Più che vestire, Belle esprime presenza, personalità e scelta."
+    "Peças para expressar quem você é, do cotidiano às ocasiões que merecem presença.",
+    "Pieces that express who you are, from everyday moments to occasions worth showing up for.",
+    "Prendas que expresan quién eres, de cada día a las ocasiones que merecen presencia.",
+    "Capi che esprimono chi sei, dalla quotidianità alle occasioni da ricordare."
   ],
   [
     "Na trajetória de Gislayne de Alencar em Araxá, moda feminina e acessórios se encontram em uma curadoria que valoriza a expressão de cada mulher.",

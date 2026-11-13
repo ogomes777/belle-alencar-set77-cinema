@@ -7,9 +7,10 @@ export const phrasePairs = [
   ],
   [
     "Uma assinatura. Uma presença.",
-    "A signature. A presence.",
-    "Una firma. Una presencia.",
-    "Una firma. Una presenza."
+    "Seu estilo deixa assinatura.",
+    "Your style leaves a signature.",
+    "Tu estilo deja huella.",
+    "Il tuo stile lascia il segno."
   ],
   [
     "MODA & ACESSÓRIOS",
@@ -151,9 +152,10 @@ export const phrasePairs = [
   ],
   [
     "Araxá, Frutal, Catalão e Mineiros. Role para entrar na loja ou vá direto ao que procura.",
-    "Araxá, Frutal, Catalão and Mineiros. Scroll into the boutique or head straight to what you are looking for.",
-    "Araxá, Frutal, Catalão y Mineiros. Desliza para entrar en la boutique o ve directamente a lo que buscas.",
-    "Araxá, Frutal, Catalão e Mineiros. Scorri per entrare nella boutique o vai direttamente a ciò che cerchi."
+    "Entre na Belle, explore a coleção e escolha sua loja para consultar suas peças favoritas.",
+    "Step into Belle, explore the collection and choose your boutique to ask about your favorites.",
+    "Entra en Belle, explora la colección y elige tu tienda para consultar tus favoritos.",
+    "Entra da Belle, esplora la collezione e scegli la tua boutique per chiedere dei tuoi capi preferiti."
   ],
   [
     "Ver a coleção",
@@ -193,9 +195,10 @@ export const phrasePairs = [
   ],
   [
     "A porta abre no seu ritmo. É só continuar.",
-    "The door opens at your pace. Just keep scrolling.",
-    "La puerta se abre a tu ritmo. Solo tienes que seguir.",
-    "La porta si apre al tuo ritmo. Continua a scorrere."
+    "Siga a experiência e encontre a peça que combina com você.",
+    "Keep exploring and find a piece that feels like you.",
+    "Sigue explorando y encuentra una prenda que vaya contigo.",
+    "Continua a esplorare e trova un capo che ti rappresenti."
   ],
   [
     "03 · Arara viva",
@@ -217,9 +220,10 @@ export const phrasePairs = [
   ],
   [
     "Deslize para os lados, traga uma peça para perto e clique para ver. Gostou? Ela voa para a sua sacola.",
-    "Slide sideways, bring a piece closer and tap to explore. Love it? Watch it fly into your bag.",
-    "Desliza a los lados, acerca una prenda y tócala para verla. ¿Te gusta? Volará hasta tu bolsa.",
-    "Scorri lateralmente, avvicina un capo e toccalo per scoprirlo. Ti piace? Volerà nella tua borsa."
+    "Deslize entre as peças, toque na sua favorita e salve na sacola. A loja confirma a disponibilidade.",
+    "Browse the pieces, tap your favorite and save it in your bag. The boutique confirms availability.",
+    "Desliza entre las prendas, toca tu favorita y guárdala en la bolsa. La tienda confirma la disponibilidad.",
+    "Scorri tra i capi, tocca il tuo preferito e salvalo nella borsa. La boutique conferma la disponibilità."
   ],
   [
     "30 peças sintéticas isoladas, em vista frontal. Catálogo, tamanhos e disponibilidade reais são confirmados pela loja.",
@@ -481,9 +485,10 @@ export const phrasePairs = [
   ],
   [
     "Comece pelo momento. A gente mostra as peças que combinam com ele.",
-    "Start with your plans. We'll show you pieces that fit the moment.",
-    "Empieza por la ocasión. Te mostramos prendas que encajan con el momento.",
-    "Parti dall'occasione. Ti mostriamo i capi perfetti per quel momento."
+    "Escolha a ocasião e descubra os looks que combinam com ela.",
+    "Choose the occasion and discover looks made for that moment.",
+    "Elige la ocasión y descubre los looks que mejor combinan.",
+    "Scegli l'occasione e scopri i look che la valorizzano."
   ],
   [
     "Dia a dia",
@@ -553,15 +558,17 @@ export const phrasePairs = [
   ],
   [
     "Escolha com calma.",
-    "Take your time.",
-    "Elige con calma.",
-    "Scegli con calma."
+    "Encontre sua favorita.",
+    "Find your favorite.",
+    "Encuentra tu favorita.",
+    "Trova il tuo preferito."
   ],
   [
     "A loja confirma o resto.",
-    "The boutique confirms the details.",
-    "La tienda confirma los detalles.",
-    "Il negozio conferma i dettagli."
+    "Confirme com a Belle.",
+    "Confirm it with Belle.",
+    "Confírmalo con Belle.",
+    "Conferma con Belle."
   ],
   [
     "Pré-lançamento.",
@@ -631,9 +638,10 @@ export const phrasePairs = [
   ],
   [
     "Descubra peças, monte sua seleção e conte com a Belle da sua cidade para cuidar dos detalhes.",
-    "Discover your favorites, create a selection and let your local Belle boutique take care of the details.",
-    "Descubre prendas, crea tu selección y deja que Belle de tu ciudad se ocupe de los detalles.",
-    "Scopri i capi, crea la tua selezione e lascia che Belle nella tua città si occupi dei dettagli."
+    "Explore a coleção, monte sua sacola de interesse e fale com a sua unidade para confirmar tamanho e disponibilidade.",
+    "Explore the collection, save your favorites and contact your boutique to confirm sizes and availability.",
+    "Explora la colección, guarda tus favoritos y habla con tu tienda para confirmar tallas y disponibilidad.",
+    "Esplora la collezione, salva i preferiti e contatta la boutique per confermare taglie e disponibilità."
   ],
   [
     "Sua Belle, na sua cidade",
@@ -715,9 +723,10 @@ export const phrasePairs = [
   ],
   [
     "Escolha sua loja. Sua sacola e suas preferências ficam salvas neste navegador e você pode trocar quando quiser.",
-    "Choose your store. Your bag and preferences are saved in this browser, and you can switch whenever you wish.",
-    "Elige tu tienda. Tu bolsa y tus preferencias se guardan en este navegador y puedes cambiarlas cuando quieras.",
-    "Scegli il tuo negozio. La borsa e le preferenze restano salvate nel browser e puoi cambiarle quando vuoi."
+    "Escolha sua unidade e continue com seus favoritos. A sacola fica salva neste navegador, mesmo se você trocar de loja.",
+    "Choose your boutique and keep your favorites. Your bag stays saved in this browser, even if you switch stores.",
+    "Elige tu tienda y conserva tus favoritos. Tu bolsa queda guardada en este navegador aunque cambies de tienda.",
+    "Scegli la tua boutique e conserva i preferiti. La borsa resta salvata in questo browser anche se cambi negozio."
   ],
   [
     "Ver no mapa ↗",
@@ -757,9 +766,10 @@ export const phrasePairs = [
   ],
   [
     "Tamanho, combinação, ocasião: mande uma mensagem e a equipe ajuda você a escolher.",
-    "Sizing, styling or an occasion? Send a message and our team will help you choose.",
-    "¿Talla, combinación u ocasión? Envíanos un mensaje y te ayudamos a elegir.",
-    "Taglia, abbinamenti o occasione? Scrivici e il team ti aiuterà a scegliere."
+    "Quer ajuda para escolher? Pergunte sobre tamanhos, combinações e disponibilidade diretamente à Belle.",
+    "Need help choosing? Ask Belle about sizes, styling and availability.",
+    "¿Necesitas ayuda para elegir? Consulta con Belle tallas, combinaciones y disponibilidad.",
+    "Hai bisogno di aiuto? Chiedi a Belle taglie, abbinamenti e disponibilità."
   ],
   [
     "Falar no WhatsApp",

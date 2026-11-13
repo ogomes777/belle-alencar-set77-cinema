@@ -1,0 +1,185 @@
+/* BELLE ALENCAR V51 — FIVE EDITORIAL ROLES, ENTIRE EXPERIENCE
+ * Reference faces: Gebuk / Allesya / Savage Roses / Wasted Vindey / Playfair Display
+ * Only Playfair is open licensed. Other faces are optional local names until
+ * licensed webfont kits have been purchased and integrated.
+ * Current OFL stand-ins: Righteous / Pinyon Script / Bodoni Moda / Italiana.
+ * Keep text live/selectable/translatable. No text sprites and no continuous GPU animation.
+ */
+:root {
+ --v51-gebuk:'Gebuk','Righteous','Arial Rounded MT Bold',sans-serif;
+ --v51-allesya:'Allesya','Pinyon Script','Brush Script MT',cursive;
+ --v51-savage:'Savage Roses','Bodoni Moda','Bodoni MT',Didot,serif;
+ --v51-wasted:'Wasted Vindey','Italiana','Bodoni Moda',Didot,serif;
+ --v51-playfair:'Playfair Display',Georgia,serif;
+ --v51-gleam:rgba(164,127,69,.32);
+ --v51-accent-1:#74532d;
+ --v51-accent-2:#be9460;
+ --v51-accent-3:#785e4b;
+ --serif:var(--v51-wasted);
+ --sans:var(--v51-playfair);
+}
+html[data-belle-theme='dark'] {
+ --v51-gleam:rgba(239,187,125,.31);
+ --v51-accent-1:#e8c99d;
+ --v51-accent-2:#fff0d5;
+ --v51-accent-3:#e1af81;
+}
+html[data-belle-theme='rose'] {
+ --v51-gleam:rgba(193,106,144,.28);
+ --v51-accent-1:#9d5778;
+ --v51-accent-2:#d796af;
+ --v51-accent-3:#7f4667;
+}
+/* Universal coverage: absolutely every on-screen text node inherits one
+ * of the five editorial families, including labels created later by JS.
+ * No original DM Sans, Cormorant or system-ui style can leak through.
+ * Scoped !important overrides below intentionally group by editorial role. */
+body { font-family:var(--v51-playfair)!important; }
+body :where(*) { font-family:inherit!important; }
+body :is(.intro__signature-ink,.brand-story__signature,.signature-script) {
+ font-family:var(--v51-allesya)!important;
+ font-feature-settings:'liga' 1,'calt' 1;
+}
+body :is(.brand__word,.site-footer__brand p,#colecaoTitle,#finaleTitle,
+ .manifesto__quote,.couture-nav__primary a) {
+ font-family:var(--v51-savage)!important;
+ font-optical-sizing:auto;
+ letter-spacing:-.045em;
+}
+body :is(.display,h1,h2,h3,.runway__intro h2,.runway__caption,
+ .ov__title,.qv__title,.faq summary,.store-option__city,
+ .pcard__title,.store-card h3,.belle-ig-dialog__title) {
+ font-family:var(--v51-wasted)!important;
+ font-weight:400;
+}
+body :is(#howTitle,#lojasTitle,.pcard__title,.store-card h3,.qv__title,
+ .look h3,.occ-card h3,.store-option__city,.search-hit span) {
+ font-family:var(--v51-playfair)!important;
+ letter-spacing:-.025em;
+}
+body :is(.eyebrow,.runway__eyebrow,.brand__word small,
+ .intro__eyebrow,.intro__descriptor,.section-kicker,
+ .pcard__meta,.look__n,.occ-card__n,.chapter__card .fineprint,
+ .belle-ig-dialog__eyebrow,.brand-story__kicker) {
+ font-family:var(--v51-gebuk)!important;
+ font-weight:400;
+ letter-spacing:clamp(.08em,.15vw,.16em);
+}
+body :is(.btn,button:not(.icon-btn):not(.fitting__choice),.store-pill__label,
+ .couture-toggle__label,.link-cta,.store-card__cta,
+ .collection__filters button,.seg__btn,.size-filter,.site-footer__links a,
+ .belle-neon,.pcard__action,.portal-list button) {
+ font-family:var(--v51-gebuk)!important;
+ font-weight:400;
+ letter-spacing:.012em;
+}
+body :is(input,textarea,select,.search-field,.search-input,
+ .faq p,.lede,.brand-story__paragraph,.pcard__price) {
+ font-family:var(--v51-playfair)!important;
+}
+body :is(#inicio .display,#porta .display,#vestido .display,
+ #detalhe .display,#provador .display,#ocasioesTitle,#faqTitle,
+ .brand-story .display) {
+ font-family:var(--v51-wasted)!important;
+ font-weight:400;
+ letter-spacing:-.035em;
+}
+body :is(#categorias .display,#passarela .runway__intro h2,
+ #atendimento .brand-story__lead) {
+ font-family:var(--v51-savage)!important;
+ font-optical-sizing:auto;
+ letter-spacing:-.047em;
+}
+body .display em,body :is(.brand-story__lead em,.manifesto__quote em,
+ #finaleTitle em,#lojasTitle em,#faqTitle em) {
+ font-family:var(--v51-allesya)!important;
+ font-weight:400;
+ font-style:normal;
+ letter-spacing:-.025em;
+ line-height:1.04;
+ padding-inline:.04em .12em;
+ -webkit-box-decoration-break:clone;
+ box-decoration-break:clone;
+}
+body #filme .chapter__card .display em { font-size:.96em; }
+body :is(.brand__word,.intro__signature-ink,.site-footer__brand p) {
+ text-rendering:optimizeLegibility;
+}
+/* A restrained metallic ink. Gradients are typography, not blinking neon.
+ * Body and functional UI stay solid for contrast / easy selection. */
+body :is(.display em,#finaleTitle em,#colecaoTitle em,.manifesto__quote em) {
+ background:linear-gradient(110deg,var(--v51-accent-1) 4%,var(--v51-accent-2) 49%,var(--v51-accent-3) 94%);
+ -webkit-background-clip:text;
+ background-clip:text;
+ -webkit-text-fill-color:transparent;
+ text-shadow:none;
+}
+body :is(#inicio .display,.brand-story .display,.finale .display,
+ #colecaoTitle,#ocasioesTitle) {
+ text-shadow:0 7px 40px var(--v51-gleam);
+}
+body :is(.display,h1,h2,h3,.pcard__title,.store-card h3) {
+ text-wrap:balance;
+ overflow-wrap:break-word;
+}
+body :is(p,li,small,label,input,textarea,.lede) {
+ text-wrap:pretty;
+}
+body :is(.btn,.store-pill,.couture-nav a,.store-card__cta,
+ .pcard__action,.portal-list button,.link-cta,.belle-neon) {
+ transition-property:color,background-color,border-color,box-shadow,text-shadow,opacity;
+ transition-duration:280ms;
+ transition-timing-function:cubic-bezier(.18,.75,.22,1);
+}
+@media(hover:hover) {
+ body :is(.btn,.store-pill,.couture-nav a,.store-card__cta,
+ .pcard__action,.portal-list button,.link-cta,.belle-neon):hover {
+  text-shadow:0 0 11px var(--v51-gleam);
+ }
+ body :is(.pcard__title,.store-card h3,.look h3):hover {
+  text-shadow:0 3px 24px var(--v51-gleam);
+ }
+}
+body :is(.btn,.store-pill,.couture-nav a,.store-card__cta,.portal-list button):active {
+ text-shadow:0 0 9px var(--v51-gleam);
+}
+/* Existing film scroll director / glass WAAPI animation takes precedence.
+ * Typography motion only targets static chapter headers outside #filme. */
+@media(max-width:899px) {
+ body .intro__signature-ink {
+  font-size:clamp(58px,13vw,93px);
+  line-height:1.16;
+ }
+ body #filme .chapter__card .display {
+  font-size:clamp(1.42rem,5.4vw,1.91rem);
+  line-height:1.11;
+ }
+ body #filme .chapter--hero .display {
+  font-size:clamp(1.65rem,6.4vw,2.12rem);
+ }
+ body .display em {
+  font-size:.96em;
+  line-height:1.1;
+ }
+ body :is(#colecaoTitle,#finaleTitle,#faqTitle,#lojasTitle,
+ #ocasioesTitle,#howTitle,#conciergeTitle) {
+  font-size:clamp(2.15rem,7vw,3.5rem);
+  line-height:1.08;
+  max-width:100%;
+ }
+ body .brand__word {font-size:clamp(.92rem,3.1vw,1.15rem);}
+ body .lede {line-height:1.5;}
+ body .pcard__title {font-size:clamp(1.06rem,4vw,1.3rem);}
+ body .couture-nav__primary a {font-size:clamp(2rem,8vw,3.5rem);}
+}
+@media(max-width:359px) {
+ body #filme .chapter__card .display {font-size:1.45rem;}
+ body #filme .chapter--hero .display {font-size:1.64rem;}
+ body .intro__signature-ink {font-size:58px;}
+}
+/* Motion accessibility: text remains in DOM and visible even without JS. */
+@media(prefers-reduced-motion:reduce) {
+ body :is(.display,.eyebrow,.lede,.intro__signature-ink) {
+  animation-duration:.001ms!important;
+ }
+}
