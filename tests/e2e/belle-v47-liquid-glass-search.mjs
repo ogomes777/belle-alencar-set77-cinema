@@ -100,7 +100,9 @@ try{
    await page.locator('#searchDialog .search-hit--product').first().click();
    await page.locator('#quickView.is-open').waitFor({timeout:10000});
    await page.keyboard.press('Escape');
-   await page.locator('#searchDialog .ov__close').click({timeout:10000}).catch(()=>{});
+   if(await page.locator('#searchDialog .ov__close').isVisible()){
+     await page.locator('#searchDialog .ov__close').click({timeout:5000});
+   }
    check(errors.length===0,'Runtime exception '+nkey+': '+errors.join(' | '));
    console.log('PASS V47 nav/search',nkey,'glass, real tabs, store, products, quickview');
   }
