@@ -32,6 +32,9 @@ try{
       return {left:b.left,right:b.right,width:b.width,height:b.height}
     };
     return {
+      rootTheme:document.documentElement.dataset.belleTheme,
+      filmResolvedInk:getComputedStyle(document.querySelector('#filme')).getPropertyValue('--v49-ink'),
+      darkRuleMatches:document.querySelector('#filme').matches('html[data-belle-theme="dark"] #filme'),
       bodyOverflow:document.documentElement.scrollWidth-innerWidth,
       canvas:document.querySelectorAll('#filmCanvas').length,
       cards:cards.map(c=>{
@@ -80,7 +83,7 @@ try{
      if(theme==='dark'){
        check(c.base.includes('25, 15, 19')||c.base.includes('25,15,19'),
          'dark card must be warm smoke not gray '+key+' '+c.base);
-       check(c.text.includes('255, 241, 226'),'dark text lost contrast '+key+' '+c.text);
+       check(c.text.includes('255, 241, 226'),'dark text lost contrast '+key+' '+c.text+' root='+result.rootTheme+' var='+result.filmResolvedInk+' match='+result.darkRuleMatches+' bg='+c.base);
      }
    }
    check(result.cards.find(x=>x.id==='categorias').categories.length===8,
