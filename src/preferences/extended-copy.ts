@@ -841,7 +841,6 @@ export const additionalPairs = [
     "firma."
   ],
   [
-    "Mais do que vestir, a Belle traduz presença, personalidade e escolha.",
     "Peças para expressar quem você é, do cotidiano às ocasiões que merecem presença.",
     "Pieces that express who you are, from everyday moments to occasions worth showing up for.",
     "Prendas que expresan quién eres, de cada día a las ocasiones que merecen presencia.",
