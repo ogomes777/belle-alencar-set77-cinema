@@ -107,7 +107,7 @@ export class World {
     this.renderer.setPixelRatio(this.dpr);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.92;
+    this.renderer.toneMappingExposure = 0.83;
     this.renderer.shadowMap.enabled = tier === 'cinema' && !lessCapable;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     container.appendChild(this.renderer.domElement);
