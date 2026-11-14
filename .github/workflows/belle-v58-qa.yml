@@ -1,8 +1,9 @@
-name: BELLE V58 | Evidências POV + 6 ângulos
+name: BELLE V60 | POV, câmera fiel e seis ângulos
 on:
   push:
     branches:
       - feat/belle-pov-v58-set77
+      - feat/belle-v60-art-reference-alignment
   workflow_dispatch:
   pull_request:
     branches:
@@ -50,7 +51,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: BELLE-V58-POV-SIX-ANGLES-VIDEO
+          name: BELLE-V60-POV-SIX-ANGLES-VIDEO
           path: artifacts/belle-pov-v58/
           if-no-files-found: warn
           retention-days: 30
