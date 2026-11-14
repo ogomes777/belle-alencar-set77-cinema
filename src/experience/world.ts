@@ -441,7 +441,7 @@ export class World {
       this.camTgt.set(pose.x+Math.sin(pose.yaw)*cp,1.62+Math.sin(pose.pitch),pose.z-Math.cos(pose.yaw)*cp);
       fov=this.fitFov(pose.fov);
     }
-    const ck = exact ? 1 : 1 - Math.exp(-dt * 10);
+    const ck = (exact || this.comparisonShot !== null) ? 1 : 1 - Math.exp(-dt * 10);
     this.lookPos.lerp(this.camPos, ck);
     this.lookTgt.lerp(this.camTgt, ck);
     if (exact || this.frames === 0) { this.lookPos.copy(this.camPos); this.lookTgt.copy(this.camTgt); }
