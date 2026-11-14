@@ -46,7 +46,7 @@ try {
   await sceneReady(page);
   await sala(page);
   await page.evaluate(()=>{
-    document.querySelectorAll('.chapter__card,.roomrail,.belle-pov').forEach(el=>el.style.setProperty('visibility','hidden','important'));
+    document.querySelectorAll('.chapter__card,.roomrail,.belle-pov,#siteHeader').forEach(el=>el.style.setProperty('visibility','hidden','important'));
   });
   for(const [name,label] of [
     ['fachada','01_fachada'],['sala','02_sala'],['direita','03_arara_direita'],
@@ -54,7 +54,14 @@ try {
   ]){
     const success=await page.evaluate(n=>window.__belle?.setView?.(n),name);
     assert(success,'Could not set camera pose '+name);
-    await page.waitForTimeout(800);
+    // QA must not capture an interpolated in-between pose on a software GPU.
+    const target={fachada:[0,9],sala:[0,-2.18],direita:[.35,-4.65],
+      esquerda:[-.35,-4.65],provador:[-.55,-11.95],portaInterna:[0,-9.8]}[name];
+    await page.waitForFunction(([x,z])=>{
+      const camera=window.__belle?.world?.()?.camera;
+      return !!camera && Math.abs(camera[0]-x)<.06 && Math.abs(camera[2]-z)<.06;
+    },target,{timeout:45000});
+    await page.waitForTimeout(300);
     // Full viewport screenshot avoids Playwright's never-settling element-stability check for a continuously animated WebGL canvas.
     await page.screenshot({path:join(OUT,label+'.png'),timeout:60000,animations:'disabled'});
     report.shots.push({name,asset:label+'.png',world:await page.evaluate(()=>window.__belle?.world?.())});
