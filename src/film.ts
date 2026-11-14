@@ -115,7 +115,9 @@ export function initFilm(director: Director): void {
     posterEls.forEach((p, key) => p.classList.toggle('is-active', key === id));
     // pré-carrega o próximo
     const next = CHAPTERS[CHAPTERS.indexOf(id) + 1];
-    if (next && tier === 'static') poster(next);
+    // While WebGL shaders warm up, the next chapter is already decoded
+    // so a customer can scroll before the first 3D frame without a blank cut.
+    if (next && !stage!.classList.contains('is-live')) poster(next);
     void el;
   }
 
@@ -142,6 +144,17 @@ export function initFilm(director: Director): void {
     let current:ChapterId=spans[0]?.id??'vitrine';
     for(const sp of spans)if(progress>=sp.s-.012)current=sp.id;
     if(current!==active)setActive(current);
+    if(tier!=='static' && !posterMode && !stage!.classList.contains('is-live')){
+      // Progressive first-paint: a light transform-only camera impression
+      // responds to scroll immediately while heavy WebGL shaders compile.
+      // The full camera takes over as soon as the real first frame renders.
+      const span=spans.find(sp=>sp.id===current);
+      const local=span?clamp((progress-span.s)/Math.max(.0001,span.e-span.s),0,1):progress;
+      const narrow=innerWidth<900;
+      stage!.style.setProperty('--film-warm-x',((local-.5)*(narrow?3.8:5.0)).toFixed(2)+'%');
+      stage!.style.setProperty('--film-warm-y',((.5-local)*(narrow?1.6:2.5)).toFixed(2)+'%');
+      stage!.style.setProperty('--film-warm-scale',(1.045+local*.068).toFixed(4));
+    }
   }
   function onScroll():void{
     const current=scrollY;
