@@ -68,7 +68,7 @@ export function initPovUi(stage: HTMLElement, getWorld: () => World | null): Pov
         <button type="button" class="pov__all">Todas as categorias</button>
       </header>
       <div class="pov__cats" role="group" aria-label="Trocar categoria nesta arara">
-        ${SHOP_CATEGORIES.map((c) => `<button type="button" data-cat="${c}" aria-pressed="false">${CATEGORY_LABEL[c]}</button>`).join('')}
+        ${SHOP_CATEGORIES.map((c) => `<button type="button" data-pov-cat="${c}" aria-pressed="false">${CATEGORY_LABEL[c]}</button>`).join('')}
       </div>
       <div class="pov__pager">
         <button type="button" class="pov__prev" aria-label="Página anterior">←</button>
@@ -165,7 +165,7 @@ export function initPovUi(stage: HTMLElement, getWorld: () => World | null): Pov
     ui.classList.toggle('has-pages', plan.pages > 1);
     $<HTMLButtonElement>('.pov__prev').disabled = plan.page === 0;
     $<HTMLButtonElement>('.pov__next').disabled = plan.page >= plan.pages - 1;
-    ui.querySelectorAll<HTMLButtonElement>('[data-cat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === plan.category)));
+    ui.querySelectorAll<HTMLButtonElement>('[data-pov-cat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.povCat === plan.category)));
     emptyMsg.hidden = plan.total > 0;
     const visible = [...plan.hangers, ...plan.shelf].filter((p): p is Product => !!p);
     list.replaceChildren(...visible.map((p, i) => {
@@ -295,9 +295,9 @@ export function initPovUi(stage: HTMLElement, getWorld: () => World | null): Pov
     selected = null; getWorld()?.selectRack(null); applySide(activeSide); paintRack();
     announce('Seleção inicial da arara.');
   });
-  ui.querySelectorAll<HTMLButtonElement>('[data-cat]').forEach((b) => b.addEventListener('click', () => {
+  ui.querySelectorAll<HTMLButtonElement>('[data-pov-cat]').forEach((b) => b.addEventListener('click', () => {
     if (!activeSide) return;
-    const category = b.dataset.cat as Category;
+    const category = b.dataset.povCat as Category;
     sides[activeSide] = openCategory(sides[activeSide], category, DEMO_CATALOG);
     if (selected && selected.category !== category) { selected = null; getWorld()?.selectRack(null); }
     applySide(activeSide); paintRack();

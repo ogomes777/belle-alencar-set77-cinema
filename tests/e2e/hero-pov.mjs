@@ -118,7 +118,7 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
   const cats = Object.keys(perCategory);
   let allComplete = cats.length > 0;
   for (const cat of cats) {
-    await page.locator(`[data-cat="${cat}"]`).click();
+    await page.locator(`[data-pov-cat="${cat}"]`).click();
     await page.waitForTimeout(150);
     const titles = await page.locator('.pov__list button').allInnerTexts();
     const got = titles.map((t) => t.replace(/^\d+\s*/, '').trim()).sort();
@@ -127,17 +127,17 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
     if (!ok) { allComplete = false; console.log('   ', cat, 'esperado', want.length, 'obtido', got.length); }
   }
   check('B · todas as categorias da fonte são alcançáveis por inteiro na arara tocada', allComplete, cats.join(','));
-  const bermudas = await page.locator('[data-cat="bermudas"]').count();
+  const bermudas = await page.locator('.pov__rack [data-pov-cat="bermudas"]').count();
   check('B · bermudas não existem na fonte e não são inventadas', bermudas === 0 && !perCategory.bermudas);
   // estado por lado: abre vestidos à direita, bolsas à esquerda, direita permanece
-  await page.locator('[data-cat="vestidos"]').click();
+  await page.locator('[data-pov-cat="vestidos"]').click();
   await page.locator('.pov__list button').first().click();
   const rightTitle = await page.locator('.pov__title').textContent();
   await page.locator('[data-go="araraEsquerda"]').click();
   await arrived(page);
   const leftOpened = await tapProduct(page, 'left');
   check('B · toque na arara esquerda abre o lado esquerdo', leftOpened);
-  await page.locator('[data-cat="bolsas"]').click();
+  await page.locator('[data-pov-cat="bolsas"]').click();
   await page.waitForTimeout(150);
   const leftCount = await page.locator('.pov__list button').count();
   check('B · bolsas aparecem no expositor da esquerda (6 peças)', leftCount === 6, String(leftCount));
