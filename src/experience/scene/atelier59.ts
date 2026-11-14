@@ -114,8 +114,8 @@ export function buildAtelier59(kit:Kit,tier:Tier):THREE.Group{
 const g=new THREE.Group();g.name='FLAGSHIP-ATELIER-V59-REBUILD';
 const limestone=new THREE.MeshStandardMaterial({map:limestoneTexture(),roughness:.86,metalness:0,color:'#f4e7d7'});
 const darkWood=new THREE.MeshStandardMaterial({color:'#40291d',roughness:.66});
-const floorMat=new THREE.MeshStandardMaterial({map:parquetTexture(),roughness:.43,metalness:.03});
-floorMat.map!.repeat.set(3,6);
+const floorMat=new THREE.MeshStandardMaterial({map:parquetTexture(),color:'#f0d0aa',roughness:.42,metalness:.025});
+floorMat.map!.repeat.set(3,5);
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(10.4,16.4),floorMat);floor.rotation.x=-Math.PI/2;floor.position.set(0,.004,-9.25);floor.receiveShadow=true;g.add(floor);
 g.add(box(10.4,.17,16.4,darkWood,0,-.09,-9.25));
 const ceiling=new THREE.Mesh(new THREE.PlaneGeometry(10.4,16.1),new THREE.MeshStandardMaterial({color:'#d7b99a',roughness:1}));
@@ -132,7 +132,18 @@ g.add(box(.06,.16,16,kit.brass,side*5.01,.08,-9.25));
 const inset=new THREE.Mesh(new THREE.TorusGeometry(1.2,.22,12,44,Math.PI),limestone);
 inset.rotation.y=side*Math.PI/2;inset.position.set(side*4.83,2.8,-4.55);g.add(inset);
 }
-for(const x of [-2.75,0,2.75])lampTrack(g,x,-9.5,13.8,kit.brass);
+// Stone vaults face the entrance: formerly the side openings were almost edge-on.
+ for(const side of [-1,1]){
+   const portal=limestoneArch(3.03,4.21,.58,limestone);
+   portal.name=side<0?'limestone-vault-left':'limestone-vault-right';
+   portal.position.set(side*3.73,0,-8.10);
+   portal.receiveShadow=true;g.add(portal);
+   const returnWall=box(.22,4.21,.72,limestone,side*5.15,2.105,-8.08);
+   g.add(returnWall);
+   const vaultLight=spot('#ffe0af',8,[side*3.86,3.91,-7.82],[side*3.73,2.0,-8.65],.83,.89);
+   g.add(vaultLight,vaultLight.target);
+ }
+ for(const x of [-2.75,0,2.75])lampTrack(g,x,-9.5,13.8,kit.brass);
 const backWall=box(10.4,4.22,.25,limestone,0,2.11,back-.08);backWall.receiveShadow=true;g.add(backWall);
 const sidePanelMaterial=new THREE.MeshStandardMaterial({color:'#60462f',metalness:.13,roughness:.78});
 g.add(box(.12,3.7,.2,sidePanelMaterial,-4.96,1.85,-17));
@@ -155,14 +166,14 @@ const pedestal=new THREE.Mesh(new THREE.CylinderGeometry(.68,.72,.84,42),limesto
 g.add(contact(kit,1.65,1.65,-3.03,-15.9));
 const handbag=leatherHandbag('#69302f',kit.brass);handbag.scale.setScalar(.9);handbag.position.set(-3.03,.84,-15.9);g.add(handbag);
 const flower=shopFlower(kit);flower.scale.setScalar(.55);flower.position.set(-.65,.12,-16.96);g.add(flower);
-const seat=bench(kit);seat.position.set(-3.6,0,-13.7);seat.rotation.y=.4;g.add(seat);
-const showroomSpot=spot('#ffd1a1',44,[0,4.15,-8.8],[0,1.05,-9.1],.95,.78);g.add(showroomSpot,showroomSpot.target);
+const seat=bench(kit);seat.position.set(-2.75,0,-14.45);seat.rotation.y=.4;g.add(seat);
+const showroomSpot=spot('#ffdbb2',37,[0,4.15,-8.8],[0,1.05,-9.1],.95,.78);g.add(showroomSpot,showroomSpot.target);
 for(const side of [-1,1]){
-const light=spot('#f5bf86',48,[side*2.8,4.15,-7.2],[side*3.4,1,-8.0],.93,.9);g.add(light,light.target);
+const light=spot('#ffe0ba',43,[side*2.8,4.15,-7.2],[side*3.4,1,-8.0],.93,.9);g.add(light,light.target);
 }
 const rearLight=spot('#ffdeb1',33,[.2,4.08,-14.3],[1.1,1.3,-16.7],.9,.9);g.add(rearLight,rearLight.target);
-g.add(new THREE.HemisphereLight('#dfb48c','#26160d',.75));
-g.add(new THREE.AmbientLight('#ddbb91',.23));
+g.add(new THREE.HemisphereLight('#e4c19a','#372717',.88));
+g.add(new THREE.AmbientLight('#f2d4ad',.28));
 return g;
 }
 export function leatherHandbag(color:string,brass:THREE.Material):THREE.Group{
