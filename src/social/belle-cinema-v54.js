@@ -41,6 +41,7 @@ if(section && dialog){
  const proximity = typeof IntersectionObserver !== 'undefined'
    ? new IntersectionObserver(entries=>{
        nearStage=entries.some(entry=>entry.isIntersecting);
+       section.classList.toggle('v54-near',nearStage);
        if(nearStage){prewarm(Math.max(0,current));schedule();}
      },{rootMargin:'1200px 0px'})
    : null;
@@ -90,7 +91,7 @@ if(section && dialog){
    const center=stage.querySelector('.v54-phone-core');
    if(center){center.style.transform=`rotateY(${pointer[0]*7+(local-.5)*5}deg) rotateX(${-pointer[1]*5+2}deg)`}
  }
- const schedule=()=>{if(!renderReq)renderReq=requestAnimationFrame(tickScroll)};
+ const schedule=()=>{if(!nearStage||dialog.open||document.hidden)return;if(!renderReq)renderReq=requestAnimationFrame(tickScroll)};
  window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
  const moving=window.matchMedia('(pointer:fine)');
  if(moving.matches){stage.addEventListener('pointermove',event=>{const r=stage.getBoundingClientRect();pointer=[clamp((event.clientX-r.left)/Math.max(1,r.width)*2-1,-1,1),clamp((event.clientY-r.top)/Math.max(1,r.height)*2-1,-1,1)];schedule()},{passive:true});stage.addEventListener('pointerleave',()=>{pointer=[0,0];schedule()})}
