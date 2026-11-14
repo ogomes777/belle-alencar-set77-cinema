@@ -125,12 +125,16 @@ export function initFilm(director: Director): void {
   // ---------- scroll → progresso ----------
   // Static/painter mode and large reverse jumps cannot wait for a delayed RAF:
   // the chapter poster, rail and debug state must reflect scrollY right away.
-  let ticking=false,lastScrollPosition=scrollY;
+  let ticking=false,lastScrollPosition=scrollY,lastInFilm:boolean|null=null;
   function applyScrollPosition():void{
     const previous=progress;
-    progress=clamp((scrollY-filmTop)/range,0,1);
-    document.documentElement.classList.toggle('in-film',
-      scrollY>=filmTop-innerHeight*.3&&scrollY<=filmTop+range+innerHeight*.15);
+    const sy=scrollY;
+    progress=clamp((sy-filmTop)/range,0,1);
+    const inFilm=sy>=filmTop-innerHeight*.3&&sy<=filmTop+range+innerHeight*.15;
+    // V37 perf: no DOM writes while nothing changed (e.g. scrolling the shop).
+    if(progress===previous&&inFilm===lastInFilm)return;
+    lastInFilm=inFilm;
+    document.documentElement.classList.toggle('in-film',inFilm);
     debug.progress=progress;
     if(bar)bar.style.setProperty('--p',progress.toFixed(4));
     world?.setProgress(progress,Math.abs(progress-previous)>.16);
@@ -142,7 +146,9 @@ export function initFilm(director: Director): void {
     const current=scrollY;
     const jumped=Math.abs(current-lastScrollPosition)>innerHeight*.65;
     lastScrollPosition=current;
-    if(jumped||tier==='static'||!world){applyScrollPosition();return;}
+    // V37 perf: always coalesce to one frame (static tier too); only a large
+    // jump applies synchronously so anchors land on the right chapter.
+    if(jumped){applyScrollPosition();return;}
     if(ticking)return;
     ticking=true;
     requestAnimationFrame(()=>{
@@ -226,20 +232,39 @@ export function initFilm(director: Director): void {
       },{passive:true});
     }
   });
+  // V50: a short, tightly-controlled optical impact. The reveal re-arms
+  // after exiting the viewport, including reverse scroll, with no new scroll
+  // handler, particles, extra canvas, or filters animated on the GPU.
+  const lastGlassReveal=new WeakMap<HTMLElement,number>();
   const glassObserver=new IntersectionObserver(entries=>{
     for(const entry of entries){
-      if(!entry.isIntersecting)continue;
       const card=entry.target as HTMLElement;
-      card.classList.add('is-glass-appeared');
-      glassObserver.unobserve(card);
-      if(!reducedGlass.matches && !document.documentElement.classList.contains('poster-mode')){
-        card.animate([
-          {opacity:0.62,transform:'translate3d(0,22px,0) scale(.985)'},
-          {opacity:1,transform:'translate3d(0,0,0) scale(1)'}
-        ],{duration:720,easing:'cubic-bezier(.16,1,.3,1)'});
+      if(!entry.isIntersecting){
+        card.classList.remove('is-glass-appeared');
+        continue;
       }
+      if(card.classList.contains('is-glass-appeared'))continue;
+      card.classList.add('is-glass-appeared');
+      const now=performance.now();
+      if(now-(lastGlassReveal.get(card)??-Infinity)<440)continue;
+      lastGlassReveal.set(card,now);
+      if(reducedGlass.matches ||
+         document.documentElement.classList.contains('poster-mode') ||
+         document.documentElement.classList.contains('perf-lite'))continue;
+      const narrow=innerWidth<=899;
+      // The "explosion" is a three-frame scale/rotation overshoot,
+      // not an expensive particle system. Opacity/transform only.
+      card.animate([
+        {offset:0,opacity:narrow?.08:.06,
+         transform:narrow?'translate3d(0,48px,0) rotate(-5deg) scale(.72)':
+                          'translate3d(0,64px,0) rotate(-4deg) scale(.76)'},
+        {offset:.64,opacity:1,
+         transform:narrow?'translate3d(0,-7px,0) rotate(1.2deg) scale(1.065)':
+                          'translate3d(0,-10px,0) rotate(1.5deg) scale(1.08)'},
+        {offset:1,opacity:1,transform:'translate3d(0,0,0) rotate(0deg) scale(1)'}
+      ],{duration:narrow?700:850,easing:'cubic-bezier(.16,1,.30,1)'});
     }
-  },{threshold:0.13,rootMargin:'0px 0px -6% 0px'});
+  },{threshold:0.12,rootMargin:'0px 0px -5% 0px'});
   glassCards.forEach(card=>glassObserver.observe(card));
 
   // ---------- 3D sob demanda ----------

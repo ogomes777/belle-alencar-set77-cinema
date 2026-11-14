@@ -1,0 +1,197 @@
+/* Belle V46: genuine couture glass on 4 post-throw cards; luxury-tech CTA.
+ * Scope only #como-comprar. Existing --how-card-* transform, reversible
+ * video scrub, entrance sequence and scroll-synced choreography are untouched.
+ * V18 forced an opaque background and disabled backdrop-filter: override both.
+ */
+#como-comprar.how--couture{
+ --v46-base:rgba(255,250,240,.43);--v46-highlight:rgba(255,255,255,.67);
+ --v46-bottom:rgba(227,192,142,.12);--v46-edge:rgba(255,244,220,.82);
+ --v46-rim:rgba(148,105,58,.22);--v46-ink:#30261e;--v46-copy:#564638;
+ --v46-gold:#9b6e3a;--v46-shadow:rgba(54,32,12,.26);
+}
+html[data-belle-theme="dark"] #como-comprar.how--couture{
+ --v46-base:rgba(37,29,31,.55);--v46-highlight:rgba(243,214,185,.16);
+ --v46-bottom:rgba(83,64,54,.2);--v46-edge:rgba(238,204,158,.60);
+ --v46-rim:rgba(232,179,119,.2);--v46-ink:#fff2e1;--v46-copy:#ead4bf;
+ --v46-gold:#edc791;--v46-shadow:rgba(0,0,0,.48);
+}
+html[data-belle-theme="rose"] #como-comprar.how--couture{
+ --v46-base:rgba(255,244,247,.44);--v46-highlight:rgba(255,255,255,.68);
+ --v46-bottom:rgba(226,172,188,.14);--v46-edge:rgba(255,231,236,.83);
+ --v46-rim:rgba(163,100,121,.2);--v46-ink:#452c38;--v46-copy:#614457;
+ --v46-gold:#a26981;--v46-shadow:rgba(86,38,58,.24);
+}
+/* Glass is composed of a translucent base, optical specular highlights,
+   real backdrop blur, an inner rim, and physically layered shadows. */
+html #como-comprar.how--couture .how__steps>li{
+ position:relative;isolation:isolate;overflow:hidden;
+ border-radius:clamp(15px,1.5vw,21px);
+ border:1px solid var(--v46-edge);
+ background:
+   radial-gradient(ellipse 88% 60% at 18% -8%,var(--v46-highlight),transparent 77%),
+   linear-gradient(135deg,rgba(255,255,255,.16),transparent 39%,var(--v46-bottom)),
+   var(--v46-base);
+ -webkit-backdrop-filter:blur(15px) saturate(1.38);
+ backdrop-filter:blur(15px) saturate(1.38);
+ outline:1px solid var(--v46-rim);outline-offset:-3px;
+ box-shadow:0 21px 42px -27px var(--v46-shadow),
+   0 8px 20px -19px var(--v46-shadow),
+   inset 0 1px 0 rgba(255,255,255,.65),
+   inset 1px 0 0 rgba(255,255,255,.18),
+   inset 0 -1px 0 var(--v46-rim);
+}
+/* Do not override the clip/reveal of the existing cinematic choreography. */
+html #como-comprar.how--couture .how__steps>li::before{
+ left:0;right:0;top:0;bottom:0;height:auto;border-radius:inherit;
+ background:linear-gradient(116deg,rgba(255,255,255,.27) 0%,
+   rgba(255,255,255,.09) 23%,transparent 39%,transparent 73%,
+   rgba(255,255,255,.10) 100%),
+   linear-gradient(180deg,rgba(255,255,255,.30),transparent 27%);
+ opacity:.81;pointer-events:none;
+}
+html #como-comprar.how--couture .how__steps>li::after{
+ inset:1px;width:auto;height:auto;border-radius:inherit;
+ border:1px solid var(--v46-rim);
+ background:radial-gradient(ellipse 82% 51% at 90% 0%,
+   rgba(255,253,230,.27),transparent 85%),
+   linear-gradient(150deg,transparent 35%,rgba(255,255,255,.14) 47%,transparent 61%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.50),inset 0 0 14px rgba(255,251,238,.13);
+ pointer-events:none;
+}
+/* Preserve V20 light-pass .how__lumen and staggered landing effect. */
+html #como-comprar.how--couture .how__steps>li>span:not(.how__lumen){
+ color:var(--v46-gold);font-family:"Cormorant Garamond",Georgia,serif;
+ font-size:clamp(1.85rem,2.6vw,2.7rem);font-weight:540;
+ letter-spacing:-.055em;line-height:1;
+}
+html #como-comprar.how--couture .how__steps>li>h3{
+ color:var(--v46-ink);font-size:clamp(.95rem,1.06vw,1.14rem);
+ font-weight:780;line-height:1.24;letter-spacing:-.018em;text-wrap:balance;
+}
+html #como-comprar.how--couture .how__steps>li>p{
+ color:var(--v46-copy);font-size:clamp(.78rem,.86vw,.91rem);
+ font-weight:540;line-height:1.49;text-wrap:pretty;
+}
+@media(hover:hover) and (pointer:fine){
+ html #como-comprar.how--couture .how__steps>li:hover{
+   border-color:var(--v46-edge);outline-color:var(--v46-gold);
+   -webkit-backdrop-filter:blur(18px) saturate(1.48);
+   backdrop-filter:blur(18px) saturate(1.48);
+ }
+}
+/* Collection CTA: carbon/champagne base, brushed metal rim, traveling light.
+   Overrides generic btn--line hover fill ONLY on this specific element. */
+html #como-comprar.how--couture .how__foot .how__collection-cta{
+ --fill:transparent;position:relative;isolation:isolate;
+ box-sizing:border-box;display:inline-flex;align-items:center;
+ justify-content:space-between;gap:clamp(10px,1.2vw,18px);
+ width:auto;min-width:clamp(185px,16vw,258px);min-height:58px;height:auto;
+ padding:9px 10px 9px clamp(17px,1.55vw,24px);
+ border:1px solid #d2a768;border-radius:13px;
+ background:radial-gradient(ellipse 110% 90% at 12% 0%,
+   rgba(191,148,90,.24),transparent 76%),
+   linear-gradient(143deg,#292118,#0e0c0a 58%,#2a2115);
+ color:#fff4e4;font-family:var(--sans);
+ font-size:clamp(.72rem,.78vw,.86rem);font-weight:790;
+ letter-spacing:.065em;line-height:1.3;text-align:left;text-decoration:none;
+ text-transform:uppercase;white-space:normal;
+ box-shadow:0 14px 28px -17px rgba(20,11,5,.50),
+   0 0 20px rgba(223,167,89,.21),
+   inset 0 1px 0 rgba(255,246,220,.23),
+   inset 0 0 0 1px rgba(255,246,211,.06);
+ -webkit-tap-highlight-color:transparent;
+ transition:transform .28s ease,border-color .28s ease,
+   box-shadow .28s ease,filter .28s ease;
+}
+html #como-comprar.how--couture .how__foot .how__collection-cta::before{
+ content:"";z-index:0;position:absolute;
+ inset:-25% auto -25% -46%;width:43%;height:auto;
+ background:linear-gradient(90deg,transparent,rgba(255,239,199,.04) 23%,
+   rgba(255,232,176,.23) 52%,rgba(255,239,207,.03) 78%,transparent);
+ transform:skewX(-21deg) translateX(-140%);transform-origin:center;
+ transition:none;pointer-events:none;
+ animation:belle-v46-collection-sheen 5.3s ease-in-out infinite;
+}
+html #como-comprar.how--couture .how__foot .how__collection-cta::after{
+ content:"";pointer-events:none;position:absolute;z-index:0;
+ inset:2px;border-radius:10px;border:1px solid rgba(251,226,172,.10);
+ box-shadow:inset 0 1px 0 rgba(255,252,240,.13);
+}
+html #como-comprar.how--couture .how__collection-cta__label,
+html #como-comprar.how--couture .how__collection-cta__icon{
+ position:relative;z-index:1;color:inherit;flex:none;
+}
+html #como-comprar.how--couture .how__collection-cta__label{flex:0 1 auto}
+html #como-comprar.how--couture .how__collection-cta__icon{
+ width:36px;height:36px;display:grid;place-items:center;
+ border-radius:10px;color:#f3d39c;
+ background:linear-gradient(145deg,rgba(224,182,117,.23),rgba(211,166,96,.06));
+ border:1px solid rgba(233,195,135,.39);
+ box-shadow:inset 0 1px 0 rgba(255,244,219,.18);
+ transition:transform .26s ease,background .26s ease;
+}
+html #como-comprar.how--couture .how__collection-cta__icon svg{
+ display:block;width:18px;height:18px;
+ fill:none;stroke:currentColor;stroke-width:1.7;
+ stroke-linecap:round;stroke-linejoin:round;
+}
+html #como-comprar.how--couture .how__foot .how__collection-cta:hover,
+html #como-comprar.how--couture .how__foot .how__collection-cta:focus-visible{
+ transform:translateY(-2px);color:#fffaf0;border-color:#f0ca8b;
+ box-shadow:0 18px 35px -15px rgba(20,11,5,.56),
+   0 0 27px rgba(228,177,101,.32),inset 0 1px 0 rgba(255,250,224,.29);
+}
+html #como-comprar.how--couture .how__foot .how__collection-cta:hover .how__collection-cta__icon,
+html #como-comprar.how--couture .how__foot .how__collection-cta:focus-visible .how__collection-cta__icon{
+ transform:translateX(3px);
+ background:linear-gradient(145deg,rgba(224,182,117,.36),rgba(211,166,96,.10));
+}
+html #como-comprar.how--couture .how__foot .how__collection-cta:focus-visible{
+ outline:2px solid #eec484;outline-offset:4px;
+}
+html #como-comprar.how--couture .how__foot .how__collection-cta:active{
+ transform:translateY(0) scale(.99);
+}
+@keyframes belle-v46-collection-sheen{
+ 0%,12%{transform:skewX(-21deg) translateX(-140%);opacity:0}
+ 17%{opacity:.85}
+ 36%{transform:skewX(-21deg) translateX(480%);opacity:0}
+ 100%{transform:skewX(-21deg) translateX(480%);opacity:0}
+}
+@media(max-width:900px){
+ html #como-comprar.how--couture .how__steps>li{
+   -webkit-backdrop-filter:blur(10px) saturate(1.24);
+   backdrop-filter:blur(10px) saturate(1.24);
+ }
+}
+@media(max-width:600px){
+ html #como-comprar.how--couture .how__steps>li{
+   border-radius:13px;padding:clamp(11px,3vw,15px);
+   -webkit-backdrop-filter:blur(5px) saturate(1.14);
+   backdrop-filter:blur(5px) saturate(1.14);
+ }
+ html #como-comprar.how--couture .how__steps>li>span:not(.how__lumen){
+   font-size:clamp(1.34rem,5.4vw,1.58rem);margin-bottom:5px;
+ }
+ html #como-comprar.how--couture .how__steps>li>h3{
+   font-size:clamp(.75rem,3.15vw,.88rem);line-height:1.16;
+ }
+ html #como-comprar.how--couture .how__steps>li>p{
+   font-size:clamp(.67rem,2.75vw,.76rem);line-height:1.35;
+ }
+ html #como-comprar.how--couture .how__foot .how__collection-cta{
+   width:100%;min-width:0;min-height:53px;
+   padding:8px 10px 8px 17px;font-size:clamp(.73rem,3.05vw,.83rem);
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ html #como-comprar.how--couture .how__foot .how__collection-cta::before{
+   animation:none!important;opacity:.12;transform:translateX(0);
+ }
+}
+html[data-intensity="essential"] #como-comprar.how--couture .how__steps>li{
+ -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+html[data-intensity="essential"] #como-comprar.how--couture .how__foot .how__collection-cta::before{
+ animation:none!important;opacity:.12;
+}

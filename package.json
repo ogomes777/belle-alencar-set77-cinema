@@ -15,16 +15,21 @@
     "legacy": "node legacy/v3/dev-server.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/bodoni-moda": "^5.3.0",
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource/cormorant-garamond": "^5.3.0",
     "gsap": "^3.15.0",
-    "three": "^0.187.0"
+    "three": "^0.187.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@types/three": "^0.187.0",
     "jsdom": "^31.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.7",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
   }
 }

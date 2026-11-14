@@ -1,0 +1,32 @@
+[
+ {
+  "vp": "1440",
+  "errors": [
+   "shot timeout passarela 0.5",
+   "shot timeout passarela 1",
+   "shot timeout ocasioes 0.5",
+   "shot timeout ocasioes 1",
+   "shot timeout colecao 0.15",
+   "shot timeout colecao 0.5",
+   "shot timeout colecao 1",
+   "shot timeout lojas 1",
+   "shot timeout atendimento 0.15",
+   "shot timeout atendimento 0.5",
+   "shot timeout atendimento 1",
+   "shot timeout duvidas 0.15",
+   "shot timeout duvidas 0.5",
+   "shot timeout duvidas 1"
+  ],
+  "overflowX": false,
+  "fixedOverlays": []
+ },
+ {
+  "vp": "390",
+  "errors": [
+   "shot timeout lojas 1",
+   "shot timeout atendimento 0.15"
+  ],
+  "overflowX": false,
+  "fixedOverlays": []
+ }
+]

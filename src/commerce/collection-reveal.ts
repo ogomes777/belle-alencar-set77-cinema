@@ -7,6 +7,7 @@
  * Filtered DOM changes and reduced-motion follow the same fail-open contract.
  */
 import { gsap } from 'gsap';
+import { viewTop, invalidateGeometry } from '../core/scroll-geometry';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Director } from '../shell/director';
 import '../styles/collection-reveal.css';
@@ -49,7 +50,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
       el.style.setProperty('--cr-veil','0');
       el.style.removeProperty('--cr-seam-x');
       el.style.removeProperty('--cr-sheen');
-      gsap.set(el,{clearProps:'transform,opacity,clipPath,willChange'});
+      for(const prop of ['transform','opacity','clip-path','will-change'])el.style.removeProperty(prop);
       return;
     }
 
@@ -69,18 +70,18 @@ export function initCatalogScrollReveal(director:Director):()=>void {
       : `polygon(${at(100-edge)} 0,100% 0,100% 100%,${at(100-edge)} 100%,${at(100-edge+serration*.7)} 78%,${at(100-edge-serration)} 53%,${at(100-edge+serration)} 24%)`;
     const impulse=Math.sin(Math.PI*open);
     const side=entry.direction;
-    gsap.set(el,{
-      opacity:.035+.965*smooth(0,.57,progress),
-      x:side*(mobile?27:66)*remaining,
-      y:(mobile?58:102)*remaining,
-      rotationY:side*(mobile?13:24)*remaining,
-      rotationZ:side*(mobile?5.5:9)*remaining,
-      skewX:side*(mobile?2.8:4.5)*remaining,
-      scale:(mobile?.84:.77)+(mobile?.16:.23)*open+impulse*(mobile?.022:.039),
-      clipPath:shape,
-      willChange:close?'transform,opacity,clip-path':'auto',
-      force3D:close
-    });
+    // V37 perf: direct style writes (same values and transform order GSAP
+    // used: translate → rotate → rotateY → skewX → scale). gsap.set parsed the
+    // clip-path string and read computed style for every card, every frame.
+    const x=side*(mobile?27:66)*remaining,y=(mobile?58:102)*remaining;
+    const ry=side*(mobile?13:24)*remaining,rz=side*(mobile?5.5:9)*remaining;
+    const sk=side*(mobile?2.8:4.5)*remaining;
+    const sc=(mobile?.84:.77)+(mobile?.16:.23)*open+impulse*(mobile?.022:.039);
+    const t=close?`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`:`translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
+    el.style.transform=`${t} rotate(${rz.toFixed(3)}deg) rotateY(${ry.toFixed(3)}deg) skewX(${sk.toFixed(3)}deg) scale(${sc.toFixed(4)})`;
+    el.style.opacity=(.035+.965*smooth(0,.57,progress)).toFixed(4);
+    el.style.clipPath=shape;
+    el.style.willChange=close?'transform,opacity,clip-path':'auto';
     el.style.setProperty('--cr-seam-x',(entry.direction<0?edge:100-edge).toFixed(1)+'%');
     el.style.setProperty('--cr-sheen',(Math.sin(Math.PI*reveal)*.78).toFixed(3));
     el.style.setProperty('--cr-veil',(.77*(1-smooth(0,.88,progress))).toFixed(3));
@@ -89,7 +90,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   function update(){
     if(!active)return;
     const viewport=innerHeight;
-    const gridY=grid!.getBoundingClientRect().top;
+    const gridY=viewTop(grid!); // cached geometry, no forced layout per frame
     // Longer travel makes each incoming slice perceptible, even on a fast
     // touch gesture, and ensures the same path is followed going upward.
     const travel=Math.max(190,Math.min(viewport*(innerWidth<=820?.43:.50),420));
@@ -105,11 +106,10 @@ export function initCatalogScrollReveal(director:Director):()=>void {
   function updateStory(){
     if(!active)return;
     const height=innerHeight;
-    const rect=section!.getBoundingClientRect();
-    const headline=clamp((height*.94-rect.top)/Math.max(190,height*.48));
-    const bridgeRect=handoff?.getBoundingClientRect();
-    const bridge=bridgeRect
-      ? clamp((height*.88-bridgeRect.top)/Math.max(180,height*.57))
+    const sectionTop=viewTop(section!);
+    const headline=clamp((height*.94-sectionTop)/Math.max(190,height*.48));
+    const bridge=handoff
+      ? clamp((height*.88-viewTop(handoff))/Math.max(180,height*.57))
       : 1;
     section!.style.setProperty('--collection-copy',headline.toFixed(4));
     section!.style.setProperty('--collection-bridge',bridge.toFixed(4));
@@ -128,6 +128,7 @@ export function initCatalogScrollReveal(director:Director):()=>void {
 
   function measure(){
     if(!active)return;
+    invalidateGeometry();
     const cards=Array.from(grid!.querySelectorAll<HTMLElement>('.pcard'));
     // offsetTop does not contain the GSAP transform/rotation/clip.
     // The grid is the offset parent (position:relative in companion CSS),

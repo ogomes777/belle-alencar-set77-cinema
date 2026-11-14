@@ -273,7 +273,7 @@ html[data-belle-theme="rose"] #como-comprar::after{background:linear-gradient(18
 }
 @media(max-width:370px){
  #siteHeader .site-actions{gap:0!important}
- #siteHeader .store-pill{padding:0 4px!important;margin-right:0!important;width:38px!important;min-width:38px!important;max-width:38px!important;min-height:36px!important}
+ #siteHeader .store-pill{padding:0 4px!important;margin-right:0!important;width:44px!important;min-width:44px!important;max-width:44px!important;min-height:44px!important} /* V37: área de toque ≥44px */
  #siteHeader .store-pill__label{display:none!important}
  #siteHeader #belleSettingsButton{width:34px!important;min-width:34px!important;height:36px!important}
  #siteHeader #wishlistButton{display:grid!important}

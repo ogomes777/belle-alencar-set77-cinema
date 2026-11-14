@@ -11,10 +11,11 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<!-- Allura (SIL OFL 1.1): handwriting style for the loader only, not a brand-logo replacement. -->
+<!-- BELLE V51: five licensed/open display roles. The four reference originals
+     require separately purchased webfont licenses; only OFL substitutes are loaded. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Italiana&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Righteous&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Belle Alencar — Araxá","description":"Moda feminina e acessórios.","sameAs":["https://www.instagram.com/belle.alencar/"],"address":{"@type":"PostalAddress","streetAddress":"Av. Vereador João Sena, 103, Centro","addressLocality":"Araxá","addressRegion":"MG","addressCountry":"BR"}}</script>
 <link rel="preload" as="image" href="/posters/vitrine.jpg" fetchpriority="high">
@@ -41,6 +42,8 @@
       if (selected === 'dark' || selected === 'rose') document.documentElement.dataset.belleTheme = selected;
     } catch (_) {}
   </script>
+<link rel="stylesheet" href="/src/styles/belle-cinema-v54.css">
+<script type="module" src="/src/social/belle-cinema-v54.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#colecao">Pular para a coleção</a>
@@ -51,7 +54,7 @@
   <div class="intro__panel intro__panel--top"></div>
   <div class="intro__panel intro__panel--bottom"></div>
   <div class="intro__stage" aria-label="Belle Alencar, assinatura caligráfica">
-    <span class="intro__eyebrow">Uma assinatura. Uma presença.</span>
+    <span class="intro__eyebrow">Seu estilo deixa assinatura.</span>
     <div class="intro__signature">
       <span class="intro__signature-ink" aria-hidden="true">Belle Alencar</span>
       <svg class="intro__flourish" viewBox="0 0 720 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -69,13 +72,6 @@
     <span class="brand__mark" data-monogram="header" aria-hidden="true"></span>
     <span class="brand__word">BELLE ALENCAR<small>MODA &amp; ACESSÓRIOS</small></span>
   </a>
-  <nav class="site-nav" aria-label="Principal">
-    <a href="#inicio">A loja</a>
-    <a href="#passarela">Passarela</a>
-    <a href="#ocasioes">Ocasiões</a>
-    <a href="#colecao">Coleção</a>
-    <a href="#lojas">Lojas</a>
-  </nav>
   <div class="site-actions">
     <button type="button" class="store-pill" id="storeButton" data-open-store aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
@@ -92,28 +88,41 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
       <span class="icon-btn__count" data-bag-count hidden>0</span>
     </button>
-    <button type="button" class="belle-menu-toggle" id="belleMenuButton" aria-label="Abrir navegação" aria-controls="belleMenuPanel" aria-expanded="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="belle-menu-line belle-menu-line--top" d="M4 8h16"/><path class="belle-menu-line belle-menu-line--bottom" d="M4 16h16"/></svg>
+    <button type="button" class="couture-toggle" id="belleMenuButton" aria-label="Abrir menu" aria-controls="belleMenuPanel" aria-expanded="false">
+      <span class="couture-toggle__pill" aria-hidden="true"><span class="couture-toggle__track">
+        <span class="couture-toggle__label couture-toggle__label--menu" data-roll>Menu</span>
+        <span class="couture-toggle__label couture-toggle__label--close" data-roll>Fechar</span>
+      </span></span>
+      <span class="couture-toggle__disc" aria-hidden="true"><span class="couture-toggle__glyph">
+        <span class="couture-toggle__diamond"></span>
+        <svg class="couture-toggle__close" viewBox="0 0 12 12" focusable="false"><path d="M1 1l10 10M1 11L11 1"/></svg>
+      </span></span>
     </button>
   </div>
-  <div class="belle-menu-panel" id="belleMenuPanel" hidden>
-    <div class="belle-menu-panel__intro">
-      <span>BELLE ALENCAR</span><small>UM CONVITE PARA SE VESTIR BEM.</small>
-    </div>
-    <nav class="belle-menu-panel__links" aria-label="Navegação mobile">
-      <a href="#inicio" data-mobile-nav><span>01</span>A loja</a>
-      <a href="#passarela" data-mobile-nav><span>02</span>Passarela</a>
-      <a href="#ocasioes" data-mobile-nav><span>03</span>Ocasiões</a>
-      <a href="#colecao" data-mobile-nav><span>04</span>Coleção</a>
-      <a href="#lojas" data-mobile-nav><span>05</span>Lojas</a>
-      <a href="#atendimento" data-mobile-nav><span>06</span>Atendimento</a>
-    </nav>
-    <div class="belle-menu-panel__foot">
-      <span>ARAXÁ · FRUTAL · CATALÃO · MINEIROS</span>
-      <span>MODA &amp; ACESSÓRIOS</span>
-    </div>
-  </div>
 </header>
+
+<!-- V38 · menu de capítulos em tela cheia (fora do header: o header tem transform). -->
+<div class="couture-nav" id="belleMenuPanel" aria-hidden="true" inert>
+  <div class="couture-nav__inner">
+    <nav class="couture-nav__primary" aria-label="Capítulos">
+      <ol class="couture-nav__list" style="--last:5">
+        <li class="couture-nav__item" style="--i:0"><a class="couture-nav__link" href="#inicio" data-mobile-nav data-split>A loja</a></li>
+        <li class="couture-nav__item" style="--i:1"><a class="couture-nav__link" href="#passarela" data-mobile-nav data-split>Passarela</a></li>
+        <li class="couture-nav__item" style="--i:2"><a class="couture-nav__link" href="#ocasioes" data-mobile-nav data-split>Ocasiões</a></li>
+        <li class="couture-nav__item" style="--i:3"><a class="couture-nav__link" href="#colecao" data-mobile-nav data-split>Coleção</a></li>
+        <li class="couture-nav__item" style="--i:4"><a class="couture-nav__link" href="#lojas" data-mobile-nav data-split>Lojas</a></li>
+        <li class="couture-nav__item" style="--i:5"><a class="couture-nav__link" href="#atendimento-final" data-mobile-nav data-split>Atendimento</a></li>
+      </ol>
+    </nav>
+    <ul class="couture-nav__secondary">
+      <li style="--i:6"><a href="#como-comprar" data-mobile-nav data-split>Como comprar</a></li>
+      <li style="--i:7"><a href="#duvidas" data-mobile-nav data-split>Dúvidas</a></li>
+      <li style="--i:8"><a href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer" data-split data-external>WhatsApp</a></li>
+      <li style="--i:9"><a href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer" data-split data-external>Instagram</a></li>
+    </ul>
+    <p class="couture-nav__legal">Araxá · Frutal · Catalão · Mineiros</p>
+  </div>
+</div>
 
 <main id="main">
 
@@ -148,7 +157,7 @@
         <div class="chapter__card">
           <p class="eyebrow">Belle Alencar · Moda &amp; Acessórios</p>
           <h1 class="display" data-split>O look começa <em>aqui.</em><br>O resto é <em>seu.</em></h1>
-          <p class="lede">Araxá, Frutal, Catalão e Mineiros. Role para entrar na loja ou vá direto ao que procura.</p>
+          <p class="lede">Entre na Belle, explore a coleção e escolha sua loja para consultar suas peças favoritas.</p>
           <div class="cta-row">
             <a class="btn btn--solid" href="#colecao">Ver a coleção</a>
             <button type="button" class="btn btn--line" data-open-store>Escolher minha loja</button>
@@ -161,7 +170,7 @@
         <div class="chapter__card chapter__card--center">
           <p class="eyebrow">02 · A porta</p>
           <h2 class="display" data-split>Entre.<br><em>Fique à vontade.</em></h2>
-          <p class="lede">A porta abre no seu ritmo. É só continuar.</p>
+          <p class="lede">Siga a experiência e encontre a peça que combina com você.</p>
         </div>
       </article>
 
@@ -169,7 +178,7 @@
         <div class="chapter__card chapter__card--rack">
           <p class="eyebrow">03 · Arara viva</p>
           <h2 class="display" data-split>Passe a mão<br><em>pela arara.</em></h2>
-          <p class="lede">Deslize para os lados, traga uma peça para perto e clique para ver. Gostou? Ela voa para a sua sacola.</p>
+          <p class="lede">Deslize entre as peças, toque na sua favorita e salve na sacola. A loja confirma a disponibilidade.</p>
           <p class="fineprint">30 peças sintéticas isoladas, em vista frontal. Catálogo, tamanhos e disponibilidade reais são confirmados pela loja.</p>
         </div>
       </article>
@@ -262,7 +271,7 @@
     <header class="sec-head">
       <p class="eyebrow">Compre por ocasião</p>
       <h2 class="display" id="ocasioesTitle" data-reveal>Qual é o <em>seu plano?</em></h2>
-      <p class="lede">Comece pelo momento. A gente mostra as peças que combinam com ele.</p>
+      <p class="lede">Escolha a ocasião e descubra os looks que combinam com ela.</p>
     </header>
     <div class="occ-round" data-occ-round>
       <div class="occ-round__aura" aria-hidden="true"></div>
@@ -352,7 +361,7 @@
   <section class="collection" id="colecao" aria-labelledby="colecaoTitle">
     <header class="section-head">
       <p class="eyebrow">A coleção</p>
-      <h2 class="display" id="colecaoTitle">Escolha com calma.<br><em>A loja confirma o resto.</em></h2>
+      <h2 class="display" id="colecaoTitle">Encontre sua favorita.<br><em>Confirme com a Belle.</em></h2>
       <p class="notice" role="note"><strong>Pré-lançamento.</strong> As peças abaixo são ilustrações demonstrativas enquanto o acervo oficial é fotografado. Preço, tamanho e estoque são confirmados pela loja da sua cidade.</p>
     </header>
     <div id="catalogMount" class="catalog">
@@ -383,7 +392,7 @@
       <header class="how__intro sec-head">
         <p class="eyebrow">A experiência Belle · Como comprar</p>
         <h2 class="display" id="howTitle">Seu próximo look.<br><em>Do seu jeito.</em></h2>
-        <p class="lede">Descubra peças, monte sua seleção e conte com a Belle da sua cidade para cuidar dos detalhes.</p>
+        <p class="lede">Explore a coleção, monte sua sacola de interesse e fale com a sua unidade para confirmar tamanho e disponibilidade.</p>
       </header>
       <div class="how__bottom">
         <ol class="how__steps" aria-label="Quatro etapas para escolher e conversar com a Belle">
@@ -396,7 +405,7 @@
           <p>Sua sacola organiza os favoritos. A disponibilidade e as condições são confirmadas diretamente pela unidade.</p>
           <div class="cta-row cta-row--center">
             
-            <a class="btn btn--line" href="#colecao">Explorar a coleção</a>
+            <a class="btn btn--line how__collection-cta" href="#colecao"><span class="how__collection-cta__label">Explorar a coleção</span><span class="how__collection-cta__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4.5 12h14m-6.5-6.5L18.5 12 12 18.5"/></svg></span></a>
           </div>
         </div>
       </div>
@@ -406,11 +415,12 @@
   <!-- 10 · MINHA BELLE: lojas -->
   <section class="stores" id="lojas" aria-labelledby="lojasTitle">
     <header class="section-head section-head--light">
-      <p class="eyebrow">Quatro cidades, uma Belle</p>
+      <p class="eyebrow">Seis cidades, uma Belle</p>
       <h2 class="display" id="lojasTitle">A Belle <em>da sua cidade.</em></h2>
-      <p class="lede">Escolha sua loja. Sua sacola e suas preferências ficam salvas neste navegador e você pode trocar quando quiser.</p>
+      <p class="lede">Escolha sua unidade e continue com seus favoritos. A sacola fica salva neste navegador, mesmo se você trocar de loja.</p>
     </header>
     <canvas class="stores__orbit" aria-hidden="true"></canvas>
+    <nav class="stores__geo-trail" aria-label="Navegação geográfica das lojas" data-geo-trail></nav>
     <ul class="store-list" id="storeList">
       <li class="store-card" data-store-card="araxa">
         <p class="store-card__uf">MG</p>
@@ -437,26 +447,111 @@
         <p class="store-card__addr">Quarta Avenida, 76, Centro</p><a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Quarta%20Avenida%2C%2076%2C%20Centro%2C%20Mineiros%20GO" target="_blank" rel="noopener noreferrer">Ver no mapa ↗</a>
         <button type="button" class="btn btn--line" data-select-store="mineiros">Definir como minha loja</button>
       </li>
+
+      <li class="store-card" data-store-card="ibia">
+        <p class="store-card__uf">MG</p>
+        <h3>Ibiá</h3>
+        <p class="store-card__addr is-pending">Endereço da unidade a confirmar</p>
+        <a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Ibi%C3%A1%2C%20Minas%20Gerais%2C%20Brasil" target="_blank" rel="noopener noreferrer" aria-label="Ver Ibiá em Minas Gerais no Google Maps (cidade, não endereço da loja)">Ver cidade no mapa ↗</a>
+        <button type="button" class="btn btn--line" data-select-store="ibia">Definir como minha loja</button>
+      </li>
+      <li class="store-card" data-store-card="franca">
+        <p class="store-card__uf">SP</p>
+        <h3>Franca</h3>
+        <p class="store-card__addr is-pending">Endereço da unidade a confirmar</p>
+        <a class="store-card__map" href="https://www.google.com/maps/search/?api=1&amp;query=Franca%2C%20S%C3%A3o%20Paulo%2C%20Brasil" target="_blank" rel="noopener noreferrer" aria-label="Ver Franca em São Paulo no Google Maps (cidade, não endereço da loja)">Ver cidade no mapa ↗</a>
+        <button type="button" class="btn btn--line" data-select-store="franca">Definir como minha loja</button>
+      </li>
     </ul>
     <p class="stores__note">Atendimento por WhatsApp pelo canal oficial da Belle. Contatos individuais de cada unidade ainda estão sendo confirmados.</p>
   </section>
 
 
   <!-- ATENDIMENTO DE ESTILO -->
-  <section class="concierge" id="atendimento" aria-labelledby="conciergeTitle">
-    <div class="concierge__media" aria-hidden="true"><img src="/posters/provador.jpg" alt="" loading="lazy" decoding="async" width="1600" height="1000"></div>
-    <div class="concierge__body">
-      <p class="eyebrow">Atendimento de estilo</p>
-      <h2 class="display" id="conciergeTitle" data-reveal>Ficou na dúvida?<br><em>Pergunte para a Belle.</em></h2>
-      <p class="lede">Tamanho, combinação, ocasião: mande uma mensagem e a equipe ajuda você a escolher.</p>
-      <div class="cta-row">
-        <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
-        <a class="btn btn--line" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Novidades no Instagram</a>
+  <section class="concierge concierge--brand-story" id="atendimento" aria-labelledby="conciergeTitle">
+    <div class="concierge__media style-reveal" data-concierge-reveal role="img" aria-label="Billie, da Belle Alencar. Passe o cursor ou arraste para revelar uma composição editorial com vestido champagne."><div class="style-reveal__figure"><img class="style-reveal__original" src="/concierge/billie-original.webp" alt="Billie com óculos escuros, blusa branca e short jeans" loading="lazy" decoding="async" width="768" height="1152"><canvas class="style-reveal__canvas" aria-hidden="true"></canvas></div><p class="style-reveal__hint">Passe o cursor para revelar o vestido</p></div>
+    <div class="concierge__body brand-story">
+      <p class="eyebrow">A história por trás da Belle</p>
+      <h2 class="display" id="conciergeTitle" data-reveal>Moda com <em>assinatura.</em></h2>
+      <p class="brand-story__signature">BELLE ALENCAR · MODA &amp; ACESSÓRIOS</p>
+      <p class="brand-story__lead">Peças para expressar quem você é, do cotidiano às ocasiões que merecem presença.</p>
+      <p class="brand-story__paragraph">Na trajetória de Gislayne de Alencar em Araxá, moda feminina e acessórios se encontram em uma curadoria que valoriza a expressão de cada mulher.</p>
+      <p class="brand-story__paragraph">Para o dia a dia, para celebrar e para os momentos que merecem ser lembrados: cada look carrega um pouco de quem o escolhe.</p>
+      <div class="brand-story__presence">
+        <p class="brand-story__presence-label">Uma identidade. Diferentes cidades.</p>
+        <p class="brand-story__cities">Araxá <span>·</span> Frutal <span>·</span> Catalão <span>·</span> Mineiros <span>·</span> Ibiá <span>·</span> Franca</p>
       </div>
-      <p class="fineprint">Canal oficial da Belle. Contatos individuais de cada unidade em confirmação.</p>
+      <button class="brand-story__social" type="button" data-instagram-directory>Conheça o universo Belle no Instagram <span aria-hidden="true">↗</span></button>
     </div>
   </section>
 
+  <!-- BELLE V54 · six supplied iPhone 17 Pro Max PNGs and 47 real preview slots. -->
+  <section id="belle-cidades" class="v54-cinema" aria-labelledby="v54Title">
+    <div class="v54-sticky">
+      <div class="v54-atmosphere" aria-hidden="true"></div><div class="v54-bridge" aria-hidden="true"></div>
+      <div class="v54-inner">
+        <header class="v54-heading">
+          <p class="v54-eyebrow">O universo Belle Alencar · Seis cidades</p>
+          <h2 id="v54Title">Uma marca. <em>Seis destinos.</em></h2>
+          <p>O mesmo olhar para a moda, em diferentes cidades. Percorra, descubra e entre no universo de cada Belle.</p>
+        </header>
+        <div class="v54-grid">
+          <div class="v54-copy">
+            <p class="v54-serial" data-v54-serial>01 / 06</p>
+            <h3 class="v54-city" data-v54-name>Araxá</h3>
+            <p class="v54-city-meta"><span data-v54-region>Minas Gerais</span><span aria-hidden="true">·</span><span data-v54-handle>@belle.alencar</span><span aria-hidden="true">·</span><span data-v54-count>12 PREVIEWS</span></p>
+            <p class="v54-lede">Seis perfis, uma identidade. Desça a página ou selecione a cidade para revelar os iPhones e descobrir os vídeos das lojas.</p>
+            <nav class="v54-city-tabs" aria-label="Ver apresentação de cada cidade">
+              <button type="button" data-v54-city="araxa" aria-pressed="true">Araxá</button>
+              <button type="button" data-v54-city="frutal" aria-pressed="false">Frutal</button>
+              <button type="button" data-v54-city="catalao" aria-pressed="false">Catalão</button>
+              <button type="button" data-v54-city="mineiros" aria-pressed="false">Mineiros</button>
+              <button type="button" data-v54-city="ibia" aria-pressed="false">Ibiá</button>
+              <button type="button" data-v54-city="franca" aria-pressed="false">Franca</button>
+            </nav>
+            <button class="v54-open-film" data-v54-open type="button">Assistir aos previews · Araxá ↗</button>
+            <span class="v54-ib-note">Ibiá: zero previews · acesso direto ao Instagram.</span>
+          </div>
+          <div class="v54-stage" data-v54-stage>
+            <div class="v54-pedestal" aria-hidden="true"></div>
+            <button class="v54-phone-hit" type="button" data-v54-tap aria-label="Abrir filme de previews Belle Araxá">
+              <span class="v54-phone-core">
+                <img class="v54-phone-photo" data-v54-phone src="/belle-v54/phones/araxa.webp" width="960" height="1280" alt="Mockup original iPhone 17 Pro Max com Instagram da Belle Araxá" decoding="async">
+                <span class="v54-phone-shards" aria-hidden="true">
+                  <img class="v54-phone-shard" data-v54-shard src="/belle-v54/phones/araxa.webp" alt="" style="clip-path:inset(0 0 83.33% 0)">
+                  <img class="v54-phone-shard" data-v54-shard src="/belle-v54/phones/araxa.webp" alt="" style="clip-path:inset(16.66% 0 66.66% 0)">
+                  <img class="v54-phone-shard" data-v54-shard src="/belle-v54/phones/araxa.webp" alt="" style="clip-path:inset(33.33% 0 50% 0)">
+                  <img class="v54-phone-shard" data-v54-shard src="/belle-v54/phones/araxa.webp" alt="" style="clip-path:inset(50% 0 33.33% 0)">
+                  <img class="v54-phone-shard" data-v54-shard src="/belle-v54/phones/araxa.webp" alt="" style="clip-path:inset(66.66% 0 16.66% 0)">
+                  <img class="v54-phone-shard" data-v54-shard src="/belle-v54/phones/araxa.webp" alt="" style="clip-path:inset(83.33% 0 0 0)">
+                </span>
+              </span>
+            </button>
+            <p class="v54-phone-instruction" data-v54-instruction>Toque no iPhone para assistir ao filme</p>
+          </div>
+        </div>
+        <div class="v54-counterline" aria-label="Progresso da experiência de seis cidades"><span>01</span><span class="v54-progress-track"><span class="v54-progress-fill" data-v54-fill></span></span><span>06</span></div>
+      </div>
+    </div>
+  </section>
+  <dialog class="v54-film-dialog" id="belleV54FilmDialog" aria-labelledby="v54FilmTitle">
+    <div class="v54-film-frame">
+      <header class="v54-film-header">
+        <button type="button" class="v54-film-back" data-v54-back>← Voltar</button>
+        <div class="v54-film-header-title"><strong id="v54FilmTitle" data-v54-dialog-city>Belle Araxá</strong><small data-v54-dialog-count>12 PREVIEWS · LOOP CONTÍNUO</small></div>
+        <select data-v54-select class="v54-film-city-select" aria-label="Selecionar outra unidade Belle">
+          <option value="araxa">Araxá</option><option value="frutal">Frutal</option><option value="catalao">Catalão</option><option value="mineiros">Mineiros</option><option value="ibia">Ibiá · Instagram</option><option value="franca">Franca</option>
+        </select>
+      </header>
+      <div class="v54-film-world">
+        <div class="v54-rotunda-mount" data-v54-rotunda aria-hidden="true"></div>
+        <button class="v54-film-arrow v54-film-arrow--prev" type="button" data-v54-prev aria-label="Vídeo anterior">‹</button>
+        <div class="v54-clip-deck" data-v54-players aria-label="Vídeos reais da unidade selecionada"></div>
+        <button class="v54-film-arrow v54-film-arrow--next" type="button" data-v54-next aria-label="Próximo vídeo">›</button>
+      </div>
+      <footer class="v54-film-footer"><span>Vídeos contínuos, sem áudio · navegue pelas setas ou deslize</span><a data-v54-instagram target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/belle.alencar/">Abrir Instagram Belle Araxá ↗</a></footer>
+    </div>
+  </dialog>
   <!-- DÚVIDAS FREQUENTES -->
   <section class="faq" id="duvidas" aria-labelledby="faqTitle">
     <header class="sec-head">
@@ -483,9 +578,16 @@
       <div class="finale__copy">
         <span class="finale__edition">BELLE ALENCAR · ASSINATURA</span>
         <h2 class="display" id="finaleTitle">A próxima escolha<br><em>é sua.</em></h2>
-        <div class="cta-row cta-row--center">
-          <a class="btn btn--solid" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">Falar com a Belle</a>
-          <a class="btn btn--line" href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
+        <div class="finale__consult" id="atendimento-final" aria-labelledby="finaleConsultTitle">
+          <p class="finale__consult-kicker">Atendimento de estilo</p>
+          <h3 id="finaleConsultTitle">Ficou na dúvida?<br><em>Pergunte para a Belle.</em></h3>
+          <p class="finale__consult-desc">Quer ajuda para escolher? Pergunte sobre tamanhos, combinações e disponibilidade diretamente à Belle.</p>
+          <div class="finale__actions">
+            <a class="btn btn--solid belle-neon belle-neon--wa" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer"><span class="belle-neon__icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.198.296-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.76-1.653-2.058-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.496.1-.198.05-.372-.025-.52-.074-.149-.669-1.612-.916-2.206-.242-.579-.487-.5-.669-.51-.173-.009-.372-.011-.57-.011s-.52.074-.792.372c-.273.297-1.04 1.016-1.04 2.479s1.065 2.875 1.214 3.073c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.005-1.414.248-.694.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.876 9.876 0 0 1-5.031-1.378l-.36-.214-3.741.981.998-3.648-.235-.374a9.88 9.88 0 0 1-1.516-5.273c.002-5.45 4.437-9.884 9.889-9.884a9.82 9.82 0 0 1 6.988 2.895 9.82 9.82 0 0 1 2.894 6.993c-.003 5.451-4.437 9.885-9.882 9.885m8.413-18.295A11.81 11.81 0 0 0 12.05 0C5.494 0 .16 5.333.157 11.892c-.001 2.096.547 4.142 1.588 5.946L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.557 0 11.893-5.334 11.896-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg></span><span class="belle-neon__label">Falar no WhatsApp</span></a>
+            <button type="button" class="btn btn--line belle-neon belle-neon--ig" data-instagram-directory><span class="belle-neon__icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" fill="currentColor"><path d="M7.03 0C3.15 0 0 3.15 0 7.03v9.94C0 20.85 3.15 24 7.03 24h9.94C20.85 24 24 20.85 24 16.97V7.03C24 3.15 20.85 0 16.97 0H7.03zm0 2.16h9.94a4.87 4.87 0 0 1 4.87 4.87v9.94a4.87 4.87 0 0 1-4.87 4.87H7.03a4.87 4.87 0 0 1-4.87-4.87V7.03a4.87 4.87 0 0 1 4.87-4.87zm11.175 1.63a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88zM12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zm0 2.16a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg></span><span class="belle-neon__label">Novidades no Instagram</span></button>
+          </div>
+          <button class="finale__instagram-link" type="button" data-instagram-directory>Ver Instagram <span aria-hidden="true">↗</span></button>
+          <p class="finale__fineprint">Canal oficial da Belle. Contatos individuais de cada unidade em confirmação.</p>
         </div>
       </div>
     </div>
@@ -494,7 +596,7 @@
 
 <footer class="site-footer">
   <div class="site-footer__brand" role="img" aria-label="Belle Alencar, Moda e Acessórios"><span data-monogram="footer" aria-hidden="true"></span></div>
-  <p>Araxá · Frutal (MG) · Catalão · Mineiros (GO)</p>
+  <p>Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)</p>
   <p class="site-footer__legal">Pré-lançamento digital. Ilustrações e estudo 3D são demonstrativos e não representam estoque. Disponibilidade, preço e atendimento são confirmados diretamente com a loja. Direção e engenharia: SET77 Labs.</p>
   <button type="button" class="director" id="directorToggle" aria-pressed="false">
     <span class="director__dot" aria-hidden="true"></span><span data-director-label>Movimento: cinema</span>
@@ -503,5 +605,33 @@
 
 <a class="float-cta" id="floatCta" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span>Falar com a Belle</span></a>
 <div id="overlays"></div>
+<dialog id="belleInstagramDialog" class="belle-ig-dialog" aria-labelledby="belleIgTitle" aria-describedby="belleIgDesc">
+  <div class="belle-ig-dialog__inner">
+    <div class="belle-ig-dialog__header">
+      <div>
+        <p class="belle-ig-dialog__eyebrow">O UNIVERSO BELLE ALENCAR</p>
+        <h2 id="belleIgTitle">De qual Belle <em>você é?</em></h2>
+        <p id="belleIgDesc">Encontre a unidade ou o perfil que mais combina com você.</p>
+      </div>
+      <form method="dialog"><button type="submit" class="belle-ig-dialog__close" aria-label="Fechar seleção de Instagram">×</button></form>
+    </div>
+    <p class="belle-ig-dialog__group-label">Lojas e coleções</p>
+    <div class="belle-ig-dialog__grid">
+      <a href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer"><span>Araxá</span><small>@belle.alencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/frutal.bellealencar/" target="_blank" rel="noopener noreferrer"><span>Frutal</span><small>@frutal.bellealencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/catalao.bellealencar/" target="_blank" rel="noopener noreferrer"><span>Catalão</span><small>@catalao.bellealencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar.mineiros/" target="_blank" rel="noopener noreferrer"><span>Mineiros</span><small>@bellealencar.mineiros</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar.ibia/" target="_blank" rel="noopener noreferrer"><span>Ibiá</span><small>@bellealencar.ibia</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar.franca/" target="_blank" rel="noopener noreferrer"><span>Franca</span><small>@bellealencar.franca</small><b aria-hidden="true">↗</b></a>
+    </div>
+    <p class="belle-ig-dialog__group-label belle-ig-dialog__group-label--secondary">Pessoas e ocasiões</p>
+    <div class="belle-ig-dialog__grid belle-ig-dialog__grid--secondary">
+      <a href="https://www.instagram.com/gislayne.alencar/" target="_blank" rel="noopener noreferrer"><span>Gislayne Alencar</span><small>@gislayne.alencar</small><b aria-hidden="true">↗</b></a>
+      <a href="https://www.instagram.com/bellealencar_eventos/" target="_blank" rel="noopener noreferrer"><span>Belle Eventos</span><small>@bellealencar_eventos</small><b aria-hidden="true">↗</b></a>
+    </div>
+    <p class="belle-ig-dialog__note">Perfis indicados pela marca. Atendimento, endereços e disponibilidade devem ser confirmados diretamente em cada unidade.</p>
+  </div>
+</dialog>
+
 </body>
 </html>

@@ -1,0 +1,41 @@
+name: Belle V46 | Couture Glass QA
+on:
+  push:
+    branches:
+      - feat/belle-v46-couture-glass-collection-cta
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  couture-glass-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Existing unit regressions
+        run: npm test
+      - name: Four-language source audit
+        run: node scripts/i18n-audit-v39.mjs
+      - name: Strict production build
+        run: npm run build
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: Real browser couture glass and collection CTA QA
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v46.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/belle-v46-couture-glass.mjs

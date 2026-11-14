@@ -1,3 +1,5 @@
+import { initConciergeReveal } from './concierge-reveal';
+import { initEditorialBoundaries } from './motion/editorial-boundaries';
 import { initStoreMap } from './astral/store-map';
 import './styles/city-globe.css';
 import { initStoreOrbit } from './astral/orbit';
@@ -14,31 +16,54 @@ import './styles/header-glass.css';
 import './styles/search-atelier.css';
 import './styles/catalog-couture-v17.css';
 import './styles/preferences-v31.css';
+import './styles/stores-atelier-v40.css'; // V40: city selection only, globe/scroll unchanged.
+import './styles/brand-story-v41.css'; // Only #atendimento narrative, finale service, profile modal.
+import './styles/belle-signature-neon-v42.css'; // Only final WhatsApp/Instagram CTAs and story typography.
+import './styles/geo-six-v44.css'; // Same canvas globe, six-location hierarchy and maps neon CTA.
+import './styles/store-card-visibility-v45.css'; // Fix clipped store buttons and mobile layout, existing globe untouched.
+import './styles/couture-glass-collection-v46.css'; // Four post-throw glass cards + collection CTA only; scroll logic untouched.
+import './styles/liquid-glass-nav-v47.css'; // Navigation glass, tactile icon buttons and theme overrides.
+import './styles/editorial-search-v47.css'; // Full search atelier redesign; semantic live result filters.
+import './styles/prismatic-search-v48.css'; // Search-only left-to-right reveal, prismatic type and pill glass.
+import './styles/film-optical-glass-v49.css'; // Seven compact optical film captions, warm dark glass and mobile-safe bounds.
+import './styles/film-mobile-impact-v50.css'; // Compact mobile cards and one-shot optical impact reveal.
+import './styles/editorial-typography-v51.css'; // Full-page five-role editorial typography and accessible theme contrast.
+import './styles/contrast-readable-film-v52.css'; // Keep bright how-film readable in dark theme; legible compact film cards.
+import { initTypographyCinema } from './motion/editorial-typography-v51';
 import { initBelleI18n } from './preferences/i18n';
 import { initBelleSettings } from './preferences/settings';
 import { mountMonograms } from './shell/monogram';
 import { initIntro } from './shell/intro';
 import { initHeader } from './shell/header';
+import { initCoutureMenu } from './shell/couture-menu';
 import { initDirector } from './shell/director';
 import { initCommerce } from './commerce';
 import { initFilm } from './film';
 import { initSections } from './sections';
+import { initBelleInstagramDirectory } from './social/instagram-directory';
 import { initHowFilm } from './how-film';
 import { initStoresChampagne } from './motion/stores-champagne';
+import { initPerfGuard } from './core/perf-guard';
 
 
+initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
 initHeader();
+initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
+initTypographyCinema(); // Lightweight scroll-based editorial text reveals, separate from film.
 initSections();
+initBelleInstagramDirectory(); // Accessible Instagram profile selector; no changes to existing navigation.
+initConciergeReveal(); // Codex: local pointer/touch reveal in concierge only.
 // V36 CLEAN: no global transition compositor and no second scene director.
 // Leave the original 3D film, runway, carousel, video scrub, collections,
 // city globe and all their own scroll-based interactions undisturbed.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
 const director = initDirector();
+initEditorialBoundaries();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
 // A coleção contém peças renderizadas dinamicamente. O módulo de movimento
 // só carrega quando o catálogo se aproxima, evitando custo no hero e na

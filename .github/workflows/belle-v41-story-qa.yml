@@ -1,0 +1,49 @@
+name: Belle V41 Story + Instagram QA
+on:
+  push:
+    branches:
+      - feat/belle-v41-brand-story-instagram-directory
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  story-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Unit tests
+        run: npm test
+      - name: Four-language HTML coverage
+        run: node scripts/i18n-audit-v39.mjs
+      - name: TypeScript production build
+        run: npm run build
+      - name: Chromium
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: Actual scene and profile QA (9 layouts and 4 languages)
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v41.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/brand-story-v41.mjs
+      - name: Preserve screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: belle-v41-story-and-instagram
+          path: artifacts/belle-v41/*.png
+          retention-days: 7
+          if-no-files-found: ignore

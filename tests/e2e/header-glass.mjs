@@ -45,21 +45,26 @@ try{
       return v.display!=='none'&&r.width>=40&&r.height>=40&&r.left>=-1&&r.right<=innerWidth+1;
     }),width+': real '+id+' retains a 40px+ touch target');
   }
-  if(width<=1020){
+  // V38: every viewport uses the full-page couture chapter menu.
+  {
     const toggle=page.locator('#belleMenuButton');
-    check(await toggle.isVisible(),width+': custom menu button visible');
+    const panel=page.locator('#belleMenuPanel');
+    check(await toggle.isVisible(),width+': couture menu button visible');
+    check(await toggle.evaluate(el=>{const r=el.getBoundingClientRect();return r.height>=40&&r.right<=innerWidth+1;}),width+': menu button 40px+ and inside viewport');
     await toggle.click();
-    check(await toggle.getAttribute('aria-expanded')==='true'&&await page.locator('#belleMenuPanel').isVisible(),width+': glass navigation opens');
-    const panel=await page.locator('#belleMenuPanel').boundingBox();
-    check(panel&&panel.x>=-1&&panel.x+panel.width<=width+1,width+': mobile menu stays within safe viewport');
+    await page.waitForFunction(()=>document.getElementById('belleMenuPanel')?.classList.contains('is-open'),null,{timeout:3000});
+    check(await toggle.getAttribute('aria-expanded')==='true'&&await panel.getAttribute('aria-hidden')==='false',width+': chapter menu opens');
+    check(await page.locator('#belleMenuPanel .couture-nav__link').count()===6,width+': six chapters inside the menu');
+    const box=await panel.boundingBox();
+    check(box&&box.x>=-1&&box.width<=width+1,width+': menu panel fills the safe viewport');
     await page.keyboard.press('Escape');
-    check(await toggle.getAttribute('aria-expanded')==='false'&&await page.locator('#belleMenuPanel').isHidden(),width+': Escape closes menu');
+    await page.waitForTimeout(1100);
+    check(await toggle.getAttribute('aria-expanded')==='false'&&await panel.evaluate(el=>el.inert&&getComputedStyle(el).visibility==='hidden'),width+': Escape closes menu');
     await toggle.click();
+    await page.waitForTimeout(1300);
     await page.locator('#belleMenuPanel a[href="#colecao"]').click();
-    check(await page.locator('#belleMenuPanel').isHidden(),width+': tapping collection closes sheet');
-  }else{
-    check(await page.locator('#belleMenuButton').isHidden(),width+': wide header shows the actual desktop navigation');
-    check(await page.locator('.site-nav a').count()===5,width+': desktop links preserved');
+    await page.waitForTimeout(1300);
+    check(await panel.evaluate(el=>el.inert)&&await page.evaluate(()=>Math.abs(document.getElementById('colecao').getBoundingClientRect().top)<160),width+': chapter link closes menu and lands on the collection');
   }
   await page.locator('#colecao').scrollIntoViewIfNeeded();
   await page.waitForFunction(()=>document.getElementById('siteHeader')?.dataset.atmosphere==='pearl',null,{timeout:4000});
@@ -92,7 +97,7 @@ try{
  await page.waitForFunction(()=>document.getElementById('siteHeader')?.dataset.atmosphere==='noir');
  check(await page.locator('#siteHeader').isVisible(),'reduced motion still changes header palette without animations');
  await page.locator('#belleMenuButton').click();
- check(await page.locator('#belleMenuPanel').isVisible(),'reduced motion retains an accessible menu');
+ check(await page.locator('#belleMenuPanel').evaluate(el=>el.classList.contains('is-open')&&getComputedStyle(el).visibility==='visible'),'reduced motion retains an accessible menu');
  await context.close();
  console.log('PASS '+passed+' adaptive Belle header checks');
 } finally{await browser.close();}
