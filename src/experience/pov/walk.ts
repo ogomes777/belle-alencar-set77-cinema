@@ -12,12 +12,12 @@ export const VISIT_DESTINATIONS:Record<VisitDestination,WalkPoint>={
  direita:{x:2.12,z:-7.25},provador:{x:1.65,z:-13.15}
 };
 export const VIEWPOSES={
- fachada:{x:.9,z:12.9,yaw:0,pitch:.01,fov:40},
+ fachada:{x:0,z:12.5,yaw:0,pitch:0,fov:39},
  sala:{x:0,z:-2.8,yaw:0,pitch:0,fov:42},
- direita:{x:.65,z:-7.6,yaw:-1.04,pitch:0,fov:46},
- esquerda:{x:-.65,z:-7.6,yaw:1.04,pitch:0,fov:46},
- provador:{x:1.12,z:-13.05,yaw:-.67,pitch:0,fov:43},
- portaInterna:{x:0,z:-3.45,yaw:Math.PI,pitch:0,fov:42},
+ direita:{x:.65,z:-7.6,yaw:1.04,pitch:0,fov:46},
+ esquerda:{x:-.65,z:-7.6,yaw:-1.04,pitch:0,fov:46},
+ provador:{x:.35,z:-13.05,yaw:0,pitch:0,fov:46},
+ portaInterna:{x:0,z:-4.1,yaw:Math.PI,pitch:0,fov:42},
 } as const;
 const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
 const norm=(a:number)=>Math.atan2(Math.sin(a),Math.cos(a));
@@ -26,12 +26,12 @@ function collides(x:number,z:number,r=.29):boolean{
  // Two physical freestanding rails and stone supports, 1+ metres from walls.
  for(const side of [-1,1]){
   const dx=Math.abs(x-side*3.45);
-  if(dx<.49+r && z< -2.58+r && z> -11.35-r)return true;
+  if(dx<.49+r && z< -3.12+r && z> -11.9-r)return true;
  }
  // Center display is offset from the principal circulation lane.
- if((x+1.88)**2+(z+12.15)**2 < (0.75+r)**2)return true;
+ if((x+3.03)**2+(z+15.9)**2 < (0.71+r)**2)return true;
  // Partition between corridor and fitting alcove.
- if(x>2.24-r&&x<2.47+r&&z< -13.45+r&&z> -16.4-r)return true;
+ if((x+3.6)**2+(z+13.7)**2 < (0.62+r)**2)return true;
  return false;
 }
 export function safeWalkPoint(x:number,z:number):WalkPoint{
@@ -107,7 +107,7 @@ export class POVWalk {
    this.path=[];this.arrival=null;
   }else if(this.path.length){
    const next=this.path[0]!,dx=next.x-this.x,dz=next.z-this.z,dist=Math.hypot(dx,dz);
-   if(dist<.11){this.x=next.x;this.z=next.z;this.path.shift();if(!this.path.length)this.arrival=null;}
+   if(dist<.11){this.x=next.x;this.z=next.z;this.path.shift();if(!this.path.length){const side=this.arrival;this.arrival=null;if(side==='direita')this.yaw=Math.PI/2;if(side==='esquerda')this.yaw=-Math.PI/2;if(side==='provador')this.yaw=0;}}
    else{vx=dx/dist;vz=dz/dist;}
   }
   const step=collisionStep({x:this.x,z:this.z},{x:this.x+vx*speed,z:this.z+vz*speed});
