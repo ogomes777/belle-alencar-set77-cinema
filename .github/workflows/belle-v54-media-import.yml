@@ -1,0 +1,42 @@
+name: Belle V54 | Import optimized licensed project media
+on:
+  push:
+    branches:
+      - feat/belle-v54-six-city-cinema-originkit
+    paths:
+      - '.github/workflows/belle-v54-media-import.yml'
+permissions:
+  contents: write
+jobs:
+  import-belle-media:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
+          ref: feat/belle-v54-six-city-cinema-originkit
+      - name: Fetch six authorized iPhones and optimized video archive
+        env:
+          # One-time staging link for user-supplied media; output is committed to this branch.
+          BELLE_MEDIA_ARCHIVE: https://at.adobe.com/jrq4gbXtryHJNe3g
+        run: |
+          set -euo pipefail
+          curl --retry 3 --retry-all-errors --fail --location --silent --show-error --output /tmp/belle-v54-assets.zip "$BELLE_MEDIA_ARCHIVE"
+          echo "508a08563c5960771e2e0fc6f51ee5e810e5ca4fcbe81149bee9aaeaa5e3cadf  /tmp/belle-v54-assets.zip" | sha256sum --check
+          unzip -q /tmp/belle-v54-assets.zip -d public
+          test "$(find public/belle-v54/phones -name '*.webp' | wc -l)" -eq 6
+          test "$(find public/belle-v54/media -name '*.mp4' | wc -l)" -eq 27
+          node --input-type=module -e "import fs from 'node:fs';const x=JSON.parse(fs.readFileSync('public/belle-v54/manifest.json'));if(x.length!==47||x.some(x=>x.city==='ibia'))process.exit(1);console.log('Validated',x.length,'video slots');"
+      - name: Update npm lockfile to match original Rotunda React dependencies
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Commit optimized media to source branch
+        run: |
+          set -euo pipefail
+          git config user.name "set77-belle-media-bot"
+          git config user.email "set77-belle-media-bot@users.noreply.github.com"
+          git add public/belle-v54 package-lock.json
+          if git diff --cached --quiet; then echo "Assets already committed"; exit 0; fi
+          git commit -m "assets(belle-v54): 6 supplied iPhones, 47 slots across 27 deduplicated optimized MP4s"
+          git push origin HEAD:feat/belle-v54-six-city-cinema-originkit
