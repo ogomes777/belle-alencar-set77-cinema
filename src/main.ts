@@ -1,8 +1,6 @@
 import { initConciergeReveal } from './concierge-reveal';
 import { initEditorialBoundaries } from './motion/editorial-boundaries';
-import { initStoreMap } from './astral/store-map';
 import './styles/city-globe.css';
-import { initStoreOrbit } from './astral/orbit';
 /**
  * BELLE ALENCAR · boot.
  * Ordem: estilos → monogramas → intro → shell → comércio → filme (3D lazy).
@@ -113,8 +111,26 @@ if (occasionSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) 
 }
 initFilm(director);
 
-initStoreOrbit();
-initStoreMap();
+// The globe builds a dense connection graph. Keep CPU/GPU headroom for
+// the opening film; initialize it only as its section approaches.
+const geoSection=document.getElementById('lojas');
+if(geoSection){
+  let geographyBooted=false;
+  const bootGeography=()=>{
+    if(geographyBooted)return;
+    geographyBooted=true;
+    void Promise.all([import('./astral/orbit'),import('./astral/store-map')])
+      .then(([orbit,map])=>{orbit.initStoreOrbit();map.initStoreMap();})
+      .catch(error=>console.warn('[belle] globe deferred; store links remain available',error));
+  };
+  if('IntersectionObserver' in window){
+    const nearby=new IntersectionObserver(entries=>{
+      if(!entries.some(entry=>entry.isIntersecting))return;
+      nearby.disconnect();bootGeography();
+    },{rootMargin:'1500px 0px'});
+    nearby.observe(geoSection);
+  }else bootGeography();
+}
 void import('./finale/ba-solid').then(({initFinaleSolid})=>initFinaleSolid()).catch(()=>{
   // Authenticated BA foil remains visible in fallback, including no WebGL.
 });
