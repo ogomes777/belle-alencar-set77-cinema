@@ -4,6 +4,9 @@ on:
     branches:
       - feat/belle-pov-v58-set77
   workflow_dispatch:
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
 permissions:
   contents: read
 jobs:
