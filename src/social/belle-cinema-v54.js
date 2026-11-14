@@ -26,7 +26,26 @@ if(section && dialog){
  let rotundaUninstall=null,rotundaRequest=0,returnFocus=null;
  let pointer=[0,0],lastScrollIndex=-1;
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- for(const city of cities){const im=new Image();im.src=source(city);}
+ // Do NOT fetch six high-resolution 3D phones while the first hero is
+ // assembling. They compete with its textures, fonts and WebGL upload.
+ let nearStage = false;
+ const warmed = new Set();
+ function prewarm(index){
+   for(const n of [index,(index+1)%cities.length]){
+     const url=source(cities[n]);
+     if(warmed.has(url))continue;
+     warmed.add(url);
+     const im=new Image();im.decoding='async';im.src=url;
+   }
+ }
+ const proximity = typeof IntersectionObserver !== 'undefined'
+   ? new IntersectionObserver(entries=>{
+       nearStage=entries.some(entry=>entry.isIntersecting);
+       if(nearStage){prewarm(Math.max(0,current));schedule();}
+     },{rootMargin:'1200px 0px'})
+   : null;
+ if(proximity)proximity.observe(section);
+ else nearStage=true;
  function paintCity(index){
    index=clamp(index,0,cities.length-1);
    if(index===current)return;
@@ -59,11 +78,13 @@ if(section && dialog){
  }
  function tickScroll(){
    renderReq=0;
+   // Keep the 690svh cinema dormant while visitors are still in the opening film.
+   if(!nearStage || document.hidden || dialog.open)return;
    const rect=section.getBoundingClientRect();
    const travel=Math.max(1,section.offsetHeight-innerHeight);
    const local=clamp(-rect.top/travel,0,1);
    const idx=clamp(Math.floor(local*6),0,5);
-   if(idx!==lastScrollIndex){paintCity(idx);lastScrollIndex=idx}
+   if(idx!==lastScrollIndex){paintCity(idx);prewarm(idx);lastScrollIndex=idx}
    fill.style.width=(100*local).toFixed(2)+'%';
    assembly(local*6);
    const center=stage.querySelector('.v54-phone-core');
