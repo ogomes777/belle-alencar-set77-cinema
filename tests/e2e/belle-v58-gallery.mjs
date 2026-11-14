@@ -55,7 +55,8 @@ try {
     const success=await page.evaluate(n=>window.__belle?.setView?.(n),name);
     assert(success,'Could not set camera pose '+name);
     await page.waitForTimeout(800);
-    await page.locator('#filmStage').screenshot({path:join(OUT,label+'.png'),timeout:30000});
+    // Full viewport screenshot avoids Playwright's never-settling element-stability check for a continuously animated WebGL canvas.
+    await page.screenshot({path:join(OUT,label+'.png'),timeout:60000,animations:'disabled'});
     report.shots.push({name,asset:label+'.png',world:await page.evaluate(()=>window.__belle?.world?.())});
   }
   await page.evaluate(()=>window.__belle?.setView?.(null));
