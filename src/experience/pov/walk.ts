@@ -12,12 +12,12 @@ export const VISIT_DESTINATIONS:Record<VisitDestination,WalkPoint>={
  direita:{x:2.12,z:-7.25},provador:{x:1.65,z:-13.15}
 };
 export const VIEWPOSES={
- fachada:{x:0,z:12.5,yaw:0,pitch:0,fov:39},
- sala:{x:0,z:-2.8,yaw:0,pitch:0,fov:42},
+ fachada:{x:0,z:9,yaw:0,pitch:0,fov:40},
+ sala:{x:0,z:2.1,yaw:0,pitch:0,fov:42},
  direita:{x:.65,z:-7.6,yaw:1.04,pitch:0,fov:46},
  esquerda:{x:-.65,z:-7.6,yaw:-1.04,pitch:0,fov:46},
  provador:{x:.35,z:-13.05,yaw:0,pitch:0,fov:46},
- portaInterna:{x:0,z:-4.1,yaw:Math.PI,pitch:0,fov:42},
+ portaInterna:{x:0,z:-9.8,yaw:Math.PI,pitch:0,fov:42},
 } as const;
 const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
 const norm=(a:number)=>Math.atan2(Math.sin(a),Math.cos(a));
