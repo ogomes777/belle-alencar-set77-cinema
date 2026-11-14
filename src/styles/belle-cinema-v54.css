@@ -67,3 +67,9 @@ html[data-belle-theme='rose'] #belle-cidades.v54-cinema{--c-bg:#f9edf0;--c-ink:#
 .v54-film-dialog button:focus-visible,.v54-film-dialog select:focus-visible,.v54-film-dialog a:focus-visible{outline:3px solid #e8bd80;outline-offset:3px}
 @media(max-width:700px){.v54-film-header{padding:12px 9px;gap:7px}.v54-film-back{min-height:42px;font-size:.67rem;padding:6px 8px}.v54-film-city-select{min-width:85px;max-width:116px;font-size:.69rem;padding:6px}.v54-film-header-title strong{font-size:1rem}.v54-film-header-title small{font-size:.56rem}.v54-clip{width:min(60vw,265px);height:min(62dvh,495px)}.v54-clip[data-side='-1'],.v54-clip[data-side='1']{position:absolute;left:-42%;filter:brightness(.42);pointer-events:none}.v54-clip[data-side='1']{left:auto;right:-42%}.v54-film-arrow{width:39px;height:39px}.v54-film-footer{padding:12px;flex-wrap:wrap;justify-content:center;text-align:center;font-size:.69rem}}
 @media(prefers-reduced-motion:reduce){#belle-cidades .v54-phone-core{animation:none}#belle-cidades .v54-open-film,#belle-cidades .v54-city-tabs button,.v54-clip{transition:none}}
+/* V55: offscreen 4K phone shards should not hold compositor layers or animations.
+ * The first hero owns the GPU budget until this section is near the viewport. */
+#belle-cidades.v54-cinema .v54-phone-core{animation-play-state:paused}
+#belle-cidades.v54-cinema.v54-near .v54-phone-core{animation-play-state:running}
+#belle-cidades.v54-cinema .v54-phone-shard{will-change:auto}
+#belle-cidades.v54-cinema.v54-near .v54-phone-shard{will-change:transform,opacity}
