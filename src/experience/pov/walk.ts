@@ -13,10 +13,10 @@ export const VISIT_DESTINATIONS:Record<VisitDestination,WalkPoint>={
 };
 export const VIEWPOSES={
  fachada:{x:0,z:9,yaw:0,pitch:0,fov:40},
- sala:{x:0,z:2.1,yaw:0,pitch:0,fov:42},
- direita:{x:.65,z:-7.6,yaw:1.04,pitch:0,fov:46},
- esquerda:{x:-.65,z:-7.6,yaw:-1.04,pitch:0,fov:46},
- provador:{x:.35,z:-13.05,yaw:0,pitch:0,fov:46},
+ sala:{x:0,z:-2.18,yaw:0,pitch:0,fov:52},
+ direita:{x:.35,z:-4.65,yaw:.43,pitch:-.025,fov:46},
+ esquerda:{x:-.35,z:-4.65,yaw:-.43,pitch:-.025,fov:46},
+ provador:{x:-.55,z:-11.95,yaw:.1,pitch:-.02,fov:52},
  portaInterna:{x:0,z:-9.8,yaw:Math.PI,pitch:0,fov:42},
 } as const;
 const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
@@ -26,7 +26,7 @@ function collides(x:number,z:number,r=.29):boolean{
  // Two physical freestanding rails and stone supports, 1+ metres from walls.
  for(const side of [-1,1]){
   const dx=Math.abs(x-side*3.45);
-  if(dx<.49+r && z< -3.12+r && z> -11.9-r)return true;
+  if(dx<.49+r && z< -4.0+r && z> -12.92-r)return true;
  }
  // Center display is offset from the principal circulation lane.
  if((x+3.03)**2+(z+15.9)**2 < (0.71+r)**2)return true;
