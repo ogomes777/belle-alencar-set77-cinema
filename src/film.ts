@@ -280,28 +280,13 @@ export function initFilm(director: Director): void {
     const serial=++startSerial;
     stage!.classList.add('is-loading');
     try {
-      // The original 1.05s hard wait was additive to 1.5s font + 2s brand
-      // preflight and delayed camera updates until every product loaded.
-      // Wait for the ACTUAL short intro if playing, never a blind extra delay.
-      if (!posterMode && document.documentElement.classList.contains('intro-playing')) {
-        await new Promise<void>(resolve=>{
-          const root=document.documentElement;
-          let settled=false;
-          let timeout=0;
-          const observer=new MutationObserver(()=>{
-            if(root.classList.contains('intro-done'))finish();
-          });
-          const finish=()=>{
-            if(settled)return;
-            settled=true;observer.disconnect();clearTimeout(timeout);resolve();
-          };
-          observer.observe(root,{attributes:true,attributeFilter:['class']});
-          timeout=window.setTimeout(finish,2900);
-        });
-      }
+      // V57: start downloading the 3D chunk immediately, DURING the intro.
+      // The first paint remains free: building starts after one browser frame.
+      // Scroll never waits for intro animation, fonts or brand preflight.
+      const worldModule = import('./experience');
       await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
       if(serial!==startSerial || (tier as Tier)==='static')return;
-      const mod = await import('./experience');
+      const mod = await worldModule;
       if(serial!==startSerial || (tier as Tier)==='static')return;
       const created = await mod.createWorld({
         container: canvasHost!,
@@ -316,7 +301,7 @@ export function initFilm(director: Director): void {
           if(!current)return;
           void Promise.race([
             current.readyEntranceMedia().catch(()=>undefined),
-            new Promise<void>(resolve=>setTimeout(resolve,1950)),
+            new Promise<void>(resolve=>setTimeout(resolve,240)),
           ]).then(()=>{
             if(world!==current||tier==='static')return;
             stage!.classList.remove('is-loading');
@@ -399,12 +384,20 @@ export function initFilm(director: Director): void {
     document.documentElement.classList.add('poster-mode', 'intro-seen');
     startWorld();
   } else if (tier !== 'static') {
-    const preload = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      preload.disconnect();
+    // V57: do not wait for IntersectionObserver's async delivery for above-
+    // the-fold entry. It can arrive one or more frames after main has finished.
+    // Still avoid booting WebGL on a deep link far below the first film.
+    const initialRect = film.getBoundingClientRect();
+    if (initialRect.bottom > -innerHeight * 0.3 && initialRect.top < innerHeight * 1.3) {
       void startWorld();
-    }, { rootMargin: '200px' });
-    preload.observe(film);
+    } else {
+      const preload = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        preload.disconnect();
+        void startWorld();
+      }, { rootMargin: '1200px 0px' });
+      preload.observe(film);
+    }
   }
 
   director.onChange((intensity) => {
