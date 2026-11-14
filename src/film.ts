@@ -240,10 +240,9 @@ export function initFilm(director: Director): void {
   const glassObserver=new IntersectionObserver(entries=>{
     for(const entry of entries){
       const card=entry.target as HTMLElement;
-      if(!entry.isIntersecting){
-        card.classList.remove('is-glass-appeared');
-        continue;
-      }
+      // Never erase a readable caption when sticky cards hover near an
+      // IntersectionObserver threshold. Reset only well outside the viewport.
+      if(!entry.isIntersecting)continue;
       if(card.classList.contains('is-glass-appeared'))continue;
       card.classList.add('is-glass-appeared');
       const now=performance.now();
@@ -266,7 +265,13 @@ export function initFilm(director: Director): void {
       ],{duration:narrow?700:850,easing:'cubic-bezier(.16,1,.30,1)'});
     }
   },{threshold:0.12,rootMargin:'0px 0px -5% 0px'});
-  glassCards.forEach(card=>glassObserver.observe(card));
+  const glassExitObserver=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      if(!entry.isIntersecting)
+        (entry.target as HTMLElement).classList.remove('is-glass-appeared');
+    }
+  },{rootMargin:'120px 0px 120px 0px',threshold:0});
+  glassCards.forEach(card=>{glassObserver.observe(card);glassExitObserver.observe(card);});
 
   // ---------- 3D sob demanda ----------
   async function startWorld(): Promise<void> {
