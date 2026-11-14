@@ -266,55 +266,56 @@ for(const [label,width,height] of [['mobile',390,844],['desktop',1440,900]]){
   await ctx.close();
 }
 
-// 6c · WEBGL: UMA ARARA E BOLSA NO MESMO CÔMODO, COM INTERAÇÕES DESKTOP/MOBILE
-const gotoRoomRail=async(page)=>{
+// 6c · WEBGL: LOJA ÚNICA · OLHAR LATERAL, PEÇA → CATEGORIA → TAMANHO → SACOLA (desktop, touch, motion reduzido)
+const gotoRoom=async(page)=>{
   await page.evaluate(()=>document.querySelector('#sala')?.scrollIntoView({block:'center'}));
-  await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala'&&document.querySelector('.roomrail.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:30000});
+  await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala'&&document.querySelector('.pov.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:60000});
 };
+const settleFrames=async(page,n=8)=>{const f0=await page.evaluate(()=>window.__belle.world().frames);await page.waitForFunction((f)=>window.__belle.world().frames>f,f0+n,{timeout:60000});};
 for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-preference'],[1280,800,'reduce']]){
   const {ctx,page,errors}=await newPage({viewport:{width,height},reducedMotion:motion,isMobile:width===390,hasTouch:width===390});
   await skipIntro(page);
   await page.goto(BASE+'/?tier=touch&loja=araxa',{waitUntil:'load'});
-  await gotoRoomRail(page);
-  const start=await page.evaluate(()=>({ready:window.__belle?.world()?.products.ready,canvas:!!document.querySelector('#filmCanvas canvas'),oldRack:document.querySelectorAll('.rack').length,oldBag:document.querySelectorAll('.bagw').length}));
+  await gotoRoom(page);
+  const start=await page.evaluate(()=>({ready:window.__belle?.world()?.products.ready,canvas:!!document.querySelector('#filmCanvas canvas'),oldRack:document.querySelectorAll('.rack,.roomrail').length,draw:window.__belle.world().drawCalls}));
   check('boutique '+width+': assets 3D prontos',start.canvas&&start.ready>40);
-  check('boutique '+width+': sem arara/bolsa HTML duplicadas',start.oldRack===0&&start.oldBag===0);
-  const initialOrbit=await page.evaluate(()=>window.__belle.world().orbit);
-  await page.locator('.roomrail__switch').click({timeout:12000});
-  await page.waitForFunction(()=>window.__belle.world().orbit.current < -.45,null,{timeout:18000});
-  const leftOrbit=await page.evaluate(()=>window.__belle.world().orbit);
-  check('boutique '+width+': câmera olha para a parede oposta sem sair do cômodo',
-    initialOrbit.current>.45 && leftOrbit.current<-.45 && leftOrbit.free);
-  await page.locator('.roomrail__switch').click({timeout:12000});
-  await page.waitForFunction(()=>window.__belle.world().orbit.current > .45,null,{timeout:18000});
-  check('boutique '+width+': câmera retorna à parede direita sem reset',
-    (await page.evaluate(()=>window.__belle.world().orbit.current))>.45);
-  check('boutique '+width+': cards têm reflexo de vidro editorial',
-    await page.locator('#sala .chapter__card .chapter__glint').count()===1);
-  const prior=await page.locator('.roomrail__product').textContent();
-  await page.locator('.roomrail__next').click({timeout:12000});
-  check('boutique '+width+': muda a peça',await page.locator('.roomrail__product').textContent()!==prior);
-  await page.locator('.roomrail__inspect').click({timeout:12000});
-  await page.waitForSelector('.roomrail__detail:not([hidden])',{timeout:12000});
-  check('boutique '+width+': ficha na cena',await page.locator('.roomrail__detail:not([hidden])').count()===1);
-  // Boutique size is now a real, accessible ivory/gold choice button.
-  await page.locator('.roomrail__size-choice').first().click();
-  check('boutique '+width+': tamanho chip sincronizado',await page.locator('.roomrail__size').inputValue()!=='');
-  const luxe=await page.evaluate(()=>({
-    glass:getComputedStyle(document.querySelector('.chapter__card')).backdropFilter,
-    radius:parseFloat(getComputedStyle(document.querySelector('.chapter__card')).borderRadius),
-    size:parseFloat(getComputedStyle(document.querySelector('.roomrail__size-choice')).borderRadius)
-  }));
-  check('boutique '+width+': vidro champagne e bordas premium',
-    luxe.glass.includes('blur(')&&luxe.radius>=15&&luxe.size>=9);
-
-  await page.locator('.roomrail__add').click({timeout:12000});
-  await page.waitForFunction(()=>document.querySelector('.roomrail__bag b')?.textContent==='1',null,{timeout:25000});
+  check('boutique '+width+': sem arara HTML duplicada',start.oldRack===0);
+  check('boutique '+width+': draw calls ≤ 120',start.draw<=120,String(start.draw));
+  check('boutique '+width+': mão "Explorar a loja" visível',await page.locator('.pov__enter').isVisible());
+  await page.locator('[data-side-look="1"]').click({timeout:12000});
+  await page.waitForFunction(()=>window.__belle.world().sideLook>.6,null,{timeout:20000});
+  const right=await page.evaluate(()=>window.__belle.world().lookTarget);
+  await page.locator('[data-side-look="-1"]').click({timeout:12000});
+  await page.waitForFunction(()=>window.__belle.world().sideLook<-.6,null,{timeout:20000});
+  const left=await page.evaluate(()=>window.__belle.world().lookTarget);
+  check('boutique '+width+': direita olha para +x e esquerda para −x, sem sair do cômodo',right[0]>1&&left[0]<-1&&(await page.evaluate(()=>document.documentElement.dataset.filmChapter))==='sala');
+  await page.locator('[data-side-look="1"]').click();
+  await page.waitForFunction(()=>window.__belle.world().sideLook>.85,null,{timeout:20000});
+  await settleFrames(page,6);
+  // toque numa peça da arara direita pelo centro do palco (raycast real)
+  let hit=false;
+  outer: for(const fy of [.5,.42,.6,.7]) for(const fx of [.6,.7,.5,.78,.42,.86,.34,.94,.26]){
+    await page.mouse.click(Math.round(width*fx),Math.round(height*fy));
+    await page.waitForTimeout(220);
+    if(!(await page.locator('.pov__rack').isHidden())){hit=true;break outer;}
+  }
+  check('boutique '+width+': toque na peça abre a categoria inteira',hit);
+  const panel=await page.evaluate(()=>({count:document.querySelector('.pov__count')?.textContent,items:document.querySelectorAll('.pov__list button').length,pressed:document.querySelectorAll('.pov__list button[aria-pressed=true]').length,title:document.querySelector('.pov__title')?.textContent}));
+  check('boutique '+width+': lista completa (6 peças) com a tocada selecionada',panel.items===6&&panel.pressed===1&&/6 peças/.test(panel.count||''),JSON.stringify(panel));
+  await page.locator('.pov__sizes button').first().click();
+  check('boutique '+width+': tamanho selecionado',(await page.locator('.pov__sizes button[aria-pressed=true]').count())===1);
+  await page.locator('.pov__add').click({timeout:12000});
+  await page.waitForFunction(()=>document.querySelector('.pov__bag b')?.textContent==='1',null,{timeout:25000});
   await page.waitForFunction(()=>!document.querySelector('.dress-ghost'),null,{timeout:25000});
-  const end=await page.evaluate(()=>({count:document.querySelector('.roomrail__bag b')?.textContent,header:document.querySelector('[data-bag-count]')?.textContent,chapter:document.documentElement.dataset.filmChapter,ghost:document.querySelectorAll('.dress-ghost').length}));
-  check('boutique '+width+': saco sincronizado',end.count==='1'&&end.header?.trim()==='1'&&end.ghost===0);
+  const end=await page.evaluate(()=>({count:document.querySelector('.pov__bag b')?.textContent,header:document.querySelector('[data-bag-count]')?.textContent,chapter:document.documentElement.dataset.filmChapter,ghost:document.querySelectorAll('.dress-ghost').length}));
+  check('boutique '+width+': sacola sincronizada',end.count==='1'&&end.header?.trim()==='1'&&end.ghost===0);
   check('boutique '+width+': câmera continua no cômodo',end.chapter==='sala');
-  if(SHOTS)await page.screenshot({path:OUT+'/boutique-unica-'+width+'.png'});
+  // "Ver peça" abre a ficha canônica
+  await page.locator('.pov__view').click();
+  const qv=await page.waitForSelector('.qv',{state:'visible',timeout:5000}).then(()=>true).catch(()=>false);
+  check('boutique '+width+': "Ver peça" abre o detalhe canônico',qv);
+  await page.keyboard.press('Escape');
+  if(SHOTS)await page.screenshot({path:OUT+'/boutique-unica-'+width+'.png',timeout:20000}).catch(()=>undefined);
   check('boutique '+width+': sem exceções JS',errors.length===0,errors.join(' | '));
   await ctx.close();
 }

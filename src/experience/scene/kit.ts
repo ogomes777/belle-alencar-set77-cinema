@@ -16,6 +16,17 @@ export interface Kit {
   glowTex: THREE.Texture;
   weave: THREE.Texture;
   textures: THREE.Texture[];
+  /* Hero POV 360 */
+  travertineSlab: THREE.MeshStandardMaterial;
+  travertineLight: THREE.MeshStandardMaterial;
+  oakDark: THREE.MeshStandardMaterial;
+  walnut: THREE.MeshStandardMaterial;
+  brassSatin: THREE.MeshStandardMaterial;
+  linen: THREE.MeshStandardMaterial;
+  boucle: THREE.MeshStandardMaterial;
+  black: THREE.MeshStandardMaterial;
+  ceramic: THREE.MeshStandardMaterial;
+  ceiling: THREE.MeshStandardMaterial;
 }
 
 export function createKit(): Kit {
@@ -27,6 +38,12 @@ export function createKit(): Kit {
   const glowTex = T.glowPanel();
   const weave = T.weaveNormal();
   const shadowTex = T.contactShadow();
+  const slabTex = T.travertineSlab();
+  const slabLightTex = T.travertineSlab(1024, 37);
+  const oakDarkTex = T.herringboneDark();
+  const walnutTex = T.walnut();
+  const linenTex = T.linen();
+  const boucleTex = T.boucle();
 
   const travertine = new THREE.MeshStandardMaterial({ map: trav, roughness: 0.78, metalness: 0 });
   const stoneFloor = new THREE.MeshStandardMaterial({ map: stone, roughness: 0.16, metalness: 0, envMapIntensity: 1.2 });
@@ -40,10 +57,22 @@ export function createKit(): Kit {
   const shadow = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, toneMapped: false });
   const light = new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.94, 0.84).multiplyScalar(2.4) });
 
+  const travertineSlab = new THREE.MeshStandardMaterial({ map: slabTex, color: '#efe3cf', roughness: 0.74, metalness: 0, envMapIntensity: 0.35 });
+  const ceiling = new THREE.MeshStandardMaterial({ map: plas, color: '#f4ede2', emissive: new THREE.Color('#cfc2ae'), emissiveIntensity: 0.5, roughness: 0.95 });
+  const travertineLight = new THREE.MeshStandardMaterial({ map: slabLightTex, color: '#f3ebdd', roughness: 0.7, metalness: 0, envMapIntensity: 0.4 });
+  const oakDark = new THREE.MeshStandardMaterial({ map: oakDarkTex, roughness: 0.42, metalness: 0, envMapIntensity: 0.9 });
+  const walnut = new THREE.MeshStandardMaterial({ map: walnutTex, roughness: 0.48, metalness: 0, envMapIntensity: 0.7 });
+  const brassSatin = new THREE.MeshStandardMaterial({ color: '#c8a568', roughness: 0.36, metalness: 1, envMapIntensity: 1.15 });
+  const linen = new THREE.MeshStandardMaterial({ map: linenTex, color: '#c9a981', roughness: 0.9, metalness: 0, side: THREE.DoubleSide });
+  const boucle = new THREE.MeshStandardMaterial({ map: boucleTex, bumpMap: boucleTex, bumpScale: 0.6, roughness: 0.95, metalness: 0 });
+  const black = new THREE.MeshStandardMaterial({ color: '#1a1512', roughness: 0.55, metalness: 0.4 });
+  const ceramic = new THREE.MeshStandardMaterial({ color: '#e9e0d1', roughness: 0.38, metalness: 0, envMapIntensity: 0.8 });
+
   return {
     travertine, stoneFloor, oak, plaster, plasterWarm, brass, velvet,
     glass: glassMaterial(), shadow, light, glowTex, weave,
-    textures: [trav, stone, oakTex, plas, plasWarm, glowTex, weave, shadowTex],
+    textures: [trav, stone, oakTex, plas, plasWarm, glowTex, weave, shadowTex, slabTex, slabLightTex, oakDarkTex, walnutTex, linenTex, boucleTex],
+    travertineSlab, travertineLight, oakDark, walnut, brassSatin, linen, boucle, black, ceramic, ceiling,
   };
 }
 
@@ -138,6 +167,66 @@ export function archPanel(w: number, h: number, mat: THREE.Material): THREE.Mesh
   const pos = g.getAttribute('position') as THREE.BufferAttribute;
   const uv = g.getAttribute('uv') as THREE.BufferAttribute;
   for (let i = 0; i < pos.count; i++) uv.setXY(i, (pos.getX(i) + w / 2) / w, pos.getY(i) / h);
+  return new THREE.Mesh(g, mat);
+}
+
+/**
+ * Superfície interna de um nicho em arco (sem tampas): faixa entre o contorno
+ * do arco em z=0 e o mesmo contorno em z=-depth. Normais apontam para dentro.
+ */
+export function archReveal(w: number, h: number, depth: number, mat: THREE.Material, segments = 28): THREE.Mesh {
+  const r = w / 2;
+  const pts: [number, number][] = [[-r, 0]];
+  pts.push([-r, h - r]);
+  for (let i = 1; i < segments; i++) {
+    const a = Math.PI - (i / segments) * Math.PI;
+    pts.push([Math.cos(a) * r, h - r + Math.sin(a) * r]);
+  }
+  pts.push([r, h - r], [r, 0]);
+  const pos: number[] = [], nor: number[] = [], uv: number[] = [], idx: number[] = [];
+  let u = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const [x, y] = pts[i]!;
+    if (i > 0) u += Math.hypot(x - pts[i - 1]![0], y - pts[i - 1]![1]);
+    pos.push(x, y, 0, x, y, -depth);
+    // normal para o interior do vão
+    const cx = 0, cy = Math.min(y, h - r);
+    let nx = cx - x, ny = cy - y;
+    const len = Math.hypot(nx, ny) || 1;
+    nx /= len; ny /= len;
+    nor.push(nx, ny, 0, nx, ny, 0);
+    uv.push(u * 0.5, 0, u * 0.5, depth * 0.5);
+  }
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = i * 2, b = a + 1, c = a + 2, d = a + 3;
+    idx.push(a, c, b, b, c, d);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  return new THREE.Mesh(g, mat);
+}
+
+/** Parede retangular (largura w, altura h) com furos em arco; UV em metros/tile. */
+export function wallWithArches(w: number, h: number, arches: { x: number; w: number; h: number }[], mat: THREE.Material, tile = 1.6): THREE.Mesh {
+  const s = new THREE.Shape();
+  s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h); s.closePath();
+  for (const a of arches) {
+    const hole = new THREE.Path();
+    const r = a.w / 2;
+    hole.moveTo(a.x + r, 0);
+    hole.lineTo(a.x + r, a.h - r);
+    hole.absarc(a.x, a.h - r, r, 0, Math.PI, false);
+    hole.lineTo(a.x - r, 0);
+    hole.lineTo(a.x + r, 0);
+    s.holes.push(hole);
+  }
+  const g = new THREE.ShapeGeometry(s, 24);
+  const pos = g.getAttribute('position') as THREE.BufferAttribute;
+  const uv = g.getAttribute('uv') as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i++) uv.setXY(i, (pos.getX(i) + w / 2) / tile, pos.getY(i) / tile);
   return new THREE.Mesh(g, mat);
 }
 

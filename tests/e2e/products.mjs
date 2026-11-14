@@ -59,16 +59,23 @@ const motion=await browser.newContext({viewport:{width:1440,height:900},reducedM
 const mp=await motion.newPage();watch(mp);
 await mp.goto(base+'/?tier=touch&loja=araxa');
 await chapter(mp,'sala');
-await mp.waitForFunction(()=>document.querySelector('.roomrail.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:30000});
-check(await mp.locator('.rack__piece').count()===0,'3D rail without duplicate HTML objects');
-const initial=await mp.locator('.roomrail__product').textContent();
-await mp.locator('.roomrail__next').click();
-check((await mp.locator('.roomrail__product').textContent())!==initial,'next control selects an in-room product');
-await mp.locator('.roomrail__inspect').click();
-await mp.waitForSelector('.roomrail__detail:not([hidden])');
-await mp.locator('.roomrail__size-choice').first().click();
-await mp.locator('.roomrail__add').click();
-await mp.waitForFunction(()=>document.querySelector('.roomrail__bag b')?.textContent==='1',null,{timeout:14000});
+await mp.waitForFunction(()=>document.querySelector('.pov.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:30000});
+await mp.locator('[data-side-look="1"]').click();
+await mp.waitForFunction(()=>window.__belle.world().sideLook>.85,null,{timeout:20000});
+let opened=false;
+for(const [fx,fy] of [[.62,.5],[.7,.5],[.55,.52],[.78,.5],[.66,.6],[.5,.42],[.86,.5],[.42,.6],[.94,.5],[.34,.5],[.7,.7],[.26,.55]]){
+  const vp=mp.viewportSize();
+  await mp.mouse.click(Math.round(vp.width*fx),Math.round(vp.height*fy));
+  await mp.waitForTimeout(250);
+  if(!(await mp.locator('.pov__rack').isHidden())){opened=true;break;}
+}
+check(opened,'tapping an in-room product opens its full category');
+const initial=await mp.locator('.pov__title').textContent();
+await mp.locator('.pov__list button:not([aria-pressed=true])').first().click();
+check((await mp.locator('.pov__title').textContent())!==initial,'list control selects another in-room product of the same category');
+await mp.locator('.pov__sizes button').first().click();
+await mp.locator('.pov__add').click();
+await mp.waitForFunction(()=>document.querySelector('.pov__bag b')?.textContent==='1',null,{timeout:14000});
 check(await mp.locator('.dress-ghost').count()===0,'reduced-motion cart without ghost overlay');
 await motion.close();
 check(errors.length===0,`zero browser/HTTP errors: ${errors.join(' | ')}`);

@@ -321,3 +321,140 @@ function drawTracked(x: Ctx, text: string, cx: number, y: number, tracking: numb
   });
   x.textAlign = align;
 }
+
+/* ===================== Hero POV 360 · materiais adicionais ===================== */
+
+/** Nogueira escura com veio vertical (painéis da entrada e cabides). */
+export function walnut(size = 512, seed = 11, base = '#3b2719'): THREE.CanvasTexture {
+  const [c, x] = canvas(size);
+  const r = rng(seed);
+  x.fillStyle = base;
+  x.fillRect(0, 0, size, size);
+  for (let i = 0; i < 160; i++) {
+    const px = r() * size;
+    const w = 1 + r() * 7;
+    x.fillStyle = r() > 0.5 ? `rgba(90,58,34,${0.05 + r() * 0.18})` : `rgba(18,10,6,${0.06 + r() * 0.2})`;
+    x.beginPath();
+    x.moveTo(px, 0);
+    for (let y = 0; y <= size; y += 24) x.lineTo(px + Math.sin(y * 0.02 + i) * 6 + (r() - 0.5) * 2, y);
+    x.lineTo(px + w, size);
+    for (let y = size; y >= 0; y -= 24) x.lineTo(px + w + Math.sin(y * 0.021 + i) * 6, y);
+    x.closePath();
+    x.fill();
+  }
+  for (let i = 0; i < 900; i++) {
+    x.fillStyle = `rgba(0,0,0,${r() * 0.12})`;
+    x.fillRect(r() * size, r() * size, 1, 2 + r() * 12);
+  }
+  return toTexture(c);
+}
+
+/** Linho/veludo champagne com trama fina e variação por prega (cortina). */
+export function linen(size = 512, seed = 17, base = '#a98a5f'): THREE.CanvasTexture {
+  const [c, x] = canvas(size);
+  const r = rng(seed);
+  x.fillStyle = base;
+  x.fillRect(0, 0, size, size);
+  for (let i = 0; i < size; i += 2) {
+    x.fillStyle = `rgba(255,236,200,${0.03 + r() * 0.06})`;
+    x.fillRect(i, 0, 1, size);
+    x.fillStyle = `rgba(70,45,20,${r() * 0.06})`;
+    x.fillRect(0, i, size, 1);
+  }
+  for (let i = 0; i < 2200; i++) {
+    x.fillStyle = r() > 0.5 ? `rgba(255,240,210,${r() * 0.12})` : `rgba(60,38,18,${r() * 0.1})`;
+    x.fillRect(r() * size, r() * size, 1 + r() * 2, 1);
+  }
+  return toTexture(c);
+}
+
+/** Bouclé creme: laçadas claras sobre fundo marfim (poltrona do provador). */
+export function boucle(size = 512, seed = 23): THREE.CanvasTexture {
+  const [c, x] = canvas(size);
+  const r = rng(seed);
+  x.fillStyle = '#e6dccb';
+  x.fillRect(0, 0, size, size);
+  for (let i = 0; i < 6000; i++) {
+    const s = 1.5 + r() * 3.5;
+    x.fillStyle = r() > 0.4 ? `rgba(255,252,244,${0.25 + r() * 0.5})` : `rgba(150,130,105,${0.08 + r() * 0.25})`;
+    x.beginPath();
+    x.arc(r() * size, r() * size, s, 0, Math.PI * 2);
+    x.fill();
+  }
+  return toTexture(c);
+}
+
+/** Travertino com poros e juntas de chapa (paredes grandes). */
+export function travertineSlab(size = 1024, seed = 31): THREE.CanvasTexture {
+  const [c, x] = canvas(size);
+  const r = rng(seed);
+  x.fillStyle = '#e2d5c0';
+  x.fillRect(0, 0, size, size);
+  for (let i = 0; i < 140; i++) {
+    const y = r() * size;
+    const hgt = 1 + r() * 14;
+    const l = 72 + r() * 16;
+    x.fillStyle = `hsla(${33 + r() * 9}, ${16 + r() * 14}%, ${l}%, ${0.1 + r() * 0.2})`;
+    x.beginPath();
+    x.moveTo(0, y);
+    for (let px = 0; px <= size; px += 24) x.lineTo(px, y + Math.sin(px * 0.013 + i) * 3 + (r() - 0.5) * 2);
+    x.lineTo(size, y + hgt);
+    for (let px = size; px >= 0; px -= 24) x.lineTo(px, y + hgt + Math.sin(px * 0.011 + i) * 2.5);
+    x.closePath();
+    x.fill();
+  }
+  for (let i = 0; i < 2600; i++) {
+    x.fillStyle = `rgba(105,82,55,${0.06 + r() * 0.16})`;
+    const w = 1 + r() * 6;
+    x.beginPath();
+    x.ellipse(r() * size, r() * size, w, 0.6 + r() * 1.6, 0, 0, Math.PI * 2);
+    x.fill();
+  }
+  // juntas de chapa (2 × 2 por tile)
+  x.strokeStyle = 'rgba(95,78,58,0.28)';
+  x.lineWidth = 2;
+  for (const f of [0, 0.5]) {
+    x.beginPath(); x.moveTo(f * size, 0); x.lineTo(f * size, size); x.stroke();
+    x.beginPath(); x.moveTo(0, f * size); x.lineTo(size, f * size); x.stroke();
+  }
+  return toTexture(c);
+}
+
+/** Carvalho/nogueira em espinha de peixe, mais escuro e quente (piso da boutique). */
+export function herringboneDark(size = 1024, seed = 29): THREE.CanvasTexture {
+  const [c, x] = canvas(size);
+  const r = rng(seed);
+  x.fillStyle = '#5a3a24';
+  x.fillRect(0, 0, size, size);
+  const pw = size / 16;
+  const pl = pw * 4;
+  for (let row = -4; row < 24; row++) {
+    for (let col = -4; col < 12; col++) {
+      const ox = col * pl * 0.5 * 2 * 0.70710678 * 2;
+      const oy = row * pw * 1.41421356 * 2;
+      for (let k = 0; k < 2; k++) {
+        x.save();
+        x.translate(ox + k * pw * 0.70710678 * 2, oy + k * pw * 0.70710678 * 2);
+        x.rotate(k === 0 ? Math.PI / 4 : -Math.PI / 4);
+        const hue = 22 + r() * 9;
+        const light = 27 + r() * 11;
+        x.fillStyle = `hsl(${hue}, ${34 + r() * 10}%, ${light}%)`;
+        x.fillRect(0, 0, pl, pw);
+        for (let g = 0; g < 8; g++) {
+          x.strokeStyle = `rgba(30,16,8,${0.08 + r() * 0.12})`;
+          x.lineWidth = 0.5 + r() * 1.2;
+          x.beginPath();
+          const gy = r() * pw;
+          x.moveTo(0, gy);
+          x.bezierCurveTo(pl * 0.3, gy + (r() - 0.5) * 5, pl * 0.7, gy + (r() - 0.5) * 5, pl, gy);
+          x.stroke();
+        }
+        x.strokeStyle = 'rgba(20,10,5,0.55)';
+        x.lineWidth = 1.3;
+        x.strokeRect(0, 0, pl, pw);
+        x.restore();
+      }
+    }
+  }
+  return toTexture(c);
+}

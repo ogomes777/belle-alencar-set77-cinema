@@ -28,19 +28,6 @@
   backdrop-filter:blur(19px) saturate(1.18);
   transition:border-color .4s ease,box-shadow .5s ease,background .5s ease;
 }
-.chapter__card::before,
-.roomrail__detail::before{
-  content:'';
-  position:absolute;
-  z-index:0;
-  pointer-events:none;
-  inset:0;
-  border-radius:inherit;
-  background:linear-gradient(125deg,rgba(255,255,255,.62),transparent 27%,transparent 69%,rgba(201,164,102,.12)),
-    linear-gradient(180deg,rgba(255,255,255,.32),transparent 19%);
-  opacity:.48;
-  animation:belleGlassBreathe 8s ease-in-out infinite alternate;
-}
 .chapter__card::after{
   content:'';
   position:absolute;
@@ -48,8 +35,6 @@
   width:80%;height:1px;top:0;left:10%;
   background:linear-gradient(90deg,transparent,rgba(255,252,232,.94) 45%,rgba(179,140,71,.42),transparent);
 }
-.chapter__card>*,
-.roomrail__detail>*{position:relative;z-index:1}
 .chapter__card:hover,
 .chapter__card:focus-within{
   border-color:rgba(177,137,67,.72);
@@ -86,146 +71,12 @@
 .size input:checked+span,
 .pv__size input:checked+span{border-color:#a58755;background:linear-gradient(145deg,#8c714d,#463628);color:#fffaf2;box-shadow:0 6px 18px rgba(83,57,24,.19)}
 .select:focus-visible{outline:2px solid #927148;outline-offset:3px}
-
-/* HUD: uma lâmina de vidro flutuante, não uma barra de videogame. */
-html .roomrail__controls{
-  border:1px solid rgba(188,149,90,.55);
-  border-radius:16px;
-  background:linear-gradient(135deg,rgba(255,255,253,.90),rgba(251,246,234,.77));
-  box-shadow:0 16px 50px rgba(41,29,18,.18),inset 0 1px 0 #fff,0 0 0 1px rgba(255,232,186,.10);
-  -webkit-backdrop-filter:blur(15px) saturate(1.2);
-  backdrop-filter:blur(15px) saturate(1.2);
-}
-html .roomrail__controls button{border-radius:10px;transition:transform .25s,background .25s,color .25s,box-shadow .25s}
-html .roomrail__controls button:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.62);transform:translateY(-1px)}
-html .roomrail__controls .roomrail__inspect{
-  border-radius:10px;
-  background:linear-gradient(135deg,#61472f,#30251e)!important;
-  box-shadow:0 4px 14px rgba(54,38,24,.18),inset 0 1px 0 rgba(255,255,255,.16)
-}
-html .roomrail__controls .roomrail__inspect:hover{background:linear-gradient(135deg,#886846,#493526)!important}
-html .roomrail__detail{
-  isolation:isolate;
-  overflow:hidden;
-  border-radius:18px;
-  border:1px solid rgba(184,147,92,.64);
-  background:linear-gradient(150deg,rgba(255,253,248,.95),rgba(248,239,221,.88));
-  box-shadow:0 24px 60px rgba(40,27,11,.19),inset 0 1px 0 #fff;
-  -webkit-backdrop-filter:blur(18px) saturate(1.15);
-  backdrop-filter:blur(18px) saturate(1.15);
-}
-html .roomrail__detail::before{opacity:.42;animation-duration:7s}
-html .roomrail__title{color:#3a2b1d;letter-spacing:-.025em}
-html .roomrail__description{line-height:1.6;color:#695844}
-html .roomrail__size-label{letter-spacing:.15em;color:#73542e}
-html .roomrail__size{
-  appearance:none;
-  -webkit-appearance:none;
-  border:1px solid rgba(161,125,71,.66);
-  border-radius:12px;
-  min-height:49px;
-  color:#34281d;
-  font-weight:550;
-  letter-spacing:.03em;
-  background-color:rgba(255,253,248,.89);
-  background-image:linear-gradient(45deg,transparent 50%,#98754b 50%),linear-gradient(135deg,#98754b 50%,transparent 50%),
-    linear-gradient(to right,transparent,rgba(201,174,128,.14));
-  background-position:calc(100% - 23px) 52%,calc(100% - 17px) 52%,0 0;
-  background-size:6px 6px,6px 6px,100% 100%;
-  background-repeat:no-repeat;
-  padding:0 42px 0 14px;
-  box-shadow:inset 0 1px 0 white,0 4px 13px rgba(131,97,51,.07);
-  transition:border-color .25s,box-shadow .25s;
-}
-html .roomrail__size:hover{border-color:#926a36;box-shadow:0 0 0 2px rgba(186,146,80,.10)}
-html .roomrail__size:focus-visible{outline:2px solid #765327;outline-offset:3px;box-shadow:0 0 0 4px rgba(201,160,93,.16)}
-html .roomrail__actions button{
-  position:relative;
-  overflow:hidden;
-  border-radius:11px;
-  min-height:49px;
-  font-weight:650;
-  letter-spacing:.025em;
-  transition:transform .25s,box-shadow .3s,background .25s;
-}
-html .roomrail__actions .roomrail__add{
-  background:linear-gradient(120deg,#99774a,#65472a 56%,#3f2f22);
-  border-color:#785a35;
-  box-shadow:inset 0 1px 0 #f1cb8a66,0 6px 16px #4e372d25;
-}
-html .roomrail__actions .roomrail__close{background:rgba(255,255,255,.28);border-color:#c5a875}
-html .roomrail__actions button:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 10px 22px #6c4c2630}
-html .roomrail__actions button:active:not([disabled]){transform:scale(.98)}
-html .roomrail__actions button:focus-visible{outline:2px solid #836135;outline-offset:3px}
-html .roomrail__hint,html .roomrail__gesture{color:#6f5634;text-shadow:0 1px 0 #fff7}
 @media(max-width:899px){
   .chapter__card,.chapter--hero .chapter__card{border-radius:16px;-webkit-backdrop-filter:blur(11px);backdrop-filter:blur(11px)}
-  html .roomrail__detail{border-radius:15px}
-  html .roomrail__controls{border-radius:13px;-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
   .btn{border-radius:10px}
 }
-@media(prefers-reduced-motion:reduce){
-  .chapter__card::before,html .roomrail__detail::before{animation:none!important}
-  html .roomrail__controls button,
-  html .roomrail__actions button,.btn{transition-duration:0.01ms!important;transform:none!important}
 }
-
-
-/* Tailored size tiles: the native select remains as a progressive, keyboard-
-   compatible state source, while the visible controls use boutique-sized chips. */
-html .roomrail__size-label {position:relative;display:block}
-html .roomrail__size {
-  position:absolute!important;
-  opacity:0!important;
-  width:1px!important;
-  height:1px!important;
-  padding:0!important;
-  margin:0!important;
-  left:0;bottom:0;
-  pointer-events:none;
-  border:0!important;
 }
-html .roomrail__size-options{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:10px;
-  margin-bottom:14px;
-}
-html .roomrail__size-choice {
-  position:relative;
-  display:inline-grid;
-  place-items:center;
-  min-width:52px;
-  height:46px;
-  padding:0 12px;
-  border:1px solid rgba(166,133,83,.62);
-  border-radius:11px;
-  background:linear-gradient(142deg,rgba(255,255,255,.84),rgba(244,231,203,.5));
-  box-shadow:inset 0 1px 0 #fff,0 3px 10px rgba(70,49,24,.06);
-  color:#4b3824;
-  font:600 13px/1 var(--sans);
-  transition:background .24s,color .24s,transform .24s,box-shadow .24s,border-color .24s;
-}
-html .roomrail__size-choice:hover{
-  transform:translateY(-2px);
-  border-color:#a17a42;
-  box-shadow:0 7px 16px rgba(117,78,29,.14),inset 0 1px 0 #fff;
-}
-html .roomrail__size-choice[aria-pressed=true]{
-  background:linear-gradient(140deg,#c1a36c,#856038 54%,#5a4129);
-  color:#fffdf7;
-  border-color:#866136;
-  box-shadow:0 5px 18px rgba(120,85,42,.22),inset 0 1px 0 rgba(255,255,255,.36);
-}
-html .roomrail__size-choice:focus-visible{outline:2px solid #71502e;outline-offset:3px}
-html .roomrail__size-label:focus-within .roomrail__size-options{border-radius:12px}
-@media(max-width:899px){
-  html .roomrail__size-options{gap:6px;margin-bottom:12px}
-  html .roomrail__size-choice{min-width:44px;height:42px;padding:0 9px}
-}
-@media(prefers-reduced-motion:reduce){
-  html .roomrail__size-choice{animation:none!important;transition:none!important}
 }
 
 
@@ -235,33 +86,7 @@ html .roomrail__size-label:focus-within .roomrail__size-options{border-radius:12
 .film__canvas,
 .film__canvas canvas,
 .film__posters {pointer-events:none!important}
-@media(max-width:899px){
-  /* Keep the detail sheet and compact controls below the sticky story copy.
-     Otherwise a narrative card/canvas can cover the HUD on a 390px phone. */
-  html .roomrail{
-    top:auto!important;
-    bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;
-    z-index:35;
-  }
-  html .roomrail__detail{
-    top:auto!important;
-    bottom:calc(100% + 12px)!important;
-    max-height:min(58svh,460px);
-    overflow-y:auto;
-    overscroll-behavior:contain;
-  }
-  html .roomrail__hint{font-size:8px}
-  html .roomrail__gesture{font-size:7px}
 }
-
-
-/* V4.1 portal: keep the rail control HUD above film narrative cards,
-   but below true commerce drawers (z-overlay:60). */
-html .roomrail{
-  position:fixed!important;
-  z-index:45!important;
-}
-html .roomrail:not(.is-on){pointer-events:none!important}
 
 
 /* V5 · Atelier de vidro: editorial translucent panels, never an opaque UI slab.
@@ -316,33 +141,6 @@ html .chapter__card:hover{
 }
 html .chapter__card .display{letter-spacing:-.028em}
 html .chapter__card .eyebrow{letter-spacing:.2em}
-
-/* In-room HUD stays legible without pretending to be a separate page. */
-html .roomrail__controls{
-  border:1px solid rgba(181,137,72,.60);
-  border-radius:17px;
-  background:linear-gradient(142deg,rgba(255,255,253,.89),rgba(245,234,214,.72));
-  box-shadow:0 18px 54px rgba(48,30,12,.21),inset 0 1px 0 #fff,
-    inset 0 -1px 0 rgba(186,142,79,.29);
-}
-html .roomrail__controls button:focus-visible,
-html .roomrail__switch:focus-visible {outline:2px solid #8a642f;outline-offset:3px}
-html .roomrail__gesture{align-items:center;gap:12px;font-size:8px;white-space:normal;text-align:left}
-html .roomrail__switch{
-  border:1px solid rgba(167,127,68,.64);
-  background:linear-gradient(135deg,rgba(255,252,246,.93),rgba(223,195,146,.73));
-  color:#563d23;
-  border-radius:999px;
-  padding:7px 11px;
-  font:650 9px/1.2 var(--sans);
-  white-space:nowrap;
-  letter-spacing:.11em;
-  cursor:pointer;
-  box-shadow:0 3px 13px rgba(62,39,17,.14),inset 0 1px 0 #fff;
-  transition:transform .25s,background .25s,box-shadow .25s;
-}
-html .roomrail__switch:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(95,65,22,.20)}
-html .roomrail__switch:active{transform:scale(.97)}
 /* Native vertical scrolling remains untouched; only horizontal drag steers camera. */
 html .film__stage.is-room-rail{touch-action:pan-y}
 @media(max-width:899px){
@@ -352,15 +150,12 @@ html .film__stage.is-room-rail{touch-action:pan-y}
     backdrop-filter:blur(11px) saturate(1.14);
     background:linear-gradient(145deg,rgba(255,255,252,.82),rgba(247,238,221,.70) 57%,rgba(218,185,133,.29));
   }
-  html .roomrail__gesture{font-size:7px;line-height:1.5}
-  html .roomrail__switch{font-size:8px;padding:7px 9px}
 }
 @supports not ((backdrop-filter:blur(3px)) or (-webkit-backdrop-filter:blur(3px))){
   html .chapter__card{background:rgba(251,248,238,.94)}
 }
 @media(prefers-reduced-motion:reduce){
   html .chapter__card.is-glass-appeared .chapter__glint{animation:none!important}
-  html .roomrail__switch{transition:none!important}
 }
 
 /* Horizontal look gestures can start on the large narrative glass cards.

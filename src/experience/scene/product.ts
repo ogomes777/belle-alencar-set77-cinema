@@ -114,6 +114,66 @@ export function supportedProduct(kit: Kit, slug: string, height: number, baseY: 
   return root;
 }
 
+/* ===================== Hero POV 360 · cartões de arara ===================== */
+
+const textureCache = new Map<string, { texture: THREE.Texture; promise: Promise<THREE.Texture | null>; failed: boolean }>();
+const placeholder = (() => {
+  const data = new Uint8Array([0, 0, 0, 0]);
+  const t = new THREE.DataTexture(data, 1, 1);
+  t.needsUpdate = true;
+  return t;
+})();
+export function placeholderTexture(): THREE.Texture { return placeholder; }
+
+/** Textura do recorte alpha, carregada uma vez por produto e reutilizada por todos os slots. */
+export function productTexture(product: Product): { texture: THREE.Texture | null; promise: Promise<THREE.Texture | null>; failed: boolean } {
+  const url = product.cutout;
+  if (!url) return { texture: null, promise: Promise.resolve(null), failed: true };
+  let entry = textureCache.get(url);
+  if (!entry) {
+    const holder = { texture: placeholder as THREE.Texture, failed: false, promise: Promise.resolve<THREE.Texture | null>(null) };
+    holder.promise = new Promise<THREE.Texture | null>((resolve) => {
+      new THREE.TextureLoader().load(url, (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = 4;
+        holder.texture = texture;
+        resolve(texture);
+      }, undefined, () => { holder.failed = true; resolve(null); });
+    });
+    textureCache.set(url, holder);
+    entry = holder;
+  }
+  return { texture: entry.texture === placeholder ? null : entry.texture, promise: entry.promise, failed: entry.failed };
+}
+
+export function disposeProductTextures(): void {
+  textureCache.forEach((e) => { if (e.texture !== placeholder) e.texture.dispose(); });
+  textureCache.clear();
+}
+
+/** Plano 1×1 ligeiramente convexo (silhueta de perfil para fotos frontais 2.5D). Origem no topo-centro. */
+export function garmentCardGeometry(bulge = 0.07, segments = 14): THREE.BufferGeometry {
+  const g = new THREE.PlaneGeometry(1, 1, segments, 1);
+  const pos = g.getAttribute('position') as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    pos.setZ(i, bulge * (1 - (2 * x) * (2 * x)));
+    pos.setY(i, pos.getY(i) - 0.5); // topo em y=0, pende para baixo
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+/** Medidas do cartão de um produto para uma altura óptica (metros): tamanho do canvas e deslocamentos. */
+export function cardMetrics(product: Product, height: number): { w: number; h: number; dx: number; top: number; opaqueW: number } {
+  const dimensions = product.cutoutSize ?? [600, 900];
+  const raw = product.cutoutBounds ?? [0, 0, dimensions[0], dimensions[1]];
+  const [l, t, r, b] = [raw[0] / dimensions[0], raw[1] / dimensions[1], raw[2] / dimensions[0], raw[3] / dimensions[1]];
+  const h = height / Math.max(0.01, b - t);
+  const w = h * dimensions[0] / dimensions[1];
+  return { w, h, dx: (0.5 - (l + r) / 2) * w, top: t * h, opaqueW: w * (r - l) };
+}
+
 export function sceneProductReadiness(root: THREE.Object3D): { total: number; ready: number; failed: number } {
   let total=0,ready=0,failed=0;
   root.traverse(object => {

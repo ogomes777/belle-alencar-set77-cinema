@@ -107,6 +107,7 @@ export function initCommerce(): void {
     hasStore: () => !!commerce.get().storeId,
     ensureStore: (trigger, then) => { if (commerce.get().storeId) then(); else ctx.openStorePicker(trigger, then); },
     openBag: (trigger) => ctx.openBag(trigger ?? null),
+    openProduct: (id, trigger) => ctx.openQuickView(id, trigger ?? null, null),
     availabilityText: (productId, size) => {
       const sid = commerce.get().storeId;
       if (!sid) return 'Escolha sua loja para consultar disponibilidade.';

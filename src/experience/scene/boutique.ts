@@ -1,50 +1,77 @@
 /**
- * Boutique (z < -1.4): piso de carvalho em espinha de peixe, gesso marfim,
- * nichos em arco, araras de latão com cabides em mola, pódio central,
- * três arcos de categoria no fundo e provador com espelho.
+ * Boutique Belle · loja única em 3D (planta em ./layout.ts).
+ * Travertino, piso espinha de peixe escuro, trilhos de spots, nichos em arco,
+ * duas araras livres com bases de pedra e cabides de madeira, pedestal com a
+ * bolsa Belle, espelho em arco no fundo, arco com cortina e provador.
+ * Produtos: recortes alpha oficiais do kit (2.5D) em cartões levemente
+ * convexos, reutilizados por slot; nunca peças cenográficas elevadas.
  */
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
-import { archFrame, archPanel, box, contact, plane, spot, type Kit } from './kit';
-import { labelTexture } from '../textures';
-import { DEMO_CATALOG, productById } from '../../commerce/catalog.demo';
+import { archPanel, archReveal, box, contact, plane, spot, wallWithArches, type Kit } from './kit';
+import { ARCHES, BACK_MIRROR, BAG_PEDESTAL, CURTAIN_ARCH, DOOR, FITTING, HERO_SLOT, HERO_STAND, RAIL, ROOM, SHELF, SIDE_SIGN, TRACKS, WOOD_PANEL, shelfSlotZ, slotZ, type Side } from './layout';
+import { productById } from '../../commerce/catalog.demo';
 import type { Product } from '../../commerce/types';
-import { DISPLAY_HEIGHT, disposeProductDisplay, productDisplay, sceneProduct, supportedProduct } from './product';
+import { DISPLAY_HEIGHT, cardMetrics, disposeProductDisplay, garmentCardGeometry, placeholderTexture, productTexture, supportedProduct } from './product';
+import type { SidePlan } from '../rack-state';
+import { isAccessory } from '../rack-state';
 import type { Tier } from '../../core/tier';
 
-export const ROOM = { x: 5.2, zFront: -1.4, zBack: -17.2, h: 4.2 };
-export const RAIL = { y: 1.92, x: 4.72, z0: -2.8, z1: -11.2 };
-export const HERO_HANGER = new THREE.Vector3(RAIL.x, RAIL.y, -6.4);
-export const PODIUM = new THREE.Vector3(0, 0.2, -8);
-export const FITTING = new THREE.Vector3(3.9, 0, -15.5);
-export const ARCHES = [-3.6, -1.2, 1.2];
+export const HERO_HANGER = new THREE.Vector3(RAIL.x, RAIL.y, slotZ(HERO_SLOT));
+export const HERO_STAND_POS = new THREE.Vector3(HERO_STAND.x, 1.34, HERO_STAND.z);
+export const FITTING_POS = new THREE.Vector3(FITTING.standX, 1.34, FITTING.standZ);
+
+export interface BoutiqueCtx {
+  camera: THREE.Camera;
+  camVel: number;
+  pointer: THREE.Vector2 | null;
+  pointerVel: number;
+  fittingActive: boolean;
+  heroOnRail: boolean;
+  sweep: number;
+  /** 0 fechada → 1 aberta (cortina do provador). */
+  curtain: number;
+  /** espelhos com reflexo em tempo real neste quadro */
+  mirrorsLive: { back: boolean; fitting: boolean };
+}
+
+export interface PickHit { product: Product; side: Side; index: number; kind: 'hanger' | 'shelf' }
 
 export interface BoutiqueHandle {
   group: THREE.Group;
-  update(dt: number, ctx: { camera: THREE.Camera; camVel: number; pointer: THREE.Vector2 | null; pointerVel: number; archFocus: number; fittingActive: boolean; heroOnRail: boolean; sweep: number }): void;
-  mirror: Reflector | null;
-  setProduct(productId: string | null): void;
-  browse(dir:number):Product|null;
-  activeProduct():Product|null;
-  pick(ndc:THREE.Vector2,camera:THREE.Camera):Product|null;
-  hover(ndc:THREE.Vector2,camera:THREE.Camera):Product|null;
-  select(id:string|null):void;
-  hideProduct(id:string,hide:boolean):void;
-  productPosition(id:string):{position:THREE.Vector3;width:number;height:number}|null;
-  cameraShift():number;
-  focusPoint():THREE.Vector3;
-  railPosition():{index:number;total:number};
-  bagPosition():THREE.Vector3;
-  bagWidth():number;
-  impactBag():void;
-  bagHit(ndc:THREE.Vector2,camera:THREE.Camera):boolean;
+  update(dt: number, ctx: BoutiqueCtx): void;
+  /** Atribui produtos aos slots de um lado (plano de rack-state). */
+  applyPlan(side: Side, plan: SidePlan): void;
+  pick(ndc: THREE.Vector2, camera: THREE.Camera): PickHit | null;
+  hover(ndc: THREE.Vector2, camera: THREE.Camera): PickHit | null;
+  select(id: string | null): void;
+  hideProduct(id: string, hide: boolean): void;
+  productPosition(id: string): { position: THREE.Vector3; width: number; height: number } | null;
+  /** Ponto central do varão de um lado (alvo de olhar). */
+  railFocus(side: Side): THREE.Vector3;
+  setFittingProduct(id: string | null): void;
+  bagPosition(): THREE.Vector3;
+  bagWidth(): number;
+  impactBag(): void;
+  bagHit(ndc: THREE.Vector2, camera: THREE.Camera): boolean;
+  /** Reflexos reais disponíveis (tier cinema). */
+  hasReflectors(): boolean;
+  dropReflectors(): void;
+  dispose(): void;
 }
 
-interface Swing {
-  ax: number; az: number; vx: number; vz: number;
-  hook:THREE.Vector3; yaw:number; mesh:THREE.Object3D; clipped:boolean;
-  product:Product;side:number;baseZ:number;focus:number;focusV:number;slide:number;
+interface Slot {
+  side: Side; index: number; kind: 'hanger' | 'shelf';
+  pivot: THREE.Group; card: THREE.Mesh; material: THREE.MeshStandardMaterial;
+  product: Product | null; hidden: boolean;
+  hook: THREE.Vector3; natural: number; yaw: number;
+  ax: number; az: number; vx: number; vz: number; focus: number; focusV: number;
+  hangerIndex: number; clipped: boolean;
+  mediaSerial: number;
 }
+
+const CARD_GEO = garmentCardGeometry(0.075, 14);
+const SHELF_GEO = garmentCardGeometry(0.03, 8);
 
 export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle {
   const g = new THREE.Group();
@@ -52,475 +79,557 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   const { x: X, zFront, zBack, h: H } = ROOM;
   const L = zFront - zBack;
   const zc = (zFront + zBack) / 2;
+  const cinema = tier === 'cinema';
+  const disposables: { dispose(): void }[] = [];
 
-  // piso, teto, paredes
-  const floor = plane(X * 2, L, kit.oak, 1.6);
+  // ---------- piso, teto, paredes ----------
+  const floor = plane(X * 2, L + 0.02, kit.oakDark, 1.7);
   floor.rotation.x = -Math.PI / 2;
   floor.position.set(0, 0.001, zc);
   floor.receiveShadow = true;
   g.add(floor);
-  const ceil = plane(X * 2, L, kit.plaster, 3);
+  const fitFloor = plane(FITTING.x1 - FITTING.x0, FITTING.z0 - FITTING.z1, kit.oakDark, 1.7);
+  fitFloor.rotation.x = -Math.PI / 2;
+  fitFloor.position.set((FITTING.x0 + FITTING.x1) / 2, 0.001, (FITTING.z0 + FITTING.z1) / 2);
+  g.add(fitFloor);
+  const ceil = plane(X * 2, L, kit.ceiling, 3);
   ceil.rotation.x = Math.PI / 2;
   ceil.position.set(0, H, zc);
   g.add(ceil);
-  for (const side of [-1, 1]) {
-    const wall = plane(L, H, kit.plaster, 3);
+  const fitCeil = plane(FITTING.x1 - FITTING.x0, FITTING.z0 - FITTING.z1, kit.ceiling, 3);
+  fitCeil.rotation.x = Math.PI / 2;
+  fitCeil.position.set((FITTING.x0 + FITTING.x1) / 2, H, (FITTING.z0 + FITTING.z1) / 2);
+  g.add(fitCeil);
+
+  // Paredes laterais em travertino com nichos em arco (recuo iluminado).
+  const nicheGlow = new THREE.MeshStandardMaterial({ map: kit.glowTex, color: '#f1e5d2', emissiveMap: kit.glowTex, emissive: new THREE.Color('#f4e0bf'), emissiveIntensity: 0.26, roughness: 0.9 });
+  for (const side of [-1, 1] as const) {
+    const arches = ARCHES.z.map((z) => ({ x: (z - zc) * side * -1, w: ARCHES.w, h: ARCHES.h }));
+    // A parede é construída no plano local (u ao longo de z, v = y) e girada para o lado.
+    const wall = wallWithArches(L, H, arches, kit.travertineSlab, 1.6);
     wall.rotation.y = side * -Math.PI / 2;
-    wall.position.set(side * X, H / 2, zc);
+    wall.position.set(side * X, 0, zc);
     wall.receiveShadow = true;
     g.add(wall);
-    g.add(box(0.03, 0.14, L, kit.travertine, side * (X - 0.015), 0.07, zc));
-    g.add(box(0.05, 0.03, L, kit.light, side * (X - 0.2), H - 0.02, zc)); // sanca
+    for (const z of ARCHES.z) {
+      const reveal = archReveal(ARCHES.w, ARCHES.h, ARCHES.depth, kit.travertineLight);
+      reveal.rotation.y = side * -Math.PI / 2;
+      reveal.position.set(side * X, 0, z);
+      g.add(reveal);
+      const back = archPanel(ARCHES.w, ARCHES.h, nicheGlow);
+      back.rotation.y = side * -Math.PI / 2;
+      back.position.set(side * (X + ARCHES.depth - 0.005), 0, z);
+      g.add(back);
+    }
+    // rodapé de latão
+    g.add(box(0.02, 0.07, L, kit.brassSatin, side * (X - 0.01), 0.035, zc));
   }
-  const back = plane(X * 2, H, kit.plaster, 3);
-  back.position.set(0, H / 2, zBack);
-  g.add(back);
-  // parede frontal interna com o vão da porta
+  // Parede do fundo com o arco do espelho e o arco da cortina (aberto para o provador).
+  const backWall = wallWithArches(X * 2, H, [
+    { x: BACK_MIRROR.x, w: BACK_MIRROR.w + 0.16, h: BACK_MIRROR.h + 0.28 },
+    { x: CURTAIN_ARCH.x, w: CURTAIN_ARCH.w, h: CURTAIN_ARCH.h },
+  ], kit.travertineSlab, 1.6);
+  backWall.position.set(0, 0, zBack);
+  g.add(backWall);
+  g.add(box(X * 2, 0.07, 0.02, kit.brassSatin, 0, 0.035, zBack + 0.01));
+  // nicho raso do espelho do fundo + passagem da cortina
+  const mirrorReveal = archReveal(BACK_MIRROR.w + 0.16, BACK_MIRROR.h + 0.28, 0.16, kit.travertineLight);
+  mirrorReveal.position.set(BACK_MIRROR.x, 0, zBack);
+  g.add(mirrorReveal);
+  const curtainReveal = archReveal(CURTAIN_ARCH.w, CURTAIN_ARCH.h, 0.45, kit.travertineLight);
+  curtainReveal.position.set(CURTAIN_ARCH.x, 0, zBack);
+  g.add(curtainReveal);
+  // Provador: paredes
+  const fitLeft = plane(FITTING.z0 - FITTING.z1, H, kit.travertineSlab, 1.6);
+  fitLeft.rotation.y = Math.PI / 2;
+  fitLeft.position.set(FITTING.x0, H / 2, (FITTING.z0 + FITTING.z1) / 2);
+  g.add(fitLeft);
+  const fitRight = plane(FITTING.z0 - FITTING.z1, H, kit.travertineSlab, 1.6);
+  fitRight.rotation.y = -Math.PI / 2;
+  fitRight.position.set(FITTING.x1, H / 2, (FITTING.z0 + FITTING.z1) / 2);
+  g.add(fitRight);
+  const fitBack = wallWithArches(FITTING.x1 - FITTING.x0, H, [{ x: FITTING.mirrorX - (FITTING.x0 + FITTING.x1) / 2, w: FITTING.mirrorW + 0.14, h: FITTING.mirrorH + 0.26 }], kit.travertineSlab, 1.6);
+  fitBack.position.set((FITTING.x0 + FITTING.x1) / 2, 0, FITTING.z1);
+  g.add(fitBack);
+  const fitMirrorReveal = archReveal(FITTING.mirrorW + 0.14, FITTING.mirrorH + 0.26, 0.14, kit.travertineLight);
+  fitMirrorReveal.position.set(FITTING.mirrorX, 0, FITTING.z1);
+  g.add(fitMirrorReveal);
+  // Lado de trás da parede do fundo, visto do provador (entre o arco e as laterais).
+  const fitFront = wallWithArches(FITTING.x1 - FITTING.x0, H, [{ x: CURTAIN_ARCH.x - (FITTING.x0 + FITTING.x1) / 2, w: CURTAIN_ARCH.w, h: CURTAIN_ARCH.h }], kit.travertineSlab, 1.6);
+  fitFront.rotation.y = Math.PI;
+  fitFront.position.set((FITTING.x0 + FITTING.x1) / 2, 0, FITTING.z0 - 0.45);
+  g.add(fitFront);
+
+  // Parede interna da entrada: gesso claro com o vão da porta e painéis de nogueira.
   const front = new THREE.Shape();
-  front.moveTo(-X, 0); front.lineTo(-1.25, 0); front.lineTo(-1.25, 3.1); front.lineTo(1.25, 3.1);
-  front.lineTo(1.25, 0); front.lineTo(X, 0); front.lineTo(X, H); front.lineTo(-X, H); front.closePath();
-  const frontMesh = new THREE.Mesh(new THREE.ShapeGeometry(front), kit.plaster);
+  front.moveTo(-X, 0); front.lineTo(-DOOR.halfW, 0); front.lineTo(-DOOR.halfW, DOOR.h + 0.08); front.lineTo(DOOR.halfW, DOOR.h + 0.08);
+  front.lineTo(DOOR.halfW, 0); front.lineTo(X, 0); front.lineTo(X, H); front.lineTo(-X, H); front.closePath();
+  const frontMesh = new THREE.Mesh(new THREE.ShapeGeometry(front), kit.travertineSlab);
+  const fuv = frontMesh.geometry.getAttribute('uv') as THREE.BufferAttribute;
+  const fpos = frontMesh.geometry.getAttribute('position') as THREE.BufferAttribute;
+  for (let i = 0; i < fpos.count; i++) fuv.setXY(i, (fpos.getX(i) + X) / 1.6, fpos.getY(i) / 1.6);
   frontMesh.rotation.y = Math.PI;
   frontMesh.position.z = zFront;
   g.add(frontMesh);
+  for (const side of [-1, 1] as const) {
+    const w = WOOD_PANEL.x1 - WOOD_PANEL.x0;
+    const panel = box(w, H - 0.02, 0.07, kit.walnut, side * (WOOD_PANEL.x0 + w / 2), (H - 0.02) / 2, zFront - 0.04);
+    g.add(panel);
+    // junta vertical de latão entre a nogueira e a pedra
+    g.add(box(0.012, H, 0.08, kit.brassSatin, side * WOOD_PANEL.x1, H / 2, zFront - 0.045));
+    // retorno da nogueira no vão da porta
+    g.add(box(0.07, DOOR.h + 0.08, 0.9, kit.walnut, side * (DOOR.halfW + 0.035), (DOOR.h + 0.08) / 2, zFront - 0.45));
+  }
+  g.add(box(DOOR.halfW * 2 + 0.14, 0.09, 0.9, kit.walnut, 0, DOOR.h + 0.125, zFront - 0.45));
 
-  // spots embutidos no teto (instanciados)
-  const disc = new THREE.InstancedMesh(new THREE.CircleGeometry(0.06, 20), kit.light, 40);
-  let di = 0;
+  // ---------- trilhos de spots no teto ----------
+  const headGeo = new THREE.CylinderGeometry(0.028, 0.03, 0.09, 12);
+  const lensGeo = new THREE.CircleGeometry(0.02, 12);
+  lensGeo.rotateX(Math.PI / 2);
+  const headCount = TRACKS.x.length * Math.ceil(L / TRACKS.step) + 6;
+  const heads = new THREE.InstancedMesh(headGeo, kit.black, headCount);
+  const lenses = new THREE.InstancedMesh(lensGeo, kit.light, headCount);
+  let hi = 0;
   const m4 = new THREE.Matrix4();
-  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
-  for (let z = zFront - 1.4; z > zBack + 0.8; z -= 1.8) {
-    for (const x of [-3.4, -1.1, 1.1, 3.4]) {
-      if (di >= 40) break;
-      m4.compose(new THREE.Vector3(x, H - 0.005, z), q, new THREE.Vector3(1, 1, 1));
-      disc.setMatrixAt(di++, m4);
-    }
-  }
-  disc.count = di;
-  g.add(disc);
-
-  // Front-facing alpha studies in physically supported boutique niches.
-  const nicheProducts=['saias-03','camisas-01','bolsas-02','calcas-01','croppeds-02','pulseiras-01'] as const;
-  let nicheIndex=0;
-  const nicheMat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissiveMap: kit.glowTex, emissive: new THREE.Color('#f1dcb8'), emissiveIntensity: 0.22, roughness: 0.95 });
-  for (const side of [-1, 1]) {
-    for (const z of [-4.2, -7.0, -9.8]) {
-      const fr = archFrame(2.5, 3.3, 0.12, 0.1, kit.travertine);
-      fr.rotation.y = side * -Math.PI / 2;
-      fr.position.set(side * (X - 0.1), 0, z);
-      g.add(fr);
-      const panel = archPanel(2.5, 3.3, nicheMat);
-      panel.rotation.y = side * -Math.PI / 2;
-      panel.position.set(side * (X - 0.012), 0, z);
-      g.add(panel);
-      const slug=nicheProducts[nicheIndex++]!, product=sceneProduct(slug);
-      const clothing=!['bolsas','pulseiras','aneis'].includes(product.category);
-      const display=supportedProduct(kit, slug, DISPLAY_HEIGHT[product.category],clothing?2.25:1.16,clothing);
-      display.rotation.y=side * -Math.PI / 2;
-      display.position.set(side*(X-.24),0,z);
-      g.add(display);
-    }
-  }
-
-  // araras de latão
-  for (const side of [-1, 1]) {
-    const len = RAIL.z0 - RAIL.z1;
-    const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, len, 12), kit.brass);
-    bar.rotation.x = Math.PI / 2;
-    bar.position.set(side * RAIL.x, RAIL.y, (RAIL.z0 + RAIL.z1) / 2);
-    g.add(bar);
-    for (const z of [RAIL.z0, (RAIL.z0 + RAIL.z1) / 2, RAIL.z1]) {
-      const br = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, X - RAIL.x, 8), kit.brass);
-      br.rotation.z = Math.PI / 2;
-      br.position.set(side * (RAIL.x + (X - RAIL.x) / 2), RAIL.y, z);
-      g.add(br);
-    }
-  }
-
-  // Canonical garments only. Jewelry and bags remain on their own displays.
-  const clothing=DEMO_CATALOG.filter(product=>!['bolsas','pulseiras','aneis'].includes(product.category));
-  const perRail = 16; // 15 roupas por parede + espaço para o vestido protagonista.
-  const hangerGeo = new THREE.TorusGeometry(0.17, 0.006, 5, 24, Math.PI * 0.62);
-  hangerGeo.rotateZ(Math.PI * 0.19);
-  const hookGeo = new THREE.TorusGeometry(0.025, 0.004, 5, 12, Math.PI * 1.3);
-  hookGeo.translate(0, 0.17 + 0.012, 0);
-  const hangers = new THREE.InstancedMesh(hangerGeo, kit.brass, perRail * 2 + 1);
-  const hooks = new THREE.InstancedMesh(hookGeo, kit.brass, perRail * 2 + 1);
-  g.add(hangers, hooks);
-  const clipBars=new THREE.InstancedMesh(new THREE.BoxGeometry(.34,.015,.018),kit.brass,perRail*2+1);
-  const clipPins=new THREE.InstancedMesh(new THREE.BoxGeometry(.025,.055,.025),kit.brass,(perRail*2+1)*2);
-  const hidden=new THREE.Matrix4().makeScale(0,0,0);
-  for(let i=0;i<perRail*2+1;i++){clipBars.setMatrixAt(i,hidden);clipPins.setMatrixAt(i*2,hidden);clipPins.setMatrixAt(i*2+1,hidden);}
-  g.add(clipBars,clipPins);
-  const swings:Swing[]=[];
-  const rightSwings:Swing[]=[];
-  const leftSwings:Swing[]=[];
-  let focusIndex=4,hoverId:string|null=null,selectedId:string|null=null;
-  const raycaster=new THREE.Raycaster();
-  let hi=0;
-  for (const side of [-1, 1]) {
-    for (let k = 0; k < perRail; k++) {
-      const z = RAIL.z0 - 0.25 - (k / (perRail - 1)) * (RAIL.z0 - RAIL.z1 - 0.5);
-      if (side === -1 && k === perRail-1) continue;
-      if (side === 1 && k === 6) continue; // um único cabide reservado ao protagonista
-      // Order is stable: 15 left + 15 right, every one of the 30 outfits once.
-      const product=clothing[hi]!;
-      const pivot=new THREE.Group(); pivot.userData.dynamic=true;
-      const display=productDisplay(product,DISPLAY_HEIGHT[product.category],'top');
-      display.position.y=-.22; pivot.add(display); g.add(pivot);
-      const clipped=product.category==='saias'||product.category==='calcas';
-      const swing:Swing={ax:0,az:0,vx:0,vz:0,hook:new THREE.Vector3(side*RAIL.x,RAIL.y,z),yaw:side*-Math.PI/2,mesh:pivot,clipped,product,side,baseZ:z,focus:0,focusV:0,slide:0};
-      swings.push(swing);
-      if(side===1)rightSwings.push(swing); else leftSwings.push(swing);
+  for (const x of TRACKS.x) {
+    g.add(box(0.03, 0.03, L - 1.4, kit.black, x, H - 0.015, zc));
+    for (let z = zFront - 1.2; z > zBack + 0.6; z -= TRACKS.step) {
+      if (hi >= headCount) break;
+      m4.makeTranslation(x, H - 0.085, z);
+      heads.setMatrixAt(hi, m4);
+      m4.makeTranslation(x, H - 0.131, z);
+      lenses.setMatrixAt(hi, m4);
       hi++;
     }
   }
-  // Start on the right wall. Continuing left enters the other rail in the SAME room.
-  const railSwings=[...rightSwings,...leftSwings];
-  hangers.count = hooks.count = clipBars.count = hi + 1;
-  clipPins.count=(hi+1)*2;
-  // cabide vazio do protagonista (fica na arara quando o vestido sai)
-  const heroHangerIndex = hi;
+  // trilho curto no provador
+  g.add(box(0.03, 0.03, 3.2, kit.black, (FITTING.x0 + FITTING.x1) / 2, H - 0.015, (FITTING.z0 + FITTING.z1) / 2));
+  for (const z of [-19.0, -20.3, -21.6]) {
+    if (hi >= headCount) break;
+    m4.makeTranslation((FITTING.x0 + FITTING.x1) / 2, H - 0.085, z); heads.setMatrixAt(hi, m4);
+    m4.makeTranslation((FITTING.x0 + FITTING.x1) / 2, H - 0.131, z); lenses.setMatrixAt(hi, m4);
+    hi++;
+  }
+  heads.count = lenses.count = hi;
+  g.add(heads, lenses);
 
+  // ---------- araras livres ----------
+  const hangerShape = new THREE.Shape();
+  hangerShape.moveTo(-0.215, -0.085); hangerShape.quadraticCurveTo(-0.08, -0.02, 0, 0); hangerShape.quadraticCurveTo(0.08, -0.02, 0.215, -0.085);
+  hangerShape.lineTo(0.215, -0.118); hangerShape.lineTo(0.2, -0.118); hangerShape.quadraticCurveTo(0.07, -0.058, 0, -0.04); hangerShape.quadraticCurveTo(-0.07, -0.058, -0.2, -0.118);
+  hangerShape.lineTo(-0.215, -0.118); hangerShape.closePath();
+  const hangerGeo = new THREE.ExtrudeGeometry(hangerShape, { depth: 0.013, bevelEnabled: false });
+  hangerGeo.translate(0, 0, -0.0065);
+  const barGeo = new THREE.BoxGeometry(0.4, 0.012, 0.012);
+  barGeo.translate(0, -0.118, 0);
+  const hookGeo = new THREE.TorusGeometry(0.03, 0.0035, 6, 16, Math.PI * 1.25);
+  hookGeo.rotateZ(-Math.PI * 0.14);
+  hookGeo.translate(0, 0.026, 0);
+  const hangerSlots = RAIL.slots * 2 + 1;
+  const hangerWood = new THREE.InstancedMesh(hangerGeo, kit.walnut, hangerSlots);
+  const hangerBars = new THREE.InstancedMesh(barGeo, kit.walnut, hangerSlots);
+  const hangerHooks = new THREE.InstancedMesh(hookGeo, kit.brassSatin, hangerSlots);
+  const hiddenM = new THREE.Matrix4().makeScale(0, 0, 0);
+  for (let i = 0; i < hangerSlots; i++) { hangerWood.setMatrixAt(i, hiddenM); hangerBars.setMatrixAt(i, hiddenM); hangerHooks.setMatrixAt(i, hiddenM); }
+  g.add(hangerWood, hangerBars, hangerHooks);
+
+  const slots: Slot[] = [];
+  const sides: Record<Side, { hangers: Slot[]; shelf: Slot[] }> = { left: { hangers: [], shelf: [] }, right: { hangers: [], shelf: [] } };
+  let hangerCursor = 0;
+  const makeSlot = (side: Side, index: number, kind: 'hanger' | 'shelf', hook: THREE.Vector3, natural: number): Slot => {
+    const pivot = new THREE.Group();
+    pivot.userData.dynamic = true;
+    pivot.matrixAutoUpdate = false;
+    const material = new THREE.MeshStandardMaterial({
+      map: placeholderTexture(), transparent: false, alphaTest: 0.22, alphaToCoverage: cinema,
+      depthWrite: true, side: THREE.DoubleSide, roughness: 0.84, metalness: 0, envMapIntensity: 0.16,
+    });
+    const card = new THREE.Mesh(kind === 'hanger' ? CARD_GEO : SHELF_GEO, material);
+    card.visible = false;
+    card.receiveShadow = true;
+    card.userData.productMedia = true;
+    pivot.add(card);
+    g.add(pivot);
+    const slot: Slot = {
+      side, index, kind, pivot, card, material, product: null, hidden: false,
+      hook, natural, yaw: natural, ax: 0, az: 0, vx: 0, vz: 0, focus: 0, focusV: 0,
+      hangerIndex: kind === 'hanger' ? hangerCursor++ : -1, clipped: false, mediaSerial: 0,
+    };
+    slots.push(slot);
+    sides[side][kind === 'hanger' ? 'hangers' : 'shelf'].push(slot);
+    return slot;
+  };
+  for (const side of ['left', 'right'] as const) {
+    const s = SIDE_SIGN[side];
+    const natural = s * -Math.PI / 2;
+    const x = s * RAIL.x;
+    // varão, montantes e bases de pedra
+    const len = RAIL.z0 - RAIL.z1;
+    const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.017, 0.017, len + 0.04, 14), kit.brassSatin);
+    bar.rotation.x = Math.PI / 2;
+    bar.position.set(x, RAIL.y, (RAIL.z0 + RAIL.z1) / 2);
+    g.add(bar);
+    for (const z of [RAIL.z0, RAIL.z1]) {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.017, 0.017, RAIL.y - RAIL.baseH + 0.03, 14), kit.brassSatin);
+      post.position.set(x, RAIL.baseH + (RAIL.y - RAIL.baseH + 0.03) / 2, z);
+      g.add(post);
+      const cap = new THREE.Mesh(new THREE.SphereGeometry(0.022, 12, 8), kit.brassSatin);
+      cap.position.set(x, RAIL.y + 0.02, z);
+      g.add(cap);
+      const base = box(RAIL.baseW, RAIL.baseH, RAIL.baseD, kit.travertineLight, x, RAIL.baseH / 2, z);
+      base.castShadow = cinema; base.receiveShadow = true;
+      g.add(base);
+      g.add(contact(kit, RAIL.baseW + 0.5, RAIL.baseD + 0.5, x, z));
+    }
+    // sombra de contato das peças no piso (uma faixa suave sob o varão)
+    const strip = contact(kit, 1.1, len - 0.4, x, (RAIL.z0 + RAIL.z1) / 2, 0.0045);
+    (strip.material as THREE.Material).opacity = 0.75;
+    g.add(strip);
+    for (let i = 0; i < RAIL.slots; i++) {
+      makeSlot(side, i, 'hanger', new THREE.Vector3(x, RAIL.y, slotZ(i)), natural);
+    }
+    // banco de pedra no fim da arara (acessórios)
+    const shelfLen = SHELF.z0 - SHELF.z1;
+    const bench = box(SHELF.d, SHELF.h, shelfLen, kit.travertineLight, s * SHELF.x, SHELF.h / 2, (SHELF.z0 + SHELF.z1) / 2);
+    bench.receiveShadow = true; bench.castShadow = cinema;
+    g.add(bench);
+    g.add(contact(kit, SHELF.d + 0.6, shelfLen + 0.5, s * SHELF.x, (SHELF.z0 + SHELF.z1) / 2));
+    for (let i = 0; i < SHELF.slots; i++) {
+      makeSlot(side, i, 'shelf', new THREE.Vector3(s * (SHELF.x - 0.02), SHELF.h + 0.004, shelfSlotZ(i)), natural);
+    }
+  }
+  // cabide reservado ao vestido protagonista (direita): o índice é o último da instância
+  const heroHangerIndex = hangerCursor;
+  const heroSwing = { ax: 0, az: 0, vx: 0, vz: 0, yaw: -Math.PI / 2 };
+  const usableHangers = (side: Side) => sides[side].hangers.filter((s) => !(side === 'right' && s.index === HERO_SLOT));
+
+  // ---------- suporte do vestido protagonista (fora do corredor) ----------
+  const heroStand = new THREE.Group();
+  heroStand.position.set(HERO_STAND.x, 0, HERO_STAND.z);
+  heroStand.add(new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.035, 36), kit.brassSatin));
+  heroStand.children[0]!.position.y = 0.018;
+  const heroPole = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 1.2, 10), kit.brassSatin);
+  heroPole.position.y = 0.6;
+  heroStand.add(heroPole);
+  g.add(heroStand);
+  g.add(contact(kit, 1.1, 1.1, HERO_STAND.x, HERO_STAND.z));
+
+  // ---------- pedestal com a bolsa Belle ----------
+  const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(BAG_PEDESTAL.r, BAG_PEDESTAL.r + 0.01, BAG_PEDESTAL.h, 40), kit.travertineLight);
+  pedestal.position.set(BAG_PEDESTAL.x, BAG_PEDESTAL.h / 2, BAG_PEDESTAL.z);
+  pedestal.castShadow = cinema; pedestal.receiveShadow = true;
+  g.add(pedestal);
+  g.add(contact(kit, BAG_PEDESTAL.r * 3.2, BAG_PEDESTAL.r * 3.2, BAG_PEDESTAL.x, BAG_PEDESTAL.z));
+  const bag = buildBelleBag(kit);
+  bag.position.set(BAG_PEDESTAL.x, BAG_PEDESTAL.h, BAG_PEDESTAL.z);
+  bag.rotation.y = 0.35;
+  g.add(bag);
+  let bagPulse = 0;
+
+  // ---------- espelhos ----------
+  const mirrorTex = Math.max(256, Math.min(1024, Math.round(Math.min(innerWidth, innerHeight) * dpr * 0.45)));
+  const backMirror = buildMirror(BACK_MIRROR.w, BACK_MIRROR.h, cinema, mirrorTex, kit);
+  backMirror.group.position.set(BACK_MIRROR.x, 0.22, zBack + 0.06);
+  g.add(backMirror.group);
+  const fitMirror = buildMirror(FITTING.mirrorW, FITTING.mirrorH, cinema, mirrorTex, kit);
+  fitMirror.group.position.set(FITTING.mirrorX, 0.2, FITTING.z1 + 0.06);
+  g.add(fitMirror.group);
+  let reflectors = cinema;
+
+  // ---------- cortina do arco (duas folhas) e drapeado do provador ----------
+  const curtainRod = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, CURTAIN_ARCH.w + 0.3, 10), kit.brassSatin);
+  curtainRod.rotation.z = Math.PI / 2;
+  curtainRod.position.set(CURTAIN_ARCH.x, CURTAIN_ARCH.h - 0.08, zBack + 0.1);
+  g.add(curtainRod);
+  const curtainPanels: THREE.Mesh[] = [];
+  for (const side of [-1, 1] as const) {
+    const geo = pleatedPanel(CURTAIN_ARCH.w / 2 + 0.08, CURTAIN_ARCH.h - 0.14, 40, 0.08);
+    // origem na borda externa, para abrir deslizando até o montante do arco
+    geo.translate(-side * (CURTAIN_ARCH.w / 4 + 0.04), 0, 0);
+    const panel = new THREE.Mesh(geo, kit.linen);
+    panel.userData.dynamic = true;
+    panel.position.set(CURTAIN_ARCH.x + side * (CURTAIN_ARCH.w / 2 + 0.04), (CURTAIN_ARCH.h - 0.14) / 2, zBack + 0.12);
+    g.add(panel);
+    curtainPanels.push(panel);
+  }
+  const drape = new THREE.Mesh(pleatedPanel(FITTING.z0 - FITTING.z1 - 0.35, H - 0.12, 64, 0.1), kit.linen);
+  drape.rotation.y = -Math.PI / 2;
+  drape.position.set(FITTING.x1 - 0.14, (H - 0.12) / 2, (FITTING.z0 + FITTING.z1) / 2 - 0.15);
+  g.add(drape);
+  g.add(box(0.03, 0.03, FITTING.z0 - FITTING.z1 - 0.3, kit.brassSatin, FITTING.x1 - 0.14, H - 0.1, (FITTING.z0 + FITTING.z1) / 2 - 0.15));
+
+  // ---------- provador: poltrona bouclé, suporte de latão ----------
+  const chair = buildChair(kit);
+  chair.position.set(FITTING.chairX, 0, FITTING.chairZ);
+  chair.rotation.y = 0.55;
+  g.add(chair);
+  g.add(contact(kit, 1.5, 1.5, FITTING.chairX, FITTING.chairZ));
+  const fitStand = new THREE.Group();
+  fitStand.position.set(FITTING.standX, 0, FITTING.standZ);
+  const fitFoot = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.035, 36), kit.brassSatin);
+  fitFoot.position.y = 0.018;
+  const fitPole = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 1.9, 10), kit.brassSatin);
+  fitPole.position.y = 0.95;
+  const fitArm = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.5, 10), kit.brassSatin);
+  fitArm.rotation.z = Math.PI / 2;
+  fitArm.position.y = 1.9;
+  fitStand.add(fitFoot, fitPole, fitArm);
+  g.add(fitStand);
+  g.add(contact(kit, 1.2, 1.2, FITTING.standX, FITTING.standZ));
+  const fittingDisplay = new THREE.Group();
+  fittingDisplay.name = 'fitting-product-display';
+  fittingDisplay.userData.dynamic = true;
+  fittingDisplay.position.set(FITTING.standX, 0, FITTING.standZ);
+  fittingDisplay.visible = false;
+  g.add(fittingDisplay);
+  let fittingProductId: string | null = null;
+
+  // ---------- luz ----------
+  g.add(new THREE.HemisphereLight('#fff0d8', '#a88e6c', 0.72));
+  const lights: THREE.SpotLight[] = [];
+  const addSpot = (color: string, intensity: number, from: [number, number, number], to: [number, number, number], angle: number, pen = 0.8) => {
+    const s = spot(color, intensity, from, to, angle, pen);
+    g.add(s, s.target);
+    lights.push(s);
+    return s;
+  };
+  for (const s of [-1, 1] as const) {
+    addSpot('#ffe3bd', 52, [s * 1.9, H - 0.06, -5.2], [s * RAIL.x, 0.9, -5.6], 0.95, 0.85);
+    if (cinema) addSpot('#ffe3bd', 46, [s * 1.9, H - 0.06, -8.3], [s * RAIL.x, 0.9, -8.6], 0.95, 0.85);
+    // lavagem quente dos nichos atrás das araras
+    addSpot('#ffdcae', 30, [s * 2.6, H - 0.06, -7.3], [s * (X + 0.2), 2.0, -7.3], 0.75, 0.9);
+  }
+  addSpot('#ffe6c7', 44, [0, H - 0.06, -2.6], [0, 0, -3.2], 0.8, 0.9);
+  const heroSpot = addSpot('#ffe9cc', 60, [-0.6, H - 0.06, -11.4], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.5, 0.7);
+  if (cinema) {
+    heroSpot.castShadow = true;
+    heroSpot.shadow.mapSize.set(1024, 1024);
+    heroSpot.shadow.bias = -0.0004;
+    heroSpot.shadow.normalBias = 0.02;
+    heroSpot.shadow.camera.near = 1;
+    heroSpot.shadow.camera.far = 7;
+  }
+  addSpot('#ffe3c0', 48, [-0.2, H - 0.06, -15.6], [BACK_MIRROR.x, 1.3, zBack], 0.7, 0.85);
+  addSpot('#ffdfb6', 40, [CURTAIN_ARCH.x, H - 0.06, -16.2], [CURTAIN_ARCH.x, 1.3, zBack], 0.7, 0.85);
+  addSpot('#ffe8cf', 50, [2.5, H - 0.06, -20.2], [FITTING.standX, 1.0, FITTING.standZ], 0.7, 0.8);
+  if (cinema) addSpot('#ffe3c0', 34, [1.6, H - 0.06, -20.0], [FITTING.chairX, 0.6, FITTING.chairZ], 0.7, 0.85);
+  addSpot('#ffe0b8', 42, [3.4, H - 0.06, -19.6], [FITTING.x1, 1.2, -20.8], 0.8, 0.9);
+  const sweep = spot('#ffd28a', 0, [-2.6, 2.6, -11.6], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.16, 0.55);
+  g.add(sweep, sweep.target);
+
+  // ---------- estado de seleção e picking ----------
+  const raycaster = new THREE.Raycaster();
+  let hoverId: string | null = null;
+  let selectedId: string | null = null;
+  const proj = new THREE.Vector3();
   const tmpQ = new THREE.Quaternion();
   const tmpE = new THREE.Euler();
-  const offHanger = new THREE.Matrix4().makeTranslation(0, -0.2, 0);
-  const clipOffsets=[new THREE.Matrix4().makeTranslation(-.12,-.22,0),new THREE.Matrix4().makeTranslation(.12,-.22,0)];
   const one = new THREE.Vector3(1, 1, 1);
   const base = new THREE.Matrix4();
   const out = new THREE.Matrix4();
-  const writeSwing = (s: Swing, hiIdx: number) => {
-    tmpE.set(s.ax, s.yaw, s.az, 'YXZ');
-    tmpQ.setFromEuler(tmpE);
-    base.compose(s.hook, tmpQ, one);
-    s.mesh.matrixAutoUpdate=false;
-    s.mesh.matrix.copy(base);
-    s.mesh.matrixWorldNeedsUpdate=true;
-    out.multiplyMatrices(base, offHanger);
-    hangers.setMatrixAt(hiIdx, s.clipped?hidden:out);
-    hooks.setMatrixAt(hiIdx, out);
-    clipBars.setMatrixAt(hiIdx,s.clipped?out:hidden);
-    for(let side=0;side<2;side++) {
-      if(s.clipped) {
-        out.multiplyMatrices(base,clipOffsets[side]!);
-        clipPins.setMatrixAt(hiIdx*2+side,out);
-      } else clipPins.setMatrixAt(hiIdx*2+side,hidden);
+  const hangerOffset = new THREE.Matrix4().makeTranslation(0, -0.03, 0);
+
+  function assign(slot: Slot, product: Product | null): void {
+    if (slot.product?.id === product?.id) return;
+    slot.product = product;
+    slot.hidden = false;
+    slot.mediaSerial++;
+    const serial = slot.mediaSerial;
+    if (!product) {
+      slot.card.visible = false;
+      slot.material.map = placeholderTexture();
+      slot.material.needsUpdate = true;
+      delete slot.pivot.userData.productId;
+      delete slot.pivot.userData.mediaPromise;
+      slot.pivot.userData.mediaReady = false;
+      return;
     }
-  };
-  swings.forEach((s, i) => writeSwing(s, i));
-  const heroSwing: Swing = { ax:0,az:0,vx:0,vz:0,hook:HERO_HANGER.clone(),yaw:-Math.PI/2,mesh:new THREE.Group(),clipped:false,product:clothing[0]!,side:1,baseZ:HERO_HANGER.z,focus:0,focusV:0,slide:0 };
+    const height = DISPLAY_HEIGHT[product.category];
+    const m = cardMetrics(product, height);
+    slot.clipped = product.category === 'saias' || product.category === 'calcas';
+    slot.card.scale.set(m.w, m.h, 1);
+    if (slot.kind === 'hanger') {
+      const drop = slot.clipped ? 0.118 : 0.052;
+      slot.card.position.set(m.dx, -drop + m.top, 0.012);
+      slot.card.rotation.set(0, 0, 0);
+    } else {
+      slot.card.position.set(m.dx, m.top + height, 0.0);
+      slot.card.rotation.set(-0.22, 0, 0);
+    }
+    slot.pivot.userData.productId = product.id;
+    slot.pivot.userData.displayWidth = m.opaqueW;
+    slot.pivot.userData.mediaReady = false;
+    slot.pivot.userData.mediaFailed = false;
+    const tex = productTexture(product);
+    slot.pivot.userData.mediaPromise = tex.promise;
+    const apply = (t: THREE.Texture | null) => {
+      if (serial !== slot.mediaSerial) return; // troca rápida de categoria: mídia obsoleta
+      if (!t) { slot.card.visible = false; slot.pivot.userData.mediaFailed = true; return; }
+      slot.pivot.userData.mediaReady = true;
+      slot.material.map = t;
+      slot.material.needsUpdate = true;
+      slot.card.visible = !slot.hidden;
+    };
+    if (tex.texture) apply(tex.texture); else { slot.card.visible = false; void tex.promise.then(apply); }
+  }
+
+  function writeSlot(slot: Slot): void {
+    tmpE.set(slot.ax, slot.yaw, slot.az, 'YXZ');
+    tmpQ.setFromEuler(tmpE);
+    base.compose(slot.hook, tmpQ, one);
+    slot.pivot.matrix.copy(base);
+    slot.pivot.matrixWorldNeedsUpdate = true;
+    if (slot.hangerIndex >= 0) {
+      const show = !!slot.product && !slot.hidden;
+      if (show) {
+        out.multiplyMatrices(base, hangerOffset);
+        hangerWood.setMatrixAt(slot.hangerIndex, out);
+        hangerHooks.setMatrixAt(slot.hangerIndex, out);
+        hangerBars.setMatrixAt(slot.hangerIndex, slot.clipped ? out : hiddenM);
+      } else {
+        hangerWood.setMatrixAt(slot.hangerIndex, hiddenM);
+        hangerHooks.setMatrixAt(slot.hangerIndex, hiddenM);
+        hangerBars.setMatrixAt(slot.hangerIndex, hiddenM);
+      }
+    }
+  }
   const writeHero = () => {
     tmpE.set(heroSwing.ax, heroSwing.yaw, heroSwing.az, 'YXZ');
     tmpQ.setFromEuler(tmpE);
-    base.compose(heroSwing.hook, tmpQ, one);
-    out.multiplyMatrices(base, offHanger);
-    hangers.setMatrixAt(heroHangerIndex, out);
-    hooks.setMatrixAt(heroHangerIndex, out);
+    base.compose(HERO_HANGER, tmpQ, one);
+    out.multiplyMatrices(base, hangerOffset);
+    hangerWood.setMatrixAt(heroHangerIndex, out);
+    hangerHooks.setMatrixAt(heroHangerIndex, out);
+    hangerBars.setMatrixAt(heroHangerIndex, hiddenM);
   };
+  slots.forEach(writeSlot);
   writeHero();
+  hangerWood.instanceMatrix.needsUpdate = hangerHooks.instanceMatrix.needsUpdate = hangerBars.instanceMatrix.needsUpdate = true;
 
-
-  // Loja única: saco de couro geométrico 3D no piso (não overlay duplicado).
-  const bag=new THREE.Group();bag.name='sacola-no-piso';bag.userData.dynamic=true;bag.position.set(2.05,0,-6.05);
-  const leather=new THREE.MeshStandardMaterial({color:'#e8ddc9',roughness:.53,metalness:.04,side:THREE.DoubleSide});
-  const dark=new THREE.MeshStandardMaterial({color:'#493b2d',roughness:.94});
-  const body=new THREE.Mesh(new THREE.BoxGeometry(.49,.51,.25),leather);body.position.y=.31;body.castShadow=true;bag.add(body);
-  const mouth=new THREE.Mesh(new THREE.PlaneGeometry(.42,.18),dark);mouth.rotation.x=-Math.PI/2;mouth.position.y=.571;bag.add(mouth);
-  const rim=new THREE.Mesh(new THREE.TorusGeometry(.243,.013,8,36,Math.PI),kit.brass);rim.rotation.x=Math.PI/2;rim.scale.y=.47;rim.position.set(0,.572,.015);bag.add(rim);
-  for(const side of [-1,1]){
-    const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.17,.55,side*.078),new THREE.Vector3(-.13,.80,side*.078),new THREE.Vector3(.13,.80,side*.078),new THREE.Vector3(.17,.55,side*.078)]);
-    bag.add(new THREE.Mesh(new THREE.TubeGeometry(curve,20,.012,7,false),leather));
-  }
-  // O lettering vem do arquivo oficial da Belle, sem reconstrução tipográfica.
-  // Placa inexistente: a impressão é aplicada na superfície frontal do couro,
-  // com mapas alfa, para parecer uma gravação de folha dourada.
-  const officialLogo=new THREE.TextureLoader().load('/brand/belle-alencar-logo.svg',texture=>{
-    texture.colorSpace=THREE.SRGBColorSpace;
-    texture.anisotropy=4;
-    texture.needsUpdate=true;
-  });
-  officialLogo.colorSpace=THREE.SRGBColorSpace;
-  const foil=new THREE.Mesh(
-    new THREE.PlaneGeometry(.37,.178),
-    new THREE.MeshBasicMaterial({map:officialLogo,transparent:true,opacity:.97,
-      depthWrite:false,alphaTest:.02,polygonOffset:true,polygonOffsetFactor:-1,toneMapped:false})
-  );
-  foil.name='logo-oficial-belle-alencar';
-  foil.position.set(0,.325,.134);
-  foil.renderOrder=3;
-  bag.add(foil);
-  // Uma costura delicada, não um adesivo sobre a marca.
-  const seam=new THREE.Mesh(new THREE.PlaneGeometry(.426,.0028),
-    new THREE.MeshBasicMaterial({color:'#bea170',transparent:true,opacity:.34,depthWrite:false}));
-  seam.position.set(0,.104,.132);
-  bag.add(seam);
-  bag.add(box(.075,.055,.015,kit.brass,0,.44,.135));g.add(bag);g.add(contact(kit,.8,.48,2.05,-6.05));
-  let bagPulse=0;
-  function swingFor(id:string){return railSwings.find(s=>s.product.id===id)||null;}
-  function hitRail(ndc:THREE.Vector2,camera:THREE.Camera):Swing|null{
-    raycaster.setFromCamera(ndc,camera);
-    for(const hit of raycaster.intersectObjects(railSwings.filter(s=>s.mesh.visible).map(s=>s.mesh),true)){
-      let node:THREE.Object3D|null=hit.object;
-      while(node&&node!==g){const found=railSwings.find(s=>s.mesh===node);if(found)return found;node=node.parent;}
+  const slotFor = (id: string) => slots.find((s) => s.product?.id === id) ?? null;
+  function hitSlot(ndc: THREE.Vector2, camera: THREE.Camera): Slot | null {
+    raycaster.setFromCamera(ndc, camera);
+    const cards = slots.filter((s) => s.card.visible && s.product).map((s) => s.card);
+    const hits = raycaster.intersectObjects(cards, false);
+    if (hits.length) {
+      const first = hits[0]!;
+      // arquitetura à frente? (parede do fundo/paredes): o raio precisa chegar primeiro no cartão
+      const found = slots.find((s) => s.card === first.object);
+      if (found) return found;
     }
-    // Raycast can miss a very thin 2.5D garment seen at an oblique angle.
-    // Fallback uses the actual projected center and a tight click radius.
-    let best:Swing|null=null,dist=.11;
-    const projected=new THREE.Vector3();
-    for(const swing of railSwings){
-      if(!swing.mesh.visible)continue;
-      swing.mesh.getWorldPosition(projected).project(camera);
-      if(projected.z<0||projected.z>=1)continue;
-      const d=Math.hypot(projected.x-ndc.x,(projected.y-.10)-ndc.y);
-      if(d<dist){best=swing;dist=d;}
+    // Fallback: recortes finos vistos de lado. Centro projetado e raio de toque apertado.
+    let best: Slot | null = null, dist = 0.1;
+    for (const s of slots) {
+      if (!s.card.visible || !s.product) continue;
+      proj.set(0, -0.6 * (s.card.scale.y), 0).applyMatrix4(s.pivot.matrixWorld).project(camera);
+      if (proj.z < 0 || proj.z >= 1) continue;
+      const d = Math.hypot(proj.x - ndc.x, proj.y - ndc.y);
+      if (d < dist) { best = s; dist = d; }
     }
     return best;
   }
+  const hitOf = (s: Slot | null): PickHit | null => (s && s.product ? { product: s.product, side: s.side, index: s.index, kind: s.kind } : null);
 
-  // pódio central
-  const podium = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.1, 0.2, 64), kit.travertine);
-  podium.position.set(PODIUM.x, 0.1, PODIUM.z);
-  podium.receiveShadow = true;
-  podium.castShadow = true;
-  g.add(podium);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.012, 8, 96), kit.brass);
-  ring.rotation.x = Math.PI / 2;
-  ring.position.set(PODIUM.x, 0.2, PODIUM.z);
-  g.add(ring);
-  g.add(contact(kit, 3.2, 3.2, PODIUM.x, PODIUM.z));
-
-  // arcos de categoria no fundo
-  const archPanels: THREE.MeshStandardMaterial[] = [];
-  const labels = ['VESTIDOS', 'CAMISAS', 'BOLSAS'];
-  ARCHES.forEach((x, i) => {
-    const fr = archFrame(2.0, 3.4, 0.14, 0.3, kit.travertine);
-    fr.position.set(x, 0, zBack + 0.01);
-    g.add(fr);
-    const mat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissiveMap: kit.glowTex, emissive: new THREE.Color('#f6e2bf'), emissiveIntensity: 0.25, roughness: 0.95 });
-    archPanels.push(mat);
-    const panel = archPanel(2.0, 3.4, mat);
-    panel.position.set(x, 0, zBack + 0.012);
-    g.add(panel);
-    const label = plane(1.9, 0.3, new THREE.MeshStandardMaterial({ map: labelTexture(labels[i]!), transparent: true, alphaTest: 0.05, metalness: 0.8, roughness: 0.35 }));
-    label.position.set(x, 3.86, zBack + 0.05);
-    g.add(label);
-    const plinth = box(1.3, 0.32, 0.7, kit.travertine, x, 0.16, zBack + 0.7);
-    g.add(plinth);
-    g.add(contact(kit, 1.9, 1.2, x, zBack + 0.7));
-  });
-  // Photo displays retain their own visual identity on actual supports.
-  const archDress=supportedProduct(kit,'vestidos-03',1.48,.32);
-  archDress.position.set(ARCHES[0]!,0,zBack+.7);g.add(archDress);
-  const archShirt=supportedProduct(kit,'camisas-04',.72,1.84,true);
-  archShirt.position.set(ARCHES[1]!,0,zBack+.7);g.add(archShirt);
-  for(const [dx,slug,height] of [[-.28,'bolsas-01',.34],[.3,'bolsas-02',.28]] as const) {
-    const display=supportedProduct(kit,slug,height,.32);
-    display.position.set(ARCHES[2]!+dx,0,zBack+.7);g.add(display);
-  }
-
-  // provador: divisória, cortina de veludo, espelho em arco, pufe
-  // alcova aberta para a frente: parede lateral em x=2.6, cortina recolhida à direita
-  const part = box(0.12, H, 3.6, kit.plaster, 2.6, H / 2, -15.4);
-  g.add(part);
-  g.add(box(2.72, 0.24, 0.14, kit.plaster, 3.9, H - 0.12, -13.6)); // verga da alcova
-  const curtainGeo = new THREE.PlaneGeometry(0.9, 3.3, 40, 1);
-  const cp = curtainGeo.getAttribute('position') as THREE.BufferAttribute;
-  for (let i = 0; i < cp.count; i++) cp.setZ(i, Math.sin(cp.getX(i) * 34) * 0.05);
-  curtainGeo.computeVertexNormals();
-  const curtain = new THREE.Mesh(curtainGeo, kit.velvet);
-  curtain.position.set(4.7, 1.7, -13.66);
-  g.add(curtain);
-  g.add(box(2.6, 0.03, 0.03, kit.brass, 3.9, 3.42, -13.66));
-  const mirrorFrame = archFrame(1.2, 2.5, 0.07, 0.05, kit.brass);
-  mirrorFrame.position.set(FITTING.x, 0.25, zBack + 0.02);
-  g.add(mirrorFrame);
-  // Espelho estável: reflexo editorial sincronizado, sem Reflector em tempo real.
-  // O Reflector reproduzia recortes 2.5D por uma câmera virtual e causava
-  // clipping/ghosting, além de duplicar passes no celular.
-  // A imagem refletida usa o MESMO recorte selecionado e apenas um plano alpha;
-  // a superfície permanece um espelho cenográfico, não uma simulação física.
-  const archShape = new THREE.Shape();
-  archShape.moveTo(-.6,0);archShape.lineTo(-.6,1.9);
-  archShape.absarc(0,1.9,.6,Math.PI,0,true);
-  archShape.lineTo(.6,0);archShape.lineTo(-.6,0);
-  const mirrorSurface = new THREE.Mesh(new THREE.ShapeGeometry(archShape,32),
-    new THREE.MeshPhysicalMaterial({
-      color:'#c1bbb0',metalness:.69,roughness:.19,
-      envMapIntensity:.75,side:THREE.DoubleSide
-    }));
-  mirrorSurface.name='espelho-estavel-sem-reflector';
-  mirrorSurface.position.set(FITTING.x,.25,zBack+.036);
-  g.add(mirrorSurface);
-  const mirrorLook = new THREE.Group();
-  mirrorLook.name='vestido-refletido-sincronizado';
-  mirrorLook.position.set(FITTING.x,.54,zBack+.086);
-  mirrorLook.scale.x=-1;
-  mirrorLook.visible=false;
-  g.add(mirrorLook);
-  // Reflexo de luminosidade na lâmina sem aumentar as renderizações da cena.
-  const glassGlare=new THREE.Mesh(new THREE.PlaneGeometry(1.02,2.02),
-    new THREE.MeshBasicMaterial({color:'#fdf9e9',transparent:true,opacity:.075,
-      depthWrite:false,depthTest:true,side:THREE.DoubleSide}));
-  glassGlare.position.set(FITTING.x,.25+1.08,zBack+.095);
-  glassGlare.renderOrder=2;
-  g.add(glassGlare);
-  const mirror: Reflector | null = null;
-  const pouf = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.42, 32), kit.velvet);
-  pouf.position.set(4.75, 0.21, -16.4);
-  g.add(pouf);
-  g.add(contact(kit, 0.9, 0.9, 4.75, -16.4));
-  const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.34, 0.06, 40), kit.brass);
-  stand.position.set(FITTING.x, 0.03, FITTING.z);
-  g.add(stand);
-  g.add(contact(kit, 1.4, 1.4, FITTING.x, FITTING.z));
-
-  // A selected product is a frontal supported photograph, never a claimed 360 try-on.
-  const fittingDisplay=new THREE.Group();fittingDisplay.name='fitting-product-display';
-  fittingDisplay.position.set(FITTING.x,0,FITTING.z);fittingDisplay.visible=false;g.add(fittingDisplay);
-  let fittingProductId:string|null=null;
-  const setProduct=(id:string|null) => {
-    if(id===fittingProductId)return;
-    fittingProductId=id;
+  const setFittingProduct = (id: string | null) => {
+    if (id === fittingProductId) return;
+    fittingProductId = id;
     [...fittingDisplay.children].forEach(disposeProductDisplay);
-    [...mirrorLook.children].forEach(disposeProductDisplay);
-    if(!id){fittingDisplay.visible=false;mirrorLook.visible=false;return;}
-    const product=productById(id);
-    if(!product){fittingProductId=null;return;}
-    const height=DISPLAY_HEIGHT[product.category];
-    fittingDisplay.add(supportedProduct(kit,product.slug,height,.065));
-    // Recorte espelhado na própria moldura: um só produto, mesma cor e textura.
-    const reflection=productDisplay(product,Math.min(1.36,height*.86),'bottom');
-    mirrorLook.add(reflection);
+    if (!id) { fittingDisplay.visible = false; return; }
+    const product = productById(id);
+    if (!product) { fittingProductId = null; return; }
+    fittingDisplay.add(supportedProduct(kit, product.slug, DISPLAY_HEIGHT[product.category], 0.1));
   };
 
-  // luz
-  const hemi = new THREE.HemisphereLight('#fff4e4', '#a48c6c', 1.05);
-  g.add(hemi);
-  const podiumSpot = spot('#ffe9c9', 70, [0.6, H - 0.05, -6.6], [0, 0.9, -8], 0.42, 0.65);
-  if (tier === 'cinema') {
-    podiumSpot.castShadow = true;
-    podiumSpot.shadow.mapSize.set(1024, 1024);
-    podiumSpot.shadow.bias = -0.0004;
-    podiumSpot.shadow.normalBias = 0.02;
-    podiumSpot.shadow.camera.near = 1;
-    podiumSpot.shadow.camera.far = 8;
-  }
-  g.add(podiumSpot, podiumSpot.target);
-  for (const side of [-1, 1]) {
-    const s = spot('#ffe4bd', 42, [side * 2.4, H - 0.05, -7], [side * RAIL.x, 1.2, -7], 0.95, 0.85);
-    g.add(s, s.target);
-  }
-  const backSpot = spot('#ffe6c0', 50, [-1.2, H - 0.05, -13.4], [-1.2, 1.4, zBack], 0.85, 0.9);
-  g.add(backSpot, backSpot.target);
-  // faixa de luz dourada que atravessa o tecido no capítulo "detalhe"
-  const sweep = spot('#ffd28a', 0, [-1.6, 2.6, -6.4], [0, 1.0, -8], 0.16, 0.55);
-  g.add(sweep, sweep.target);
-  const fitSpot = spot('#ffeacc', 34, [3.9, H - 0.05, -14.0], [FITTING.x, 1.0, FITTING.z], 0.6, 0.8);
-  g.add(fitSpot, fitSpot.target);
-
-  // Keep distant products in scene; architectural occlusion and frustum culling handle visibility.
-  // atualização: molas dos cabides + foco dos arcos + espelho
-  const proj = new THREE.Vector3();
   let t = 0;
-  let heroKicked=false;
+  let heroKicked = false;
+  const k = 34, c = 7.2;
   return {
-    browse(dir){
-      focusIndex=THREE.MathUtils.clamp(focusIndex+Math.sign(dir),0,railSwings.length-1);
-      hoverId=railSwings[focusIndex]?.product.id??null;
-      return railSwings[focusIndex]?.product??null;
-    },
-    activeProduct(){return railSwings[focusIndex]?.product??null;},
-    hover(ndc,camera){
-      const hit=hitRail(ndc,camera);
-      hoverId=hit?.product.id??null;
-      return hit?.product??null;
-    },
-    pick(ndc,camera){
-      const hit=hitRail(ndc,camera);
-      if(hit){hoverId=hit.product.id;focusIndex=railSwings.indexOf(hit);}
-      else hoverId=null;
-      return hit?.product??null;
-    },
-    railPosition(){return {index:focusIndex+1,total:railSwings.length};},
-    focusPoint(){
-      const s=railSwings[focusIndex];
-      return new THREE.Vector3(s?.hook.x??RAIL.x,1.32,s?.hook.z??-6.4);
-    },
-    select(id){selectedId=id;},
-    hideProduct(id,hide){const s=swingFor(id);if(s)s.mesh.visible=!hide;},
-    productPosition(id){const s=swingFor(id);if(!s)return null;const p=s.mesh.getWorldPosition(new THREE.Vector3());p.y-=.22;return {position:p,width:(s.mesh.children[0]?.userData.displayWidth as number)||.65,height:DISPLAY_HEIGHT[s.product.category]};},
-    cameraShift(){
-      const swing=railSwings[focusIndex];
-      return swing ? THREE.MathUtils.clamp(swing.baseZ+6.4,-3.2,3.2) : 0;
-    },
-    bagPosition(){bag.updateWorldMatrix(true,false);return bag.localToWorld(new THREE.Vector3(0,.58,.02));},
-    bagWidth(){return .35;},
-    impactBag(){bagPulse=1;},
-    bagHit(ndc,camera){raycaster.setFromCamera(ndc,camera);return raycaster.intersectObject(bag,true).length>0;},
     group: g,
-    mirror,
-    setProduct,
+    applyPlan(side, plan) {
+      const hangers = usableHangers(side);
+      const list = plan.hangers.filter((p): p is Product | null => true);
+      // mantém o índice visual: cabide i recebe o i-ésimo produto da página
+      for (let i = 0; i < hangers.length; i++) assign(hangers[i]!, list[i] ?? null);
+      const shelf = sides[side].shelf;
+      for (let i = 0; i < shelf.length; i++) assign(shelf[i]!, plan.shelf[i] ?? null);
+    },
+    pick(ndc, camera) { const s = hitSlot(ndc, camera); hoverId = s?.product?.id ?? null; return hitOf(s); },
+    hover(ndc, camera) { const s = hitSlot(ndc, camera); hoverId = s?.product?.id ?? null; return hitOf(s); },
+    select(id) { selectedId = id; },
+    hideProduct(id, hide) { const s = slotFor(id); if (s) { s.hidden = hide; s.card.visible = !hide && !!s.material.map && s.material.map !== placeholderTexture(); } },
+    productPosition(id) {
+      const s = slotFor(id);
+      if (!s) return null;
+      const p = new THREE.Vector3(0, s.card.position.y, 0).applyMatrix4(s.pivot.matrixWorld);
+      return { position: p, width: (s.pivot.userData.displayWidth as number) || 0.6, height: DISPLAY_HEIGHT[s.product!.category] };
+    },
+    railFocus(side) { return new THREE.Vector3(SIDE_SIGN[side] * RAIL.x, 1.3, (RAIL.z0 + RAIL.z1) / 2); },
+    setFittingProduct,
+    bagPosition() { bag.updateWorldMatrix(true, false); return bag.localToWorld(new THREE.Vector3(0, 0.58, 0.02)); },
+    bagWidth() { return 0.35; },
+    impactBag() { bagPulse = 1; },
+    bagHit(ndc, camera) { raycaster.setFromCamera(ndc, camera); return raycaster.intersectObject(bag, true).length > 0; },
+    hasReflectors() { return reflectors; },
+    dropReflectors() { reflectors = false; backMirror.drop(); fitMirror.drop(); },
     update(dt, ctx) {
-      fittingDisplay.visible=!!fittingProductId&&ctx.fittingActive;
-      mirrorLook.visible=!!fittingProductId&&ctx.fittingActive;
-      glassGlare.visible=ctx.fittingActive;
-      t+=dt;
-      if(bagPulse>0){bagPulse=Math.max(0,bagPulse-dt*1.8);bag.rotation.z=Math.sin((1-bagPulse)*20)*.055*bagPulse;bag.scale.y=1+Math.sin((1-bagPulse)*22)*.04*bagPulse;}
-      const k=34; // reactive but stable spring
-      const c = 7.2; // physical damping prevents jitter and stuck twisting
+      t += dt;
+      fittingDisplay.visible = !!fittingProductId && ctx.fittingActive;
+      backMirror.setLive(reflectors && ctx.mirrorsLive.back);
+      fitMirror.setLive(reflectors && ctx.mirrorsLive.fitting);
+      // cortina: folhas deslizam para os montantes
+      const open = THREE.MathUtils.clamp(ctx.curtain, 0, 1);
+      for (const panel of curtainPanels) panel.scale.x = 1 - open * 0.8;
+      if (bagPulse > 0) { bagPulse = Math.max(0, bagPulse - dt * 1.8); bag.rotation.z = Math.sin((1 - bagPulse) * 20) * 0.055 * bagPulse; bag.scale.y = 1 + Math.sin((1 - bagPulse) * 22) * 0.04 * bagPulse; }
       const camPos = (ctx.camera as THREE.PerspectiveCamera).position;
-      swings.forEach((s,i)=>{
-        const isSelected=s.product.id===selectedId;
-        const isHovered=s.product.id===hoverId;
-        const isFocused=s===railSwings[focusIndex];
-        const goal=isSelected?.86:isHovered?.28:isFocused?.17:0;
-        s.focusV+=(goal-s.focus)*46*dt;
-        s.focusV*=Math.exp(-13*dt);
-        s.focus=THREE.MathUtils.clamp(s.focus+s.focusV*dt,0,.88);
-        const active=railSwings[focusIndex];
-        // A peça fica no seu próprio cabide: não deslize a arara inteira para
-        // frente/trás com cada seleção. Isso fazia planos fotográficos se cruzarem.
-        const slideGoal=0;
-        s.slide+=(slideGoal-s.slide)*(1-Math.exp(-dt*10));
-        s.hook.set(s.side*(RAIL.x-.55*s.focus),RAIL.y+s.focus*.07,
-          s.baseZ+s.slide);
-        const face=Math.atan2(camPos.x-s.hook.x,camPos.z-s.hook.z);
-        const natural=s.side*-Math.PI/2;
-        // Shortest-angle interpolation: atan2 never jumps from +PI to -PI.
-        // Limit the facing angle as if a real hanger twists on the rail.
-        const delta=Math.atan2(Math.sin(face-natural),Math.cos(face-natural));
-        const goalYaw=natural+THREE.MathUtils.clamp(delta,-1.05,1.05)*s.focus;
-        const deltaYaw=Math.atan2(Math.sin(goalYaw-s.yaw),Math.cos(goalYaw-s.yaw));
-        s.yaw+=deltaYaw*(1-Math.exp(-dt*9));
-        const dx=camPos.x-s.hook.x;
-        const dz = camPos.z - s.hook.z;
-        const d2 = dx * dx + dz * dz;
-        if (d2 < 9 && ctx.camVel > 0.02) {
-          const f = (ctx.camVel * 0.9) / (1 + d2);
-          s.vz += f * Math.sign(s.hook.x) * -0.6;
-          s.vx += f * 0.3 * Math.sin(i * 1.7 + t);
-        }
-        if (ctx.pointer && ctx.pointerVel > 0.002) {
-          proj.copy(s.hook).setY(1.3).project(ctx.camera);
-          const pd = Math.hypot(proj.x - ctx.pointer.x, proj.y - ctx.pointer.y);
-          if (pd < 0.12 && proj.z < 1) {
-            s.vz += ctx.pointerVel * 14 * (0.12 - pd) * (Math.sign(s.hook.x) || 1);
-            s.vx += ctx.pointerVel * 5 * (0.12 - pd);
+      slots.forEach((s, i) => {
+        if (!s.product) { if (s.focus !== 0) { s.focus = 0; writeSlot(s); } return; }
+        const isSelected = s.product.id === selectedId;
+        const isHovered = s.product.id === hoverId;
+        const goal = isSelected ? 0.8 : isHovered ? 0.3 : 0;
+        s.focusV += (goal - s.focus) * 46 * dt;
+        s.focusV *= Math.exp(-13 * dt);
+        s.focus = THREE.MathUtils.clamp(s.focus + s.focusV * dt, 0, 0.85);
+        const sign = SIDE_SIGN[s.side];
+        if (s.kind === 'hanger') {
+          s.hook.set(sign * (RAIL.x - 0.28 * s.focus), RAIL.y + s.focus * 0.05, slotZ(s.index));
+          const face = Math.atan2(camPos.x - s.hook.x, camPos.z - s.hook.z);
+          const delta = Math.atan2(Math.sin(face - s.natural), Math.cos(face - s.natural));
+          const goalYaw = s.natural + THREE.MathUtils.clamp(delta, -0.75, 0.75) * s.focus;
+          const deltaYaw = Math.atan2(Math.sin(goalYaw - s.yaw), Math.cos(goalYaw - s.yaw));
+          s.yaw += deltaYaw * (1 - Math.exp(-dt * 9));
+          const dx = camPos.x - s.hook.x, dz = camPos.z - s.hook.z;
+          const d2 = dx * dx + dz * dz;
+          if (d2 < 9 && ctx.camVel > 0.02) {
+            const f = (ctx.camVel * 0.8) / (1 + d2);
+            s.vz += f * sign * -0.5;
+            s.vx += f * 0.25 * Math.sin(i * 1.7 + t);
           }
+          if (ctx.pointer && ctx.pointerVel > 0.002) {
+            proj.copy(s.hook).setY(1.3).project(ctx.camera);
+            const pd = Math.hypot(proj.x - ctx.pointer.x, proj.y - ctx.pointer.y);
+            if (pd < 0.12 && proj.z < 1) {
+              s.vz += ctx.pointerVel * 12 * (0.12 - pd) * sign;
+              s.vx += ctx.pointerVel * 4 * (0.12 - pd);
+            }
+          }
+          s.vx += Math.sin(t * 0.88 + i * 0.67) * 0.014 * dt;
+          s.vz += Math.sin(t * 0.73 + i * 0.91) * 0.018 * dt;
+          if (isHovered) s.vx += Math.sin(t * 2.4 + i) * 0.1 * dt;
+          s.vx += (-k * s.ax - c * s.vx) * dt;
+          s.vz += (-k * s.az - c * s.vz) * dt;
+          s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -0.1, 0.1);
+          s.az = THREE.MathUtils.clamp(s.az + s.vz * dt, -0.1, 0.1);
+        } else {
+          s.hook.set(sign * (SHELF.x - 0.02 - 0.12 * s.focus), SHELF.h + 0.004 + s.focus * 0.02, shelfSlotZ(s.index));
+          const face = Math.atan2(camPos.x - s.hook.x, camPos.z - s.hook.z);
+          const delta = Math.atan2(Math.sin(face - s.natural), Math.cos(face - s.natural));
+          const goalYaw = s.natural + THREE.MathUtils.clamp(delta, -0.6, 0.6) * s.focus;
+          const deltaYaw = Math.atan2(Math.sin(goalYaw - s.yaw), Math.cos(goalYaw - s.yaw));
+          s.yaw += deltaYaw * (1 - Math.exp(-dt * 9));
         }
-        // ar ambiente (respiração quase imperceptível)
-        // Soft real-room airflow and a stronger but bounded gesture response.
-        s.vx+=Math.sin(t*.88+i*.67)*.018*dt;
-        s.vz+=Math.sin(t*.73+i*.91)*.022*dt;
-        if(isFocused){s.vz+=Math.sin(t*1.9+i)*.09*dt;}
-        if(isHovered){s.vx+=Math.sin(t*2.4+i)*.12*dt;}
-        s.vx += (-k * s.ax - c * s.vx) * dt;
-        s.vz += (-k * s.az - c * s.vz) * dt;
-        s.ax = THREE.MathUtils.clamp(s.ax + s.vx * dt, -.12, .12);
-        s.az = THREE.MathUtils.clamp(s.az + s.vz * dt, -.12, .12);
-        writeSwing(s, i);
+        writeSlot(s);
       });
-      // cabide vazio balança quando o vestido sai
+      // cabide vazio balança quando o vestido protagonista sai
       if (!ctx.heroOnRail && !heroKicked) { heroSwing.vz = 2.4; heroKicked = true; }
       if (ctx.heroOnRail) { heroKicked = false; heroSwing.vx = heroSwing.vz = heroSwing.ax = heroSwing.az = 0; }
       heroSwing.vx += (-k * heroSwing.ax - c * heroSwing.vx) * dt;
@@ -528,20 +637,129 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       heroSwing.ax += heroSwing.vx * dt;
       heroSwing.az += heroSwing.vz * dt;
       writeHero();
-      hangers.instanceMatrix.needsUpdate = true;
-      hooks.instanceMatrix.needsUpdate = true;
-      clipBars.instanceMatrix.needsUpdate=true;clipPins.instanceMatrix.needsUpdate=true;
-      archPanels.forEach((m, i) => {
-        const target = 0.25 + Math.max(0, 1 - Math.abs(ctx.archFocus - i)) * 0.55;
-        m.emissiveIntensity += (target - m.emissiveIntensity) * Math.min(1, dt * 5);
-      });
-      // Reflector intentionally absent: mirror and reflection stay deterministic.
+      hangerWood.instanceMatrix.needsUpdate = true;
+      hangerHooks.instanceMatrix.needsUpdate = true;
+      hangerBars.instanceMatrix.needsUpdate = true;
       if (ctx.sweep >= 0) {
-        const sx = -0.9 + ctx.sweep * 1.8;
-        sweep.target.position.set(sx, 1.2 - ctx.sweep * 0.5, PODIUM.z);
+        const sx = HERO_STAND.x - 0.7 + ctx.sweep * 1.4;
+        sweep.target.position.set(sx, 1.2 - ctx.sweep * 0.5, HERO_STAND.z);
         sweep.target.updateMatrixWorld();
         sweep.intensity = 90 * Math.sin(Math.min(1, Math.max(0, ctx.sweep)) * Math.PI);
       } else sweep.intensity = 0;
     },
+    dispose() {
+      disposables.forEach((d) => d.dispose());
+      slots.forEach((s) => { s.material.dispose(); });
+      backMirror.dispose();
+      fitMirror.dispose();
+    },
   };
+}
+
+/** Plano com pregas verticais (seno) e normais recalculadas. */
+function pleatedPanel(w: number, h: number, segments: number, depth: number): THREE.BufferGeometry {
+  const geo = new THREE.PlaneGeometry(w, h, segments, 2);
+  const p = geo.getAttribute('position') as THREE.BufferAttribute;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i);
+    const pleat = Math.sin((x / w) * Math.PI * segments * 0.5) * depth;
+    // as pregas abrem ligeiramente no pé da cortina
+    p.setZ(i, pleat * (1 + (0.5 - y / h) * 0.25));
+  }
+  geo.computeVertexNormals();
+  const uv = geo.getAttribute('uv') as THREE.BufferAttribute;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * w / 0.9, uv.getY(i) * h / 0.9);
+  return geo;
+}
+
+interface MirrorHandle { group: THREE.Group; setLive(live: boolean): void; drop(): void; dispose(): void }
+function buildMirror(w: number, h: number, cinema: boolean, texSize: number, kit: Kit): MirrorHandle {
+  const group = new THREE.Group();
+  group.userData.dynamic = true;
+  const shape = new THREE.Shape();
+  const r = w / 2;
+  shape.moveTo(-r, 0); shape.lineTo(-r, h - r); shape.absarc(0, h - r, r, Math.PI, 0, true); shape.lineTo(r, 0); shape.lineTo(-r, 0);
+  const frame = new THREE.Mesh(new THREE.ExtrudeGeometry((() => {
+    const o = new THREE.Shape();
+    const R = r + 0.045;
+    o.moveTo(-R, -0.045); o.lineTo(-R, h - r); o.absarc(0, h - r, R, Math.PI, 0, true); o.lineTo(R, -0.045); o.lineTo(-R, -0.045);
+    const hole = new THREE.Path();
+    hole.moveTo(r, 0); hole.lineTo(r, h - r); hole.absarc(0, h - r, r, 0, Math.PI, false); hole.lineTo(-r, 0); hole.lineTo(r, 0);
+    o.holes.push(hole);
+    return o;
+  })(), { depth: 0.04, bevelEnabled: true, bevelSize: 0.006, bevelThickness: 0.006, bevelSegments: 2, curveSegments: 32 }), kit.brassSatin);
+  frame.position.z = -0.02;
+  group.add(frame);
+  const staticSurface = new THREE.Mesh(new THREE.ShapeGeometry(shape, 32), new THREE.MeshPhysicalMaterial({ color: '#b9b3a8', metalness: 0.85, roughness: 0.16, envMapIntensity: 1.1 }));
+  staticSurface.position.z = 0.001;
+  group.add(staticSurface);
+  let reflector: Reflector | null = null;
+  if (cinema) {
+    reflector = new Reflector(new THREE.ShapeGeometry(shape, 32), { clipBias: 0.003, textureWidth: texSize, textureHeight: texSize, color: 0xb0aaa0 });
+    reflector.position.z = 0.002;
+    reflector.visible = false;
+    group.add(reflector);
+  }
+  return {
+    group,
+    setLive(live) {
+      if (!reflector) return;
+      reflector.visible = live;
+      staticSurface.visible = !live;
+    },
+    drop() { if (reflector) { reflector.removeFromParent(); reflector.dispose(); reflector = null; staticSurface.visible = true; } },
+    dispose() { reflector?.dispose(); },
+  };
+}
+
+/** Poltrona bouclé baixa e arredondada, base de latão. */
+function buildChair(kit: Kit): THREE.Group {
+  const g = new THREE.Group();
+  const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.4, 0.4, 36), kit.boucle);
+  seat.position.y = 0.26;
+  g.add(seat);
+  const cushion = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.08, 36), kit.boucle);
+  cushion.position.y = 0.5;
+  g.add(cushion);
+  const back = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.46, 0.42, 36, 1, true, Math.PI * 0.62, Math.PI * 1.26), kit.boucle);
+  back.position.y = 0.66;
+  back.rotation.y = Math.PI;
+  g.add(back);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.09, 10, 36, Math.PI * 1.26), kit.boucle);
+  rim.rotation.x = Math.PI / 2;
+  rim.rotation.z = Math.PI * 0.62 + Math.PI;
+  rim.position.y = 0.87;
+  g.add(rim);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.32, 0.05, 32), kit.brassSatin);
+  base.position.y = 0.03;
+  g.add(base);
+  return g;
+}
+
+/** Sacola Belle em couro claro com o lettering oficial (alvo do voo até a sacola). */
+function buildBelleBag(kit: Kit): THREE.Group {
+  const bag = new THREE.Group();
+  bag.name = 'sacola-belle';
+  bag.userData.dynamic = true;
+  const leather = new THREE.MeshStandardMaterial({ color: '#e8ddc9', roughness: 0.53, metalness: 0.04, side: THREE.DoubleSide });
+  const dark = new THREE.MeshStandardMaterial({ color: '#493b2d', roughness: 0.94 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.49, 0.51, 0.25), leather);
+  body.position.y = 0.31; body.castShadow = true; bag.add(body);
+  const mouth = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.18), dark);
+  mouth.rotation.x = -Math.PI / 2; mouth.position.y = 0.571; bag.add(mouth);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.243, 0.013, 8, 36, Math.PI), kit.brassSatin);
+  rim.rotation.x = Math.PI / 2; rim.scale.y = 0.47; rim.position.set(0, 0.572, 0.015); bag.add(rim);
+  for (const side of [-1, 1]) {
+    const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-0.17, 0.55, side * 0.078), new THREE.Vector3(-0.13, 0.8, side * 0.078), new THREE.Vector3(0.13, 0.8, side * 0.078), new THREE.Vector3(0.17, 0.55, side * 0.078)]);
+    bag.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 20, 0.012, 7, false), leather));
+  }
+  const officialLogo = new THREE.TextureLoader().load('/brand/belle-alencar-logo.svg', (texture) => { texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4; texture.needsUpdate = true; });
+  officialLogo.colorSpace = THREE.SRGBColorSpace;
+  const foil = new THREE.Mesh(new THREE.PlaneGeometry(0.37, 0.178), new THREE.MeshBasicMaterial({ map: officialLogo, transparent: true, opacity: 0.97, depthWrite: false, alphaTest: 0.02, polygonOffset: true, polygonOffsetFactor: -1, toneMapped: false }));
+  foil.name = 'logo-oficial-belle-alencar';
+  foil.position.set(0, 0.325, 0.134);
+  foil.renderOrder = 3;
+  bag.add(foil);
+  bag.add(box(0.075, 0.055, 0.015, kit.brassSatin, 0, 0.44, 0.135));
+  return bag;
 }

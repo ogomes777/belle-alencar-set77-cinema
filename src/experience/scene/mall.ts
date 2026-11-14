@@ -45,9 +45,10 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
 
   if (!reflector) {
     // Refletores em tempo real duplicam draw calls; piso especular mantém a estética com um passe.
-    floorMat.roughness = 0.17;
-    floorMat.metalness = 0.19;
-    floorMat.envMapIntensity = 1.35;
+    floorMat.roughness = 0.18;
+    floorMat.metalness = 0.12;
+    floorMat.envMapIntensity = 0.9;
+    floorMat.color.set('#d9d1c4');
   }
 
   // teto e sancas de luz
@@ -95,8 +96,19 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
     g.add(contact(kit, 2.8, 1.2, side * 4.7, 8.5));
   }
 
+  // fundo da galeria: parede de travertino com vitrine vizinha iluminada (sem marca)
+  const far = plane(W, H, kit.travertine, 2);
+  far.rotation.y = Math.PI;
+  far.position.set(0, H / 2, L + 0.2);
+  g.add(far);
+  const farGlow = plane(6.4, 3.1, glowMat);
+  farGlow.rotation.y = Math.PI;
+  farGlow.position.set(0, 1.95, L + 0.18);
+  g.add(farGlow);
+  for (const x of [-3.3, 3.3]) g.add(box(0.06, 3.3, 0.06, kit.brass, x, 1.95, L + 0.16));
+
   // luz de fim de tarde vinda da claraboia + destaque do letreiro
-  const sun = new THREE.DirectionalLight('#ffe6c4', 1.25);
+  const sun = new THREE.DirectionalLight('#ffe6c4', 0.95);
   sun.position.set(5, 11, 16);
   sun.target.position.set(0, 1, 0);
   g.add(sun, sun.target);

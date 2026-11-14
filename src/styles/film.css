@@ -146,3 +146,7 @@ html.poster-mode .film__posters { display: none; }
 .portal-list button:hover,.portal-list button:focus-visible{padding-left:17px;}
 .fitting__static .editorial-cutout{width:100%;height:auto;max-height:340px;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(54,32,19,.2));}
 @media(max-width:560px){.portal-list{gap:0 7px;max-height:39svh}.portal-list button{min-height:36px;font-size:1rem}.portal-list button span{min-width:1.25em}}
+
+/* Hero POV 360 · no modo essencial/pôster a escolha de categoria continua acessível pelo catálogo. */
+.chapter__static-cta{display:none;margin:14px 0 0}
+html[data-tier='static'] .chapter__static-cta{display:block}

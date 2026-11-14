@@ -16,7 +16,7 @@ import type { DressParams, Silhouette, Tone } from './core/dress';
 import type { Director } from './shell/director';
 import type { World } from './experience/world';
 import type { ChapterId, Span } from './experience/story';
-import { initRoomRail } from './experience/rail-ui';
+import { initPovUi } from './experience/explore-ui';
 
 const CHAPTERS: ChapterId[] = ['vitrine', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador'];
 const LABELED: ChapterId[] = ['vestido', 'detalhe', 'provador'];
@@ -27,6 +27,10 @@ interface FilmDebug {
   chapter: string;
   world: () => ReturnType<World['info']> | null;
   posterReady?: boolean;
+  /** QA: pose fixa de aceite (01..06) ou null para voltar ao filme. */
+  setPose: (id: string | null) => boolean;
+  landmarks: () => ReturnType<World['landmarks']> | null;
+  explore: { enter: () => boolean; exit: () => void; goTo: (id: string) => void; lookEntrance: () => void; look: (dx: number, dy: number) => void; active: () => boolean };
 }
 
 declare global {
@@ -58,9 +62,21 @@ export function initFilm(director: Director): void {
   const dressParams: DressParams = { silhouette: 'fluido', tone: 'perola', productId: 'belle-demo-vestidos-01' };
 
   document.documentElement.dataset.tier = tier;
-  const debug: FilmDebug = { tier, progress: 0, chapter: active, world: () => world?.info() ?? null };
+  const debug: FilmDebug = {
+    tier, progress: 0, chapter: active, world: () => world?.info() ?? null,
+    setPose: (id) => world?.setPose(id) ?? false,
+    landmarks: () => world?.landmarks() ?? null,
+    explore: {
+      enter: () => { const ok = !!world?.enterExplore(); pov.refresh(); return ok; },
+      exit: () => { pov.exitExplore(); },
+      goTo: (id) => world?.goTo(id as never),
+      lookEntrance: () => world?.lookEntrance(),
+      look: (dx, dy) => world?.lookDelta(dx, dy),
+      active: () => !!world?.exploring(),
+    },
+  };
   window.__belle = debug;
-  const roomRail = initRoomRail(stage!, () => world);
+  const pov = initPovUi(stage!, () => world);
 
   // ---------- medição ----------
   const articles = CHAPTERS.map((id) => $(`[data-chapter="${id}"]`, film)).filter(Boolean) as HTMLElement[];
@@ -166,11 +182,10 @@ export function initFilm(director: Director): void {
       if (on) a.setAttribute('aria-current', 'step');
     });
     if (label) label.hidden = !LABELED.includes(id);
-    // A câmera continua no cômodo enquanto exploramos a arara física.
-    const onRoomRail = id === 'sala' && !posterMode && tier !== 'static';
-    stage!.classList.toggle('is-room-rail', onRoomRail);
-    roomRail.setActive(onRoomRail);
-    world?.setRailEngaged(onRoomRail);
+    // Dentro da loja a HUD oferece "Explorar a loja"; fora dela, a visita se encerra.
+    const liveStore = !posterMode && tier !== 'static' && !!world;
+    stage!.classList.toggle('is-room-rail', id === 'sala' && liveStore);
+    pov.setChapter(id, liveStore);
     if (!stage!.classList.contains('is-live')) showPoster(id);
     bus.emit('film:chapter', { id, index: CHAPTERS.indexOf(id) });
   }
@@ -337,10 +352,11 @@ export function initFilm(director: Director): void {
       // Awaiting every image previously left it frozen at frame zero then
       // abruptly jumped to scroll progress after multiple seconds.
       created.setProgress(progress, true);
-      created.setRailEngaged(active === 'sala');
+      created.setChapter(active);
       const rect=film!.getBoundingClientRect();
       created.setVisible(rect.bottom>0&&rect.top<innerHeight);
-      roomRail.refresh();
+      pov.setChapter(active, true);
+      pov.refresh();
       mod.initReveals(film!);
       if (posterMode) {
         await created.readyMedia();
@@ -356,7 +372,7 @@ export function initFilm(director: Director): void {
       stage!.classList.remove('is-loading');
       tier = 'static';
       document.documentElement.dataset.tier = tier;
-      roomRail.setActive(false);
+      pov.setChapter(active, false);
     } finally {
       loading = false;
     }
@@ -365,7 +381,8 @@ export function initFilm(director: Director): void {
     startSerial++;
     world?.destroy();
     world = null;
-    roomRail.refresh();
+    pov.setChapter(active, false);
+    pov.refresh();
     stage!.classList.remove('is-live', 'is-loading');
     showPoster(active);
   }
@@ -422,7 +439,7 @@ export function initFilm(director: Director): void {
   }
   let drag: { x: number; y: number; locked: boolean | null } | null = null;
   stage.addEventListener('pointerdown', (e) => {
-    if (active !== 'provador') return;
+    if (active !== 'provador' || world?.exploring()) return;
     drag = { x: e.clientX, y: e.clientY, locked: null };
   });
   addEventListener('pointermove', (e) => {

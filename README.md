@@ -48,3 +48,9 @@ node tests/e2e/products.mjs     # preview ativo, Playwright disponível
 `BASE` altera o servidor. `SHOTS_DIR` e `VIDEO_DIR` alteram as pastas de evidência. Nesta nuvem, use `NODE_PATH=/workspace/.belle-tools/node_modules NODE_OPTIONS=--require=/workspace/.belle-tools/system-chromium.cjs` antes dos comandos de navegador para selecionar o Chromium instalado.
 
 Consulte `reports/RELEASE_EVIDENCE.md` para commits, testes, capturas, limitações e situação real do Preview. Produção só após revisão visual e autorização expressa.
+
+## Hero POV 360 (filme `#filme`)
+
+A primeira seção é uma loja única em 3D (`src/experience/scene/layout.ts` é a planta compartilhada por cena, câmera, navegação e QA). O scroll continua conduzindo o filme; dentro da loja a mão **Explorar a loja** abre a visita em primeira pessoa (`src/experience/explore.ts` + `nav.ts`): arraste gira 360°, destinos físicos (entrada, corredor, araras, fundo, provador), WASD/setas, colisão com paredes, vidro e mobiliário, **Retomar o filme**/Esc. Tocar numa peça mostra a categoria inteira naquela arara (`src/experience/rack-state.ts`), com páginas quando a categoria excede os cabides, seletor de categoria, **Ver peça** (ficha canônica) e voo até a sacola.
+
+QA: `node tests/e2e/hero-pov.mjs` (preview ativo). Poses fixas de aceite: `window.__belle.setPose('01'..'06')`; marcos do quadro 02: `window.__belle.landmarks()`. Contratos e desvios: `docs/hero-pov/`. Evidências: `reports/HERO_POV_EVIDENCE.md`.

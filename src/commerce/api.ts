@@ -15,6 +15,8 @@ export interface CommerceApi {
   /** abre o seletor de loja e executa `then` após a escolha */
   ensureStore(trigger: HTMLElement | null, then: () => void): void;
   openBag(trigger?: HTMLElement | null): void;
+  /** abre o detalhe canônico da peça (ficha com tamanho, unidade, favoritos e sacola) */
+  openProduct(productId: string, trigger?: HTMLElement | null): void;
   availabilityText(productId: string, size: Size | null): string;
   onChange(fn: () => void): () => void;
 }

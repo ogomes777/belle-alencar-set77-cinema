@@ -965,5 +965,233 @@ export const additionalPairs = [
     "Start a new search",
     "Iniciar otra búsqueda",
     "Ricomincia la ricerca"
+  ],
+  [
+    "Explorar a loja",
+    "Explore the store",
+    "Explorar la tienda",
+    "Esplora il negozio"
+  ],
+  [
+    "Retomar o filme",
+    "Resume the film",
+    "Reanudar la película",
+    "Riprendi il film"
+  ],
+  [
+    "Visita à boutique Belle Alencar",
+    "Belle Alencar boutique visit",
+    "Visita a la boutique Belle Alencar",
+    "Visita alla boutique Belle Alencar"
+  ],
+  [
+    "Arraste para olhar as araras · toque numa peça · role para continuar o filme",
+    "Drag to look at the racks · tap an item · scroll to continue the film",
+    "Arrastra para mirar los percheros · toca una prenda · desplaza para seguir la película",
+    "Trascina per guardare gli appendiabiti · tocca un capo · scorri per continuare il film"
+  ],
+  [
+    "Arraste para olhar em 360° · role para continuar o filme",
+    "Drag to look around 360° · scroll to continue the film",
+    "Arrastra para mirar en 360° · desplaza para seguir la película",
+    "Trascina per guardare a 360° · scorri per continuare il film"
+  ],
+  [
+    "Olhar para",
+    "Look at",
+    "Mirar hacia",
+    "Guarda verso"
+  ],
+  [
+    "Arara esquerda",
+    "Left rack",
+    "Perchero izquierdo",
+    "Appendiabiti sinistro"
+  ],
+  [
+    "Arara direita",
+    "Right rack",
+    "Perchero derecho",
+    "Appendiabiti destro"
+  ],
+  [
+    "Centro",
+    "Center",
+    "Centro",
+    "Centro"
+  ],
+  [
+    "Ir para um ponto da loja",
+    "Walk to a point in the store",
+    "Ir a un punto de la tienda",
+    "Vai a un punto del negozio"
+  ],
+  [
+    "Entrada",
+    "Entrance",
+    "Entrada",
+    "Ingresso"
+  ],
+  [
+    "Corredor",
+    "Aisle",
+    "Pasillo",
+    "Corridoio"
+  ],
+  [
+    "Fundo da loja",
+    "Back of the store",
+    "Fondo de la tienda",
+    "Fondo del negozio"
+  ],
+  [
+    "Provador",
+    "Fitting room",
+    "Probador",
+    "Camerino"
+  ],
+  [
+    "Ver a entrada",
+    "Look at the entrance",
+    "Ver la entrada",
+    "Guarda l'ingresso"
+  ],
+  [
+    "Centralizar visão",
+    "Center the view",
+    "Centrar la vista",
+    "Centra la vista"
+  ],
+  [
+    "Olhar: arraste para girar e inclinar. Setas do teclado giram e inclinam.",
+    "Look: drag to turn and tilt. Arrow keys turn and tilt.",
+    "Mirar: arrastra para girar e inclinar. Las flechas giran e inclinan.",
+    "Guarda: trascina per ruotare e inclinare. Le frecce ruotano e inclinano."
+  ],
+  [
+    "Olhar para cima",
+    "Look up",
+    "Mirar hacia arriba",
+    "Guarda in alto"
+  ],
+  [
+    "Olhar para baixo",
+    "Look down",
+    "Mirar hacia abajo",
+    "Guarda in basso"
+  ],
+  [
+    "Girar para a esquerda",
+    "Turn left",
+    "Girar a la izquierda",
+    "Ruota a sinistra"
+  ],
+  [
+    "Girar para a direita",
+    "Turn right",
+    "Girar a la derecha",
+    "Ruota a destra"
+  ],
+  [
+    "Arara ativa",
+    "Active rack",
+    "Perchero activo",
+    "Appendiabiti attivo"
+  ],
+  [
+    "Todas as categorias",
+    "All categories",
+    "Todas las categorías",
+    "Tutte le categorie"
+  ],
+  [
+    "Trocar categoria nesta arara",
+    "Change the category on this rack",
+    "Cambiar categoría en este perchero",
+    "Cambia categoria su questo appendiabiti"
+  ],
+  [
+    "Página anterior",
+    "Previous page",
+    "Página anterior",
+    "Pagina precedente"
+  ],
+  [
+    "Próxima página",
+    "Next page",
+    "Página siguiente",
+    "Pagina successiva"
+  ],
+  [
+    "Peças nesta página",
+    "Items on this page",
+    "Prendas en esta página",
+    "Capi in questa pagina"
+  ],
+  [
+    "Nenhuma peça nesta categoria.",
+    "No items in this category.",
+    "No hay prendas en esta categoría.",
+    "Nessun capo in questa categoria."
+  ],
+  [
+    "Tamanhos disponíveis",
+    "Available sizes",
+    "Tallas disponibles",
+    "Taglie disponibili"
+  ],
+  [
+    "Ver peça",
+    "View item",
+    "Ver prenda",
+    "Vedi capo"
+  ],
+  [
+    "Adicionar à sacola",
+    "Add to bag",
+    "Añadir a la bolsa",
+    "Aggiungi alla borsa"
+  ],
+  [
+    "Fechar ficha",
+    "Close details",
+    "Cerrar ficha",
+    "Chiudi scheda"
+  ],
+  [
+    "Selecione o tamanho primeiro.",
+    "Choose a size first.",
+    "Elige la talla primero.",
+    "Scegli prima la taglia."
+  ],
+  [
+    "Seleção da arara",
+    "Rack selection",
+    "Selección del perchero",
+    "Selezione dell'appendiabiti"
+  ],
+  [
+    "03 · Dentro da loja",
+    "03 · Inside the store",
+    "03 · Dentro de la tienda",
+    "03 · Dentro il negozio"
+  ],
+  [
+    "Toque numa peça e a arara mostra a categoria inteira. Explore a loja em primeira pessoa e volte ao filme quando quiser.",
+    "Tap an item and the rack shows the whole category. Explore the store in first person and return to the film whenever you like.",
+    "Toca una prenda y el perchero muestra toda la categoría. Explora la tienda en primera persona y vuelve a la película cuando quieras.",
+    "Tocca un capo e l'appendiabiti mostra l'intera categoria. Esplora il negozio in prima persona e torna al film quando vuoi."
+  ],
+  [
+    "48 peças demonstrativas em vista frontal. Catálogo, tamanhos e disponibilidade reais são confirmados pela loja.",
+    "48 demonstration items in front view. Real catalog, sizes and availability are confirmed by the store.",
+    "48 prendas demostrativas en vista frontal. Catálogo, tallas y disponibilidad reales los confirma la tienda.",
+    "48 capi dimostrativi in vista frontale. Catalogo, taglie e disponibilità reali sono confermati dal negozio."
+  ],
+  [
+    "Ver a coleção por categoria",
+    "See the collection by category",
+    "Ver la colección por categoría",
+    "Vedi la collezione per categoria"
   ]
 ] as const;
