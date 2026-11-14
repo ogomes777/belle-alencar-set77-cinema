@@ -137,7 +137,8 @@ export function initFilm(director: Director): void {
     document.documentElement.classList.toggle('in-film',inFilm);
     debug.progress=progress;
     if(bar)bar.style.setProperty('--p',progress.toFixed(4));
-    world?.setProgress(progress,Math.abs(progress-previous)>.16);
+    // Preserve native scroll immediacy in the UI, but never teleport the 3D camera.
+    world?.setProgress(progress);
     let current:ChapterId=spans[0]?.id??'vitrine';
     for(const sp of spans)if(progress>=sp.s-.012)current=sp.id;
     if(current!==active)setActive(current);
