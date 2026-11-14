@@ -18,14 +18,19 @@ export interface Kit {
   textures: THREE.Texture[];
 }
 
-export function createKit(): Kit {
-  const trav = T.travertine();
-  const stone = T.polishedStone();
-  const oakTex = T.herringbone();
-  const plas = T.plaster();
-  const plasWarm = T.plaster(512, 8, '#eadcc6');
+export function createKit(tier: 'cinema' | 'touch' = 'cinema'): Kit {
+  // V57: halve expensive procedural canvas dimensions on phones.
+  // 1024² → 512² saves 75% of the texel work for each floor/stone texture.
+  const lite = tier === 'touch';
+  const tile = lite ? 512 : 1024;
+  const plasterSize = lite ? 256 : 512;
+  const trav = T.travertine(tile);
+  const stone = T.polishedStone(tile);
+  const oakTex = T.herringbone(tile);
+  const plas = T.plaster(plasterSize);
+  const plasWarm = T.plaster(plasterSize, 8, '#eadcc6');
   const glowTex = T.glowPanel();
-  const weave = T.weaveNormal();
+  const weave = T.weaveNormal(lite ? 256 : 512);
   const shadowTex = T.contactShadow();
 
   const travertine = new THREE.MeshStandardMaterial({ map: trav, roughness: 0.78, metalness: 0 });
