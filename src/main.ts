@@ -52,6 +52,10 @@ initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
+// V57: boot the hero before below-the-fold enhancements and costly DOM
+// choreography. Download/compile proceeds while the intro is visible.
+const director = initDirector();
+initFilm(director);
 initTypographyCinema(); // Lightweight scroll-based editorial text reveals, separate from film.
 initSections();
 initBelleInstagramDirectory(); // Accessible Instagram profile selector; no changes to existing navigation.
@@ -60,7 +64,6 @@ initConciergeReveal(); // Codex: local pointer/touch reveal in concierge only.
 // Leave the original 3D film, runway, carousel, video scrub, collections,
 // city globe and all their own scroll-based interactions undisturbed.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
-const director = initDirector();
 initEditorialBoundaries();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
 // A coleção contém peças renderizadas dinamicamente. O módulo de movimento
@@ -109,8 +112,6 @@ if (occasionSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) 
     bootOccasionCarousel();
   }
 }
-initFilm(director);
-
 // The globe builds a dense connection graph. Keep CPU/GPU headroom for
 // the opening film; initialize it only as its section approaches.
 const geoSection=document.getElementById('lojas');
@@ -131,6 +132,22 @@ if(geoSection){
     nearby.observe(geoSection);
   }else bootGeography();
 }
-void import('./finale/ba-solid').then(({initFinaleSolid})=>initFinaleSolid()).catch(()=>{
-  // Authenticated BA foil remains visible in fallback, including no WebGL.
-});
+// V57: the finale's WebGL, extrusion and foil texture cannot compete
+// with the first frame of the opening film. Boot near its own section only.
+const finaleSection=document.querySelector<HTMLElement>('[data-finale-solid]');
+if(finaleSection){
+  let finaleStarted=false;
+  const bootFinale=()=>{
+    if(finaleStarted)return;finaleStarted=true;
+    void import('./finale/ba-solid').then(({initFinaleSolid})=>initFinaleSolid()).catch(()=>{
+      // The existing static brand foil remains visible when WebGL is unavailable.
+    });
+  };
+  if('IntersectionObserver' in window){
+    const finaleProximity=new IntersectionObserver(entries=>{
+      if(!entries.some(entry=>entry.isIntersecting))return;
+      finaleProximity.disconnect();bootFinale();
+    },{rootMargin:'1200px 0px'});
+    finaleProximity.observe(finaleSection);
+  }else bootFinale();
+}
