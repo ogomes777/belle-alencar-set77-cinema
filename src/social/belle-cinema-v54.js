@@ -21,7 +21,10 @@ if(section && dialog){
  const cta=$('[data-v54-open]'),instruction=$('[data-v54-instruction]'),fill=$('[data-v54-fill]');
  const phoneButton=$('[data-v54-tap]'),stage=$('[data-v54-stage]');
  const players=$('[data-v54-players]',dialog),dialogCity=$('[data-v54-dialog-city]',dialog),dialogCount=$('[data-v54-dialog-count]',dialog);
- const movieSelect=$('[data-v54-select]'),filmLink=$('[data-v54-instagram]'),rotundaHost=$('[data-v54-rotunda]');
+ // All three controls live OUTSIDE #belle-cidades in the modal. Searching
+ // inside the section used to throw at movieSelect.addEventListener and also
+ // rejected the shared dynamic 3D chunk, forcing the hero into static posters.
+ const movieSelect=$('[data-v54-select]',dialog),filmLink=$('[data-v54-instagram]',dialog),rotundaHost=$('[data-v54-rotunda]',dialog);
  let current=-1,manifest=null,manifestPromise=null,videoIndex=0,renderReq=0;
  let rotundaUninstall=null,rotundaRequest=0,returnFocus=null;
  let pointer=[0,0],lastScrollIndex=-1;
