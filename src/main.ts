@@ -9,6 +9,7 @@ import './styles/city-globe.css';
 import './styles/base.css';
 import './styles/shell.css';
 import './styles/film.css';
+import './styles/film-first-frame-v57.css';
 import './styles/luxe-glass.css';
 import './styles/header-glass.css';
 import './styles/search-atelier.css';
