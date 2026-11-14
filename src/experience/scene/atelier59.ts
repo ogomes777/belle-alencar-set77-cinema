@@ -71,6 +71,34 @@ lens.rotation.x=Math.PI/2;lens.position.set(x,3.94,z);group.add(lens);
 group.add(tubeBetween(new THREE.Vector3(x,4.16,z),new THREE.Vector3(x,4.09,z),.015,brass));
 }
 }
+/** A cheap reflected-corridor study in touch tier. CINEMA retains an actual Reflector.
+ * Physical mirror content is deliberately not a reference PNG pasted on the wall.
+ */
+function mirrorFallbackTexture():THREE.CanvasTexture{
+ return canvasTexture((ctx,size)=>{
+  const bg=ctx.createLinearGradient(0,0,0,size);
+  bg.addColorStop(0,'#b9a085');bg.addColorStop(.3,'#8c7359');
+  bg.addColorStop(.78,'#4d4035');bg.addColorStop(1,'#76634f');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,size,size);
+  const vp=size/2;
+  for(let i=0;i<5;i++){
+    const e=i*35;
+    const x=e*.54,y=e*.62,wide=size-e*1.08,high=size-e*1.37;
+    ctx.fillStyle=i%2===0?'rgba(29,24,23,.29)':'rgba(177,147,107,.16)';
+    ctx.fillRect(x,y,wide,high);
+    ctx.strokeStyle='rgba(223,184,126,.72)';ctx.lineWidth=Math.max(2,8-i*1.2);
+    ctx.beginPath();ctx.moveTo(x+5,y+high);ctx.lineTo(x+5,y+high*.31);
+    ctx.quadraticCurveTo(vp,y-high*.25,x+wide-5,y+high*.31);
+    ctx.lineTo(x+wide-5,y+high);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(240,198,128,.85)';ctx.lineWidth=7;
+  ctx.beginPath();ctx.moveTo(vp,size*.07);ctx.lineTo(vp,size*.65);ctx.stroke();
+  ctx.strokeStyle='rgba(255,230,182,.4)';ctx.lineWidth=2;
+  for(let i=0;i<8;i++){
+   const y=size*.23+i*35;ctx.beginPath();ctx.moveTo(vp*.2+i*13,y);ctx.lineTo(size-vp*.2-i*13,y);ctx.stroke();
+  }
+ },512);
+}
 function limestoneArch(w:number,h:number,thickness:number,material:THREE.Material):THREE.Mesh{
 const shape=new THREE.Shape();shape.moveTo(-w/2,0);shape.lineTo(w/2,0);shape.lineTo(w/2,h);shape.lineTo(-w/2,h);shape.closePath();
 const hole=new THREE.Path();const r=w*.36, shoulder=h-r*.97;
@@ -132,7 +160,10 @@ g.add(box(.06,.16,16,kit.brass,side*5.01,.08,-9.25));
 const inset=new THREE.Mesh(new THREE.TorusGeometry(1.2,.22,12,44,Math.PI),limestone);
 inset.rotation.y=side*Math.PI/2;inset.position.set(side*4.83,2.8,-4.55);g.add(inset);
 }
-// Stone vaults face the entrance: formerly the side openings were almost edge-on.
+// Reference 02: TWO deep limestone vaults facing the entrance.
+ // The previous side-rotated thin arch was edge-on from the hero camera.
+ // These have real arched clear apertures. Garment rails can pass through
+ // the openings but cannot intersect the stone returns.
  for(const side of [-1,1]){
    const portal=limestoneArch(3.03,4.21,.58,limestone);
    portal.name=side<0?'limestone-vault-left':'limestone-vault-right';
@@ -155,7 +186,7 @@ if(tier==='cinema'){
 const mirror=new Reflector(new THREE.ShapeGeometry(archShape,24),{clipBias:.006,textureWidth:384,textureHeight:512,color:0x8f806c});
 mirror.position.set(-.68,.16,back+.224);mirror.name='flagship-real-mirror';g.add(mirror);
 }else{
-const mirror=new THREE.Mesh(new THREE.ShapeGeometry(archShape,24),new THREE.MeshPhysicalMaterial({color:'#665949',roughness:.055,metalness:.92,envMapIntensity:2,side:THREE.DoubleSide}));
+const mirror=new THREE.Mesh(new THREE.ShapeGeometry(archShape,24),new THREE.MeshBasicMaterial({map:mirrorFallbackTexture(),side:THREE.DoubleSide}));
 mirror.position.set(-.68,.16,back+.224);mirror.name='flagship-mirror-essential';g.add(mirror);
 }
 const drapeFrame=archFrame(2.65,3.48,.38,.26,limestone);drapeFrame.position.set(2.19,.08,back+.34);g.add(drapeFrame);
@@ -183,35 +214,74 @@ const flap=new THREE.Mesh(new THREE.BoxGeometry(.404,.09,.19),leather);flap.posi
 const handle=new THREE.Mesh(new THREE.TorusGeometry(.118,.018,8,26,Math.PI),brass);handle.position.y=.34;handle.rotation.z=Math.PI;g.add(handle);
 g.add(box(.065,.056,.012,brass,0,.23,.102));return g;
 }
+let sharedLaceTexture:THREE.CanvasTexture|null=null;
 export function editorialGarment(side:-1|1,index:number):THREE.Group{
 const g=new THREE.Group();g.name='couture-volumetric-study-not-product-scan';g.userData.editorial3d=true;
 const palette=side===-1?IVORY:BORDEAUX;
 const hue=palette[index%palette.length]!;
 const mat=new THREE.MeshPhysicalMaterial({color:hue,roughness:side===-1?.49:.68,metalness:0,sheen:1,
 sheenColor:new THREE.Color(side===-1?'#dbc3a7':'#8e4350'),sheenRoughness:.34,side:THREE.DoubleSide});
-const count=32,rows=20,verts:number[]=[],uv:number[]=[],indices:number[]=[];
-const long=index%4!==3,height=long?2.03:1.73;
+const count=36,rows=32,verts:number[]=[],uv:number[]=[],indices:number[]=[];
+const long=side===1||index%5!==3,height=long?2.12:1.77;
 const topY=-.43,bottom=-height;
 for(let j=0;j<=rows;j++){
 const t=j/rows,y=topY+(bottom-topY)*t;
-const bust=.12*(1-t)+(.24+(index%3)*.025)*t;
+const waist=Math.exp(-Math.pow((t-.32)/.17,2));
+ const sweep=t*t*(3-2*t);
+ const body=.17+.08*Math.sin(Math.PI*Math.min(t,.7)/.7);
+ const flare=(index%4===0?.15:index%3===0?.09:.045)*sweep;
+ const bust=(body*(1-.43*waist)+flare)*(1+.02*Math.cos(index*3));
 for(let i=0;i<=count;i++){
 const a=2*Math.PI*i/count;
-const r=bust*(1+.15*Math.sin(a*7.0+index*2.1)*(t*t))+.020*Math.sin(a*11+index*3)*(t*t);
-verts.push(Math.sin(a)*r,y+Math.sin(a*9+index)*.012*t,Math.cos(a)*r*.67);
+const pleat=t*t*(.075*Math.sin(a*7+index*.67)+.035*Math.sin(a*11-index*.45));
+ const r=Math.max(.085,bust*(1+pleat)+.016*Math.sin(a*5+index)*sweep);
+const hem=t>.92?(t-.92)*.18*Math.sin(a*8+index*1.2):0;
+ verts.push(Math.sin(a)*r,y+hem,Math.cos(a)*r*.66);
 uv.push(i/count,t);
 if(j<rows&&i<count){const base=j*(count+1)+i;indices.push(base,base+count+1,base+1,base+1,base+count+1,base+count+2);}
 }
 }
 const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(indices);geo.computeVertexNormals();
 const skirt=new THREE.Mesh(geo,mat);skirt.castShadow=true;skirt.receiveShadow=true;g.add(skirt);
-const torso=new THREE.Mesh(new THREE.CylinderGeometry(.135,.105,.38,20,1,false),mat);torso.position.y=-.27;torso.scale.z=.58;torso.castShadow=true;g.add(torso);
+const bodice=new THREE.Mesh(new THREE.SphereGeometry(.175,22,16),mat);
+ bodice.position.set(0,-.27,0);bodice.scale.set(1.15,1.14,.49);bodice.castShadow=true;g.add(bodice);
+ const waistBand=new THREE.Mesh(new THREE.TorusGeometry(.153,.021,8,32),mat);
+ waistBand.rotation.x=Math.PI/2;waistBand.scale.y=.64;waistBand.position.y=-.47;g.add(waistBand);
 const neck=new THREE.Mesh(new THREE.TorusGeometry(.1,.018,8,24,Math.PI),mat);neck.position.set(0,-.105,.025);neck.rotation.z=Math.PI;g.add(neck);
 for(const s of [-1,1])g.add(tubeBetween(new THREE.Vector3(s*.12,-.15,0),new THREE.Vector3(s*.12,-.06,0),.013,mat,7));
 if(index%4===0){
 for(let sideFold of [-1,1]){
 const edge=curtain(sideFold*.05,-.03,.18,.74,mat,.10);edge.position.y=-.9;edge.rotation.z=sideFold*.07;g.add(edge);
 }
+}
+// Three volumetric, asymmetric silk folds create shadow and non-flat drape.
+if(index%3!==2){
+ for(let k=0;k<2;k++){
+  const silk=curtain((k-.5)*.105,.165,.19,1.05,mat,.052);
+  silk.position.y=-.98+k*.1;silk.rotation.z=k===0?-.13:.16;
+  silk.castShadow=true;g.add(silk);
+ }
+}
+// Textile lace on selected ivory pieces; generated repeatable pattern, not an image facade.
+if(side===-1&&index%4===1){
+ if(!sharedLaceTexture){
+  sharedLaceTexture=canvasTexture((ctx,size)=>{
+   ctx.clearRect(0,0,size,size);
+   for(let x=12;x<size;x+=42)for(let y=12;y<size;y+=42){
+    ctx.strokeStyle='rgba(255,248,227,.92)';ctx.lineWidth=2.3;
+    for(let k=0;k<6;k++){
+     const a=k*Math.PI/3;
+     ctx.beginPath();ctx.ellipse(x+Math.cos(a)*11,y+Math.sin(a)*11,6.1,3.8,a,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.fillStyle='rgba(255,252,238,.83)';ctx.beginPath();ctx.arc(x,y,3.1,0,Math.PI*2);ctx.fill();
+   }
+  },256);
+  sharedLaceTexture.repeat.set(2.5,4.5);
+ }
+ const laceMat=new THREE.MeshPhysicalMaterial({map:sharedLaceTexture,transparent:true,opacity:.85,
+  roughness:.83,metalness:0,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1});
+ const lace=curtain(0,.17,.41,1.23,laceMat,.023);
+ lace.position.y=-1.03;g.add(lace);
 }
 const hangerMat=new THREE.MeshStandardMaterial({color:'#4a3026',roughness:.64});
 g.add(tubeBetween(new THREE.Vector3(-.24,-.08,0),new THREE.Vector3(0,.07,0),.020,hangerMat,8));
