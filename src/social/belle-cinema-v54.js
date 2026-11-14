@@ -91,7 +91,7 @@ if(section && dialog){
   filmLink.href=profileLink(city);filmLink.textContent='Abrir Instagram Belle '+city.name+' ↗';
   releaseVideos();
   if(!n){players.innerHTML='<p class="v54-film-empty">Os arquivos de vídeo desta cidade não foram encontrados neste deploy.</p>';return}
-  for(let s=-1;s<=1;s++){
+  for(const s of (n===1?[0]:[-1,0,1])){
    const idx=(videoIndex+s+n)%n,clip=clips[idx],tile=document.createElement('div');tile.className='v54-clip';tile.dataset.side=String(s);
    const v=document.createElement('video');v.src=clip.src;v.poster=clip.poster;v.loop=true;v.muted=true;v.autoplay=true;v.playsInline=true;v.preload=s===0?'auto':'metadata';v.disablePictureInPicture=true;v.setAttribute('aria-label',`Vídeo ${idx+1} de ${n} da Belle ${city.name}`);v.setAttribute('playsinline','');v.controls=false;
    const label=document.createElement('div');label.className='v54-clip-number';label.textContent=String(idx+1).padStart(2,'0')+' / '+String(n).padStart(2,'0')+' · LOOP';
