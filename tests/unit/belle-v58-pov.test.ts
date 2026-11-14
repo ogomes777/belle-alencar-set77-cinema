@@ -22,11 +22,11 @@ describe('Belle V58 360° navigation',()=>{
   expect(p.pose.x).toBeCloseTo(VISIT_DESTINATIONS.esquerda.x,1);
   expect(p.pose.z).toBeCloseTo(VISIT_DESTINATIONS.esquerda.z,1);
  });
- it('cannot tunnel across a freestanding rail or fitting partition',()=>{
+ it('cannot tunnel through a freestanding rail or bouclé chair',()=>{
   const p=collisionStep({x:2.25,z:-7},{x:4.4,z:-7});
   expect(p.x).toBeLessThan(2.75);
-  const partition=collisionStep({x:2,z:-14.1},{x:3.9,z:-14.1});
-  expect(partition.x).toBeLessThan(2.25);
+  const chair=collisionStep({x:-2.2,z:-13.7},{x:-4.3,z:-13.7});
+  expect(chair.x).toBeGreaterThan(-2.75);
  });
  it('door and behind-the-rail are represented by the same physical coordinates',()=>{
   const p=safeWalkPoint(0,-3.45);expect(p.z).toBeCloseTo(-3.45);
