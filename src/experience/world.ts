@@ -9,7 +9,7 @@ import { advanceFilmScrub } from './film-scrub-v55';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { bakeStatic, createKit } from './scene/kit';
 import { buildMall } from './scene/mall';
-import { buildFacade } from './scene/facade';
+import { buildFlagshipFacade } from './scene/atelier59';
 import { buildBoutique } from './scene/boutique';
 import { sceneProductReadiness, waitForSceneProducts } from './scene/product';
 import { DressRig } from './cloth/dress';
@@ -107,7 +107,7 @@ export class World {
     this.renderer.setPixelRatio(this.dpr);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.83;
+    this.renderer.toneMappingExposure = 0.76;
     this.renderer.shadowMap.enabled = tier === 'cinema' && !lessCapable;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     container.appendChild(this.renderer.domElement);
@@ -126,7 +126,7 @@ export class World {
 
     const kit = createKit(tier);
     this.mall = buildMall(kit, tier, this.dpr, !!opts.poster);
-    this.facade = buildFacade(kit, tier);
+    this.facade = buildFlagshipFacade(kit, tier);
     this.boutique = buildBoutique(kit, tier, this.dpr);
     this.scene.add(this.mall.group, this.facade.group, this.boutique.group);
     bakeStatic(this.scene);
