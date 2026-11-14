@@ -8,14 +8,14 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { archFrame, archPanel, box, contact, plane, spot, type Kit } from './kit';
 import { labelTexture } from '../textures';
 import { DEMO_CATALOG, productById } from '../../commerce/catalog.demo';
-import type { Product } from '../../commerce/types';
+import type { Product, Category } from '../../commerce/types';
 import { DISPLAY_HEIGHT, disposeProductDisplay, productDisplay, sceneProduct, supportedProduct } from './product';
 import type { Tier } from '../../core/tier';
 
 export const ROOM = { x: 5.2, zFront: -1.4, zBack: -17.2, h: 4.2 };
-export const RAIL = { y: 1.92, x: 4.72, z0: -2.8, z1: -11.2 };
+export const RAIL = { y: 1.92, x: 3.45, z0: -2.8, z1: -11.2 };
 export const HERO_HANGER = new THREE.Vector3(RAIL.x, RAIL.y, -6.4);
-export const PODIUM = new THREE.Vector3(0, 0.2, -8);
+export const PODIUM = new THREE.Vector3(-1.82, 0.2, -12.15);
 export const FITTING = new THREE.Vector3(3.9, 0, -15.5);
 export const ARCHES = [-3.6, -1.2, 1.2];
 
@@ -38,6 +38,10 @@ export interface BoutiqueHandle {
   bagWidth():number;
   impactBag():void;
   bagHit(ndc:THREE.Vector2,camera:THREE.Camera):boolean;
+  setSideCategory(side: -1|1, category: Category | null, page?:number, selectedId?:string|null):Product[];
+  lastPickedSide():-1|1;
+  sideFor(id:string): -1|1|null;
+  sideProducts(side:-1|1):Product[];
 }
 
 interface Swing {
@@ -114,11 +118,9 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       panel.position.set(side * (X - 0.012), 0, z);
       g.add(panel);
       const slug=nicheProducts[nicheIndex++]!, product=sceneProduct(slug);
-      const clothing=!['bolsas','pulseiras','aneis'].includes(product.category);
-      const display=supportedProduct(kit, slug, DISPLAY_HEIGHT[product.category],clothing?2.25:1.16,clothing);
-      display.rotation.y=side * -Math.PI / 2;
-      display.position.set(side*(X-.24),0,z);
-      g.add(display);
+      // Keep recessed stone arches and indirect light. Decorative garment
+      // billboards high above the rail are intentionally removed.
+      void product;
     }
   }
 
@@ -129,11 +131,17 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     bar.rotation.x = Math.PI / 2;
     bar.position.set(side * RAIL.x, RAIL.y, (RAIL.z0 + RAIL.z1) / 2);
     g.add(bar);
-    for (const z of [RAIL.z0, (RAIL.z0 + RAIL.z1) / 2, RAIL.z1]) {
-      const br = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, X - RAIL.x, 8), kit.brass);
-      br.rotation.z = Math.PI / 2;
-      br.position.set(side * (RAIL.x + (X - RAIL.x) / 2), RAIL.y, z);
-      g.add(br);
+    // Independent freestanding fixture: vertical poles stand ON two stone
+    // blocks. No horizontal attachment to the wall; rear passage stays open.
+    for(const z of [RAIL.z0,RAIL.z1]){
+      const foot=box(.68,.23,.82,kit.travertine,side*RAIL.x,.115,z);
+      foot.castShadow=true;foot.receiveShadow=true;g.add(foot);
+      g.add(contact(kit,.9,1.02,side*RAIL.x,z));
+      const riser=new THREE.Mesh(new THREE.CylinderGeometry(.021,.025,RAIL.y-.22,12),kit.brass);
+      riser.position.set(side*RAIL.x,(RAIL.y+.22)/2,z);
+      g.add(riser);
+      const cap=new THREE.Mesh(new THREE.SphereGeometry(.036,10,8),kit.brass);
+      cap.position.set(side*RAIL.x,RAIL.y,z);g.add(cap);
     }
   }
 
@@ -256,7 +264,34 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   bag.add(seam);
   bag.add(box(.075,.055,.015,kit.brass,0,.44,.135));g.add(bag);g.add(contact(kit,.8,.48,2.05,-6.05));
   let bagPulse=0;
+  let pickedSide:-1|1=1;
+  const initialProduct=new Map(swings.map(s=>[s,s.product]));
+  const slotsPerSide=8; // bounded GPU memory; paginate beyond eight products.
   function swingFor(id:string){return railSwings.find(s=>s.product.id===id)||null;}
+  function setSideCategory(side:-1|1,category:Category|null,page=0,requestedId:string|null=null):Product[]{
+    const activeSide=side===1?rightSwings:leftSwings;
+    const items=category ? DEMO_CATALOG.filter(p=>p.active&&p.category===category)
+      : activeSide.map(s=>initialProduct.get(s)!).filter(p=>p.active);
+    const start=Math.max(0,page)*slotsPerSide;
+    const window=items.slice(start,start+slotsPerSide);
+    activeSide.forEach((s,i)=>{
+      const next=category?window[i]??null:initialProduct.get(s)!;
+      s.mesh.visible=!!next;
+      if(!next)return;
+      if(s.product.id===next.id)return;
+      s.mesh.children.slice().forEach(obj=>{obj.removeFromParent();disposeProductDisplay(obj);});
+      s.product=next;
+      const display=productDisplay(next,DISPLAY_HEIGHT[next.category],'top');
+      display.position.y=-.22;s.mesh.add(display);
+      s.clipped=next.category==='saias'||next.category==='calcas';
+    });
+    if(requestedId){
+      const index=railSwings.findIndex(s=>s.side===side&&s.product.id===requestedId&&s.mesh.visible);
+      if(index>=0)focusIndex=index;
+    }
+    selectedId=requestedId??null;
+    return items;
+  }
   function hitRail(ndc:THREE.Vector2,camera:THREE.Camera):Swing|null{
     raycaster.setFromCamera(ndc,camera);
     for(const hit of raycaster.intersectObjects(railSwings.filter(s=>s.mesh.visible).map(s=>s.mesh),true)){
@@ -291,7 +326,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
 
   // arcos de categoria no fundo
   const archPanels: THREE.MeshStandardMaterial[] = [];
-  const labels = ['VESTIDOS', 'CAMISAS', 'BOLSAS'];
+  // Two alcoves and a curtained fitting passage share the same rear wall.
   ARCHES.forEach((x, i) => {
     const fr = archFrame(2.0, 3.4, 0.14, 0.3, kit.travertine);
     fr.position.set(x, 0, zBack + 0.01);
@@ -301,22 +336,39 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     const panel = archPanel(2.0, 3.4, mat);
     panel.position.set(x, 0, zBack + 0.012);
     g.add(panel);
-    const label = plane(1.9, 0.3, new THREE.MeshStandardMaterial({ map: labelTexture(labels[i]!), transparent: true, alphaTest: 0.05, metalness: 0.8, roughness: 0.35 }));
-    label.position.set(x, 3.86, zBack + 0.05);
-    g.add(label);
+    // No decorative category labels: these arches are architectural, not clickable items.
+    void i;
     const plinth = box(1.3, 0.32, 0.7, kit.travertine, x, 0.16, zBack + 0.7);
     g.add(plinth);
     g.add(contact(kit, 1.9, 1.2, x, zBack + 0.7));
   });
-  // Photo displays retain their own visual identity on actual supports.
-  const archDress=supportedProduct(kit,'vestidos-03',1.48,.32);
-  archDress.position.set(ARCHES[0]!,0,zBack+.7);g.add(archDress);
-  const archShirt=supportedProduct(kit,'camisas-04',.72,1.84,true);
-  archShirt.position.set(ARCHES[1]!,0,zBack+.7);g.add(archShirt);
-  for(const [dx,slug,height] of [[-.28,'bolsas-01',.34],[.3,'bolsas-02',.28]] as const) {
-    const display=supportedProduct(kit,slug,height,.32);
-    display.position.set(ARCHES[2]!+dx,0,zBack+.7);g.add(display);
+  // Full-height pleated curtain in the central rear opening, visible from
+  // the entrance. Cloth is three-dimensional and lit by the room itself.
+  const rearDrapeGeo=new THREE.PlaneGeometry(1.77,3.02,64,24);
+  const rearVerts=rearDrapeGeo.getAttribute('position') as THREE.BufferAttribute;
+  for(let i=0;i<rearVerts.count;i++){
+    const x=rearVerts.getX(i),y=rearVerts.getY(i);
+    const pleat=.085*Math.sin((x+.84)*39)+.024*Math.sin((x+.5)*91);
+    rearVerts.setZ(i,pleat*(.85+.15*(1-y/3.02)));
+    rearVerts.setX(i,x*(.94+Math.max(0,-y)*.02));
   }
+  rearDrapeGeo.computeVertexNormals();
+  const rearDrape=new THREE.Mesh(rearDrapeGeo,new THREE.MeshStandardMaterial({
+    color:'#9b7c61',roughness:.91,metalness:0,side:THREE.DoubleSide
+  }));
+  rearDrape.name='rear-fitting-drapery';
+  rearDrape.position.set(ARCHES[2]!,1.64,zBack+.39);
+  rearDrape.castShadow=true;g.add(rearDrape);
+  g.add(box(1.82,.026,.026,kit.brass,ARCHES[2]!,3.19,zBack+.41));
+  // Soft vertical mirror at the left-center aperture: no extra render pass.
+  const rearMirror = new THREE.Mesh(new THREE.PlaneGeometry(1.13,2.55),
+    new THREE.MeshPhysicalMaterial({color:'#a3927b',roughness:.12,metalness:.94,envMapIntensity:1.35,side:THREE.DoubleSide}));
+  rearMirror.name='mirror-specular-fallback';
+  rearMirror.position.set(ARCHES[1]!,1.58,zBack+.36);g.add(rearMirror);
+  // Photo displays retain their own visual identity on actual supports.
+  // Low bag pedestal rather than misleading elevated decorative clothing.
+  const archiveBag=supportedProduct(kit,'bolsas-01',.34,.42);
+  archiveBag.position.set(ARCHES[2]!,0,zBack+.7);g.add(archiveBag);
 
   // provador: divisória, cortina de veludo, espelho em arco, pufe
   // alcova aberta para a frente: parede lateral em x=2.6, cortina recolhida à direita
@@ -437,11 +489,15 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     },
     pick(ndc,camera){
       const hit=hitRail(ndc,camera);
-      if(hit){hoverId=hit.product.id;focusIndex=railSwings.indexOf(hit);}
+      if(hit){pickedSide=hit.side as -1|1;hoverId=hit.product.id;focusIndex=railSwings.indexOf(hit);}
       else hoverId=null;
       return hit?.product??null;
     },
     railPosition(){return {index:focusIndex+1,total:railSwings.length};},
+    lastPickedSide(){return pickedSide;},
+    sideFor(id){return (railSwings.find(s=>s.product.id===id&&s.mesh.visible)?.side??null) as -1|1|null;},
+    sideProducts(side){return (side===1?rightSwings:leftSwings).filter(s=>s.mesh.visible).map(s=>s.product);},
+    setSideCategory,
     focusPoint(){
       const s=railSwings[focusIndex];
       return new THREE.Vector3(s?.hook.x??RAIL.x,1.32,s?.hook.z??-6.4);
