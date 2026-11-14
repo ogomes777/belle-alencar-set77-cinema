@@ -9,14 +9,15 @@ import { archFrame, archPanel, box, contact, plane, spot, type Kit } from './kit
 import { labelTexture } from '../textures';
 import { DEMO_CATALOG, productById } from '../../commerce/catalog.demo';
 import type { Product, Category } from '../../commerce/types';
-import { DISPLAY_HEIGHT, disposeProductDisplay, productDisplay, sceneProduct, supportedProduct } from './product';
+import { DISPLAY_HEIGHT, disposeProductDisplay, productDisplay, supportedProduct } from './product';
+import { buildAtelier59, editorialGarment } from './atelier59';
 import type { Tier } from '../../core/tier';
 
 export const ROOM = { x: 5.2, zFront: -1.4, zBack: -17.2, h: 4.2 };
-export const RAIL = { y: 1.92, x: 3.45, z0: -2.8, z1: -11.2 };
+export const RAIL = { y: 2.28, x: 3.45, z0: -3.12, z1: -11.9 };
 export const HERO_HANGER = new THREE.Vector3(RAIL.x, RAIL.y, -6.4);
 export const PODIUM = new THREE.Vector3(-1.82, 0.2, -12.15);
-export const FITTING = new THREE.Vector3(3.9, 0, -15.5);
+export const FITTING = new THREE.Vector3(2.25, 0, -16.25);
 export const ARCHES = [-3.6, -1.2, 1.2];
 
 export interface BoutiqueHandle {
@@ -57,72 +58,9 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   const L = zFront - zBack;
   const zc = (zFront + zBack) / 2;
 
-  // piso, teto, paredes
-  const floor = plane(X * 2, L, kit.oak, 1.6);
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, 0.001, zc);
-  floor.receiveShadow = true;
-  g.add(floor);
-  const ceil = plane(X * 2, L, kit.plaster, 3);
-  ceil.rotation.x = Math.PI / 2;
-  ceil.position.set(0, H, zc);
-  g.add(ceil);
-  for (const side of [-1, 1]) {
-    const wall = plane(L, H, kit.plaster, 3);
-    wall.rotation.y = side * -Math.PI / 2;
-    wall.position.set(side * X, H / 2, zc);
-    wall.receiveShadow = true;
-    g.add(wall);
-    g.add(box(0.03, 0.14, L, kit.travertine, side * (X - 0.015), 0.07, zc));
-    g.add(box(0.05, 0.03, L, kit.light, side * (X - 0.2), H - 0.02, zc)); // sanca
-  }
-  const back = plane(X * 2, H, kit.plaster, 3);
-  back.position.set(0, H / 2, zBack);
-  g.add(back);
-  // parede frontal interna com o vão da porta
-  const front = new THREE.Shape();
-  front.moveTo(-X, 0); front.lineTo(-1.25, 0); front.lineTo(-1.25, 3.1); front.lineTo(1.25, 3.1);
-  front.lineTo(1.25, 0); front.lineTo(X, 0); front.lineTo(X, H); front.lineTo(-X, H); front.closePath();
-  const frontMesh = new THREE.Mesh(new THREE.ShapeGeometry(front), kit.plaster);
-  frontMesh.rotation.y = Math.PI;
-  frontMesh.position.z = zFront;
-  g.add(frontMesh);
-
-  // spots embutidos no teto (instanciados)
-  const disc = new THREE.InstancedMesh(new THREE.CircleGeometry(0.06, 20), kit.light, 40);
-  let di = 0;
-  const m4 = new THREE.Matrix4();
-  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
-  for (let z = zFront - 1.4; z > zBack + 0.8; z -= 1.8) {
-    for (const x of [-3.4, -1.1, 1.1, 3.4]) {
-      if (di >= 40) break;
-      m4.compose(new THREE.Vector3(x, H - 0.005, z), q, new THREE.Vector3(1, 1, 1));
-      disc.setMatrixAt(di++, m4);
-    }
-  }
-  disc.count = di;
-  g.add(disc);
-
-  // Front-facing alpha studies in physically supported boutique niches.
-  const nicheProducts=['saias-03','camisas-01','bolsas-02','calcas-01','croppeds-02','pulseiras-01'] as const;
-  let nicheIndex=0;
-  const nicheMat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissiveMap: kit.glowTex, emissive: new THREE.Color('#f1dcb8'), emissiveIntensity: 0.22, roughness: 0.95 });
-  for (const side of [-1, 1]) {
-    for (const z of [-4.2, -7.0, -9.8]) {
-      const fr = archFrame(2.5, 3.3, 0.12, 0.1, kit.travertine);
-      fr.rotation.y = side * -Math.PI / 2;
-      fr.position.set(side * (X - 0.1), 0, z);
-      g.add(fr);
-      const panel = archPanel(2.5, 3.3, nicheMat);
-      panel.rotation.y = side * -Math.PI / 2;
-      panel.position.set(side * (X - 0.012), 0, z);
-      g.add(panel);
-      const slug=nicheProducts[nicheIndex++]!, product=sceneProduct(slug);
-      // Keep recessed stone arches and indirect light. Decorative garment
-      // billboards high above the rail are intentionally removed.
-      void product;
-    }
-  }
+  // V59: the V58 showroom was removed. This is a rebuilt, physical flagship,
+  // with approved reference 02 as the single plant (not six unrelated backdrops).
+  g.add(buildAtelier59(kit,tier));
 
   // araras de latão
   for (const side of [-1, 1]) {
@@ -174,8 +112,8 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       // Order is stable: 15 left + 15 right, every one of the 30 outfits once.
       const product=clothing[hi]!;
       const pivot=new THREE.Group(); pivot.userData.dynamic=true;
-      const display=productDisplay(product,DISPLAY_HEIGHT[product.category],'top');
-      display.position.y=-.22; pivot.add(display); g.add(pivot);
+      const display=editorialGarment(side as -1|1,k);
+      pivot.add(display); g.add(pivot);
       const clipped=product.category==='saias'||product.category==='calcas';
       const swing:Swing={ax:0,az:0,vx:0,vz:0,hook:new THREE.Vector3(side*RAIL.x,RAIL.y,z),yaw:side*-Math.PI/2,mesh:pivot,clipped,product,side,baseZ:z,focus:0,focusV:0,slide:0};
       swings.push(swing);
@@ -229,8 +167,8 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
 
 
   // Loja única: saco de couro geométrico 3D no piso (não overlay duplicado).
-  const bag=new THREE.Group();bag.name='sacola-no-piso';bag.userData.dynamic=true;bag.position.set(2.05,0,-6.05);
-  const leather=new THREE.MeshStandardMaterial({color:'#e8ddc9',roughness:.53,metalness:.04,side:THREE.DoubleSide});
+  const bag=new THREE.Group();bag.name='sacola-no-piso';bag.userData.dynamic=true;bag.position.set(-3.03,.83,-15.85);
+  const leather=new THREE.MeshStandardMaterial({color:'#643231',roughness:.53,metalness:.04,side:THREE.DoubleSide});
   const dark=new THREE.MeshStandardMaterial({color:'#493b2d',roughness:.94});
   const body=new THREE.Mesh(new THREE.BoxGeometry(.49,.51,.25),leather);body.position.y=.31;body.castShadow=true;bag.add(body);
   const mouth=new THREE.Mesh(new THREE.PlaneGeometry(.42,.18),dark);mouth.rotation.x=-Math.PI/2;mouth.position.y=.571;bag.add(mouth);
@@ -281,8 +219,9 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
       if(s.product.id===next.id)return;
       s.mesh.children.slice().forEach(obj=>{obj.removeFromParent();disposeProductDisplay(obj);});
       s.product=next;
-      const display=productDisplay(next,DISPLAY_HEIGHT[next.category],'top');
-      display.position.y=-.22;s.mesh.add(display);
+      const display=category?productDisplay(next,DISPLAY_HEIGHT[next.category],'top'):editorialGarment(side,activeSide.indexOf(s));
+      if(category)display.position.y=-.22;
+      s.mesh.add(display);
       s.clipped=next.category==='saias'||next.category==='calcas';
     });
     if(requestedId){
@@ -312,119 +251,12 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     return best;
   }
 
-  // pódio central
-  const podium = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.1, 0.2, 64), kit.travertine);
-  podium.position.set(PODIUM.x, 0.1, PODIUM.z);
-  podium.receiveShadow = true;
-  podium.castShadow = true;
-  g.add(podium);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.012, 8, 96), kit.brass);
-  ring.rotation.x = Math.PI / 2;
-  ring.position.set(PODIUM.x, 0.2, PODIUM.z);
-  g.add(ring);
-  g.add(contact(kit, 3.2, 3.2, PODIUM.x, PODIUM.z));
-
-  // arcos de categoria no fundo
-  const archPanels: THREE.MeshStandardMaterial[] = [];
-  // Two alcoves and a curtained fitting passage share the same rear wall.
-  ARCHES.forEach((x, i) => {
-    const fr = archFrame(2.0, 3.4, 0.14, 0.3, kit.travertine);
-    fr.position.set(x, 0, zBack + 0.01);
-    g.add(fr);
-    const mat = new THREE.MeshStandardMaterial({ map: kit.glowTex, emissiveMap: kit.glowTex, emissive: new THREE.Color('#f6e2bf'), emissiveIntensity: 0.25, roughness: 0.95 });
-    archPanels.push(mat);
-    const panel = archPanel(2.0, 3.4, mat);
-    panel.position.set(x, 0, zBack + 0.012);
-    g.add(panel);
-    // No decorative category labels: these arches are architectural, not clickable items.
-    void i;
-    const plinth = box(1.3, 0.32, 0.7, kit.travertine, x, 0.16, zBack + 0.7);
-    g.add(plinth);
-    g.add(contact(kit, 1.9, 1.2, x, zBack + 0.7));
-  });
-  // Full-height pleated curtain in the central rear opening, visible from
-  // the entrance. Cloth is three-dimensional and lit by the room itself.
-  const rearDrapeGeo=new THREE.PlaneGeometry(1.77,3.02,64,24);
-  const rearVerts=rearDrapeGeo.getAttribute('position') as THREE.BufferAttribute;
-  for(let i=0;i<rearVerts.count;i++){
-    const x=rearVerts.getX(i),y=rearVerts.getY(i);
-    const pleat=.085*Math.sin((x+.84)*39)+.024*Math.sin((x+.5)*91);
-    rearVerts.setZ(i,pleat*(.85+.15*(1-y/3.02)));
-    rearVerts.setX(i,x*(.94+Math.max(0,-y)*.02));
-  }
-  rearDrapeGeo.computeVertexNormals();
-  const rearDrape=new THREE.Mesh(rearDrapeGeo,new THREE.MeshStandardMaterial({
-    color:'#9b7c61',roughness:.91,metalness:0,side:THREE.DoubleSide
-  }));
-  rearDrape.name='rear-fitting-drapery';
-  rearDrape.position.set(ARCHES[2]!,1.64,zBack+.39);
-  rearDrape.castShadow=true;g.add(rearDrape);
-  g.add(box(1.82,.026,.026,kit.brass,ARCHES[2]!,3.19,zBack+.41));
-  // Soft vertical mirror at the left-center aperture: no extra render pass.
-  const rearMirror = new THREE.Mesh(new THREE.PlaneGeometry(1.13,2.55),
-    new THREE.MeshPhysicalMaterial({color:'#a3927b',roughness:.12,metalness:.94,envMapIntensity:1.35,side:THREE.DoubleSide}));
-  rearMirror.name='mirror-specular-fallback';
-  rearMirror.position.set(ARCHES[1]!,1.58,zBack+.36);g.add(rearMirror);
-  // Photo displays retain their own visual identity on actual supports.
-  // Low bag pedestal rather than misleading elevated decorative clothing.
-  const archiveBag=supportedProduct(kit,'bolsas-01',.34,.42);
-  archiveBag.position.set(ARCHES[2]!,0,zBack+.7);g.add(archiveBag);
-
-  // provador: divisória, cortina de veludo, espelho em arco, pufe
-  // alcova aberta para a frente: parede lateral em x=2.6, cortina recolhida à direita
-  const part = box(0.12, H, 3.6, kit.plaster, 2.6, H / 2, -15.4);
-  g.add(part);
-  g.add(box(2.72, 0.24, 0.14, kit.plaster, 3.9, H - 0.12, -13.6)); // verga da alcova
-  const curtainGeo = new THREE.PlaneGeometry(0.9, 3.3, 40, 1);
-  const cp = curtainGeo.getAttribute('position') as THREE.BufferAttribute;
-  for (let i = 0; i < cp.count; i++) cp.setZ(i, Math.sin(cp.getX(i) * 34) * 0.05);
-  curtainGeo.computeVertexNormals();
-  const curtain = new THREE.Mesh(curtainGeo, kit.velvet);
-  curtain.position.set(4.7, 1.7, -13.66);
-  g.add(curtain);
-  g.add(box(2.6, 0.03, 0.03, kit.brass, 3.9, 3.42, -13.66));
-  const mirrorFrame = archFrame(1.2, 2.5, 0.07, 0.05, kit.brass);
-  mirrorFrame.position.set(FITTING.x, 0.25, zBack + 0.02);
-  g.add(mirrorFrame);
-  // Espelho estável: reflexo editorial sincronizado, sem Reflector em tempo real.
-  // O Reflector reproduzia recortes 2.5D por uma câmera virtual e causava
-  // clipping/ghosting, além de duplicar passes no celular.
-  // A imagem refletida usa o MESMO recorte selecionado e apenas um plano alpha;
-  // a superfície permanece um espelho cenográfico, não uma simulação física.
-  const archShape = new THREE.Shape();
-  archShape.moveTo(-.6,0);archShape.lineTo(-.6,1.9);
-  archShape.absarc(0,1.9,.6,Math.PI,0,true);
-  archShape.lineTo(.6,0);archShape.lineTo(-.6,0);
-  const mirrorSurface = new THREE.Mesh(new THREE.ShapeGeometry(archShape,32),
-    new THREE.MeshPhysicalMaterial({
-      color:'#c1bbb0',metalness:.69,roughness:.19,
-      envMapIntensity:.75,side:THREE.DoubleSide
-    }));
-  mirrorSurface.name='espelho-estavel-sem-reflector';
-  mirrorSurface.position.set(FITTING.x,.25,zBack+.036);
-  g.add(mirrorSurface);
-  const mirrorLook = new THREE.Group();
-  mirrorLook.name='vestido-refletido-sincronizado';
-  mirrorLook.position.set(FITTING.x,.54,zBack+.086);
-  mirrorLook.scale.x=-1;
-  mirrorLook.visible=false;
-  g.add(mirrorLook);
-  // Reflexo de luminosidade na lâmina sem aumentar as renderizações da cena.
-  const glassGlare=new THREE.Mesh(new THREE.PlaneGeometry(1.02,2.02),
-    new THREE.MeshBasicMaterial({color:'#fdf9e9',transparent:true,opacity:.075,
-      depthWrite:false,depthTest:true,side:THREE.DoubleSide}));
-  glassGlare.position.set(FITTING.x,.25+1.08,zBack+.095);
-  glassGlare.renderOrder=2;
-  g.add(glassGlare);
-  const mirror: Reflector | null = null;
-  const pouf = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.42, 32), kit.velvet);
-  pouf.position.set(4.75, 0.21, -16.4);
-  g.add(pouf);
-  g.add(contact(kit, 0.9, 0.9, 4.75, -16.4));
-  const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.34, 0.06, 40), kit.brass);
-  stand.position.set(FITTING.x, 0.03, FITTING.z);
-  g.add(stand);
-  g.add(contact(kit, 1.4, 1.4, FITTING.x, FITTING.z));
+  // Fitting product overlays continue to use the existing commercial API,
+  // while the ARCHITECTURE (mirror, curtain, volume and seat) lives in Atelier59.
+  const mirrorLook=new THREE.Group();mirrorLook.visible=false;g.add(mirrorLook);
+  const glassGlare=new THREE.Mesh(new THREE.PlaneGeometry(.02,.02),
+    new THREE.MeshBasicMaterial({transparent:true,opacity:0}));glassGlare.visible=false;g.add(glassGlare);
+  const mirror: Reflector|null=null;
 
   // A selected product is a frontal supported photograph, never a claimed 360 try-on.
   const fittingDisplay=new THREE.Group();fittingDisplay.name='fitting-product-display';
@@ -445,30 +277,9 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     mirrorLook.add(reflection);
   };
 
-  // luz
-  const hemi = new THREE.HemisphereLight('#fff4e4', '#a48c6c', 1.05);
-  g.add(hemi);
-  const podiumSpot = spot('#ffe9c9', 70, [0.6, H - 0.05, -6.6], [0, 0.9, -8], 0.42, 0.65);
-  if (tier === 'cinema') {
-    podiumSpot.castShadow = true;
-    podiumSpot.shadow.mapSize.set(1024, 1024);
-    podiumSpot.shadow.bias = -0.0004;
-    podiumSpot.shadow.normalBias = 0.02;
-    podiumSpot.shadow.camera.near = 1;
-    podiumSpot.shadow.camera.far = 8;
-  }
-  g.add(podiumSpot, podiumSpot.target);
-  for (const side of [-1, 1]) {
-    const s = spot('#ffe4bd', 42, [side * 2.4, H - 0.05, -7], [side * RAIL.x, 1.2, -7], 0.95, 0.85);
-    g.add(s, s.target);
-  }
-  const backSpot = spot('#ffe6c0', 50, [-1.2, H - 0.05, -13.4], [-1.2, 1.4, zBack], 0.85, 0.9);
-  g.add(backSpot, backSpot.target);
-  // faixa de luz dourada que atravessa o tecido no capítulo "detalhe"
-  const sweep = spot('#ffd28a', 0, [-1.6, 2.6, -6.4], [0, 1.0, -8], 0.16, 0.55);
-  g.add(sweep, sweep.target);
-  const fitSpot = spot('#ffeacc', 34, [3.9, H - 0.05, -14.0], [FITTING.x, 1.0, FITTING.z], 0.6, 0.8);
-  g.add(fitSpot, fitSpot.target);
+  const archPanels:THREE.MeshStandardMaterial[]=[];
+  const sweep=spot('#b48a60',0,[-1.6,2.6,-6.4],[0,1,-8],.16,.55);g.add(sweep,sweep.target);
+  // Lighting and surfaces are now physically consistent in Atelier59.
 
   // Keep distant products in scene; architectural occlusion and frustum culling handle visibility.
   // atualização: molas dos cabides + foco dos arcos + espelho
