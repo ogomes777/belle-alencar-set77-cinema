@@ -14,6 +14,8 @@ import { buildBoutique } from './scene/boutique';
 import { sceneProductReadiness, waitForSceneProducts } from './scene/product';
 import { DressRig } from './cloth/dress';
 import { Story, type Span } from './story';
+import { POVWalk, VIEWPOSES, type VisitDestination } from './pov/walk';
+import type { Category } from '../commerce/types';
 import type { Tier } from '../core/tier';
 import type { DressParams } from '../core/dress';
 import type { Product } from '../commerce/types';
@@ -42,6 +44,7 @@ export interface WorldInfo {
   rail: {index:number;total:number};
   lookTarget: number[];
   orbit: {current:number;target:number;free:boolean};
+  visit:{x:number;z:number;yaw:number;pitch:number;active:boolean};
 }
 
 export class World {
@@ -49,6 +52,8 @@ export class World {
   private scene = new THREE.Scene();
   private camera: THREE.PerspectiveCamera;
   private story = new Story();
+  private visit = new POVWalk();
+  private comparisonShot:keyof typeof VIEWPOSES|null=null;
   private dress: DressRig;
   private fittingProductId: string | null = null;
   private facade;
@@ -153,6 +158,36 @@ export class World {
     this.kick();
   }
 
+  comparisonView(name:string|null):boolean{
+    if(name && !(name in VIEWPOSES))return false;
+    this.comparisonShot=name as keyof typeof VIEWPOSES|null;
+    this.kick();return true;
+  }
+  enterVisit():boolean{
+    if(this.opts.poster || this.failed)return false;
+    const forward=new THREE.Vector3();
+    this.camera.getWorldDirection(forward);
+    const yaw=Math.atan2(forward.x,-forward.z);
+    this.visit.start(this.camera.position.x,this.camera.position.z,yaw);
+    this.kick();return true;
+  }
+  exitVisit():void{this.visit.stop();this.kick();}
+  isVisiting():boolean{return this.visit.active;}
+  lookVisit(dx:number,dy=0):void{this.visit.look(dx,dy);this.kick();}
+  destinationVisit(to:VisitDestination):void{this.visit.go(to);this.kick();}
+  seeEntrance():void{this.visit.faceEntrance();this.kick();}
+  resetVisitLook():void{this.visit.centerLook();this.kick();}
+  keyVisit(key:string,pressed:boolean):boolean{
+    const consumed=this.visit.key(key,pressed);if(consumed)this.kick();return consumed;
+  }
+  visitPose(){return this.visit.pose;}
+  visitLastSide():-1|1{return this.boutique.lastPickedSide();}
+  visitSideFor(id:string): -1|1|null{return this.boutique.sideFor(id);}
+  filterVisitSide(side:-1|1,category:Category|null,page=0,selectedId:string|null=null){
+    const items=this.boutique.setSideCategory(side,category,page,selectedId);
+    this.kick();return items;
+  }
+  visitSideProducts(side:-1|1){return this.boutique.sideProducts(side);}
   setDress(params: DressParams): void {
     this.fittingProductId = params.productId ?? null;
     this.boutique.setProduct(this.fittingProductId);
@@ -307,7 +342,7 @@ export class World {
     const r = this.renderer.info.render;
     const c = this.camera.position;
     return { tier: this.opts.tier, dpr: this.dpr, frames: this.frames, drawCalls: r.calls, triangles: r.triangles, avgFrameMs: Math.round(this.frameAvg * 10) / 10, running: !!this.raf, products: sceneProductReadiness(this.scene), progress: Math.round(this.shown * 1000) / 1000, camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100), rail: this.boutique.railPosition(), lookTarget: [this.lookTgt.x,this.lookTgt.y,this.lookTgt.z].map(v=>Math.round(v*100)/100),
-      orbit: {current:+this.roomOrbit.toFixed(3),target:+this.roomOrbitGoal.toFixed(3),free:this.roomOrbitManual} };
+      orbit: {current:+this.roomOrbit.toFixed(3),target:+this.roomOrbitGoal.toFixed(3),free:this.roomOrbitManual}, visit:this.visit.pose };
   }
 
   private kick(): void {
@@ -346,7 +381,7 @@ export class World {
     this.scrollEnergy += (Math.min(1, scrollSpeed * 18) - this.scrollEnergy) * Math.min(1, dt * 3);
 
     // câmera
-    const fov=this.fitFov(this.story.camera(p,this.camPos,this.camTgt));
+    let fov=this.fitFov(this.story.camera(p,this.camPos,this.camTgt));
     // In-room first-person orbit: horizontal gestures explore the garments,
     // while vertical progress still owns the chapter transition.
     const sala=this.story.span('sala');
@@ -354,7 +389,7 @@ export class World {
     this.railPan+=(this.railPanGoal-this.railPan)*railStep;
     const orbitStep=exact?1:1-Math.exp(-dt*3.65);
     this.roomOrbit+=(this.roomOrbitGoal-this.roomOrbit)*orbitStep;
-    if(this.railEngaged && sala && p>=sala.s-.02 && p<=sala.e+.02){
+    if(!this.visit.active && this.railEngaged && sala && p>=sala.s-.02 && p<=sala.e+.02){
       const point=this.boutique.focusPoint();
       if(!this.roomFocusReady){this.roomFocus.copy(this.camTgt);this.roomFocusReady=true;}
       // O alvo acompanha a arara com amortecimento, inclusive ao cruzar de parede.
@@ -390,6 +425,22 @@ export class World {
         this.camTgt.y += this.pointer.y * 0.12;
       }
     }
+    if(this.visit.active){
+      this.visit.update(dt);
+      const pose=this.visit.pose;
+      const cp=Math.cos(pose.pitch);
+      this.camPos.set(pose.x,this.visit.y,pose.z);
+      this.camTgt.set(pose.x+Math.sin(pose.yaw)*cp,this.visit.y+Math.sin(pose.pitch),pose.z-Math.cos(pose.yaw)*cp);
+    }
+    // QA: one coherent real 3D scene from six repeatable camera poses.
+    // Not six reference images projected onto walls.
+    if(this.comparisonShot){
+      const pose=VIEWPOSES[this.comparisonShot];
+      const cp=Math.cos(pose.pitch);
+      this.camPos.set(pose.x,1.62,pose.z);
+      this.camTgt.set(pose.x+Math.sin(pose.yaw)*cp,1.62+Math.sin(pose.pitch),pose.z-Math.cos(pose.yaw)*cp);
+      fov=this.fitFov(pose.fov);
+    }
     const ck = exact ? 1 : 1 - Math.exp(-dt * 10);
     this.lookPos.lerp(this.camPos, ck);
     this.lookTgt.lerp(this.camTgt, ck);
@@ -404,7 +455,7 @@ export class World {
     this.prevCam.copy(this.camera.position);
 
     // portas e visibilidade de efeitos caros
-    this.facade.setDoors(this.story.doors(p));
+    this.facade.setDoors(this.visit.active ? 1 : this.story.doors(p));
     if (this.mall.reflector) this.mall.reflector.visible = this.camera.position.z > -1.2;
 
     // vestido
