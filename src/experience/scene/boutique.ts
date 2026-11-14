@@ -14,7 +14,7 @@ import { buildAtelier59, editorialGarment } from './atelier59';
 import type { Tier } from '../../core/tier';
 
 export const ROOM = { x: 5.2, zFront: -1.4, zBack: -17.2, h: 4.2 };
-export const RAIL = { y: 2.28, x: 3.45, z0: -3.12, z1: -11.9 };
+export const RAIL = { y: 2.28, x: 3.45, z0: -4.25, z1: -12.7 };
 export const HERO_HANGER = new THREE.Vector3(RAIL.x, RAIL.y, -6.4);
 export const PODIUM = new THREE.Vector3(-1.82, 0.2, -12.15);
 export const FITTING = new THREE.Vector3(2.25, 0, -16.25);
