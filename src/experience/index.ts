@@ -31,7 +31,11 @@ export async function createWorld(opts: WorldOptions): Promise<World> {
     image.src='/brand/belle-alencar-logo.svg';
     setTimeout(finish, 1300);
   });
-  await Promise.all([fontReady,brandReady]);
+  // V57: fonts complete in the background. Starting the hero must not
+  // serialize 1.1s of font timeout and 1.3s of brand timeout.
+  // The logo is requested in the HTML head; allow a short cache-hit window.
+  void fontReady;
+  await Promise.race([brandReady,new Promise<void>(resolve=>setTimeout(resolve,180))]);
   return new World(opts);
 }
 
