@@ -326,7 +326,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
 
   // arcos de categoria no fundo
   const archPanels: THREE.MeshStandardMaterial[] = [];
-  const labels = ['VESTIDOS', 'CAMISAS', 'BOLSAS'];
+  // Two alcoves and a curtained fitting passage share the same rear wall.
   ARCHES.forEach((x, i) => {
     const fr = archFrame(2.0, 3.4, 0.14, 0.3, kit.travertine);
     fr.position.set(x, 0, zBack + 0.01);
@@ -336,13 +336,35 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     const panel = archPanel(2.0, 3.4, mat);
     panel.position.set(x, 0, zBack + 0.012);
     g.add(panel);
-    const label = plane(1.9, 0.3, new THREE.MeshStandardMaterial({ map: labelTexture(labels[i]!), transparent: true, alphaTest: 0.05, metalness: 0.8, roughness: 0.35 }));
-    label.position.set(x, 3.86, zBack + 0.05);
-    g.add(label);
+    // No decorative category labels: these arches are architectural, not clickable items.
+    void i;
     const plinth = box(1.3, 0.32, 0.7, kit.travertine, x, 0.16, zBack + 0.7);
     g.add(plinth);
     g.add(contact(kit, 1.9, 1.2, x, zBack + 0.7));
   });
+  // Full-height pleated curtain in the central rear opening, visible from
+  // the entrance. Cloth is three-dimensional and lit by the room itself.
+  const rearDrapeGeo=new THREE.PlaneGeometry(1.77,3.02,64,24);
+  const rearVerts=rearDrapeGeo.getAttribute('position') as THREE.BufferAttribute;
+  for(let i=0;i<rearVerts.count;i++){
+    const x=rearVerts.getX(i),y=rearVerts.getY(i);
+    const pleat=.085*Math.sin((x+.84)*39)+.024*Math.sin((x+.5)*91);
+    rearVerts.setZ(i,pleat*(.85+.15*(1-y/3.02)));
+    rearVerts.setX(i,x*(.94+Math.max(0,-y)*.02));
+  }
+  rearDrapeGeo.computeVertexNormals();
+  const rearDrape=new THREE.Mesh(rearDrapeGeo,new THREE.MeshStandardMaterial({
+    color:'#9b7c61',roughness:.91,metalness:0,side:THREE.DoubleSide
+  }));
+  rearDrape.name='rear-fitting-drapery';
+  rearDrape.position.set(ARCHES[2]!,1.64,zBack+.39);
+  rearDrape.castShadow=true;g.add(rearDrape);
+  g.add(box(1.82,.026,.026,kit.brass,ARCHES[2]!,3.19,zBack+.41));
+  // Soft vertical mirror at the left-center aperture: no extra render pass.
+  const rearMirror = new THREE.Mesh(new THREE.PlaneGeometry(1.13,2.55),
+    new THREE.MeshPhysicalMaterial({color:'#a3927b',roughness:.12,metalness:.94,envMapIntensity:1.35,side:THREE.DoubleSide}));
+  rearMirror.name='mirror-specular-fallback';
+  rearMirror.position.set(ARCHES[1]!,1.58,zBack+.36);g.add(rearMirror);
   // Photo displays retain their own visual identity on actual supports.
   // Low bag pedestal rather than misleading elevated decorative clothing.
   const archiveBag=supportedProduct(kit,'bolsas-01',.34,.42);
