@@ -17,6 +17,7 @@ import type { Director } from './shell/director';
 import type { World } from './experience/world';
 import type { ChapterId, Span } from './experience/story';
 import { initRoomRail } from './experience/rail-ui';
+import { initBellePOV } from './experience/pov/controls';
 
 const CHAPTERS: ChapterId[] = ['vitrine', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador'];
 const LABELED: ChapterId[] = ['vestido', 'detalhe', 'provador'];
@@ -27,6 +28,7 @@ interface FilmDebug {
   chapter: string;
   world: () => ReturnType<World['info']> | null;
   posterReady?: boolean;
+  setView?: (name:string|null)=>boolean;
 }
 
 declare global {
@@ -60,7 +62,11 @@ export function initFilm(director: Director): void {
   document.documentElement.dataset.tier = tier;
   const debug: FilmDebug = { tier, progress: 0, chapter: active, world: () => world?.info() ?? null };
   window.__belle = debug;
+  debug.setView=(name)=>world?.comparisonView(name)??false;
   const roomRail = initRoomRail(stage!, () => world);
+  const visitUI=initBellePOV(stage!,()=>world,visiting=>{
+    roomRail.setActive(active==='sala' && tier!=='static' && !visiting);
+  });
 
   // ---------- medição ----------
   const articles = CHAPTERS.map((id) => $(`[data-chapter="${id}"]`, film)).filter(Boolean) as HTMLElement[];
@@ -183,7 +189,8 @@ export function initFilm(director: Director): void {
     // A câmera continua no cômodo enquanto exploramos a arara física.
     const onRoomRail = id === 'sala' && !posterMode && tier !== 'static';
     stage!.classList.toggle('is-room-rail', onRoomRail);
-    roomRail.setActive(onRoomRail);
+    visitUI.setChapter(id);
+    roomRail.setActive(onRoomRail && !visitUI.isActive());
     world?.setRailEngaged(onRoomRail);
     if (!stage!.classList.contains('is-live')) showPoster(id);
     bus.emit('film:chapter', { id, index: CHAPTERS.indexOf(id) });
