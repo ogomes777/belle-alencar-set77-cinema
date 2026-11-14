@@ -119,7 +119,7 @@ export class World {
     this.scene.environmentIntensity = 0.5;
     pmrem.dispose();
 
-    const kit = createKit();
+    const kit = createKit(tier);
     this.mall = buildMall(kit, tier, this.dpr, !!opts.poster);
     this.facade = buildFacade(kit, tier);
     this.boutique = buildBoutique(kit, tier, this.dpr);
