@@ -46,7 +46,7 @@ if(section && dialog){
      },{rootMargin:'1200px 0px'})
    : null;
  if(proximity)proximity.observe(section);
- else nearStage=true;
+ else {nearStage=true;section.classList.add('v54-near');}
  function paintCity(index){
    index=clamp(index,0,cities.length-1);
    if(index===current)return;
