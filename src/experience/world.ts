@@ -300,6 +300,20 @@ export class World {
     return this.renderer.domElement.toDataURL('image/png');
   }
 
+  /** QA/vídeo offline: avança um passo fixo e desenha (loop em tempo real pausado). */
+  private offline = false;
+  renderFrame(dt: number): void {
+    if (!this.offline) {
+      this.offline = true;
+      if (this.raf) cancelAnimationFrame(this.raf);
+      this.raf = 0;
+    }
+    this.step(dt, false);
+    this.draw(dt);
+    this.frames++;
+  }
+  endOffline(): void { this.offline = false; this.kick(); }
+
   /** QA: o que o raio da câmera atinge num ponto NDC (diagnóstico de composição). */
   qaPick(x: number, y: number): { name: string; type: string; material: string; color: string; transparent: boolean; opacity: number; dist: number; point: number[] }[] {
     this.camera.updateMatrixWorld();
@@ -388,7 +402,7 @@ export class World {
   }
 
   private kick(): void {
-    if (this.failed || this.opts.poster) return;
+    if (this.failed || this.opts.poster || this.offline) return;
     if (this.raf || !this.visible || document.hidden) return;
     this.last = performance.now();
     this.raf = requestAnimationFrame(this.loop);

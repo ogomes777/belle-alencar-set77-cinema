@@ -32,6 +32,8 @@ interface FilmDebug {
   landmarks: () => ReturnType<World['landmarks']> | null;
   snapshot: () => string | null;
   qaPick: (x: number, y: number) => unknown;
+  renderFrame: (dt: number) => void;
+  endOffline: () => void;
   explore: { enter: () => boolean; exit: () => void; goTo: (id: string) => void; lookEntrance: () => void; look: (dx: number, dy: number) => void; active: () => boolean };
 }
 
@@ -70,6 +72,8 @@ export function initFilm(director: Director): void {
     landmarks: () => world?.landmarks() ?? null,
     snapshot: () => world?.snapshot() ?? null,
     qaPick: (x, y) => world?.qaPick(x, y) ?? null,
+    renderFrame: (dt) => world?.renderFrame(dt),
+    endOffline: () => world?.endOffline(),
     explore: {
       enter: () => { const ok = !!world?.enterExplore(); pov.refresh(); return ok; },
       exit: () => { pov.exitExplore(); },
