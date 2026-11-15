@@ -61,8 +61,8 @@ html:not([data-belle-theme="rose"]) #lojas.stores .section-head .display{
   -webkit-text-fill-color:transparent!important;
 }
 html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #lojas.stores{
-  background:linear-gradient(96deg,#fffaea 0%,#fff5d7 28%,#fae8ae 45%,
-    #edc96e 59%,#c38b30 71%,#7b5126 84%,#49301c 100%)!important;
+  background:linear-gradient(96deg,#fffdf9 0%,#fdfaf4 28%,#faf6ec 48%,
+    #f4ebdb 69%,#eadcc5 88%,#e7d8c1 100%)!important;
 }
 html:not([data-belle-theme="rose"]) #lojas.stores .store-card::before{
   background:linear-gradient(90deg,#be8009,#ffe17a)!important;
@@ -255,8 +255,8 @@ html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece:nth-child(4){
 /* V68 responsive finish: retain the chapter's vertical light journey on phones. */
 @media(max-width:959px){
   html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #lojas.stores{
-    background:linear-gradient(180deg,#fffbea 0%,#fff2ca 21%,#e6c064 38%,
-      #a4712c 54%,#d6b570 75%,#fff3d8 100%)!important;
+    background:linear-gradient(180deg,#fffdf9 0%,#fdfaf5 22%,#f9f5ec 43%,
+      #f5ecdd 65%,#f0e5d4 82%,#fcf9f2 100%)!important;
   }
   html[data-belle-theme="rose"] #lojas.stores{
     background:linear-gradient(180deg,#fff1fa 0%,#fbd7eb 24%,#eda9cf 52%,
