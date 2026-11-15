@@ -73,3 +73,50 @@ html[data-belle-theme='rose'] #belle-cidades.v54-cinema{--c-bg:#f9edf0;--c-ink:#
 #belle-cidades.v54-cinema.v54-near .v54-phone-core{animation-play-state:running}
 #belle-cidades.v54-cinema .v54-phone-shard{will-change:auto}
 #belle-cidades.v54-cinema.v54-near .v54-phone-shard{will-change:transform,opacity}
+
+
+/* V61 / THEATER: the client MP4 panes are a curved, living film.
+   Keep mounted nodes alive across arrows so ongoing loops never restart. */
+.v54-film-frame{background:
+ radial-gradient(ellipse 55% 65% at 50% 55%,rgba(112,74,54,.36),transparent 76%),
+ radial-gradient(ellipse 60% 78% at 50% 100%,rgba(157,97,42,.12),transparent 70%),#09080c}
+.v54-film-world{perspective:1450px;isolation:isolate}
+.v54-film-world::before{content:'';position:absolute;inset:10% 0 0;
+ background:linear-gradient(90deg,rgba(4,3,5,.83),transparent 19%,transparent 81%,rgba(4,3,5,.83)),
+ radial-gradient(ellipse 55% 20% at 50% 90%,rgba(206,153,96,.20),transparent 72%);
+ pointer-events:none;z-index:1}
+.v54-rotunda-mount{opacity:.24;filter:brightness(.62) saturate(.82);pointer-events:none}
+.v54-clip-deck{width:100%;max-width:1500px;position:relative;perspective:1350px;
+ transform-style:preserve-3d;padding:0;pointer-events:auto}
+.v54-clip{position:absolute;left:50%;top:50%;width:clamp(176px,18vw,270px);
+ height:min(65dvh,610px);max-height:calc(100% - 28px);padding:0;cursor:pointer;
+ border:1px solid rgba(247,215,176,.42);
+ display:block;transform-origin:center center;overflow:hidden;
+ transition:transform .78s cubic-bezier(.22,1,.36,1),filter .78s ease,
+ box-shadow .78s ease,opacity .4s ease;will-change:transform;
+ box-shadow:0 28px 90px rgba(0,0,0,.63),0 0 0 1px rgba(225,187,136,.08)}
+.v54-clip[data-offset='0']{transform:translate(-50%,-50%) translateZ(50px) scale(1.035);
+ filter:brightness(1.12);box-shadow:0 35px 100px rgba(0,0,0,.7),0 0 42px rgba(206,149,97,.25)}
+.v54-clip[data-offset='-1']{transform:translate(calc(-50% - clamp(165px,19vw,300px)),-48%) rotateY(16deg) scale(.91);filter:brightness(.81)}
+.v54-clip[data-offset='1']{transform:translate(calc(-50% + clamp(165px,19vw,300px)),-48%) rotateY(-16deg) scale(.91);filter:brightness(.81)}
+.v54-clip[data-offset='-2']{transform:translate(calc(-50% - clamp(325px,37vw,570px)),-46%) rotateY(23deg) scale(.79);filter:brightness(.60)}
+.v54-clip[data-offset='2']{transform:translate(calc(-50% + clamp(325px,37vw,570px)),-46%) rotateY(-23deg) scale(.79);filter:brightness(.60)}
+.v54-clip video{object-position:center center;pointer-events:none}
+.v54-clip-number{display:block;font-size:clamp(.57rem,.68vw,.72rem);letter-spacing:.09em}
+.v54-film-dialog[open] .v54-clip-deck{animation:v61-theater-reveal .88s cubic-bezier(.12,.9,.2,1) both}
+@keyframes v61-theater-reveal{from{opacity:0;transform:translateY(44px) scale(.93);filter:blur(12px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.v54-clip:focus-visible{outline:3px solid #f4d2a3;outline-offset:4px}
+@media(max-width:700px){
+ .v54-film-world{overflow:hidden}
+ .v54-clip{width:min(67vw,270px);height:min(62dvh,500px)}
+ .v54-clip[data-offset='0']{transform:translate(-50%,-50%) translateZ(28px) scale(1.02);filter:brightness(1.08)}
+ .v54-clip[data-offset='-1']{position:absolute;left:50%;right:auto;
+  transform:translate(calc(-50% - 62vw),-49%) rotateY(12deg) scale(.88);filter:brightness(.67);pointer-events:auto}
+ .v54-clip[data-offset='1']{position:absolute;left:50%;right:auto;
+  transform:translate(calc(-50% + 62vw),-49%) rotateY(-12deg) scale(.88);filter:brightness(.67);pointer-events:auto}
+ .v54-film-arrow--prev{left:4px}.v54-film-arrow--next{right:4px}
+}
+@media(prefers-reduced-motion:reduce){
+ .v54-film-dialog[open] .v54-clip-deck{animation:none}
+ .v54-clip{transition:none;will-change:auto}
+}
