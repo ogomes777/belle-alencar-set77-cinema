@@ -575,10 +575,11 @@ export class World {
   }
 
   private govern(dt: number): void {
-    if (this.opts.governor === false) return;
+    // Amostragem sempre ativa (também com ?gov=off), para medições p50/p95.
     this.frameAvg += (dt * 1000 - this.frameAvg) * 0.05;
     this.frameWindow.push(dt * 1000);
     if (this.frameWindow.length > 240) this.frameWindow.shift();
+    if (this.opts.governor === false) return;
     if (this.frameAvg > 24) this.slowFor += dt;
     else this.slowFor = Math.max(0, this.slowFor - dt * 0.5);
     if (this.slowFor > 2) {
