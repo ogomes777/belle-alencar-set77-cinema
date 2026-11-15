@@ -490,6 +490,7 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
         }
         const moving = new Map<string, MovingTexture>()
         let activeVideoCount = 0
+        let allVideoCount = 0
         const getMoving = (src: string, now: number): MovingTexture | undefined => {
             let entry = moving.get(src)
             if (entry) { entry.lastSeen = now; return entry }
@@ -858,7 +859,6 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
             gl.clearColor(0, 0, 0, 0)
             gl.clear(gl.COLOR_BUFFER_BIT)
 
-            activeVideoCount = 0
             for (let i = 0; i < n; i++) {
                 // The seam is at angle 0, behind the inward-facing camera.
                 // Each reused physical panel switches media at that seam,
@@ -872,19 +872,19 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
                 const videoSrc = list[sourceIndex]?.video ?? ""
                 if (src) ensure(src)
                 const poster = src ? cache.get(src) : undefined
-                // Camera faces -Z from INSIDE the cylinder. Allocate decoders only
-                // to nearby wall panels, including one at each edge to avoid pop.
+                // Camera faces -Z from INSIDE the cylinder. Every decoder
+                // is already playing; only GPU uploads for visible panels
+                // are required to protect frame-rate and prevent huge VRAM IO.
                 const mid = (i + .5) * itemArc + yaw
                 const aroundFront = Math.abs(wrapPi(mid - Math.PI))
-                // With all 47 approved preview slots in one ring, do not start
-                // 15-20 simultaneous decoders on mobile hardware. Keep every
-                // poster visible and activate only the nearest live video wall.
+                // Video playback has no visibility threshold.
+                // This sector limits visible texture uploads only; the
+                // others continue playing in their own HTMLVideoElements.
                 const maxLive = cssW < 720 ? 5 : 8
                 const sector = Math.min(cssW < 720 ? .87 : 1.26, Math.PI * maxLive / Math.max(1, n))
                 const active = aroundFront < sector
                 const movingHit = videoSrc && active ? getMoving(videoSrc, now) : undefined
                 const hasVideo = movingHit ? uploadMoving(movingHit, now) : false
-                if (movingHit && !movingHit.video.paused) activeVideoCount++
                 const hit = hasVideo && movingHit
                     ? { tex: movingHit.tex, aspect: movingHit.aspect }
                     : poster
@@ -905,14 +905,26 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
                 }
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertCount)
             }
-            for (const [src, entry] of moving) {
-                if (now - entry.lastSeen > 2200) releaseMoving(src, entry)
-            }
+            // Playback never pauses merely because its panel rotates behind
+            // the camera. Decoder ownership stays stable until unmount.
             if (Math.floor(now / 500) !== Math.floor((now - dt * 1000) / 500)) {
+                activeVideoCount = [...moving.values()].filter(v => !v.video.paused && !v.video.ended).length
+                const ready = [...moving.values()].filter(v => v.video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA).length
                 host.dataset.rotundaPlaying = String(activeVideoCount)
+                host.dataset.rotundaReadyVideos = String(ready)
                 host.dataset.rotundaTextures = String(moving.size)
             }
         }
+        // Begin EVERY unique MP4 immediately when this section mounts.
+        // No per-camera pause/stop/recreation: the renderer only uploads the
+        // GPU frames close to the lens. Off-camera videos continue advancing.
+        // This is intentionally user-selected, despite the decode/battery cost.
+        const initialSources = Array.from(new Set(
+            (live.current.images || []).map(item => item?.video).filter((src): src is string => !!src)
+        ))
+        allVideoCount = initialSources.length
+        for (const src of initialSources) getMoving(src, performance.now())
+        host.dataset.rotundaVideoTotal = String(allVideoCount)
         raf = requestAnimationFrame(frame)
 
         return () => {
