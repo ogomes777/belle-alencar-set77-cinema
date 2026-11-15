@@ -1,23 +1,19 @@
-/* BELLE V72 · SET77 LABS
- * Only the category ribbon between the boutique film and passarela.
- * Two identical sequences, one compositor-only translation, no JS. */
+/* BELLE V73 | SET77 Labs | continuous couture rail, full width, no fixed logo or indexes.
+   Only the manifesto ticker is styled. Existing themes and scroll effects stay untouched. */
 .manifesto--ticker .band.band--couture{
-  --band-ink:#46331b;
-  --band-secondary:#8e6b37;
-  --band-index:#916a2e;
-  --band-metal:#d59c26;
-  --band-metal-light:#ffe09a;
-  --band-spark:#b4873b;
-  --band-hairline:rgba(165,122,56,.30);
-  --band-glow:rgba(239,186,73,.12);
-  --band-bg-start:#fffbf3;
-  --band-bg-mid:#f1e5cd;
-  --band-bg-end:#faf2e1;
+  --band-ink:#51371d;
+  --band-metal:#bc872d;
+  --band-light:#ffe3a1;
+  --band-spark:#b68b45;
+  --band-hairline:rgba(164,116,52,.30);
+  --band-glow:rgba(238,182,63,.13);
+  --band-bg-start:#fffcf7;
+  --band-bg-mid:#f3e8d4;
+  --band-bg-end:#fbf5e8;
   box-sizing:border-box;
   position:relative;
   isolation:isolate;
-  display:flex;
-  align-items:stretch;
+  display:block;
   width:100%;
   height:clamp(65px,5.6vw,78px);
   margin:0!important;
@@ -26,21 +22,19 @@
   border-top:1px solid var(--band-hairline)!important;
   border-bottom:1px solid var(--band-hairline)!important;
   overflow:hidden;
-  background:linear-gradient(114deg,var(--band-bg-start) 0%,var(--band-bg-mid) 49%,var(--band-bg-end) 100%)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.62),inset 0 -1px 0 rgba(255,255,255,.28);
   text-align:left;
+  background:linear-gradient(114deg,var(--band-bg-start),var(--band-bg-mid) 49%,var(--band-bg-end))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.17);
 }
 .manifesto--ticker .band--couture::before{
   content:"";
   position:absolute;
-  z-index:3;
-  top:0;
-  left:0;
-  right:0;
+  z-index:2;
+  inset:0 0 auto;
   height:1px;
   pointer-events:none;
-  background:linear-gradient(90deg,transparent 0%,var(--band-metal) 24%,var(--band-metal-light) 52%,var(--band-metal) 78%,transparent 100%);
-  opacity:.78;
+  background:linear-gradient(90deg,transparent,var(--band-metal) 22%,var(--band-light) 50%,var(--band-metal) 78%,transparent);
+  opacity:.7;
 }
 .manifesto--ticker .band--couture::after{
   content:"";
@@ -48,199 +42,129 @@
   z-index:0;
   inset:0;
   pointer-events:none;
-  background:radial-gradient(ellipse 46% 155% at 15% 50%,var(--band-glow),transparent 78%);
-}
-.manifesto--ticker .band--couture .band__identity{
-  box-sizing:border-box;
-  position:relative;
-  z-index:2;
-  flex:0 0 clamp(158px,15vw,200px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:11px;
-  padding:0 18px;
-  border-right:1px solid var(--band-hairline);
-  background:linear-gradient(95deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
-  white-space:nowrap;
-}
-.manifesto--ticker .band--couture .band__identity::after{
-  content:"";
-  position:absolute;
-  right:-1px;
-  top:calc(50% - 11px);
-  height:22px;
-  width:2px;
-  border-radius:2px;
-  background:var(--band-metal);
-  box-shadow:0 0 10px var(--band-metal);
-  opacity:.82;
-}
-.manifesto--ticker .band--couture .band__monogram{
-  box-sizing:border-box;
-  flex:0 0 34px;
-  width:34px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border:1px solid var(--band-hairline);
-  border-radius:50%;
-  font:italic 500 22px/1 "Bodoni Moda Variable","Bodoni Moda",Georgia,serif;
-  color:var(--band-metal);
-  background:radial-gradient(circle at 26% 17%,rgba(255,255,255,.32),transparent 70%);
-  box-shadow:inset 0 0 0 3px rgba(255,255,255,.07),0 2px 12px var(--band-glow);
-}
-.manifesto--ticker .band--couture .band__identity-text{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:3px;
-  line-height:1;
-  color:var(--band-ink);
-}
-.manifesto--ticker .band--couture .band__identity-text strong{
-  font:760 10px/1.1 "Archivo",Arial,sans-serif;
-  letter-spacing:.23em;
-}
-.manifesto--ticker .band--couture .band__identity-text small{
-  font:500 8px/1.15 "Archivo",Arial,sans-serif;
-  letter-spacing:.24em;
-  color:var(--band-secondary);
+  background:radial-gradient(ellipse 46% 150% at 50% 50%,var(--band-glow),transparent 83%);
 }
 .manifesto--ticker .band--couture .band__viewport{
+  box-sizing:border-box;
   position:relative;
   z-index:1;
-  flex:1 1 0;
-  min-width:0;
+  display:block;
+  width:100%;
   height:100%;
-  display:flex;
-  align-items:center;
+  min-width:0;
   overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 2.5%,#000 97%,transparent 100%);
-  mask-image:linear-gradient(90deg,transparent 0%,#000 2.5%,#000 97%,transparent 100%);
+  -webkit-mask-image:none;
+  mask-image:none;
 }
 .manifesto--ticker .band--couture .band__track{
+  box-sizing:border-box;
   display:flex;
-  flex:0 0 auto;
-  width:max-content;
-  height:100%;
-  align-items:center;
+  flex-wrap:nowrap;
   gap:0;
-  animation:belleV72CoutureLoop 41s linear infinite;
+  align-items:center;
+  width:max-content;
+  min-width:0;
+  height:100%;
+  animation:belleV73CoutureLoop 53s linear infinite;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
 .manifesto--ticker .band--couture .band__sequence{
+  box-sizing:border-box;
   display:flex;
   flex:0 0 auto;
-  width:max-content;
-  height:100%;
-  align-items:center;
+  flex-wrap:nowrap;
   gap:0;
+  align-items:center;
+  justify-content:space-between;
+  width:max-content;
+  min-width:100vw;
+  height:100%;
 }
 .manifesto--ticker .band--couture .band__category{
   box-sizing:border-box;
   position:relative;
-  display:inline-flex;
   flex:0 0 auto;
-  height:100%;
+  display:inline-flex;
   align-items:center;
-  gap:10px;
-  padding:0 clamp(24px,2.3vw,41px);
+  justify-content:center;
+  gap:0;
+  height:100%;
+  padding:0 clamp(19px,1.6vw,30px);
   white-space:nowrap;
-  font:600 clamp(1.1rem,.92rem + .58vw,1.52rem)/1.1 "Bodoni Moda Variable","Bodoni Moda","Playfair Display",Georgia,serif;
-  letter-spacing:.018em;
+  font-family:"Bodoni Moda Variable","Bodoni Moda","Playfair Display",Georgia,serif!important;
+  font-weight:600!important;
+  font-style:normal;
+  font-size:clamp(1.13rem,.99rem + .57vw,1.56rem)!important;
+  line-height:1.14;
+  letter-spacing:.015em!important;
   color:var(--band-ink)!important;
-  text-shadow:0 1px 0 rgba(255,255,255,.11);
+  text-shadow:0 1px 0 rgba(255,255,255,.07);
+  padding-right:clamp(19px,1.6vw,30px)!important;
 }
 .manifesto--ticker .band--couture .band__category::before{
-  content:attr(data-rank);
-  transform:translateY(-.13em);
-  font:700 9px/1 "Archivo",Arial,sans-serif;
-  letter-spacing:.04em;
-  font-variant-numeric:tabular-nums;
-  color:var(--band-index)!important;
+  content:none!important;
+  display:none!important;
 }
 .manifesto--ticker .band--couture .band__category::after{
   content:"✦";
   position:absolute;
   top:50%;
   right:0;
-  transform:translate(50%,-48%);
+  transform:translate(50%,-50%);
   font:400 10px/1 Georgia,serif;
   color:var(--band-spark);
-  text-shadow:0 0 7px var(--band-glow);
-  opacity:.88;
+  opacity:.78;
+  pointer-events:none;
 }
 .manifesto--ticker .band--couture .band__category--signature{
-  font-style:italic;
-  font-weight:540;
-  letter-spacing:-.018em;
-  color:var(--band-metal)!important;
+  font-style:normal!important;
+  font-weight:600!important;
+  letter-spacing:.015em!important;
+  color:var(--band-ink)!important;
 }
-@keyframes belleV72CoutureLoop{
+@keyframes belleV73CoutureLoop{
   from{transform:translate3d(0,0,0)}
   to{transform:translate3d(-50%,0,0)}
 }
-/* ONYX | golden type and soft optic reflection, no beige slab. */
-html[data-belle-theme="dark"] .manifesto--ticker .band--couture{
-  --band-ink:#ffecbf;
-  --band-secondary:#efca83;
-  --band-index:#e6b85b;
-  --band-metal:#ffd66d;
-  --band-metal-light:#fff1ba;
-  --band-spark:#ffce5d;
-  --band-hairline:rgba(248,202,98,.36);
-  --band-glow:rgba(246,175,44,.19);
-  --band-bg-start:#161114;
-  --band-bg-mid:#2b211c;
-  --band-bg-end:#171316;
-  box-shadow:inset 0 1px 0 rgba(255,226,150,.12),inset 0 -1px 0 rgba(255,226,150,.07);
+/* Dark: near-black glass and warm metal, with the same category treatment. */
+html[data-belle-theme="dark"] .manifesto--ticker .band.band--couture{
+  --band-ink:#ffedc3;
+  --band-metal:#eebc58;
+  --band-light:#fff2bb;
+  --band-spark:#eac06b;
+  --band-hairline:rgba(246,200,104,.36);
+  --band-glow:rgba(245,174,40,.15);
+  --band-bg-start:#181416;
+  --band-bg-mid:#2c231f;
+  --band-bg-end:#181416;
+  box-shadow:inset 0 1px 0 rgba(255,227,161,.1),inset 0 -1px 0 rgba(255,220,153,.06);
 }
-html[data-belle-theme="dark"] .manifesto--ticker .band__identity{
-  background:linear-gradient(90deg,rgba(226,159,49,.08),rgba(255,220,136,.015));
-}
-/* ROSÉ | pink layered with pink. No gold / cream substitution. */
-html[data-belle-theme="rose"] .manifesto--ticker .band--couture{
-  --band-ink:#672344;
-  --band-secondary:#a13c75;
-  --band-index:#9d396f;
-  --band-metal:#cf408b;
-  --band-metal-light:#ffb0d7;
-  --band-spark:#d74d96;
-  --band-hairline:rgba(181,68,128,.29);
-  --band-glow:rgba(228,81,159,.17);
+/* Rosé: pink-on-pink; no gold typography. */
+html[data-belle-theme="rose"] .manifesto--ticker .band.band--couture{
+  --band-ink:#682948;
+  --band-metal:#c84c91;
+  --band-light:#ffb9dc;
+  --band-spark:#b93d7e;
+  --band-hairline:rgba(185,73,135,.31);
+  --band-glow:rgba(221,95,167,.13);
   --band-bg-start:#fff0f9;
-  --band-bg-mid:#f9cce7;
-  --band-bg-end:#f6dbe9;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.52),inset 0 -1px 0 rgba(255,255,255,.18);
+  --band-bg-mid:#f8cfe6;
+  --band-bg-end:#f8e0ed;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.46),inset 0 -1px 0 rgba(255,255,255,.16);
 }
-html[data-belle-theme="rose"] .manifesto--ticker .band__identity{
-  background:linear-gradient(90deg,rgba(249,113,185,.12),rgba(255,255,255,.035));
-}
-/* Touch layout: keep the seal readable without stealing the carousel width. */
+/* Phone: same uninterrupted band, no reserved identity column. */
 @media(max-width:680px){
-  .manifesto--ticker .band.band--couture{height:58px}
-  .manifesto--ticker .band--couture .band__identity{
-    flex-basis:58px;
-    gap:0;
-    padding:0 9px;
-  }
-  .manifesto--ticker .band--couture .band__identity-text{display:none}
-  .manifesto--ticker .band--couture .band__monogram{
-    flex-basis:30px;
-    width:30px;
-    height:30px;
-    font-size:20px;
-  }
+  .manifesto--ticker .band.band--couture{height:57px}
+  .manifesto--ticker .band--couture .band__track{animation-duration:50s}
   .manifesto--ticker .band--couture .band__category{
-    font-size:1.08rem;
-    gap:7px;
-    padding:0 23px;
+    padding-left:19px!important;
+    padding-right:19px!important;
+    font-size:1.07rem!important;
   }
-  .manifesto--ticker .band--couture .band__category::before{font-size:8px}
-  .manifesto--ticker .band--couture .band__track{animation-duration:38s}
+  .manifesto--ticker .band--couture .band__category::after{font-size:8px}
 }
+/* No forced movement for low-motion / essential modes. */
 @media(prefers-reduced-motion:reduce){
   .manifesto--ticker .band--couture .band__track{
     animation:none!important;
@@ -257,8 +181,4 @@ html[data-intensity="essential"] .manifesto--ticker .band--couture .band__track{
 html[data-intensity="essential"] .manifesto--ticker .band--couture .band__sequence:nth-child(2){display:none}
 @media(prefers-contrast:more){
   .manifesto--ticker .band--couture .band__category{text-shadow:none}
-  .manifesto--ticker .band--couture .band__viewport{
-    -webkit-mask-image:none;
-    mask-image:none;
-  }
 }
