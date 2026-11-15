@@ -107,7 +107,7 @@ export function initRunway(ctx: Ctx): () => void {
       root!.dataset.currentLook=currentLook.key;
     }
     if (index!==announced && Math.abs(p-target)<.01) {
-      announced=index; status.textContent=`Look ${15+index}. ${currentLook.name}, ${currentLook.styling}. Três peças disponíveis para visualizar individualmente.`;
+      announced=index; status.textContent=`Look ${15+index}. ${currentLook.name}, ${currentLook.styling}. Abra cada referência para ver os detalhes.`;
     }
   }
   function frame(now: number) {
