@@ -1,0 +1,433 @@
+/* BELLE V63 / SET77 · six quiet Instagram portals + one continuous cinema.
+   Follow the selected Belle palette without duplicating or inventing media. */
+#belle-cidades.v63-phones {
+  --v63-ink: #f3e8d9;
+  --v63-accent: #d0a778;
+  --v63-glow: rgba(205,151,103,.27);
+  --v63-edge: rgba(255,216,169,.24);
+  --v63-shift-x: 0px;
+  --v63-shift-y: 0px;
+  --v63-pitch: 0deg;
+  --v63-yaw: 0deg;
+  --v63-entrance-y: 0px;
+  --v63-entrance-z: 0px;
+  --v63-entrance-scale: 1;
+  --v63-reveal: 1;
+  position: relative;
+  min-height: 600svh;
+  height: 600svh;
+  background: radial-gradient(ellipse 55% 60% at 50% 43%, #332624 0%, #191416 68%, #0e0b0e 100%);
+  color: var(--v63-ink);
+  overflow: clip;
+  isolation: isolate;
+}
+html[data-belle-theme="light"] #belle-cidades.v63-phones {
+  --v63-ink: #644c3c;
+  --v63-accent: #ad835a;
+  --v63-glow: rgba(186,130,79,.22);
+  --v63-edge: rgba(136,89,53,.17);
+  background: radial-gradient(ellipse 60% 56% at 50% 43%, #fff8ef 0%, #f4ebdf 65%, #eee1d4 100%);
+}
+html[data-belle-theme="rose"] #belle-cidades.v63-phones {
+  --v63-ink: #7f5365;
+  --v63-accent: #bb7891;
+  --v63-glow: rgba(189,94,132,.19);
+  --v63-edge: rgba(146,74,108,.2);
+  background: radial-gradient(ellipse 60% 55% at 50% 43%, #fff8f9 0%, #f4e6e9 65%, #edd8dd 100%);
+}
+#belle-cidades.v63-phones .v54-sticky {
+  position: sticky;
+  inset-block-start: 0;
+  height: 100svh;
+  min-height: 0;
+  padding: clamp(56px,8vh,96px) 2vw clamp(38px,5vh,60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+#belle-cidades .v63-phone-atmosphere {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 34% 55% at 50% 47%, var(--v63-glow), transparent 76%),
+    radial-gradient(ellipse 65% 20% at 50% 94%, var(--v63-glow), transparent 82%);
+}
+#belle-cidades .v63-phone-atmosphere::before {
+  content: ""; position: absolute; inset: 8% 6%;
+  opacity: .4; pointer-events: none;
+  background: linear-gradient(90deg,transparent 0%, var(--v63-edge) 50%,transparent 100%);
+  mask-image: linear-gradient(to bottom,transparent 0%,black 50%,transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom,transparent 0%,black 50%,transparent 100%);
+}
+#belle-cidades .v63-phone-stage {
+  position: relative; z-index: 1;
+  width: min(1240px, 100%); height: min(79svh, 760px);
+  perspective: 1400px; perspective-origin: 50% 48%;
+  transform-style: preserve-3d; display: block;
+  touch-action: pan-y;
+}
+#belle-cidades .v63-phone-floor {
+  position: absolute; left: 50%; bottom: 3.2%; width: min(58%,560px); height: 80px;
+  transform: translateX(-50%) rotateX(70deg); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(ellipse at center, var(--v63-glow), transparent 67%);
+  border: 1px solid var(--v63-edge);
+  box-shadow: 0 0 75px 12px var(--v63-glow), 0 0 0 24px rgba(214,171,120,.015);
+}
+#belle-cidades .v63-phone-orbit {
+  position: absolute; pointer-events: none; left: 50%; top: 48%; z-index: 0;
+  width: min(76vw, 960px); aspect-ratio: 2.1;
+  border: 1px solid var(--v63-edge); border-radius: 50%;
+  opacity: .45;
+  transform: translate(-50%,-50%) rotate(-14deg) rotateX(72deg);
+  box-shadow: 0 0 32px -16px var(--v63-glow), inset 0 0 32px -18px var(--v63-glow);
+}
+#belle-cidades .v63-phone-orbit--two {
+  transform: translate(-50%,-50%) rotate(17deg) rotateX(77deg);
+  width: min(66vw,820px); opacity: .24;
+}
+#belle-cidades .v54-phone-hit.v63-phone-link {
+  display: block; position: absolute; inset: auto;
+  left: 50%; top: 49%; z-index: 5;
+  width: clamp(250px,32vw,485px); height: auto; max-width: 78vw; max-height: none;
+  aspect-ratio: 1536 / 2048;
+  border: none; padding: 0; margin: 0;
+  transform-style: preserve-3d;
+  opacity: var(--v63-reveal);
+  transform: translate(-50%,-50%)
+    translate3d(var(--v63-shift-x),var(--v63-shift-y),var(--v63-entrance-z))
+    translateY(var(--v63-entrance-y))
+    rotateY(var(--v63-yaw)) rotateX(var(--v63-pitch))
+    scale(var(--v63-entrance-scale));
+  transition: transform 210ms cubic-bezier(.22,.78,.27,1), opacity .2s linear, filter .22s ease;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 24px 38px rgba(8,5,8,.32)) drop-shadow(0 0 14px var(--v63-glow));
+}
+#belle-cidades .v54-phone-hit.v63-phone-link:hover {
+  filter: drop-shadow(0 36px 45px rgba(8,5,8,.32)) drop-shadow(0 0 25px var(--v63-glow));
+}
+#belle-cidades .v63-phone-link .v54-phone-core {
+  display: block; width: 100%; height: 100%; max-height: none; aspect-ratio: 1536 / 2048;
+  position: relative; transform-style: preserve-3d;
+  animation: v63-phone-breathe 6.5s cubic-bezier(.45,.05,.55,.95) infinite;
+  box-shadow: none; filter: none;
+}
+#belle-cidades .v63-phone-link .v54-phone-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; backface-visibility: hidden;
+  transform: translateZ(20px);
+}
+@keyframes v63-phone-breathe {
+  0%,100% {translate: 0 0}
+  50% {translate: 0 -10px}
+}
+#belle-cidades .v63-peek {
+  display: block; position: absolute; z-index: 2; top: 52%;
+  width: clamp(190px,25vw,355px); max-width: 32%;
+  aspect-ratio: 1536/2048;
+  opacity: .48; transform-style: preserve-3d; cursor: pointer;
+  transition: opacity .46s ease,filter .46s ease,transform .45s cubic-bezier(.21,.8,.23,1);
+  -webkit-tap-highlight-color: transparent;
+  filter: saturate(.62) blur(.45px) drop-shadow(0 22px 30px rgba(0,0,0,.24));
+}
+#belle-cidades .v63-peek img {
+  display: block; width: 100%; height: 100%; object-fit: contain;
+  transition: filter .4s ease;
+}
+#belle-cidades .v63-peek--left {
+  left: 13%; transform: translate(-20%,-51%) translateZ(-170px) rotateY(30deg) rotateZ(-7deg) scale(.87);
+}
+#belle-cidades .v63-peek--right {
+  right: 13%; transform: translate(20%,-51%) translateZ(-170px) rotateY(-30deg) rotateZ(7deg) scale(.87);
+}
+#belle-cidades .v63-peek:hover {
+  opacity: .78; filter: saturate(.94) drop-shadow(0 22px 32px var(--v63-glow));
+}
+#belle-cidades .v63-peek--left:hover {
+  transform: translate(-20%,-52%) translateZ(-100px) rotateY(18deg) rotateZ(-4deg) scale(.91);
+}
+#belle-cidades .v63-peek--right:hover {
+  transform: translate(20%,-52%) translateZ(-100px) rotateY(-18deg) rotateZ(4deg) scale(.91);
+}
+#belle-cidades .v63-phone-guide {
+  position: absolute; left: 20px; right: 20px; bottom: max(22px, 4vh);
+  z-index: 6; margin: 0; color: var(--v63-ink); text-align: center;
+  font: 500 clamp(.68rem,.82vw,.84rem)/1.5 "Archivo",Arial,sans-serif;
+  letter-spacing: .13em; opacity: .82;
+  text-transform: uppercase; pointer-events: none;
+}
+#belle-cidades .v63-phone-link:focus-visible,
+#belle-cidades .v63-peek:focus-visible {
+  outline: 2px solid var(--v63-accent); outline-offset: 7px;
+}
+.v63-sr-only {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+  clip: rect(0,0,0,0) !important; white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* One full preview chapter: the supplied red outlined lettering is a type
+   treatment, not a second poster block or a static substitute for the videos. */
+#belle-previews.v63-previews {
+  --v63-preview-stroke: rgba(255,241,230,.96);
+  --v63-preview-bg: #a70d1c;
+  --v63-preview-glass: rgba(255,232,229,.07);
+  --v63-preview-edge: rgba(255,235,225,.20);
+  --v63-preview-light: rgba(255,198,175,.27);
+  --v63-preview-ink: #fff3eb;
+  position: relative; overflow: hidden; isolation: isolate;
+  min-height: 100svh; padding: clamp(72px,9vh,112px) 0 clamp(42px,7vh,84px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--v63-preview-bg); color: var(--v63-preview-ink);
+  transition: background .55s ease;
+}
+html[data-belle-theme="dark"] #belle-previews.v63-previews {
+  --v63-preview-bg: #1a1017;
+  --v63-preview-stroke: rgba(250,227,216,.94);
+  --v63-preview-glass: rgba(194,112,109,.065);
+  --v63-preview-edge: rgba(235,183,169,.21);
+  --v63-preview-light: rgba(202,102,112,.23);
+  --v63-preview-ink: #f8e9de;
+}
+html[data-belle-theme="rose"] #belle-previews.v63-previews {
+  --v63-preview-bg: #98425c;
+  --v63-preview-stroke: rgba(255,241,237,.96);
+  --v63-preview-glass: rgba(255,231,236,.095);
+  --v63-preview-edge: rgba(255,221,228,.23);
+  --v63-preview-light: rgba(252,180,194,.24);
+  --v63-preview-ink: #fff2f1;
+}
+#belle-previews .v63-previews-atmosphere {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 55% at 50% 70%,var(--v63-preview-light),transparent 68%),
+    radial-gradient(ellipse 50% 25% at 50% 2%,rgba(255,255,255,.04),transparent 82%);
+}
+#belle-previews .v63-previews-heading {
+  position: relative; flex: 0 0 auto; z-index: 3;
+  width: min(1600px,96%); margin: 0 auto clamp(20px,3vh,36px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(10px,1.7vh,18px); overflow: visible;
+  perspective: 1000px;
+}
+#belle-previews .v63-previews-heading h2 {
+  --v63-title-x: 0;
+  --v63-title-y: 0;
+  display: block; margin: 0;
+  width: max-content; max-width: 100%;
+  text-align: center; white-space: nowrap;
+  color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: clamp(1px,.1vw,2px) var(--v63-preview-stroke);
+  font-family: "Archivo", "Arial Black", Impact, sans-serif;
+  font-weight: 900; font-style: normal;
+  font-size: clamp(50px,15.5vw,272px);
+  letter-spacing: -.066em; line-height: .83; text-transform: uppercase;
+  transform-style: preserve-3d;
+  transform: translate3d(0,55px,-35px) rotateX(9deg);
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: opacity .6s ease, clip-path 1.2s cubic-bezier(.14,.92,.18,1),
+    transform 1.1s cubic-bezier(.14,.9,.25,1);
+  will-change: transform; cursor: default;
+}
+#belle-previews.v63-in-view .v63-previews-heading h2 {
+  clip-path: inset(0 0 0 0);
+  opacity: 1; transform: translate3d(0,0,0) rotateX(0);
+}
+#belle-previews .v63-previews-rule {
+  display: block; width: 0; max-width: 93%; height: 1px;
+  background: linear-gradient(90deg,transparent,var(--v63-preview-stroke),transparent);
+  opacity: .66;
+  transition: width 1.25s cubic-bezier(.2,.84,.3,1) .18s;
+}
+#belle-previews.v63-in-view .v63-previews-rule {width: 90%}
+#belle-previews .v63-previews-rule--end{opacity:.38}
+#belle-previews .v63-previews-theater {
+  position: relative; z-index: 2;
+  width: min(100%,1800px); height: clamp(380px,57svh,690px);
+  border-top: 1px solid var(--v63-preview-edge);
+  border-bottom: 1px solid var(--v63-preview-edge);
+  overflow: hidden; isolation: isolate;
+  background: radial-gradient(ellipse 74% 85% at 50% 52%,var(--v63-preview-glass),transparent 85%);
+  transform: translateY(48px); opacity: .25;
+  transition: transform 1.05s cubic-bezier(.2,.8,.2,1) .14s,opacity .9s ease .14s;
+}
+#belle-previews.v63-in-view .v63-previews-theater {
+  transform: translateY(0); opacity: 1;
+}
+#belle-previews .v63-previews-glass {
+  position: absolute; inset: 2% 3%; pointer-events: none; z-index: 4;
+  border-radius: clamp(18px,3vw,46px);
+  border: 1px solid var(--v63-preview-edge);
+  background:
+    linear-gradient(118deg,rgba(255,255,255,.032),transparent 21%,transparent 72%,rgba(255,255,255,.012)),
+    repeating-linear-gradient(0deg,transparent 0 5px,rgba(255,255,255,.012) 5px 6px);
+  box-shadow: inset 0 0 65px -47px var(--v63-preview-light),0 20px 80px -45px var(--v63-preview-light);
+}
+#belle-previews .v63-previews-rotunda.v54-rotunda-mount {
+  display: block; position: absolute; inset: 0; z-index: 3;
+  overflow: hidden; opacity: 1; filter: none; pointer-events: auto;
+  background: transparent;
+  mask-image: linear-gradient(90deg,transparent 0%,black 6%,black 94%,transparent 100%);
+}
+#belle-previews .v63-previews-rotunda.v54-rotunda-mount::after {display: none}
+#belle-previews .v63-previews-rotunda > div {
+  min-width: 100% !important; min-height: 100% !important;
+  touch-action: pan-y !important;
+}
+#belle-previews .v63-previews-rotunda canvas {width: 100% !important;height: 100% !important;display: block}
+#belle-previews .v63-previews-arrow {
+  position: absolute; z-index: 6; top: 50%; translate: 0 -50%;
+  width: clamp(40px,4.2vw,58px); height: clamp(40px,4.2vw,58px);
+  border: 1px solid var(--v63-preview-edge); border-radius: 50%;
+  background: rgba(12,7,12,.18); color: var(--v63-preview-ink);
+  backdrop-filter: blur(13px); -webkit-backdrop-filter: blur(13px);
+  cursor: pointer; font-size: clamp(1.5rem,2.5vw,2.3rem); line-height: 1;
+  display: grid; place-items: center;
+  transition: background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+#belle-previews .v63-previews-arrow:hover {
+  background: var(--v63-preview-glass); transform: scale(1.06);
+  box-shadow: 0 0 22px var(--v63-preview-light);
+}
+#belle-previews .v63-previews-arrow:focus-visible {outline: 2px solid white;outline-offset:3px}
+#belle-previews .v63-previews-arrow--prev {left: clamp(8px,2.7vw,48px)}
+#belle-previews .v63-previews-arrow--next {right: clamp(8px,2.7vw,48px)}
+#belle-previews .v63-previews-hint {
+  position: absolute; z-index: 5; bottom: clamp(10px,2vh,28px);
+  left: 50%; translate: -50% 0; white-space: nowrap;
+  color: var(--v63-preview-ink); opacity: .8; pointer-events: none;
+  font: 600 clamp(.56rem,.7vw,.72rem)/1.3 "Archivo",Arial,sans-serif;
+  letter-spacing: .21em;
+}
+
+/* Mobile: one clean protagonist, no squashed side phones; large readable type. */
+@media(max-width:750px) {
+  #belle-cidades.v63-phones {min-height: 610svh; height: 610svh}
+  #belle-cidades.v63-phones .v54-sticky {padding: max(54px,8vh) 9px max(46px,7vh)}
+  #belle-cidades .v63-phone-stage {height: min(74svh,700px);width: 100%}
+  #belle-cidades .v54-phone-hit.v63-phone-link {
+    width: min(78vw,390px);max-width: none;top: 49%;
+  }
+  #belle-cidades .v63-peek {opacity: .17;pointer-events: none;width: 33%}
+  #belle-cidades .v63-peek--left {left: -8%}
+  #belle-cidades .v63-peek--right {right: -8%}
+  #belle-cidades .v63-phone-orbit {width: 112vw}
+  #belle-cidades .v63-phone-floor {width: 85%}
+  #belle-cidades .v63-phone-guide {font-size: .68rem;letter-spacing: .075em;bottom: max(22px,5vh)}
+  #belle-previews.v63-previews {padding-top: clamp(62px,9vh,100px);padding-bottom: clamp(36px,5vh,64px)}
+  #belle-previews .v63-previews-heading {
+    width: 99%;margin-bottom: 26px;gap: 14px;
+  }
+  #belle-previews .v63-previews-heading h2 {
+    font-size: clamp(47px,15.7vw,120px);letter-spacing: -.083em;
+    -webkit-text-stroke: 1.2px var(--v63-preview-stroke);
+  }
+  #belle-previews .v63-previews-theater {height: min(64svh,630px);min-height: 420px}
+  #belle-previews .v63-previews-glass {inset: 1.5% 2%}
+  #belle-previews .v63-previews-hint {bottom: 13px;letter-spacing: .12em;font-size: .58rem}
+  #belle-previews .v63-previews-arrow {width: 40px;height: 40px}
+}
+@media(max-height:570px) and (min-width:751px) {
+  #belle-cidades .v63-phone-stage {height: 66svh}
+  #belle-cidades .v54-phone-hit.v63-phone-link {width: min(24vw,350px)}
+  #belle-previews .v63-previews-theater {height: 71svh}
+  #belle-previews .v63-previews-heading h2 {font-size: 11vw}
+}
+@media(prefers-reduced-motion:reduce) {
+  #belle-cidades .v54-phone-hit.v63-phone-link,
+  #belle-cidades .v63-peek,
+  #belle-cidades .v63-phone-link .v54-phone-core,
+  #belle-previews .v63-previews-heading h2,
+  #belle-previews .v63-previews-theater,
+  #belle-previews .v63-previews-rule {
+    animation: none !important;transition: none !important;
+  }
+  #belle-cidades .v54-phone-hit.v63-phone-link {opacity:1;transform:translate(-50%,-50%)}
+  #belle-previews .v63-previews-heading h2 {opacity:1;clip-path:none;transform:none}
+  #belle-previews .v63-previews-rule {width:90%}
+  #belle-previews .v63-previews-theater {opacity:1;transform:none}
+}
+
+
+/* React quickly to the visitor's cursor after the introductory reveal. */
+#belle-previews .v63-previews-heading h2:hover {
+ transition: transform .20s ease-out, opacity .6s ease, clip-path 1.2s cubic-bezier(.14,.92,.18,1);
+}
+
+/* V63 CINEMA LENS / SET77 · elegant film-optics for the selected Belle theme.
+   The former saturated red poster is replaced with an immersive glass set. */
+#belle-previews.v63-previews{
+ --v63-preview-bg:#e9dfd4;
+ --v63-preview-stroke:rgba(112,78,61,.92);
+ --v63-preview-glass:rgba(255,249,239,.29);
+ --v63-preview-edge:rgba(127,94,68,.20);
+ --v63-preview-light:rgba(180,132,90,.24);
+ --v63-preview-ink:#694c3c;
+ --v63-lens-edge:rgba(55,36,30,.12);
+ --v63-lens-reflection:rgba(255,255,255,.23);
+ background:
+   radial-gradient(ellipse 64% 75% at 51% 44%,rgba(255,252,247,.81),transparent 83%),
+   radial-gradient(ellipse 80% 43% at 50% 96%,rgba(192,149,105,.31),transparent 76%),
+   linear-gradient(132deg,#e9dfd4 0%,#f7efe5 48%,#ddccbc 100%);
+ transition:background .55s ease,color .55s ease;
+}
+html[data-belle-theme="dark"] #belle-previews.v63-previews{
+ --v63-preview-bg:#141115;
+ --v63-preview-stroke:rgba(246,224,208,.96);
+ --v63-preview-glass:rgba(143,110,105,.10);
+ --v63-preview-edge:rgba(220,182,158,.25);
+ --v63-preview-light:rgba(197,139,108,.22);
+ --v63-preview-ink:#f1e3d7;
+ --v63-lens-edge:rgba(2,1,3,.40);
+ --v63-lens-reflection:rgba(255,222,194,.075);
+ background:
+   radial-gradient(ellipse 70% 80% at 50% 43%,rgba(91,63,62,.37),transparent 76%),
+   radial-gradient(ellipse 85% 32% at 50% 100%,rgba(181,122,93,.21),transparent 73%),
+   linear-gradient(138deg,#0e0d11,#241c23 48%,#120e12);
+}
+html[data-belle-theme="rose"] #belle-previews.v63-previews{
+ --v63-preview-bg:#e8d4de;
+ --v63-preview-stroke:rgba(132,73,97,.92);
+ --v63-preview-glass:rgba(255,244,249,.30);
+ --v63-preview-edge:rgba(160,92,121,.22);
+ --v63-preview-light:rgba(208,140,173,.22);
+ --v63-preview-ink:#774b62;
+ --v63-lens-edge:rgba(72,30,47,.11);
+ --v63-lens-reflection:rgba(255,255,255,.28);
+ background:
+   radial-gradient(ellipse 62% 76% at 52% 44%,rgba(255,246,249,.80),transparent 80%),
+   radial-gradient(ellipse 90% 36% at 50% 100%,rgba(210,139,169,.28),transparent 73%),
+   linear-gradient(130deg,#e2cbd6,#f7e9ef 48%,#e0c0ce);
+}
+#belle-previews.v63-previews::before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:
+   repeating-linear-gradient(0deg,transparent 0 3px,rgba(48,30,22,.013) 4px 5px),
+   linear-gradient(90deg,var(--v63-lens-edge),transparent 13%,transparent 87%,var(--v63-lens-edge));
+}
+#belle-previews.v63-previews::after{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse 66% 85% at 50% 46%,transparent 56%,var(--v63-lens-edge) 110%);
+}
+#belle-previews .v63-previews-atmosphere{
+ background:
+   radial-gradient(ellipse 50% 25% at 52% 13%,var(--v63-lens-reflection),transparent 73%),
+   radial-gradient(ellipse 76% 49% at 50% 76%,var(--v63-preview-light),transparent 82%);
+}
+#belle-previews .v63-previews-theater{
+ border-color:var(--v63-preview-edge);
+ background:
+   radial-gradient(ellipse 76% 100% at 50% 48%,var(--v63-preview-glass),transparent 86%),
+   linear-gradient(90deg,var(--v63-lens-edge),transparent 12%,transparent 88%,var(--v63-lens-edge));
+ box-shadow:inset 0 0 115px -65px var(--v63-preview-light),0 32px 96px -82px var(--v63-preview-ink);
+}
+#belle-previews .v63-previews-glass{
+ border:1px solid var(--v63-preview-edge);
+ background:linear-gradient(116deg,var(--v63-lens-reflection),transparent 16%,transparent 84%,var(--v63-lens-reflection));
+ box-shadow:inset 0 0 52px -38px var(--v63-preview-light);
+}
+#belle-previews .v63-previews-arrow{
+ background:var(--v63-preview-glass);border-color:var(--v63-preview-edge);color:var(--v63-preview-ink);
+}
+#belle-previews .v63-previews-hint{color:var(--v63-preview-ink)}

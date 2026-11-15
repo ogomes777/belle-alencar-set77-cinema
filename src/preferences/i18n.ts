@@ -4,10 +4,11 @@
  */
 import { phrasePairs } from './copy';
 import { productPairs } from './catalog-copy';
+import { additionalPairs } from './extended-copy';
 export type BelleLocale='pt'|'en'|'es'|'it';
 const languages: BelleLocale[]=['pt','en','es','it'];
 const dictionary:Record<'en'|'es'|'it',Record<string,string>>={en:{},es:{},it:{}};
-for(const [pt,en,es,it] of [...phrasePairs,...productPairs]){
+for(const [pt,en,es,it] of [...phrasePairs,...productPairs,...additionalPairs]){
  dictionary.en[pt.trim()]=en;dictionary.es[pt.trim()]=es;dictionary.it[pt.trim()]=it;
 }
 const storeKey='belle:v31:locale';
@@ -19,7 +20,7 @@ let locale:BelleLocale=readLocale();
 type Original={base:string;last:string};
 const textOrigins=new WeakMap<Text,Original>();
 const attrOrigins=new WeakMap<Element,Map<string,Original>>();
-const skip='[data-i18n-skip],script,style,noscript,textarea,svg,canvas,code,pre,[contenteditable="true"]';
+const skip='[data-i18n-skip],.cn-letters,script,style,noscript,textarea,svg,canvas,code,pre,[contenteditable="true"]';
 const attributes=['aria-label','title','alt','placeholder'] as const;
 let observer:MutationObserver|null=null;
 const pending=new Set<Node>();
@@ -36,6 +37,63 @@ const words:Record<Exclude<BelleLocale,'pt'>,Record<string,string>>={
 function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
  const w=words[to];
  const number=source.match(/^(\d+)\s+(peças?|itens)\s+(.+)$/i);
+ const result=source.match(/^(\d+)\s+(resultado|resultados)$/);
+ if(result)return result[1]!+' '+translate(result[2]!,to);
+ const runway=source.match(/^Look (\d+)\. (.+?), (.+?)\. Três peças disponíveis para visualizar individualmente\.$/);
+ if(runway)return 'Look '+runway[1]!+'. '+translate(runway[2]!,to)+', '+translate(runway[3]!,to)+'. '+translate('Três peças disponíveis para visualizar individualmente.',to);
+ const position=source.match(/^Ocasião (\d+) de (\d+): (.+)$/);
+ if(position)return ({en:'Occasion ',es:'Ocasión ',it:'Occasione '}[to])+position[1]!+({en:' of ',es:' de ',it:' di '}[to])+position[2]!+': '+translate(position[3]!,to);
+ const pieces=source.match(/^Conjunto (.+?), peça (\d+) de (\d+): (.+)$/);
+ if(pieces)return ({en:'Outfit ',es:'Conjunto ',it:'Completo '}[to])+translate(pieces[1]!,to)+({en:', item ',es:', prenda ',it:', capo '}[to])+pieces[2]!+({en:' of ',es:' de ',it:' di '}[to])+pieces[3]!+': '+translate(pieces[4]!,to);
+ const available=source.match(/^Disponibilidade: consultar a loja de (.+)$/);
+ if(available)return ({en:'Availability: ask the store in ',es:'Disponibilidad: consultar con la tienda de ',it:'Disponibilità: chiedi al negozio di '}[to])+available[1]!;
+ const emptyBag=source.match(/^Sua sacola de (.+?) está vazia\.$/);
+ if(emptyBag)return ({en:'Your ',es:'Tu bolsa de ',it:'La tua borsa di '}[to])+emptyBag[1]!+({en:' bag is empty.',es:' está vacía.',it:' è vuota.'}[to]);
+ const sendBelle=source.match(/^Enviar para a Belle (.+)$/);
+ if(sendBelle)return ({en:'Send to Belle ',es:'Enviar a Belle ',it:'Invia a Belle '}[to])+sendBelle[1]!;
+ const openCity=source.match(/^Abrir (Araxá|Frutal|Catalão|Mineiros)$/);
+ if(openCity)return translate('Abrir',to)+' '+openCity[1]!;
+ const askStore=source.match(/^Cada loja tem o próprio estoque\. Como você quer seguir em (.+)\?$/);
+ if(askStore)return ({en:'Every store has its own stock. How would you like to continue in ',es:'Cada tienda tiene su propio inventario. ¿Cómo quieres seguir en ',it:'Ogni negozio ha il proprio assortimento. Come vuoi continuare a '}[to])+askStore[1]!+'?';
+ const availRecheck=source.match(/^A disponibilidade é consultada de novo em (.+)\. Nada é removido sem você ver\.$/);
+ if(availRecheck)return ({en:'Availability will be checked again in ',es:'La disponibilidad se consultará de nuevo en ',it:'La disponibilità verrà verificata di nuovo a '}[to])+availRecheck[1]!+({en:'. Nothing is removed without your approval.',es:'. No se elimina nada sin tu aprobación.',it:'. Nulla viene rimosso senza la tua approvazione.'}[to]);
+ const by=source.match(/^(Quantidade de|Diminuir quantidade de|Aumentar quantidade de|Escolher tamanho de|Remover) (.+?)( da sacola| dos favoritos)?$/);
+ if(by){
+  const translated={
+   en:{'Quantidade de':'Quantity of','Diminuir quantidade de':'Decrease quantity of','Aumentar quantidade de':'Increase quantity of','Escolher tamanho de':'Choose size for','Remover':'Remove'},
+   es:{'Quantidade de':'Cantidad de','Diminuir quantidade de':'Reducir cantidad de','Aumentar quantidade de':'Aumentar cantidad de','Escolher tamanho de':'Elegir talla para','Remover':'Eliminar'},
+   it:{'Quantidade de':'Quantità di','Diminuir quantidade de':'Riduci quantità di','Aumentar quantidade de':'Aumenta quantità di','Escolher tamanho de':'Scegli la taglia per','Remover':'Rimuovi'}
+  }[to];
+  const suffix=by[3] === ' da sacola'?({en:' from bag',es:' de la bolsa',it:' dalla borsa'}[to]):by[3] === ' dos favoritos'?({en:' from favorites',es:' de favoritos',it:' dai preferiti'}[to]):'';
+  return translated[by[1]! as keyof typeof translated]+' '+translate(by[2]!,to)+suffix;
+ }
+ const moved=source.match(/^Levar as peças para (.+)$/);
+ if(moved)return translate('Levar as peças para',to)+' '+moved[1]!;
+ const kept=source.match(/^Manter a sacola de (.+) e começar outra$/);
+ if(kept)return translate('Manter a sacola de',to)+' '+kept[1]+' '+translate('e começar outra',to);
+ const continueCity=source.match(/^Continuar em (.+)$/);
+ if(continueCity)return translate('Continuar em',to)+' '+continueCity[1]!;
+ const otherBags=source.match(/^Você também tem peças salvas na sacola de (.+)\.$/);
+ if(otherBags)return translate('Você também tem peças salvas na sacola de',to)+' '+otherBags[1]+'.';
+ const bagHeading=source.match(/^Sua sacola de (.+)$/);
+ if(bagHeading)return ({en:'Your bag for ',es:'Tu bolsa de ',it:'La tua borsa di '}[to])+bagHeading[1]!;
+ const bagCount=source.match(/^tem (\d+) (peça|peças)\.$/);
+ if(bagCount)return ({en:'has ',es:'tiene ',it:'contiene '}[to])+bagCount[1]+' '+translate(bagCount[2]!,to)+'.';
+ const inBag=source.match(/^(.+) \((.+)\) está na sacola de (.+)\.$/);
+ if(inBag)return translate(inBag[1]!,to)+' ('+translate(inBag[2]!,to)+') '+({en:'is in your ',es:'está en tu bolsa de ',it:'è nella tua borsa di '}[to])+inBag[3]+({en:' bag.',es:'.',it:'.'}[to]);
+ const itemBag=source.match(/^(.+), tamanho (.+), (adicionado à sacola|está na sacola de (.+))\.$/);
+ if(itemBag){
+  const intro=translate(itemBag[1]!,to)+', '+translate('Tamanho',to).toLowerCase()+' '+translate(itemBag[2]!,to);
+  return itemBag[3]==='adicionado à sacola'?
+    intro+({en:', added to bag.',es:', añadido a la bolsa.',it:', aggiunto alla borsa.'}[to]):
+    intro+({en:', in the ',es:', en la bolsa de ',it:', nella borsa di '}[to])+itemBag[4]+({en:' bag.',es:'.',it:'.'}[to]);
+ }
+ const unique=source.match(/^Tamanho (PP|P|M|G|GG|Único)$/);
+ if(unique)return translate('Tamanho',to)+' '+translate(unique[1]!,to);
+ const seeDemo=source.match(/^Ver (.+), produto demonstrativo$/);
+ if(seeDemo)return translate('Ver',to)+' '+translate(seeDemo[1]!,to)+', '+translate('produto demonstrativo',to);
+ const favorites=source.match(/^(.+) e (.+), composição demonstrativa$/);
+ if(favorites)return translate(favorites[1]!,to)+' '+({en:'and',es:'y',it:'e'}[to])+' '+translate(favorites[2]!,to)+', '+translate('composição demonstrativa',to);
  if(number){
   const noun=number[1]==='1'?'peça':'peças';
   const tail=number[3]!;
@@ -60,7 +118,13 @@ function translate(text:string,to:Exclude<BelleLocale,'pt'>):string{
  // Composite labels are assembled from translated category, occasion and
  // live stock values without reconstructing checkout or product state.
  if(text.includes(' · '))return text.split(' · ').map(part=>translate(part,to)).join(' · ');
+ if(text.includes(' + '))return text.split(' + ').map(part=>translate(part,to)).join(' + ');
+ if(text.includes(' — '))return text.split(' — ').map(part=>translate(part,to)).join(' — ');
  return text;
+}
+/** Shared translator for letter-animated navigation and programmatic interactions. */
+export function translateBelleText(text:string,to:BelleLocale=locale):string {
+ return to==='pt'?text:translate(text,to);
 }
 function translateText(node:Text){
  const parent=node.parentElement;
@@ -72,13 +136,13 @@ function translateText(node:Text){
  const lead=state.base.match(/^\s*/)?.[0]??'';
  const trail=state.base.match(/\s*$/)?.[0]??'';
  const src=state.base.trim();
- const result=locale==='pt'?src:translate(src,locale);
+ const result=translateBelleText(src,locale);
  const next=lead+result+trail;
  state.last=next;
  if(next!==now)node.data=next;
 }
 function translateAttributes(el:Element){
- if(el.matches(skip)||el.closest('[data-i18n-skip]'))return;
+ if(el.matches(skip)||el.closest('[data-i18n-skip],.cn-letters'))return;
  let map=attrOrigins.get(el);
  if(!map){map=new Map();attrOrigins.set(el,map);}
  for(const attr of attributes){
@@ -86,7 +150,7 @@ function translateAttributes(el:Element){
   if(now===null||!now.trim())continue;
   let state=map.get(attr);
   if(!state||now!==state.last&&now!==state.base){state={base:now,last:now};map.set(attr,state);}
-  const next=locale==='pt'?state.base:translate(state.base,locale);
+  const next=translateBelleText(state.base,locale);
   state.last=next;
   if(next!==now)el.setAttribute(attr,next);
  }
@@ -127,12 +191,29 @@ function watch(){
  });
 }
 export function getBelleLocale():BelleLocale{return locale;}
+function refreshMetadata(next:BelleLocale){
+ const descriptions:Record<BelleLocale,string>={
+  pt:'Belle Alencar, moda feminina e acessórios em Araxá, Frutal, Catalão, Mineiros, Ibiá e Franca. Entre na loja, conheça a coleção e fale com a unidade da sua cidade.',
+  en:'Belle Alencar, womenswear and accessories in Araxá, Frutal, Catalão, Mineiros, Ibiá and Franca. Explore the boutique, shop the collection and contact your nearest store.',
+  es:'Belle Alencar, moda femenina y accesorios en Araxá, Frutal, Catalão, Mineiros, Ibiá y Franca. Descubre la boutique, explora la colección y contacta con tu tienda.',
+  it:'Belle Alencar, moda donna e accessori ad Araxá, Frutal, Catalão, Mineiros, Ibiá e Franca. Esplora la boutique, scopri la collezione e contatta il negozio.'
+ };
+ const description=document.querySelector<HTMLMetaElement>('meta[name="description"]');
+ if(description)description.content=descriptions[next];
+ const og=document.querySelector<HTMLMetaElement>('meta[property="og:description"]');
+ if(og)og.content=translateBelleText('O look começa aqui. O resto é seu.',next);
+ const ogTitle=document.querySelector<HTMLMetaElement>('meta[property="og:title"]');
+ if(ogTitle)ogTitle.content=titles[next];
+ const ogLocale=document.querySelector<HTMLMetaElement>('meta[property="og:locale"]');
+ if(ogLocale)ogLocale.content={pt:'pt_BR',en:'en_US',es:'es_ES',it:'it_IT'}[next];
+}
 export function setBelleLocale(next:BelleLocale){
  if(!languages.includes(next))return;
  locale=next;
  document.documentElement.lang=next==='pt'?'pt-BR':next;
  document.documentElement.dataset.belleLocale=next;
  document.title=titles[next];
+ refreshMetadata(next);
  try{localStorage.setItem(storeKey,next);}catch{}
  observer?.disconnect();pending.clear();
  translateTree(document.body);
@@ -144,6 +225,7 @@ export function initBelleI18n(){
  document.documentElement.lang=locale==='pt'?'pt-BR':locale;
  document.documentElement.dataset.belleLocale=locale;
  document.title=titles[locale];
+ refreshMetadata(locale);
  if(locale!=='pt')translateTree(document.body);
  watch();
 }

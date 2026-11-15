@@ -1,0 +1,41 @@
+name: Belle V48 | Prismatic Search Reveal
+on:
+  push:
+    branches:
+      - feat/belle-v48-search-reveal-prismatic-glass
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  prismatic-search-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Unit regression suite
+        run: npm test
+      - name: Strict production build
+        run: npm run build
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: Validate reveal, flowing type gradient, glass input and reduced motion
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v48.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/belle-v48-prismatic-search.mjs
+      - name: Validate existing editorial search interactions
+        run: node tests/e2e/belle-v47-liquid-glass-search.mjs

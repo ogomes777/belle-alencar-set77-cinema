@@ -1,0 +1,101 @@
+/* BELLE ALENCAR V52 · INK CONTRAST / FILM CAPTION READABILITY
+ * Surgical changes only. No new scroll handlers, animation layers,
+ * card geometry, theme surfaces, or changes to the 3D/video renderer.
+ */
+
+/* The how-to-shop film stays a BRIGHT filmed scene even in Nocturne:
+ * the inherited dark-theme ivory was being rendered on pale sky and
+ * champagne. Its typography MUST follow the actual scene luminance,
+ * rather than the application palette.
+ */
+body #como-comprar.how--couture .how__intro {
+  --how-readable-title:#30231d;
+  --how-readable-copy:#49372c;
+  --how-readable-label:#654421;
+  color:var(--how-readable-title)!important;
+}
+body #como-comprar.how--couture .how__intro .display {
+  color:var(--how-readable-title)!important;
+  -webkit-text-fill-color:var(--how-readable-title)!important;
+  text-shadow:0 1px 16px rgba(255,248,231,.43)!important;
+}
+body #como-comprar.how--couture .how__intro .eyebrow {
+  color:var(--how-readable-label)!important;
+  -webkit-text-fill-color:var(--how-readable-label)!important;
+}
+body #como-comprar.how--couture .how__intro .lede {
+  color:var(--how-readable-copy)!important;
+  -webkit-text-fill-color:var(--how-readable-copy)!important;
+  text-shadow:0 1px 9px rgba(255,249,236,.34);
+}
+/* The V51 gradient was too pale with dark-theme tokens. Inside this one
+ * filmed, light surface use restrained solid cognac for the calligraphy. */
+body #como-comprar.how--couture .how__intro .display em {
+  background:none!important;
+  background-image:none!important;
+  color:#75502b!important;
+  -webkit-text-fill-color:#75502b!important;
+  text-shadow:0 1px 12px rgba(255,247,225,.32)!important;
+}
+/* Prevent theme-specific cascade regressions when switching palettes while
+ * the filmed section is sticky and in view. */
+html[data-belle-theme='dark'] body #como-comprar.how--couture .how__intro,
+html[data-belle-theme='rose'] body #como-comprar.how--couture .how__intro {
+  color:#30231d!important;
+}
+
+/* Captions should stay small, but never microscopic. The glass boxes retain
+ * the V50 284px mobile width and 33/37/40svh height limits, with their native
+ * inner overflow preserved for longer user-facing descriptions. */
+html #filme .film__chapters .chapter__card .lede {
+  font-size:clamp(.93rem,1.03vw,1.04rem);
+  line-height:1.48;
+}
+html #filme .film__chapters .chapter__card .eyebrow,
+html #filme .film__chapters .chapter__card legend {
+  font-size:clamp(.75rem,.80vw,.84rem);
+  line-height:1.45;
+  letter-spacing:.09em;
+}
+html #filme .film__chapters .chapter__card .fineprint,
+html #filme .film__chapters .chapter__card .fitting__hint {
+  font-size:clamp(.73rem,.78vw,.82rem);
+  line-height:1.42;
+}
+html #filme .film__chapters .chapter__card .btn {
+  font-size:clamp(.81rem,.86vw,.91rem);
+  letter-spacing:.01em;
+}
+html #filme .chapter__card .scroll-cue {font-size:.75rem;}
+
+@media(max-width:899px) {
+  html #filme .film__chapters .chapter__card .lede {
+    font-size:clamp(.875rem,3.75vw,.98rem);
+    line-height:1.43;
+    margin-top:7px;
+  }
+  html #filme .film__chapters .chapter__card .eyebrow,
+  html #filme .film__chapters .chapter__card legend {
+    font-size:clamp(.75rem,3.05vw,.84rem);
+    line-height:1.4;
+    letter-spacing:.06em;
+  }
+  html #filme .film__chapters .chapter__card .btn {
+    font-size:clamp(.79rem,3.08vw,.87rem);
+    min-height:44px;
+    line-height:1.2;
+    padding-inline:8px;
+    white-space:normal;
+    text-wrap:balance;
+  }
+  html #filme .film__chapters .chapter__card .fineprint,
+  html #filme .film__chapters .chapter__card .fitting__hint {
+    font-size:clamp(.73rem,2.9vw,.81rem);
+  }
+  html #filme .film__chapters .chapter__card .portal-list button {
+    font-size:clamp(.81rem,3.25vw,.96rem);
+  }
+  html #filme .film__chapters .chapter__card .portal-list button span {
+    font-size:.67rem;
+  }
+}

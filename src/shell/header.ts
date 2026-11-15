@@ -23,12 +23,10 @@ export function initHeader():void {
   if(!headerNode)return;
   const header:HTMLElement=headerNode;
 
-  const menuButton=header.querySelector<HTMLButtonElement>('#belleMenuButton');
-  const panel=header.querySelector<HTMLElement>('#belleMenuPanel');
+  // V38: chapters live in the full-page couture menu (shell/couture-menu.ts).
   const nav=header.querySelector<HTMLElement>('.site-nav');
   const navLinks=Array.from(header.querySelectorAll<HTMLAnchorElement>('.site-nav a'));
-  const mobileLinks=Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-mobile-nav]'));
-  const mq=matchMedia('(max-width:1020px)');
+  const mobileLinks=Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-mobile-nav]'));
   const scenes:Scene[]=([
     {id:'filme',element:document.getElementById('filme')!,tint:'pearl',nav:'#inicio'},
     {id:'passarela',element:document.getElementById('passarela')!,tint:'champagne',nav:'#passarela'},
@@ -66,33 +64,6 @@ export function initHeader():void {
     if(!nav.contains(event.relatedTarget as Node|null))nav.classList.remove('is-gliding');
   });
 
-  function toggleMenu(open:boolean,restoreFocus=false){
-    if(!panel||!menuButton)return;
-    const next=open&&mq.matches;
-    if(next===!panel.hidden)return;
-    panel.hidden=!next;
-    menuButton.setAttribute('aria-expanded',String(next));
-    menuButton.setAttribute('aria-label',next?'Fechar navegação':'Abrir navegação');
-    header.classList.toggle('is-menu-open',next);
-    if(!next&&restoreFocus)menuButton.focus({preventScroll:true});
-  }
-  menuButton?.addEventListener('click',()=>toggleMenu(panel?.hasAttribute('hidden')??true));
-  mobileLinks.forEach(link=>link.addEventListener('click',()=>toggleMenu(false)));
-  document.addEventListener('pointerdown',event=>{
-    if(!header.contains(event.target as Node))toggleMenu(false);
-    else if(panel&&!panel.hidden){
-      const target=event.target as Element;
-      if(target.closest('#storeButton,#searchButton,#wishlistButton,#bagButton'))
-        toggleMenu(false);
-    }
-  },{passive:true});
-  document.addEventListener('keydown',event=>{
-    if(event.key!=='Escape'||!panel||panel.hidden)return;
-    event.preventDefault();
-    toggleMenu(false,true);
-  });
-  const onBreakpoint=()=>{if(!mq.matches)toggleMenu(false);schedule();};
-  mq.addEventListener('change',onBreakpoint);
 
   let lastTone='';
   let lastNav='';

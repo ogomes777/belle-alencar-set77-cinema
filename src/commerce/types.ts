@@ -5,14 +5,14 @@
 import type { IllustrationSpec } from '../core/illustration';
 import type { Silhouette, Tone } from '../core/dress';
 
-export type StoreId = 'araxa' | 'frutal' | 'catalao' | 'mineiros';
-export const STORE_IDS: readonly StoreId[] = ['araxa', 'frutal', 'catalao', 'mineiros'];
+export type StoreId = 'araxa' | 'frutal' | 'catalao' | 'mineiros' | 'ibia' | 'franca';
+export const STORE_IDS: readonly StoreId[] = ['araxa', 'frutal', 'catalao', 'mineiros', 'ibia', 'franca'];
 
 export interface Store {
   id: StoreId;
   slug: string;
   city: string;
-  state: 'MG' | 'GO';
+  state: 'MG' | 'GO' | 'SP';
   /** null = não confirmado; não inventar */
   address: string | null;
   addressSource: string | null;

@@ -1,0 +1,42 @@
+name: Belle V51 | Full-site Type, Copy & Cinema QA
+on:
+  push:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  cinematic-type-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Regression unit tests
+        run: npm test
+      - name: Four-language translation audit
+        run: node scripts/i18n-audit-v39.mjs
+      - name: Strict production build
+        run: npm run build
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: Complete landing typography coverage and mobile geometry
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v51.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/belle-v51-editorial-typography.mjs
+      - name: V52 high contrast how-film + seven compact film captions
+        run: node tests/e2e/belle-v52-contrast-readable.mjs
+      - name: Preserve film mobile glass and cinematic reveal
+        run: node tests/e2e/belle-v49-film-compact-glass.mjs

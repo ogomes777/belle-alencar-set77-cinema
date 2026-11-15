@@ -1,0 +1,49 @@
+name: Belle V42 | Signature & Neon QA
+on:
+  push:
+    branches:
+      - feat/belle-v42-neon-atelier-signature
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  neon-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Unit regression suite
+        run: npm test
+      - name: Four-language source coverage
+        run: node scripts/i18n-audit-v39.mjs
+      - name: Strict production build
+        run: npm run build
+      - name: Browser dependency
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: Visual and functional QA in 3 themes x 4 viewports
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v42-preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/belle-v42-neon-qa.mjs
+      - name: Save authentic screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: belle-v42-neon-story-screenshots
+          path: artifacts/belle-v42/*.png
+          if-no-files-found: ignore
+          retention-days: 7

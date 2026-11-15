@@ -1,0 +1,242 @@
+[
+ {
+  "run": "360",
+  "ok": true,
+  "active": 28,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 7,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "1.0000",
+    "done": true
+   },
+   "colecao": {
+    "entry": "1.0000",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "390",
+  "ok": true,
+  "active": 26,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 7,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "1.0000",
+    "done": true
+   },
+   "colecao": {
+    "entry": "1.0000",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "768",
+  "ok": true,
+  "active": 24,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 7,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "1.0000",
+    "done": true
+   },
+   "colecao": {
+    "entry": "1.0000",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "1440",
+  "ok": true,
+  "active": 20,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 7,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "1.0000",
+    "done": true
+   },
+   "colecao": {
+    "entry": "1.0000",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "1440-dark",
+  "ok": true,
+  "active": 20,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 7,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "1.0000",
+    "done": true
+   },
+   "colecao": {
+    "entry": "1.0000",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "390-rose",
+  "ok": true,
+  "active": 26,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 7,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "1.0000",
+    "done": true
+   },
+   "colecao": {
+    "entry": "1.0000",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "1440-reduced",
+  "ok": true,
+  "active": 0,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 0,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "static",
+    "done": true
+   },
+   "colecao": {
+    "entry": "static",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ },
+ {
+  "run": "1440-essential",
+  "ok": true,
+  "active": 0,
+  "monotonic": true,
+  "reversible": true,
+  "bigFixed": [],
+  "overflowX": false,
+  "boundaryCount": 0,
+  "jumps": {
+   "duvidas": {
+    "entry": "static",
+    "done": true
+   },
+   "atendimento": {
+    "entry": "static",
+    "done": true
+   },
+   "colecao": {
+    "entry": "static",
+    "done": true
+   }
+  },
+  "hitOk": [
+   true,
+   true,
+   true
+  ],
+  "errors": []
+ }
+]

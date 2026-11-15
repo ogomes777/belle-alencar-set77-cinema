@@ -5,6 +5,7 @@
  * Governador de FPS reduz DPR e efeitos antes de desistir para os pôsteres.
  */
 import * as THREE from 'three';
+import { advanceFilmScrub } from './film-scrub-v55';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { bakeStatic, createKit } from './scene/kit';
 import { buildMall } from './scene/mall';
@@ -118,7 +119,7 @@ export class World {
     this.scene.environmentIntensity = 0.5;
     pmrem.dispose();
 
-    const kit = createKit();
+    const kit = createKit(tier);
     this.mall = buildMall(kit, tier, this.dpr, !!opts.poster);
     this.facade = buildFacade(kit, tier);
     this.boutique = buildBoutique(kit, tier, this.dpr);
@@ -146,10 +147,9 @@ export class World {
 
   setProgress(p: number, immediate = false): void {
     this.target = THREE.MathUtils.clamp(p, 0, 1);
-    // A large chapter jump (fast wheel, PageUp, scrollbar grab or BFCache)
-    // must not replay every missed chapter over several seconds.
-    // Small changes still preserve smooth scrubbing.
-    if(immediate || Math.abs(this.target-this.shown)>.16)this.shown=this.target;
+    // Only explicit restoration / initial positioning may jump.
+    // Regular wheel and touch deltas must traverse every intermediate shot.
+    if (immediate) this.shown=this.target;
     this.kick();
   }
 
@@ -339,10 +339,8 @@ export class World {
   private step(dt: number, exact: boolean): void {
     this.time += dt;
     // progresso suavizado (equivalente a um scrub com inércia)
-    const k = exact ? 1 : 1 - Math.exp(-dt * (this.opts.tier === 'cinema' ? 4.2 : 6));
     const before = this.shown;
-    this.shown += (this.target - this.shown) * k;
-    if (Math.abs(this.target - this.shown) < 1e-5) this.shown = this.target;
+    this.shown = advanceFilmScrub(this.shown, this.target, dt, exact);
     const p = this.shown;
     const scrollSpeed = dt > 0 ? Math.abs(this.shown - before) / dt : 0;
     this.scrollEnergy += (Math.min(1, scrollSpeed * 18) - this.scrollEnergy) * Math.min(1, dt * 3);

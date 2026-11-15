@@ -1,0 +1,49 @@
+name: Belle V40 City Atelier QA
+on:
+  push:
+    branches:
+      - fix/belle-v40-city-atelier-premium
+  pull_request:
+    branches:
+      - claude/wonderful-meitner-kt2rnw
+permissions:
+  contents: read
+jobs:
+  city-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Existing unit suite and four-language regression
+        run: npm test
+      - name: Existing translation coverage gate
+        run: node scripts/i18n-audit-v39.mjs
+      - name: Strict build
+        run: npm run build
+      - name: Install Chromium for visual QA
+        run: |
+          npm install --no-save playwright@1.58.0
+          npx playwright install --with-deps chromium
+      - name: City layout + live store selection in 3 themes and 4 viewports
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/belle-v40.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/city-atelier-v40.mjs
+      - name: Save screenshots in all themes and form factors
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: belle-v40-city-visual-proof
+          path: artifacts/city-v40/*.png
+          retention-days: 7
+          if-no-files-found: ignore

@@ -74,7 +74,7 @@ export function initFinaleSolid():void {
   const measure=()=>{
     if(!renderer||!camera)return;
     const w=Math.max(1,host!.clientWidth),h=Math.max(1,host!.clientHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<560?1.35:1.65));
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,document.documentElement.classList.contains('perf-lite')?1:(w<560?1.35:1.65)));
     renderer.setSize(w,h,false);
     camera.aspect=w/h;camera.updateProjectionMatrix();
   };
@@ -104,7 +104,7 @@ export function initFinaleSolid():void {
       const THREE=await import('three');
       if(!active||isStill())return;
       renderer=new THREE.WebGLRenderer({
-        canvas:canvas!,alpha:true,antialias:true,powerPreference:'high-performance'
+        canvas:canvas!,alpha:true,antialias:!document.documentElement.classList.contains('perf-lite'),powerPreference:'high-performance'
       });
       renderer.outputColorSpace=THREE.SRGBColorSpace;
       renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -134,6 +134,8 @@ export function initFinaleSolid():void {
       });
       resize=new ResizeObserver(measure);
       resize.observe(host!);measure();
+      // V37 perf: compile shaders now (during warm-up), not on the first visible frame.
+      try{renderer.compile(scene,camera);}catch{/* optional */}
       canvas!.addEventListener('webglcontextlost',event=>{
         event.preventDefault();stop();host!.classList.remove('is-3d-ready');
       },{passive:false});
@@ -148,6 +150,17 @@ export function initFinaleSolid():void {
     if(!visible)stop();else resume();
   },{rootMargin:'200px 0px'});
   observer.observe(host!);
+  // V37 perf: warm the renderer (import, geometry, shader compile) well before
+  // the BA is reached and in idle time, so it never lands as a long task in
+  // the middle of a scroll. Drawing still only happens while visible.
+  const ric=(globalThis as {requestIdleCallback?:(cb:()=>void,o?:{timeout:number})=>number}).requestIdleCallback;
+  const idle=(fn:()=>void)=>{if(ric)ric(fn,{timeout:1200});else setTimeout(fn,200);};
+  const warm=new IntersectionObserver(entries=>{
+    if(!entries.some(e=>e.isIntersecting))return;
+    warm.disconnect();
+    idle(()=>{if(!renderer&&!loading)void boot();});
+  },{rootMargin:'1600px 0px'});
+  warm.observe(host!);
   const mode=new MutationObserver(resume);
   mode.observe(document.documentElement,{attributes:true,attributeFilter:['data-intensity']});
   const visibility=()=>{if(document.hidden)stop();else resume();};
@@ -156,7 +169,7 @@ export function initFinaleSolid():void {
   reduced.addEventListener?.('change',resume);
   window.addEventListener('pagehide',event=>{
     if(event.persisted){stop();return;}
-    active=false;stop();observer.disconnect();mode.disconnect();resize?.disconnect();
+    active=false;stop();observer.disconnect();warm.disconnect();mode.disconnect();resize?.disconnect();
     document.removeEventListener('visibilitychange',visibility);
     window.removeEventListener('pageshow',resume);
     reduced.removeEventListener?.('change',resume);

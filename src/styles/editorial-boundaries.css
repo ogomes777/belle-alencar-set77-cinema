@@ -1,0 +1,216 @@
+/* V37.3 · revelações cinematográficas de passagem entre seções.
+   Cada seção recebe UM véu decorativo (aria-hidden, injetado pelo JS) com
+   duas fases guiadas pelo scroll, reversíveis:
+     · cartela (--t, 1ª metade): número do capítulo + título sobe por máscara
+       sobre uma cor forte da paleta Belle, fio dourado se abre;
+     · abertura (--e, 2ª metade, ease in-out): as peças do véu saem e revelam
+       a seção, que termina revelada ao chegar ao topo.
+   Desempenho: as peças só animam transform (compositor, sem repintura); o
+   véu é overflow:hidden e limitado a 118vh; camadas existem só enquanto a
+   passagem está ativa (.v37-done → display:none). Nunca position:fixed;
+   sempre abaixo do header (seção isolada). Única exceção: o Círculo usa
+   máscara radial (repinta só a própria peça). */
+
+.v37-boundary{isolation:isolate}
+.v37-boundary:not(#lojas):not(.finale){position:relative}
+
+.v37-veil{
+  position:absolute;left:0;right:0;top:0;height:min(100%,118vh);
+  z-index:300;pointer-events:none;display:none;overflow:hidden;contain:layout paint style;
+  --p:var(--v37-entry,1);
+  --t:clamp(0, var(--p) / .48, 1);
+  --o:clamp(0, (var(--p) - .48) / .52, 1);
+  --e:calc(var(--o) * var(--o) * (3 - 2 * var(--o)));
+  /* Paleta forte Belle */
+  --espresso:#1c1814;--espresso-2:#2b221a;
+  --gold:#a48753;--gold-rich:#b8935a;--gold-deep:#7d6438;--bronze:#5b4527;
+  --rose:#a9705f;--rose-deep:#7a463b;
+  --ivory:#f6f2ea;--champ-light:#efd9ad;
+  --ink-title:var(--ivory);--accent:var(--champ-light);
+}
+.v37-boundary:not(.v37-done)>.v37-veil{display:block}
+.v37-veil__piece{position:absolute;inset:0;will-change:transform;backface-visibility:hidden}
+
+/* ── Cartela ─────────────────────────────────────────────────────────── */
+.v37-veil__stage{
+  position:absolute;left:0;right:0;top:0;z-index:2;
+  /* mantém a cartela a ~34% da tela: topo do véu = vh·(.98 − .9·lin) */
+  --y:max(9vh, calc(var(--v37-lin,1) * 90vh - 64vh));
+  display:flex;flex-direction:column;align-items:center;gap:clamp(12px,1.6vw,20px);
+  padding:0 var(--gutter);text-align:center;
+  opacity:calc(1 - var(--e) * 2.2);
+  transform:translate3d(0,calc(var(--y) - var(--e) * 60px),0);
+  will-change:transform,opacity;
+}
+.v37-veil__chapter{
+  font-family:var(--sans);font-size:clamp(10px,.85vw,12px);font-weight:500;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--accent);
+  opacity:var(--t);transform:translate3d(0,calc((1 - var(--t)) * 14px),0);
+}
+.v37-veil__mask{display:block;overflow:hidden;padding:.06em .1em .14em}
+.v37-veil__title{
+  display:block;font-family:var(--serif);font-weight:400;line-height:.95;letter-spacing:-.015em;
+  font-size:clamp(50px,9vw,148px);color:var(--ink-title);
+  transform:translate3d(0,calc((1 - var(--t)) * 108%),0);
+  text-shadow:0 2px 24px rgba(0,0,0,.18);
+}
+.v37-veil__title em{font-style:italic;color:var(--accent)}
+.v37-veil__rule{
+  display:block;width:min(200px,36vw);height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  transform:scaleX(var(--t));
+}
+
+/* 01 · CORTINA · Filme → Passarela — ouro rico sobe e sai pelo topo. */
+.v37-veil--cortina .v37-veil__piece{
+  background:linear-gradient(180deg,var(--gold-rich) 0%,var(--gold-deep) 100%);
+  box-shadow:inset 0 -2px 0 var(--champ-light);
+  transform:translate3d(0,calc(var(--e) * -101%),0);
+}
+.v37-veil--cortina{--accent:var(--espresso)}
+
+/* 02 · COLUNAS · → Ocasiões — café e ouro alternados sobem em sequência;
+   na volta a da direita desce primeiro. */
+.v37-veil--colunas .v37-veil__piece{
+  right:auto;width:20.4%;left:calc(var(--i) * 20%);
+  --c:clamp(0, var(--o) * 1.8 - var(--i) * .2, 1);
+  transform:translate3d(0,calc(var(--c) * var(--c) * (3 - 2 * var(--c)) * -101%),0);
+  background:var(--espresso);
+}
+.v37-veil--colunas .v37-veil__piece:nth-child(2){background:var(--gold-deep)}
+.v37-veil--colunas .v37-veil__piece:nth-child(4){background:var(--gold)}
+.v37-veil--colunas .v37-veil__piece:nth-child(3){background:var(--espresso-2)}
+
+/* 03 · VARREDURA · → Coleção — café atravessa da direita para a esquerda,
+   borda dourada de ataque. */
+.v37-veil--varredura .v37-veil__piece{
+  background:linear-gradient(90deg,var(--champ-light) 0 2px,var(--espresso) 2px 100%);
+  transform:translate3d(calc(var(--e) * -101%),0,0);
+}
+
+/* 04 · DOBRA · → Como comprar — folha rosé intensa vira do canto inferior
+   direito ao superior esquerdo, verso escuro na dobra. */
+.v37-veil--dobra .v37-veil__piece{
+  inset:auto;left:0;top:0;width:200%;height:200%;
+  clip-path:polygon(0 0,100% 0,0 100%);
+  background:linear-gradient(135deg,var(--rose) 0%,var(--rose) 38%,var(--rose-deep) 49.6%,#3d211b 50%);
+  transform:translate3d(calc(var(--e) * -50%),calc(var(--e) * -50%),0);
+}
+
+/* 05 · CÍRCULO · → Lojas — café abre numa íris a partir do globo. */
+.v37-veil--circulo .v37-veil__piece{
+  --r:calc(var(--e) * 150%);
+  background:var(--espresso);
+  -webkit-mask:radial-gradient(circle at 72% 45%,transparent var(--r),#000 calc(var(--r) + 1px));
+          mask:radial-gradient(circle at 72% 45%,transparent var(--r),#000 calc(var(--r) + 1px));
+  will-change:auto;
+}
+
+/* 06 · CORTINA LATERAL · → Atendimento — bronze recolhe para a direita. */
+.v37-veil--lateral .v37-veil__piece{
+  background:linear-gradient(90deg,var(--bronze) 0%,var(--gold-deep) 100%);
+  box-shadow:inset 2px 0 0 var(--champ-light);
+  transform:translate3d(calc(var(--e) * 101%),0,0);
+}
+
+/* 07 · VELUDO · → Finale — veludo dourado com pregas abre para a direita
+   revelando o BA. */
+.v37-veil--veludo .v37-veil__piece{
+  background:
+    linear-gradient(90deg,rgba(28,24,20,.45),transparent 16%),
+    repeating-linear-gradient(90deg,var(--gold-rich) 0 26px,var(--gold-deep) 42px,var(--gold-rich) 58px);
+  box-shadow:inset 3px 0 0 var(--champ-light);
+  transform:translate3d(calc(var(--e) * 101%),0,0);
+}
+.v37-veil--veludo{--accent:var(--espresso)}
+
+@media(max-width:700px){
+  .v37-veil--circulo .v37-veil__piece{
+    -webkit-mask:radial-gradient(circle at 50% 30%,transparent var(--r),#000 calc(var(--r) + 1px));
+            mask:radial-gradient(circle at 50% 30%,transparent var(--r),#000 calc(var(--r) + 1px));
+  }
+  .v37-veil--veludo .v37-veil__piece{background:linear-gradient(90deg,rgba(28,24,20,.45),transparent 16%),repeating-linear-gradient(90deg,var(--gold-rich) 0 16px,var(--gold-deep) 26px,var(--gold-rich) 36px)}
+  .v37-veil__title{font-size:clamp(44px,13vw,72px)}
+}
+
+@media(prefers-reduced-motion:reduce){.v37-veil{display:none!important}}
+
+/* ════════════════════════════════════════════════════════════════════════
+   Paletas por tema. Claro = paleta acima (ouro, café, rosé, bronze).
+   Escuro = ônix + ouro noturno. Rosé = pink dourado.
+   Mesma coreografia; só cores mudam (troca de tema é instantânea, sem custo).
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── TEMA ESCURO · ônix, grafite, ouro noturno ─────────────────────────── */
+html[data-belle-theme="dark"] .v37-veil{
+  --onyx:#110e0b;--graphite:#25201a;--night-gold:#8f6f3d;--night-gold-hi:#c6a265;
+  --ink-title:#f3ead9;--accent:var(--night-gold-hi);
+}
+html[data-belle-theme="dark"] .v37-veil--cortina{--accent:var(--night-gold-hi)}
+html[data-belle-theme="dark"] .v37-veil--cortina .v37-veil__piece{
+  background:linear-gradient(180deg,var(--graphite) 0%,var(--onyx) 100%);
+  box-shadow:inset 0 -2px 0 var(--night-gold-hi);
+}
+html[data-belle-theme="dark"] .v37-veil--colunas .v37-veil__piece{background:var(--onyx)}
+html[data-belle-theme="dark"] .v37-veil--colunas .v37-veil__piece:nth-child(2){background:var(--night-gold)}
+html[data-belle-theme="dark"] .v37-veil--colunas .v37-veil__piece:nth-child(3){background:var(--graphite)}
+html[data-belle-theme="dark"] .v37-veil--colunas .v37-veil__piece:nth-child(4){background:#6e5530}
+html[data-belle-theme="dark"] .v37-veil--varredura{--ink-title:var(--onyx);--accent:#f3ead9}
+html[data-belle-theme="dark"] .v37-veil--varredura .v37-veil__piece{
+  background:linear-gradient(90deg,var(--onyx) 0 2px,var(--night-gold-hi) 2px,var(--night-gold) 100%);
+}
+html[data-belle-theme="dark"] .v37-veil--dobra .v37-veil__piece{
+  background:linear-gradient(135deg,#3a2a1b 0%,#3a2a1b 38%,#1d140c 49.6%,#000 50%);
+}
+html[data-belle-theme="dark"] .v37-veil--circulo{--ink-title:var(--onyx);--accent:#f8efdc}
+html[data-belle-theme="dark"] .v37-veil--circulo .v37-veil__piece{background:linear-gradient(160deg,var(--night-gold-hi),var(--night-gold))}
+html[data-belle-theme="dark"] .v37-veil--lateral .v37-veil__piece{
+  background:linear-gradient(90deg,var(--onyx) 0%,var(--graphite) 100%);
+  box-shadow:inset 2px 0 0 var(--night-gold-hi);
+}
+html[data-belle-theme="dark"] .v37-veil--veludo{--accent:var(--night-gold-hi)}
+html[data-belle-theme="dark"] .v37-veil--veludo .v37-veil__piece{
+  background:
+    linear-gradient(90deg,rgba(198,162,101,.22),transparent 14%),
+    repeating-linear-gradient(90deg,#1c1712 0 26px,#0b0907 42px,#1c1712 58px);
+  box-shadow:inset 3px 0 0 var(--night-gold-hi);
+}
+
+/* ── TEMA ROSÉ · pink dourado ──────────────────────────────────────────── */
+html[data-belle-theme="rose"] .v37-veil{
+  --blush:#f2cfd1;--rose-gold:#c4878a;--rose-deep:#93505d;--pink-gold:#cfa25f;--pink-gold-hi:#f4dcae;
+  --ink-title:#fff6f2;--accent:var(--pink-gold-hi);
+}
+html[data-belle-theme="rose"] .v37-veil--cortina{--accent:var(--pink-gold-hi)}
+html[data-belle-theme="rose"] .v37-veil--cortina .v37-veil__piece{
+  background:linear-gradient(180deg,#d9a1a2 0%,var(--rose-gold) 100%);
+  box-shadow:inset 0 -2px 0 var(--pink-gold);
+}
+html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece{background:var(--rose-deep)}
+html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece:nth-child(2){background:var(--pink-gold)}
+html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece:nth-child(3){background:var(--rose-gold)}
+html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece:nth-child(4){background:#e3b6b3}
+html[data-belle-theme="rose"] .v37-veil--varredura .v37-veil__piece{
+  background:linear-gradient(90deg,var(--pink-gold-hi) 0 2px,var(--rose-deep) 2px 100%);
+}
+html[data-belle-theme="rose"] .v37-veil--dobra{--accent:#fff6f2;--ink-title:#5e2a35}
+html[data-belle-theme="rose"] .v37-veil--dobra .v37-veil__piece{
+  background:linear-gradient(135deg,var(--pink-gold) 0%,#dcb675 38%,#a8813f 49.6%,#6e3f45 50%);
+}
+html[data-belle-theme="rose"] .v37-veil--circulo .v37-veil__piece{background:linear-gradient(160deg,var(--rose-gold),var(--rose-deep))}
+html[data-belle-theme="rose"] .v37-veil--lateral{--ink-title:#5e2a35;--accent:#a8813f}
+html[data-belle-theme="rose"] .v37-veil--lateral .v37-veil__piece{
+  background:linear-gradient(90deg,var(--blush) 0%,#e6b9b6 100%);
+  box-shadow:inset 2px 0 0 var(--pink-gold);
+}
+html[data-belle-theme="rose"] .v37-veil--veludo{--accent:var(--pink-gold-hi)}
+html[data-belle-theme="rose"] .v37-veil--veludo .v37-veil__piece{
+  background:
+    linear-gradient(90deg,rgba(94,42,53,.38),transparent 14%),
+    repeating-linear-gradient(90deg,#c98a8f 0 26px,#9e5f68 42px,#c98a8f 58px);
+  box-shadow:inset 3px 0 0 var(--pink-gold);
+}
+@media(max-width:700px){
+  html[data-belle-theme="dark"] .v37-veil--veludo .v37-veil__piece{background:linear-gradient(90deg,rgba(198,162,101,.22),transparent 14%),repeating-linear-gradient(90deg,#1c1712 0 16px,#0b0907 26px,#1c1712 36px)}
+  html[data-belle-theme="rose"] .v37-veil--veludo .v37-veil__piece{background:linear-gradient(90deg,rgba(94,42,53,.38),transparent 14%),repeating-linear-gradient(90deg,#c98a8f 0 16px,#9e5f68 26px,#c98a8f 36px)}
+}
