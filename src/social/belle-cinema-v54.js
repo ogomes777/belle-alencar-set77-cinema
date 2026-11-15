@@ -108,86 +108,33 @@ if(section && dialog){
   if(!manifestPromise)manifestPromise=fetch('/belle-v54/manifest.json',{cache:'force-cache'}).then(r=>{if(!r.ok)throw new Error('Pacote de mídia indisponível');return r.json()}).then(data=>{manifest=Array.isArray(data)?data:[];return manifest});
   return manifestPromise;
  }
- // A live, continuously playing strip. Moving focus does not unmount or restart
- // any retained clip; only the one exiting the visible window is released.
- const liveClips=new Map();
- const smallScreen=window.matchMedia('(max-width:700px)');
- smallScreen.addEventListener?.('change',()=>{if(dialog.open)updatePlayer()});
- const autoplay=(video)=>{
-   video.muted=true;video.defaultMuted=true;
-   const promise=video.play();
-   if(promise&&typeof promise.catch==='function')promise.catch(()=>{video.muted=true});
- };
- function releaseVideos(){
-   for(const {v} of liveClips.values()){v.pause();v.removeAttribute('src');v.load()}
-   liveClips.clear();players.replaceChildren();
- }
- function newClip(clip,index,total,city){
-   const tile=document.createElement('button');tile.type='button';
-   tile.className='v54-clip';tile.dataset.clip=String(index);
-   tile.setAttribute('aria-label',`Ver preview ${index+1} de ${total} da Belle ${city.name}`);
-   const v=document.createElement('video');
-   v.src=clip.src;v.poster=clip.poster;v.loop=true;v.muted=true;
-   v.autoplay=true;v.playsInline=true;v.preload='auto';v.controls=false;
-   v.disablePictureInPicture=true;v.setAttribute('playsinline','');
-   v.setAttribute('aria-hidden','true');
-   const label=document.createElement('span');label.className='v54-clip-number';
-   label.textContent=String(index+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+' · LOOP';
-   tile.append(v,label);
-   tile.addEventListener('click',()=>{
-     const n=allClips(cities.find(c=>c.id===movieSelect.value)||city).length;
-     if(!n)return;
-     const d=(index-videoIndex+n)%n;
-     if(d===0)return;
-     shift(d>n/2?d-n:d);
-   });
-   return {tile,v};
- }
+ // The Originkit Rotunda is the entire film. No foreground HTML videos.
+ // WebGL itself loads each MP4 into the curved panel texture.
+ function releaseVideos(){players.replaceChildren()}
  function updatePlayer(){
    const city=cities.find(x=>x.id===movieSelect.value)||cities[current];
-   if(!city||city.count===0){releaseVideos();players.innerHTML='<p class="v54-film-empty">Ibiá não possui previews. Acesse o Instagram da unidade diretamente.</p>';return}
-   const clips=allClips(city),n=clips.length;
-   dialogCity.textContent='Belle '+city.name;dialogCount.textContent=n+' PREVIEWS · LOOP CONTÍNUO';
-   filmLink.href=profileLink(city);filmLink.textContent='Abrir Instagram Belle '+city.name+' ↗';
-   if(!n){releaseVideos();players.innerHTML='<p class="v54-film-empty">Os arquivos de vídeo desta cidade não foram encontrados neste deploy.</p>';return}
-   const radius=n===1?0:(smallScreen.matches?1:2);
-   const offsets=n===1?[0]:Array.from({length:radius*2+1},(_,i)=>i-radius);
-   const visible=new Set();
-   // Every mounted pane keeps its video instance across navigation, so the
-   // cinema keeps playing instead of jumping to the first frame per arrow.
-   for(const off of offsets){
-     const idx=(videoIndex+off+n)%n,key=city.id+':'+idx;
-     if(visible.has(key))continue;
-     visible.add(key);
-     let item=liveClips.get(key);
-     if(!item){item=newClip(clips[idx],idx,n,city);liveClips.set(key,item);players.append(item.tile);autoplay(item.v)}
-     else if(!item.tile.isConnected)players.append(item.tile);
-     item.tile.dataset.offset=String(off);
-     item.tile.dataset.active=String(off===0);
-     item.tile.style.setProperty('--v54-offset',String(off));
-     item.tile.tabIndex=off===0?0:-1;
-     item.tile.setAttribute('aria-current',String(off===0));
-     item.tile.style.zIndex=String(5-Math.abs(off));
-   }
-   for(const [key,item] of liveClips){
-     if(visible.has(key))continue;
-     item.v.pause();item.v.removeAttribute('src');item.v.load();
-     item.tile.remove();liveClips.delete(key);
-   }
-   players.style.setProperty('--v54-count',String(visible.size));
+   if(!city)return;
+   const n=allClips(city).length;
+   dialogCity.textContent='Belle '+city.name;
+   dialogCount.textContent=n+' PREVIEWS · ROTUNDA EM LOOP';
+   filmLink.href=profileLink(city);
+   filmLink.textContent='Abrir Instagram Belle '+city.name+' ↗';
  }
  function shift(delta){
-   const city=cities.find(x=>x.id===movieSelect.value);if(!city)return;
-   const n=allClips(city).length||1;
-   videoIndex=(videoIndex+delta+n)%n;updatePlayer();
+   window.dispatchEvent(new CustomEvent('belle:rotunda:step',{detail:{delta}}));
  }
  const prev=$('[data-v54-prev]',dialog),next=$('[data-v54-next]',dialog);
  prev.addEventListener('click',()=>shift(-1));next.addEventListener('click',()=>shift(1));
- let touchX=null,touchY=null;
- players.addEventListener('touchstart',event=>{if(event.touches.length!==1)return;touchX=event.touches[0].clientX;touchY=event.touches[0].clientY},{passive:true});
- players.addEventListener('touchend',event=>{if(touchX===null)return;const pt=event.changedTouches[0],dx=pt.clientX-touchX,dy=pt.clientY-touchY;touchX=touchY=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.25)shift(dx<0?1:-1)},{passive:true});
+ // Drag, touch inertia and the spin are the original Originkit engine.
+ // Wheel and arrow commands only request a rotation of THAT same cylinder.
  let lastWheel=0;
- players.addEventListener('wheel',event=>{if(Math.abs(event.deltaY)<15&&Math.abs(event.deltaX)<15)return;event.preventDefault();const now=performance.now();if(now-lastWheel>440){shift((event.deltaY||event.deltaX)>0?1:-1);lastWheel=now}},{passive:false});
+ rotundaHost.addEventListener('wheel',event=>{
+   const v=event.deltaY||event.deltaX;
+   if(Math.abs(v)<12)return;
+   event.preventDefault();
+   const now=performance.now();
+   if(now-lastWheel>370){shift(v>0?1:-1);lastWheel=now}
+ },{passive:false});
  dialog.addEventListener('keydown',event=>{const target=event.target;if(target instanceof HTMLSelectElement)return;if(event.key==='ArrowRight')shift(1);if(event.key==='ArrowLeft')shift(-1)});
  movieSelect.addEventListener('change',()=>{
   const city=cities.find(x=>x.id===movieSelect.value);if(!city)return;
@@ -202,7 +149,7 @@ if(section && dialog){
   try{
     const module=await import('./belle-v54-rotunda-island');
     if(request!==rotundaRequest||!dialog.open)return;
-    rotundaUninstall=await module.mountBelleRotunda(rotundaHost,clips.map(x=>x.poster));
+    rotundaUninstall=await module.mountBelleRotunda(rotundaHost,clips);
   }catch(error){console.warn('V54 Rotunda fallback:',error);rotundaHost.innerHTML='<div class="v54-rotunda-placeholder" aria-hidden="true"></div>'}
  }
  async function openFilm(){
