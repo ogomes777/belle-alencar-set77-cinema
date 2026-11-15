@@ -149,8 +149,14 @@ if(previews){
      .then(r=>{if(!r.ok)throw Error('Manifest indisponível '+r.status);return r.json()})
      .then(a=>{
        if(!Array.isArray(a))throw Error('Manifest inválido');
-       return a.filter(x=>typeof x.src==='string'&&typeof x.poster==='string'
-         &&x.src.startsWith('/belle-v54/media/')&&x.poster.startsWith('/belle-v54/media/'));
+       const seen=new Set();
+       return a.filter(x=>{
+         if(typeof x.src!=='string'||typeof x.poster!=='string')return false;
+         if(!x.src.startsWith('/belle-v54/media/')||!x.poster.startsWith('/belle-v54/media/'))return false;
+         if(seen.has(x.src))return false;
+         seen.add(x.src);
+         return true;
+       });
      });
    return manifestPromise;
  }
@@ -162,8 +168,8 @@ if(previews){
      const [clips,module]=await Promise.all([allMedia(),import('./belle-v54-rotunda-island')]);
      if(ticket!==generation||document.hidden)return;
      if(!clips.length)throw Error('Nenhum vídeo no pacote aprovado');
-     // The Rotunda uses the actual supplied files, in the manifest's order,
-     // including intentionally repeated clips, with zero city segmentation.
+     // One continuous Rotunda with every DISTINCT MP4 from the client's ZIP.
+     // Every unique video remains playing even behind the camera.
      unmount=await module.mountBelleRotunda(host,clips);
      previews.dataset.mediaCount=String(clips.length);
      previews.classList.add('v63-rotunda-ready');
@@ -182,12 +188,15 @@ if(previews){
       for(const entry of entries)previews.classList.toggle('v63-in-view',entry.isIntersecting);
    },{threshold:.12}):null;
  revealObserver?.observe(previews);
+ // Once started, do NOT unmount when scrolled offscreen.
+ // The requested videos keep looping behind the camera and across sections.
  const mountObserver=typeof IntersectionObserver!=='undefined'
   ?new IntersectionObserver(entries=>{
-    const visible=entries.some(e=>e.isIntersecting);
-    if(visible)void mount();
-    else stop();
-  },{rootMargin:'550px 0px'}):null;
+    if(entries.some(e=>e.isIntersecting)){
+      void mount();
+      mountObserver?.disconnect();
+    }
+  },{rootMargin:'700px 0px'}):null;
  if(mountObserver)mountObserver.observe(theater);else void mount();
  const spin=delta=>window.dispatchEvent(new CustomEvent('belle:rotunda:step',{detail:{delta}}));
  prev.addEventListener('click',()=>spin(-1));
@@ -218,9 +227,12 @@ if(previews){
    for(const [key,value] of [['--v63-title-shift-x','0px'],['--v63-title-shift-y','0px'],
      ['--v63-title-pitch','0deg'],['--v63-title-yaw','0deg']])title.style.setProperty(key,value);
  });
+ // Browser background-tab throttling is managed by the browser, not by us.
+ // Never call pause(), recreate the Rotunda, or reset all progress on visibility.
  document.addEventListener('visibilitychange',()=>{
-   if(document.hidden)stop();
-   else if(theater.getBoundingClientRect().top<innerHeight+350 && theater.getBoundingClientRect().bottom>-350)void mount();
+   if(!document.hidden&&!unmount
+      &&theater.getBoundingClientRect().top<innerHeight+350
+      &&theater.getBoundingClientRect().bottom>-350)void mount();
  });
 }
 
