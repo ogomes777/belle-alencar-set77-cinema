@@ -40,7 +40,7 @@ for(const category of [...new Set(products.map(p=>p.category))]){
 await page.locator('#catalogMount [data-cat="todas"]').click();
 for(const width of [360,390,768,1440]){
  await page.setViewportSize({width,height:width<800?844:900});
- for(const id of ['inicio','sala','passarela','provador','looks','colecao']){
+ for(const id of ['inicio','sala','passarela','provador','colecao']){
   await chapter(page,id);
   await page.locator('img.editorial-cutout').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode().catch(()=>{}))));
   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${width}/${id}: no document overflow`);

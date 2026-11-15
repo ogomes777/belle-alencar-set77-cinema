@@ -273,6 +273,13 @@ export class World {
     return { x: center.x, y: center.y, w: Math.max(22, Math.abs(edge.x - center.x) * 2) };
   }
 
+  /** QA: renderiza um quadro e devolve PNG (independe de preserveDrawingBuffer). */
+  snapshot(): string {
+    this.step(0, true);
+    this.renderer.render(this.scene, this.camera);
+    return this.renderer.domElement.toDataURL('image/png');
+  }
+
   // ---------- QA: poses fixas e marcos ----------
   poseIds(): string[] { return POSES.map((p) => p.id); }
   setPose(id: string | null): boolean {
@@ -403,9 +410,12 @@ export class World {
         const z = this.fwd.x * sin + this.fwd.z * cos;
         this.fwd.x = x; this.fwd.z = z;
         this.camTgt.copy(this.camPos).add(this.fwd);
-        // aproxima-se ligeiramente da arara escolhida
-        this.camPos.x += this.sideLook * 0.35 * w;
-        this.camTgt.x += this.sideLook * 0.35 * w;
+        // aproxima-se da arara escolhida (as peças ficam ao alcance do toque, também no celular)
+        const reach = this.camera.aspect < 1 ? 1.0 : 0.6;
+        this.camPos.x += this.sideLook * 0.45 * w;
+        this.camTgt.x += this.sideLook * 0.45 * w;
+        this.camPos.z -= Math.abs(this.sideLook) * w * reach * 2.2;
+        this.camTgt.z -= Math.abs(this.sideLook) * w * reach * 2.2;
       }
     }
     if (!exact && this.opts.tier === 'cinema' && this.exploreBlend < 0.5) {

@@ -30,6 +30,7 @@ interface FilmDebug {
   /** QA: pose fixa de aceite (01..06) ou null para voltar ao filme. */
   setPose: (id: string | null) => boolean;
   landmarks: () => ReturnType<World['landmarks']> | null;
+  snapshot: () => string | null;
   explore: { enter: () => boolean; exit: () => void; goTo: (id: string) => void; lookEntrance: () => void; look: (dx: number, dy: number) => void; active: () => boolean };
 }
 
@@ -66,6 +67,7 @@ export function initFilm(director: Director): void {
     tier, progress: 0, chapter: active, world: () => world?.info() ?? null,
     setPose: (id) => world?.setPose(id) ?? false,
     landmarks: () => world?.landmarks() ?? null,
+    snapshot: () => world?.snapshot() ?? null,
     explore: {
       enter: () => { const ok = !!world?.enterExplore(); pov.refresh(); return ok; },
       exit: () => { pov.exitExplore(); },

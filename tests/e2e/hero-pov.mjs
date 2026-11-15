@@ -219,7 +219,7 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
     await settle(page, 3);
     const w = await info(page);
     if (!set || w.pose !== id) ok = false;
-    if (SHOTS) await page.locator('#filmCanvas canvas').screenshot({ path: `${SHOTS}/pose-${id}.png`, timeout: 30000 }).catch(() => undefined);
+    if (SHOTS) { const { writeFileSync } = await import('node:fs'); writeFileSync(`${SHOTS}/pose-${id}.png`, Buffer.from((await page.evaluate(() => window.__belle.snapshot())).split(',')[1], 'base64')); }
   }
   check('D · as seis poses fixas são reproduzíveis', ok);
   await page.evaluate(() => window.__belle.setPose('02'));
