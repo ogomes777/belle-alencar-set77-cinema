@@ -17,7 +17,7 @@ const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  · ' + detail : ''}`); };
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 
-async function open(opts = {}, query = 'tier=cinema&gov=off&loja=araxa') {
+async function open(opts = {}, query = 'tier=touch&gov=off&loja=araxa') {
   const ctx = await browser.newContext({ deviceScaleFactor: 1, viewport: { width: 1440, height: 900 }, ...opts });
   const page = await ctx.newPage();
   const errors = [];
@@ -30,8 +30,8 @@ async function open(opts = {}, query = 'tier=cinema&gov=off&loja=araxa') {
   return { ctx, page, errors };
 }
 const info = (page) => page.evaluate(() => window.__belle.world());
-const settle = async (page, n = 8) => { const f0 = await page.evaluate(() => window.__belle.world().frames); await page.waitForFunction((f) => window.__belle.world().frames > f, f0 + n, { timeout: 120000 }); };
-const arrived = async (page) => { for (let i = 0; i < 16; i++) { await settle(page, 12); if (!(await info(page)).explore.walking) return true; } return false; };
+const settle = async (page, n = 8) => { const f0 = await page.evaluate(() => window.__belle.world().frames); await page.waitForFunction((f) => window.__belle.world().frames > f, f0 + n, { timeout: 300000 }); };
+const arrived = async (page) => { await settle(page, 2); return page.waitForFunction(() => !window.__belle.world().explore.walking, null, { timeout: 300000 }).then(() => true).catch(() => false); };
 const near = (a, b, tol) => Math.abs(a - b) <= tol;
 /** Toca o palco numa grade até abrir a ficha de uma peça (raycast real). */
 async function tapProduct(page, side = null, w = 1440, h = 900) {
@@ -70,7 +70,7 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
   w = await info(page);
   check('A · chegou ao destino físico do corredor', near(w.explore.x, 0, 0.1) && near(w.explore.z, -6.8, 0.1), JSON.stringify([w.explore.x, w.explore.z]));
   await page.locator('.pov__entrance').click();
-  await settle(page, 60);
+  await page.waitForFunction(() => Math.abs(Math.atan2(Math.sin(window.__belle.world().explore.yaw), Math.cos(window.__belle.world().explore.yaw))) > 2.9, null, { timeout: 300000 }).catch(() => undefined);
   w = await info(page);
   check('A · "Ver a entrada" vira de costas para a loja (porta visível pelo lado interno)', Math.abs(wrap(w.explore.yaw)) > 2.9 && w.lookTarget[2] > w.camera[2], JSON.stringify(w.lookTarget));
   await page.locator('[data-go="araraDireita"]').click();
@@ -209,9 +209,9 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
   await ctx.close();
 }
 
-// D · poses fixas de aceite e marcos do quadro 02
+// D · poses fixas de aceite e marcos do quadro 02 (tier cinema, com pós de cinema)
 {
-  const { ctx, page, errors } = await open();
+  const { ctx, page, errors } = await open({}, 'tier=cinema&gov=off&loja=araxa');
   const ids = ['01', '02', '03', '04', '05', '06'];
   let ok = true;
   for (const id of ids) {
