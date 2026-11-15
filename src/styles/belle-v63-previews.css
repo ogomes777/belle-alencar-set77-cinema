@@ -354,3 +354,80 @@ html[data-belle-theme="rose"] #belle-previews.v63-previews {
 #belle-previews .v63-previews-heading h2:hover {
  transition: transform .20s ease-out, opacity .6s ease, clip-path 1.2s cubic-bezier(.14,.92,.18,1);
 }
+
+/* V63 CINEMA LENS / SET77 · elegant film-optics for the selected Belle theme.
+   The former saturated red poster is replaced with an immersive glass set. */
+#belle-previews.v63-previews{
+ --v63-preview-bg:#e9dfd4;
+ --v63-preview-stroke:rgba(112,78,61,.92);
+ --v63-preview-glass:rgba(255,249,239,.29);
+ --v63-preview-edge:rgba(127,94,68,.20);
+ --v63-preview-light:rgba(180,132,90,.24);
+ --v63-preview-ink:#694c3c;
+ --v63-lens-edge:rgba(55,36,30,.12);
+ --v63-lens-reflection:rgba(255,255,255,.23);
+ background:
+   radial-gradient(ellipse 64% 75% at 51% 44%,rgba(255,252,247,.81),transparent 83%),
+   radial-gradient(ellipse 80% 43% at 50% 96%,rgba(192,149,105,.31),transparent 76%),
+   linear-gradient(132deg,#e9dfd4 0%,#f7efe5 48%,#ddccbc 100%);
+ transition:background .55s ease,color .55s ease;
+}
+html[data-belle-theme="dark"] #belle-previews.v63-previews{
+ --v63-preview-bg:#141115;
+ --v63-preview-stroke:rgba(246,224,208,.96);
+ --v63-preview-glass:rgba(143,110,105,.10);
+ --v63-preview-edge:rgba(220,182,158,.25);
+ --v63-preview-light:rgba(197,139,108,.22);
+ --v63-preview-ink:#f1e3d7;
+ --v63-lens-edge:rgba(2,1,3,.40);
+ --v63-lens-reflection:rgba(255,222,194,.075);
+ background:
+   radial-gradient(ellipse 70% 80% at 50% 43%,rgba(91,63,62,.37),transparent 76%),
+   radial-gradient(ellipse 85% 32% at 50% 100%,rgba(181,122,93,.21),transparent 73%),
+   linear-gradient(138deg,#0e0d11,#241c23 48%,#120e12);
+}
+html[data-belle-theme="rose"] #belle-previews.v63-previews{
+ --v63-preview-bg:#e8d4de;
+ --v63-preview-stroke:rgba(132,73,97,.92);
+ --v63-preview-glass:rgba(255,244,249,.30);
+ --v63-preview-edge:rgba(160,92,121,.22);
+ --v63-preview-light:rgba(208,140,173,.22);
+ --v63-preview-ink:#774b62;
+ --v63-lens-edge:rgba(72,30,47,.11);
+ --v63-lens-reflection:rgba(255,255,255,.28);
+ background:
+   radial-gradient(ellipse 62% 76% at 52% 44%,rgba(255,246,249,.80),transparent 80%),
+   radial-gradient(ellipse 90% 36% at 50% 100%,rgba(210,139,169,.28),transparent 73%),
+   linear-gradient(130deg,#e2cbd6,#f7e9ef 48%,#e0c0ce);
+}
+#belle-previews.v63-previews::before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:
+   repeating-linear-gradient(0deg,transparent 0 3px,rgba(48,30,22,.013) 4px 5px),
+   linear-gradient(90deg,var(--v63-lens-edge),transparent 13%,transparent 87%,var(--v63-lens-edge));
+}
+#belle-previews.v63-previews::after{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse 66% 85% at 50% 46%,transparent 56%,var(--v63-lens-edge) 110%);
+}
+#belle-previews .v63-previews-atmosphere{
+ background:
+   radial-gradient(ellipse 50% 25% at 52% 13%,var(--v63-lens-reflection),transparent 73%),
+   radial-gradient(ellipse 76% 49% at 50% 76%,var(--v63-preview-light),transparent 82%);
+}
+#belle-previews .v63-previews-theater{
+ border-color:var(--v63-preview-edge);
+ background:
+   radial-gradient(ellipse 76% 100% at 50% 48%,var(--v63-preview-glass),transparent 86%),
+   linear-gradient(90deg,var(--v63-lens-edge),transparent 12%,transparent 88%,var(--v63-lens-edge));
+ box-shadow:inset 0 0 115px -65px var(--v63-preview-light),0 32px 96px -82px var(--v63-preview-ink);
+}
+#belle-previews .v63-previews-glass{
+ border:1px solid var(--v63-preview-edge);
+ background:linear-gradient(116deg,var(--v63-lens-reflection),transparent 16%,transparent 84%,var(--v63-lens-reflection));
+ box-shadow:inset 0 0 52px -38px var(--v63-preview-light);
+}
+#belle-previews .v63-previews-arrow{
+ background:var(--v63-preview-glass);border-color:var(--v63-preview-edge);color:var(--v63-preview-ink);
+}
+#belle-previews .v63-previews-hint{color:var(--v63-preview-ink)}
