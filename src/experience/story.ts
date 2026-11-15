@@ -35,8 +35,8 @@ const SHOTS: Record<ChapterId, [Shot, Shot]> = {
     { pos: [-0.3, 1.42, -8.6], tgt: [HERO_STAND.x, 1.2, HERO_STAND.z], fov: 42 },
   ],
   detalhe: [
-    { pos: [-0.2, 1.32, -10.75], tgt: [HERO_STAND.x - 0.05, 1.12, HERO_STAND.z], fov: 30 },
-    { pos: [-0.55, 1.02, -11.2], tgt: [HERO_STAND.x - 0.08, 0.86, HERO_STAND.z], fov: 27 },
+    { pos: [0.35, 1.4, -10.4], tgt: [HERO_STAND.x, 1.15, HERO_STAND.z], fov: 32 },
+    { pos: [-0.05, 1.18, -10.85], tgt: [HERO_STAND.x - 0.05, 0.95, HERO_STAND.z], fov: 30 },
   ],
   categorias: [
     { pos: [-0.3, 1.52, -12.4], tgt: [-0.5, 1.5, ROOM.zBack], fov: 44 },

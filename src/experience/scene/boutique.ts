@@ -715,7 +715,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         const sx = HERO_STAND.x - 0.7 + ctx.sweep * 1.4;
         sweep.target.position.set(sx, 1.2 - ctx.sweep * 0.5, HERO_STAND.z);
         sweep.target.updateMatrixWorld();
-        sweep.intensity = 90 * Math.sin(Math.min(1, Math.max(0, ctx.sweep)) * Math.PI);
+        sweep.intensity = 38 * Math.sin(Math.min(1, Math.max(0, ctx.sweep)) * Math.PI);
       } else sweep.intensity = 0;
     },
     dispose() {

@@ -12,7 +12,7 @@ let chromium;
 try { ({ chromium } = require('playwright')); } catch { ({ chromium } = require('/opt/node-tools/node_modules/playwright')); }
 
 const base = process.argv[2] || 'http://localhost:4173';
-const chapters = ['vitrine', 'porta', 'sala', 'vestido', 'detalhe', 'categorias', 'provador'];
+const chapters = (process.env.CHAPTERS || 'vitrine,porta,sala,vestido,detalhe,categorias,provador').split(',');
 const formats = [
   { suffix: '', width: 1600, height: 1000 },
   { suffix: '-p', width: 900, height: 1500 },
