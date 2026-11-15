@@ -45,6 +45,7 @@ import { initStoresChampagne } from './motion/stores-champagne';
 import { initPerfGuard } from './core/perf-guard';
 import './styles/belle-v68-metal-palettes.css'; // V68: final color-only layer; keeps all interactions untouched.
 import './styles/belle-v72-couture-ticker.css'; // V72: seamless premium category rail, scoped to the film/passarela separator.
+import './styles/belle-v74-editorial-cleanup.css'; // V74: conversion-first mobile readability and restrained ornament.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
