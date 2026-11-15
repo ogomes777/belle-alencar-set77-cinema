@@ -1,169 +1,226 @@
-/* BELLE V54 — progressive scroll storyboard, actual client-provided media, no scraping. */
-const section = document.getElementById('belle-cidades');
-const dialog = document.getElementById('belleV54FilmDialog');
-const cities = [
- {id:'araxa',name:'Araxá',region:'Minas Gerais',profile:'belle.alencar',count:12},
- {id:'frutal',name:'Frutal',region:'Minas Gerais',profile:'frutal.bellealencar',count:11},
- {id:'catalao',name:'Catalão',region:'Goiás',profile:'catalao.bellealencar',count:12},
- {id:'mineiros',name:'Mineiros',region:'Goiás',profile:'bellealencar.mineiros',count:11},
- {id:'ibia',name:'Ibiá',region:'Minas Gerais',profile:'bellealencar.ibia',count:0},
- {id:'franca',name:'Franca',region:'São Paulo',profile:'bellealencar.franca',count:1}
+/* BELLE V63 | One focused Instagram journey followed by ALL real cinema previews.
+ * Section A: six scroll-driven iPhone mockups with direct Instagram links.
+ * Section B: the original Originkit Rotunda WebGL, mounted inline, with the
+ * ENTIRE supplied ZIP manifest (47 slots; repeated MP4s intentionally retained).
+ * Deliberately NO modal, copy panel, city buttons, video overlays or exploding shards.
+ */
+const section=document.getElementById('belle-cidades');
+const previews=document.getElementById('belle-previews');
+const cities=[
+ {id:'araxa',name:'Araxá',profile:'belle.alencar'},
+ {id:'frutal',name:'Frutal',profile:'frutal.bellealencar'},
+ {id:'catalao',name:'Catalão',profile:'catalao.bellealencar'},
+ {id:'mineiros',name:'Mineiros',profile:'bellealencar.mineiros'},
+ {id:'ibia',name:'Ibiá',profile:'bellealencar.ibia'},
+ {id:'franca',name:'Franca',profile:'bellealencar.franca'},
 ];
-const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-const profileLink=(city)=>'https://www.instagram.com/'+city.profile+'/';
-const source=(city)=>'/belle-v54/phones/'+city.id+'.webp';
-if(section && dialog){
- const $=(s,within=section)=>within.querySelector(s);
- const phone=$('[data-v54-phone]'),shards=[...section.querySelectorAll('[data-v54-shard]')];
- const tabs=[...section.querySelectorAll('[data-v54-city]')];
- const serial=$('[data-v54-serial]'),name=$('[data-v54-name]');
- const region=$('[data-v54-region]'),handle=$('[data-v54-handle]'),count=$('[data-v54-count]');
- const cta=$('[data-v54-open]'),instruction=$('[data-v54-instruction]'),fill=$('[data-v54-fill]');
- const phoneButton=$('[data-v54-tap]'),stage=$('[data-v54-stage]');
- const players=$('[data-v54-players]',dialog),dialogCity=$('[data-v54-dialog-city]',dialog),dialogCount=$('[data-v54-dialog-count]',dialog);
- // All three controls live OUTSIDE #belle-cidades in the modal. Searching
- // inside the section used to throw at movieSelect.addEventListener and also
- // rejected the shared dynamic 3D chunk, forcing the hero into static posters.
- const movieSelect=$('[data-v54-select]',dialog),filmLink=$('[data-v54-instagram]',dialog),rotundaHost=$('[data-v54-rotunda]',dialog);
- let current=-1,manifest=null,manifestPromise=null,videoIndex=0,renderReq=0;
- let rotundaUninstall=null,rotundaRequest=0,returnFocus=null;
- let pointer=[0,0],lastScrollIndex=-1;
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- // Do NOT fetch six high-resolution 3D phones while the first hero is
- // assembling. They compete with its textures, fonts and WebGL upload.
- let nearStage = false;
- const warmed = new Set();
+const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
+const cityUrl=city=>'https://www.instagram.com/'+city.profile+'/';
+const phoneSrc=city=>'/belle-v54/phones/'+city.id+'.webp';
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+if(section){
+ const stage=section.querySelector('[data-v54-stage]');
+ const main=section.querySelector('[data-v54-tap]');
+ const photo=section.querySelector('[data-v54-phone]');
+ const announcer=section.querySelector('[data-v63-phone-announcement]');
+ const left=section.querySelector('[data-v63-peek-left]');
+ const right=section.querySelector('[data-v63-peek-right]');
+ const leftImg=section.querySelector('[data-v63-peek-photo-left]');
+ const rightImg=section.querySelector('[data-v63-peek-photo-right]');
+ let current=-1,frame=0,near=false,gesture=null,preventTap=false;
+ const preload=new Set();
  function prewarm(index){
-   for(const n of [index,(index+1)%cities.length]){
-     const url=source(cities[n]);
-     if(warmed.has(url))continue;
-     warmed.add(url);
-     const im=new Image();im.decoding='async';im.src=url;
+   for(const n of [(index+5)%6,index,(index+1)%6]){
+     const src=phoneSrc(cities[n]);
+     if(preload.has(src))continue;
+     preload.add(src);
+     const img=new Image();
+     img.decoding='async';
+     img.src=src;
    }
  }
- const proximity = typeof IntersectionObserver !== 'undefined'
-   ? new IntersectionObserver(entries=>{
-       nearStage=entries.some(entry=>entry.isIntersecting);
-       section.classList.toggle('v54-near',nearStage);
-       if(nearStage){prewarm(Math.max(0,current));schedule();}
-     },{rootMargin:'1200px 0px'})
-   : null;
- if(proximity)proximity.observe(section);
- else {nearStage=true;section.classList.add('v54-near');}
- function paintCity(index){
-   index=clamp(index,0,cities.length-1);
+ function bindPhone(anchor,image,city,animate=false){
+   anchor.href=cityUrl(city);
+   anchor.setAttribute('aria-label','Abrir Instagram da Belle '+city.name);
+   if(image.src.endsWith(phoneSrc(city)))return;
+   image.src=phoneSrc(city);
+   if(image===photo){
+     image.alt='iPhone 17 Pro Max mostrando o Instagram da Belle '+city.name;
+   }
+   if(animate&&!reduced.matches && image.animate){
+     image.animate([
+       {opacity:.28,filter:'blur(8px)',transform:'translate3d(0,15px,-40px) scale(.93)'},
+       {opacity:1,filter:'blur(0)',transform:'translate3d(0,0,0) scale(1)'}
+     ],{duration:620,easing:'cubic-bezier(.18,.9,.22,1)'});
+   }
+ }
+ function paint(index){
+   index=clamp(index,0,5);
    if(index===current)return;
-   current=index;
    const city=cities[index];
-   serial.textContent=String(index+1).padStart(2,'0')+' / 06';
-   name.textContent=city.name;region.textContent=city.region;
-   handle.textContent='@'+city.profile;
-   count.textContent=city.count===0?'ZERO PREVIEWS':city.count+' PREVIEWS';
-   if(city.count===0){
-    cta.textContent='Abrir Instagram de Ibiá ↗';instruction.textContent='Ibiá: sem vídeos · acesso direto ao Instagram';
-   }else{
-    cta.textContent='Assistir aos previews · '+city.name+' ↗';instruction.textContent='Toque no iPhone para assistir ao filme';
-   }
-   phone.src=source(city);phone.alt='Mockup original iPhone 17 Pro Max com Instagram da Belle '+city.name;
-   phoneButton.setAttribute('aria-label',city.count===0?'Abrir Instagram Belle Ibiá':'Abrir filme de previews Belle '+city.name);
-   shards.forEach(img=>{img.src=source(city)});
-   tabs.forEach((tab,i)=>{const on=i===index;tab.setAttribute('aria-pressed',String(on));tab.tabIndex=on?0:-1});
+   prewarm(index);
+   bindPhone(main,photo,city,current!==-1);
+   bindPhone(left,leftImg,cities[(index+5)%6],current!==-1);
+   bindPhone(right,rightImg,cities[(index+1)%6],current!==-1);
+   section.dataset.v63City=city.id;
+   stage.style.setProperty('--v63-chapter',String(index));
+   announcer.textContent=city.name+', '+(index+1)+' de seis lojas. Clique no mockup para abrir o Instagram.';
+   current=index;
  }
- function assembly(p){
-  const t=reduced.matches?1:clamp(p*4.5,0,1);
-  const eased=1-Math.pow(1-t,3);
-  phone.style.opacity=String(clamp((eased-.3)/.7,0,1));
-  const d=[[-185,-145,-35],[160,-140,32],[-200,-42,-19],[195,42,24],[-130,165,-17],[155,160,28]];
-  shards.forEach((sh,i)=>{
-    const [dx,dy,rotation]=d[i];const v=1-eased;
-    sh.style.opacity=String(clamp(1-eased*.98,0,1));
-    sh.style.transform=`translate3d(${(dx*v).toFixed(1)}px,${(dy*v).toFixed(1)}px,${(70*v).toFixed(1)}px) rotateZ(${(rotation*v).toFixed(2)}deg) scale(${(1+v*.13).toFixed(3)})`;
-  });
+ function moveTo(index){
+   index=(index+6)%6;
+   const rect=section.getBoundingClientRect();
+   const abs=window.scrollY+rect.top;
+   const travel=Math.max(1,section.offsetHeight-window.innerHeight);
+   const y=abs+(index+.48)/6*travel;
+   window.scrollTo({top:y,behavior:reduced.matches?'instant':'smooth'});
  }
- function tickScroll(){
-   renderReq=0;
-   // Keep the 690svh cinema dormant while visitors are still in the opening film.
-   if(!nearStage || document.hidden || dialog.open)return;
+ function tick(){
+   frame=0;
+   if(!near||document.hidden)return;
    const rect=section.getBoundingClientRect();
    const travel=Math.max(1,section.offsetHeight-innerHeight);
-   const local=clamp(-rect.top/travel,0,1);
-   const idx=clamp(Math.floor(local*6),0,5);
-   if(idx!==lastScrollIndex){paintCity(idx);prewarm(idx);lastScrollIndex=idx}
-   fill.style.width=(100*local).toFixed(2)+'%';
-   assembly(local*6);
-   const center=stage.querySelector('.v54-phone-core');
-   if(center){center.style.transform=`rotateY(${pointer[0]*7+(local-.5)*5}deg) rotateX(${-pointer[1]*5+2}deg)`}
+   const p=clamp(-rect.top/travel,0,1);
+   const idx=Math.min(5,Math.floor(p*6));
+   paint(idx);
+   section.style.setProperty('--v63-progress',String(p));
+   // Smooth optical assembly: depth, proximity and opacity, never shattered pieces.
+   const r=reduced.matches?1:clamp(p*10+.48,0,1);
+   const ease=1-Math.pow(1-r,3);
+   section.style.setProperty('--v63-reveal',String(ease));
+   section.style.setProperty('--v63-entrance-y',((1-ease)*69).toFixed(1)+'px');
+   section.style.setProperty('--v63-entrance-z',(-(1-ease)*110).toFixed(1)+'px');
+   section.style.setProperty('--v63-entrance-scale',(0.86+ease*.14).toFixed(3));
  }
- const schedule=()=>{if(!nearStage||dialog.open||document.hidden)return;if(!renderReq)renderReq=requestAnimationFrame(tickScroll)};
- window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
- const moving=window.matchMedia('(pointer:fine)');
- if(moving.matches){stage.addEventListener('pointermove',event=>{const r=stage.getBoundingClientRect();pointer=[clamp((event.clientX-r.left)/Math.max(1,r.width)*2-1,-1,1),clamp((event.clientY-r.top)/Math.max(1,r.height)*2-1,-1,1)];schedule()},{passive:true});stage.addEventListener('pointerleave',()=>{pointer=[0,0];schedule()})}
- tabs.forEach((tab,i)=>{
-   const go=()=>{const y=window.scrollY+section.getBoundingClientRect().top;const segment=(section.offsetHeight-innerHeight)/6;window.scrollTo({top:y+(i+.40)*segment,behavior:reduced.matches?'instant':'smooth'})};
-   tab.addEventListener('click',go);
-   tab.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?5:(i+(e.key==='ArrowRight'?1:5))%6;tabs[next].focus();tabs[next].click()});
+ const schedule=()=>{if(!frame)frame=requestAnimationFrame(tick)};
+ const observer=typeof IntersectionObserver!=='undefined'
+   ?new IntersectionObserver(entries=>{
+     near=entries.some(x=>x.isIntersecting);
+     if(near){paint(Math.max(0,current));schedule();}
+   },{rootMargin:'600px 0px'}):null;
+ if(observer)observer.observe(section);
+ else{near=true;paint(0);}
+ stage.addEventListener('pointermove',event=>{
+   if(!near)return;
+   const r=stage.getBoundingClientRect();
+   const x=clamp((event.clientX-r.left)/Math.max(r.width,1)*2-1,-1,1);
+   const y=clamp((event.clientY-r.top)/Math.max(r.height,1)*2-1,-1,1);
+   stage.style.setProperty('--v63-pointer-x',x.toFixed(3));
+   stage.style.setProperty('--v63-pointer-y',y.toFixed(3));
+   section.style.setProperty('--v63-shift-x',(x*13).toFixed(1)+'px');
+   section.style.setProperty('--v63-shift-y',(y*9).toFixed(1)+'px');
+   section.style.setProperty('--v63-pitch',(-y*7.5).toFixed(2)+'deg');
+   section.style.setProperty('--v63-yaw',(x*9).toFixed(2)+'deg');
+ },{passive:true});
+ stage.addEventListener('pointerleave',()=>{
+   stage.style.setProperty('--v63-pointer-x','0');
+   stage.style.setProperty('--v63-pointer-y','0');
+   for(const [key,value] of [['--v63-shift-x','0px'],['--v63-shift-y','0px'],
+     ['--v63-pitch','0deg'],['--v63-yaw','0deg']])section.style.setProperty(key,value);
  });
- function allClips(city){return (manifest||[]).filter(item=>item.city===city.id).sort((a,b)=>a.order-b.order)}
- async function getManifest(){
-  if(!manifestPromise)manifestPromise=fetch('/belle-v54/manifest.json',{cache:'force-cache'}).then(r=>{if(!r.ok)throw new Error('Pacote de mídia indisponível');return r.json()}).then(data=>{manifest=Array.isArray(data)?data:[];return manifest});
-  return manifestPromise;
+ stage.addEventListener('pointerdown',event=>{
+   if(event.pointerType==='touch')gesture={x:event.clientX,y:event.clientY};
+ },{passive:true});
+ stage.addEventListener('pointerup',event=>{
+   if(event.pointerType!=='touch'||!gesture)return;
+   const dx=event.clientX-gesture.x,dy=event.clientY-gesture.y;
+   gesture=null;
+   if(Math.abs(dx)>54 && Math.abs(dx)>Math.abs(dy)*1.4){
+     preventTap=true;
+     moveTo(current+(dx<0?1:-1));
+   }
+ },{passive:true});
+ for(const link of [main,left,right])link.addEventListener('click',event=>{
+   if(preventTap){event.preventDefault();preventTap=false}
+ });
+ window.addEventListener('scroll',schedule,{passive:true});
+ window.addEventListener('resize',schedule,{passive:true});
+ paint(0);schedule();
+}
+if(previews){
+ const title=previews.querySelector('[data-v63-previews-title]');
+ const theater=previews.querySelector('[data-v63-previews-theater]');
+ const host=previews.querySelector('[data-v54-rotunda]');
+ const prev=previews.querySelector('[data-v54-prev]');
+ const next=previews.querySelector('[data-v54-next]');
+ let unmount=null,mounting=false,generation=0,manifestPromise=null,lastWheel=0;
+ function allMedia(){
+   if(!manifestPromise)manifestPromise=fetch('/belle-v54/manifest.json',{cache:'force-cache'})
+     .then(r=>{if(!r.ok)throw Error('Manifest indisponível '+r.status);return r.json()})
+     .then(a=>{
+       if(!Array.isArray(a))throw Error('Manifest inválido');
+       return a.filter(x=>typeof x.src==='string'&&typeof x.poster==='string'
+         &&x.src.startsWith('/belle-v54/media/')&&x.poster.startsWith('/belle-v54/media/'));
+     });
+   return manifestPromise;
  }
- // The Originkit Rotunda is the entire film. No foreground HTML videos.
- // WebGL itself loads each MP4 into the curved panel texture.
- function releaseVideos(){players.replaceChildren()}
- function updatePlayer(){
-   const city=cities.find(x=>x.id===movieSelect.value)||cities[current];
-   if(!city)return;
-   const n=allClips(city).length;
-   dialogCity.textContent='Belle '+city.name;
-   dialogCount.textContent=n+' PREVIEWS · ROTUNDA EM LOOP';
-   filmLink.href=profileLink(city);
-   filmLink.textContent='Abrir Instagram Belle '+city.name+' ↗';
+ async function mount(){
+   if(unmount||mounting||document.hidden)return;
+   const ticket=++generation;
+   mounting=true;
+   try{
+     const [clips,module]=await Promise.all([allMedia(),import('./belle-v54-rotunda-island')]);
+     if(ticket!==generation||document.hidden)return;
+     if(!clips.length)throw Error('Nenhum vídeo no pacote aprovado');
+     // The Rotunda uses the actual supplied files, in the manifest's order,
+     // including intentionally repeated clips, with zero city segmentation.
+     unmount=await module.mountBelleRotunda(host,clips);
+     previews.dataset.mediaCount=String(clips.length);
+     previews.classList.add('v63-rotunda-ready');
+   }catch(error){
+     console.warn('BELLE PREVIEWS: componente ou mídia indisponível',error);
+     previews.dataset.mediaStatus='error';
+   }finally{mounting=false}
  }
- function shift(delta){
-   window.dispatchEvent(new CustomEvent('belle:rotunda:step',{detail:{delta}}));
+ function stop(){
+   ++generation;
+   if(unmount){unmount();unmount=null}
+   previews.classList.remove('v63-rotunda-ready');
  }
- const prev=$('[data-v54-prev]',dialog),next=$('[data-v54-next]',dialog);
- prev.addEventListener('click',()=>shift(-1));next.addEventListener('click',()=>shift(1));
- // Drag, touch inertia and the spin are the original Originkit engine.
- // Wheel and arrow commands only request a rotation of THAT same cylinder.
- let lastWheel=0;
- rotundaHost.addEventListener('wheel',event=>{
-   const v=event.deltaY||event.deltaX;
-   if(Math.abs(v)<12)return;
+ const revealObserver=typeof IntersectionObserver!=='undefined'
+   ?new IntersectionObserver(entries=>{
+      for(const entry of entries)previews.classList.toggle('v63-in-view',entry.isIntersecting);
+   },{threshold:.12}):null;
+ revealObserver?.observe(previews);
+ const mountObserver=typeof IntersectionObserver!=='undefined'
+  ?new IntersectionObserver(entries=>{
+    const visible=entries.some(e=>e.isIntersecting);
+    if(visible)void mount();
+    else stop();
+  },{rootMargin:'550px 0px'}):null;
+ if(mountObserver)mountObserver.observe(theater);else void mount();
+ const spin=delta=>window.dispatchEvent(new CustomEvent('belle:rotunda:step',{detail:{delta}}));
+ prev.addEventListener('click',()=>spin(-1));
+ next.addEventListener('click',()=>spin(1));
+ theater.addEventListener('wheel',event=>{
+   // Page scroll must remain native. Horizontal wheel/trackpad rotates the stage.
+   if(Math.abs(event.deltaX)<Math.abs(event.deltaY)*1.25)return;
+   if(Math.abs(event.deltaX)<12)return;
    event.preventDefault();
    const now=performance.now();
-   if(now-lastWheel>370){shift(v>0?1:-1);lastWheel=now}
+   if(now-lastWheel>320){spin(event.deltaX>0?1:-1);lastWheel=now}
  },{passive:false});
- dialog.addEventListener('keydown',event=>{const target=event.target;if(target instanceof HTMLSelectElement)return;if(event.key==='ArrowRight')shift(1);if(event.key==='ArrowLeft')shift(-1)});
- movieSelect.addEventListener('change',()=>{
-  const city=cities.find(x=>x.id===movieSelect.value);if(!city)return;
-  if(city.count===0){dialog.close();window.open(profileLink(city),'_blank','noopener,noreferrer');return}
-  releaseVideos();videoIndex=0;updatePlayer();mountRotunda(city);
+ title?.addEventListener('pointermove',event=>{
+   if(reduced.matches)return;
+   const b=title.getBoundingClientRect();
+   const x=(((event.clientX-b.left)/Math.max(1,b.width)-.5)*2);
+   const y=(((event.clientY-b.top)/Math.max(1,b.height)-.5)*2);
+   title.style.setProperty('--v63-title-x',x.toFixed(3));
+   title.style.setProperty('--v63-title-y',y.toFixed(3));
+   title.style.setProperty('--v63-title-shift-x',(x*10).toFixed(2)+'px');
+   title.style.setProperty('--v63-title-shift-y',(y*7).toFixed(2)+'px');
+   title.style.setProperty('--v63-title-pitch',(-y*2.5).toFixed(2)+'deg');
+   title.style.setProperty('--v63-title-yaw',(x*2.5).toFixed(2)+'deg');
+ },{passive:true});
+ title?.addEventListener('pointerleave',()=>{
+   title.style.setProperty('--v63-title-x','0');
+   title.style.setProperty('--v63-title-y','0');
+   for(const [key,value] of [['--v63-title-shift-x','0px'],['--v63-title-shift-y','0px'],
+     ['--v63-title-pitch','0deg'],['--v63-title-yaw','0deg']])title.style.setProperty(key,value);
  });
- async function mountRotunda(city){
-  const request=++rotundaRequest;
-  if(rotundaUninstall){rotundaUninstall();rotundaUninstall=null}
-  rotundaHost.replaceChildren();
-  const clips=allClips(city);
-  try{
-    const module=await import('./belle-v54-rotunda-island');
-    if(request!==rotundaRequest||!dialog.open)return;
-    rotundaUninstall=await module.mountBelleRotunda(rotundaHost,clips);
-  }catch(error){console.warn('V54 Rotunda fallback:',error);rotundaHost.innerHTML='<div class="v54-rotunda-placeholder" aria-hidden="true"></div>'}
- }
- async function openFilm(){
-  const city=cities[current]||cities[0];if(city.count===0){window.open(profileLink(city),'_blank','noopener,noreferrer');return}
-  returnFocus=document.activeElement;
-  try{await getManifest()}catch(error){console.warn('V54 film assets unavailable',error);manifest=[]}
-  videoIndex=0;movieSelect.value=city.id;
-  dialog.showModal();document.documentElement.classList.add('v54-film-open');
-  updatePlayer();void mountRotunda(city);
- }
- function closeFilm(){dialog.close()}
- const back=$('[data-v54-back]',dialog);back.addEventListener('click',closeFilm);
- dialog.addEventListener('click',event=>{if(event.target===dialog)closeFilm()});
- dialog.addEventListener('close',()=>{document.documentElement.classList.remove('v54-film-open');releaseVideos();rotundaRequest++;if(rotundaUninstall){rotundaUninstall();rotundaUninstall=null}rotundaHost.replaceChildren();if(returnFocus&&returnFocus.isConnected)returnFocus.focus({preventScroll:true})});
- cta.addEventListener('click',openFilm);phoneButton.addEventListener('click',openFilm);
- paintCity(0);schedule();
+ document.addEventListener('visibilitychange',()=>{
+   if(document.hidden)stop();
+   else if(theater.getBoundingClientRect().top<innerHeight+350 && theater.getBoundingClientRect().bottom>-350)void mount();
+ });
 }
+
