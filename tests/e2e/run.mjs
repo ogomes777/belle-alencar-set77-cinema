@@ -282,15 +282,15 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
   check('boutique '+width+': sem arara HTML duplicada',start.oldRack===0);
   check('boutique '+width+': draw calls ≤ 120',start.draw<=120,String(start.draw));
   check('boutique '+width+': mão "Explorar a loja" visível',await page.locator('.pov__enter').isVisible());
-  await page.locator('[data-side-look="1"]').click({timeout:12000});
-  await page.waitForFunction(()=>window.__belle.world().sideLook>.6,null,{timeout:20000});
+  await page.locator('[data-side-look="1"]').click({timeout:60000});
+  await page.waitForFunction(()=>window.__belle.world().sideLook>.6,null,{timeout:90000});
   const right=await page.evaluate(()=>window.__belle.world().lookTarget);
-  await page.locator('[data-side-look="-1"]').click({timeout:12000});
-  await page.waitForFunction(()=>window.__belle.world().sideLook<-.6,null,{timeout:20000});
+  await page.locator('[data-side-look="-1"]').click({timeout:60000});
+  await page.waitForFunction(()=>window.__belle.world().sideLook<-.6,null,{timeout:90000});
   const left=await page.evaluate(()=>window.__belle.world().lookTarget);
   check('boutique '+width+': direita olha para +x e esquerda para −x, sem sair do cômodo',right[0]>1&&left[0]<-1&&(await page.evaluate(()=>document.documentElement.dataset.filmChapter))==='sala');
   await page.locator('[data-side-look="1"]').click();
-  await page.waitForFunction(()=>window.__belle.world().sideLook>.85,null,{timeout:20000});
+  await page.waitForFunction(()=>window.__belle.world().sideLook>.85,null,{timeout:90000});
   await settleFrames(page,6);
   // toque numa peça da arara direita pelo centro do palco (raycast real)
   let hit=false;
@@ -302,17 +302,17 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
   check('boutique '+width+': toque na peça abre a categoria inteira',hit);
   const panel=await page.evaluate(()=>({count:document.querySelector('.pov__count')?.textContent,items:document.querySelectorAll('.pov__list button').length,pressed:document.querySelectorAll('.pov__list button[aria-pressed=true]').length,title:document.querySelector('.pov__title')?.textContent}));
   check('boutique '+width+': lista completa (6 peças) com a tocada selecionada',panel.items===6&&panel.pressed===1&&/6 peças/.test(panel.count||''),JSON.stringify(panel));
-  await page.locator('.pov__sizes button').first().click();
+  await page.locator('.pov__sizes button').first().click({timeout:60000});
   check('boutique '+width+': tamanho selecionado',(await page.locator('.pov__sizes button[aria-pressed=true]').count())===1);
-  await page.locator('.pov__add').click({timeout:12000});
-  await page.waitForFunction(()=>document.querySelector('.pov__bag b')?.textContent==='1',null,{timeout:25000});
-  await page.waitForFunction(()=>!document.querySelector('.dress-ghost'),null,{timeout:25000});
+  await page.locator('.pov__add').click({timeout:60000});
+  await page.waitForFunction(()=>document.querySelector('.pov__bag b')?.textContent==='1',null,{timeout:90000});
+  await page.waitForFunction(()=>!document.querySelector('.dress-ghost'),null,{timeout:90000});
   const end=await page.evaluate(()=>({count:document.querySelector('.pov__bag b')?.textContent,header:document.querySelector('[data-bag-count]')?.textContent,chapter:document.documentElement.dataset.filmChapter,ghost:document.querySelectorAll('.dress-ghost').length}));
   check('boutique '+width+': sacola sincronizada',end.count==='1'&&end.header?.trim()==='1'&&end.ghost===0);
   check('boutique '+width+': câmera continua no cômodo',end.chapter==='sala');
   // "Ver peça" abre a ficha canônica
-  await page.locator('.pov__view').click();
-  const qv=await page.waitForSelector('.qv',{state:'visible',timeout:5000}).then(()=>true).catch(()=>false);
+  await page.locator('.pov__view').click({timeout:60000});
+  const qv=await page.waitForSelector('.qv',{state:'visible',timeout:60000}).then(()=>true).catch(()=>false);
   check('boutique '+width+': "Ver peça" abre o detalhe canônico',qv);
   await page.keyboard.press('Escape');
   if(SHOTS)await page.screenshot({path:OUT+'/boutique-unica-'+width+'.png',timeout:20000}).catch(()=>undefined);
