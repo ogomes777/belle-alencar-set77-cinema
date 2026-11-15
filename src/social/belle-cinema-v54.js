@@ -140,6 +140,7 @@ if(section){
 if(previews){
  const title=previews.querySelector('[data-v63-previews-title]');
  const theater=previews.querySelector('[data-v63-previews-theater]');
+ const flipButton=previews.querySelector('[data-v64-title-flip]');
  const host=previews.querySelector('[data-v54-rotunda]');
  const prev=previews.querySelector('[data-v54-prev]');
  const next=previews.querySelector('[data-v54-next]');
@@ -198,6 +199,39 @@ if(previews){
     }
   },{rootMargin:'700px 0px'}):null;
  if(mountObserver)mountObserver.observe(theater);else void mount();
+ // V64: reversible section reveal bound to actual scroll position.
+ let revealFrame=0;
+ const renderChapterReveal=()=>{
+   revealFrame=0;
+   const bounds=previews.getBoundingClientRect(),h=Math.max(innerHeight,1);
+   const raw=Math.max(0,Math.min(1,(h*.92-bounds.top)/(h*.72)));
+   const eased=raw*raw*(3-2*raw);
+   previews.style.setProperty('--v64-reveal-pct',(eased*100).toFixed(2)+'%');
+   previews.style.setProperty('--v64-title-opacity',eased.toFixed(3));
+   previews.style.setProperty('--v64-title-lift',((1-eased)*46).toFixed(1)+'px');
+   const stage=Math.max(0,Math.min(1,(h*.76-bounds.top)/(h*.55)));
+   const smooth=stage*stage*(3-2*stage);
+   previews.style.setProperty('--v64-stage-opacity',(0.3+0.7*smooth).toFixed(3));
+   previews.style.setProperty('--v64-stage-lift',((1-smooth)*48).toFixed(1)+'px');
+ };
+ const queueChapterReveal=()=>{
+   if(!revealFrame)revealFrame=requestAnimationFrame(renderChapterReveal);
+ };
+ window.addEventListener('scroll',queueChapterReveal,{passive:true});
+ window.addEventListener('resize',queueChapterReveal,{passive:true});
+ queueChapterReveal();
+
+ // Mouse, touch and keyboard trigger the same complete 360-degree turn.
+ let flipTimeout=0;
+ const flip=()=>{
+   if(reduced.matches||!flipButton)return;
+   flipButton.classList.remove('v64-title-flipping');
+   void flipButton.offsetWidth;
+   flipButton.classList.add('v64-title-flipping');
+   clearTimeout(flipTimeout);
+   flipTimeout=window.setTimeout(()=>flipButton.classList.remove('v64-title-flipping'),960);
+ };
+ flipButton?.addEventListener('click',flip);
  const spin=delta=>window.dispatchEvent(new CustomEvent('belle:rotunda:step',{detail:{delta}}));
  prev.addEventListener('click',()=>spin(-1));
  next.addEventListener('click',()=>spin(1));
