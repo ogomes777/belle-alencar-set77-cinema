@@ -453,7 +453,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   }
   for (const s of [-1, 1] as const) for (const z of [-3.9, -10.7, -14.1]) addSpot('#ffcf94', cinema ? 38 : 30, [s * (X - 0.5), H - 0.06, z + 0.6], [s * (X + 0.1), 1.0, z], 0.6, 0.95);
   addSpot('#ffdcae', 58, [0, H - 0.06, -2.6], [0, 0, -3.2], 0.8, 0.9);
-  const heroSpot = addSpot('#ffe0b6', 72, [-0.6, H - 0.06, -11.4], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.5, 0.7);
+  const heroSpot = addSpot('#ffe0b6', 30, [-0.6, H - 0.06, -11.4], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.5, 0.7);
   if (cinema) {
     heroSpot.castShadow = true;
     heroSpot.shadow.mapSize.set(1024, 1024);
@@ -715,7 +715,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         const sx = HERO_STAND.x - 0.7 + ctx.sweep * 1.4;
         sweep.target.position.set(sx, 1.2 - ctx.sweep * 0.5, HERO_STAND.z);
         sweep.target.updateMatrixWorld();
-        sweep.intensity = 38 * Math.sin(Math.min(1, Math.max(0, ctx.sweep)) * Math.PI);
+        sweep.intensity = 22 * Math.sin(Math.min(1, Math.max(0, ctx.sweep)) * Math.PI);
       } else sweep.intensity = 0;
     },
     dispose() {
