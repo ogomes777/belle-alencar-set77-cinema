@@ -1,0 +1,32 @@
+name: Belle V71 - import first frame matching live MP4 (one time)
+on:
+  push:
+    branches:
+      - fix/belle-v71-scroll-video-initial-poster
+    paths:
+      - .github/workflows/belle-v71-poster-import-once.yml
+permissions:
+  contents: write
+jobs:
+  import-poster:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Transfer exact first-frame PNG
+        env:
+          POSTER_URL: https://at.adobe.com/pRN5bu7S5xxNb0Ar
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/media
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 "$POSTER_URL" -o public/media/belle-scroll-original-v71-first-frame.png
+          echo "853dc3caf2865184a7d33315c25c6ab243b54d0c7e1a191ec4d863fbc3c94454  public/media/belle-scroll-original-v71-first-frame.png" | sha256sum --check
+          test "$(stat -c %s public/media/belle-scroll-original-v71-first-frame.png)" -eq 948499
+      - name: Store poster asset
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/media/belle-scroll-original-v71-first-frame.png
+          git commit -m "asset(v71): matching full-resolution original-video first frame"
+          git push origin HEAD:fix/belle-v71-scroll-video-initial-poster
