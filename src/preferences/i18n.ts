@@ -5,10 +5,11 @@
 import { phrasePairs } from './copy';
 import { productPairs } from './catalog-copy';
 import { additionalPairs } from './extended-copy';
+import { conversionPairs } from './conversion-copy';
 export type BelleLocale='pt'|'en'|'es'|'it';
 const languages: BelleLocale[]=['pt','en','es','it'];
 const dictionary:Record<'en'|'es'|'it',Record<string,string>>={en:{},es:{},it:{}};
-for(const [pt,en,es,it] of [...phrasePairs,...productPairs,...additionalPairs]){
+for(const [pt,en,es,it] of [...phrasePairs,...productPairs,...additionalPairs,...conversionPairs]){
  dictionary.en[pt.trim()]=en;dictionary.es[pt.trim()]=es;dictionary.it[pt.trim()]=it;
 }
 const storeKey='belle:v31:locale';
@@ -193,7 +194,7 @@ function watch(){
 export function getBelleLocale():BelleLocale{return locale;}
 function refreshMetadata(next:BelleLocale){
  const descriptions:Record<BelleLocale,string>={
-  pt:'Belle Alencar, moda feminina e acessórios em Araxá, Frutal, Catalão, Mineiros, Ibiá e Franca. Entre na loja, conheça a coleção e fale com a unidade da sua cidade.',
+  pt:'Belle Alencar em Araxá, Frutal, Catalão, Mineiros, Ibiá e Franca. Explore referências de vestidos e acessórios, salve suas escolhas e consulte modelos, preços e tamanhos com sua unidade.',
   en:'Belle Alencar, womenswear and accessories in Araxá, Frutal, Catalão, Mineiros, Ibiá and Franca. Explore the boutique, shop the collection and contact your nearest store.',
   es:'Belle Alencar, moda femenina y accesorios en Araxá, Frutal, Catalão, Mineiros, Ibiá y Franca. Descubre la boutique, explora la colección y contacta con tu tienda.',
   it:'Belle Alencar, moda donna e accessori ad Araxá, Frutal, Catalão, Mineiros, Ibiá e Franca. Esplora la boutique, scopri la collezione e contatta il negozio.'
