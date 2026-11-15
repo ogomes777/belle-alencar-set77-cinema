@@ -221,17 +221,46 @@ if(previews){
  window.addEventListener('resize',queueChapterReveal,{passive:true});
  queueChapterReveal();
 
- // Mouse, touch and keyboard trigger the same complete 360-degree turn.
- let flipTimeout=0;
- const flip=()=>{
-   if(reduced.matches||!flipButton)return;
-   flipButton.classList.remove('v64-title-flipping');
-   void flipButton.offsetWidth;
-   flipButton.classList.add('v64-title-flipping');
-   clearTimeout(flipTimeout);
-   flipTimeout=window.setTimeout(()=>flipButton.classList.remove('v64-title-flipping'),960);
+ // V66: no-click, proximity-reactive vertical 360-degree reveal.
+ // Web Animations API uses compositor transforms without layout reflows.
+ let titleNear=false;
+ let lastTitleFlip=-Infinity;
+ let currentTitleAnimation=null;
+ const flipOnApproach=(clientX,clientY,threshold)=>{
+   if(reduced.matches||!flipButton||!title)return;
+   const b=title.getBoundingClientRect();
+   const dx=Math.max(b.left-clientX,0,clientX-b.right);
+   const dy=Math.max(b.top-clientY,0,clientY-b.bottom);
+   const isNear=Math.hypot(dx,dy)<=threshold;
+   if(!isNear){titleNear=false;return}
+   if(titleNear)return;
+   titleNear=true;
+   const now=performance.now();
+   if(now-lastTitleFlip<850)return;
+   lastTitleFlip=now;
+   if(currentTitleAnimation)currentTitleAnimation.cancel();
+   currentTitleAnimation=flipButton.animate([
+     {transform:'perspective(1450px) rotateX(0deg) translateZ(0) scale(1)',offset:0},
+     {transform:'perspective(1450px) rotateX(-76deg) translateZ(8px) scale(1.018)',offset:.22},
+     {transform:'perspective(1450px) rotateX(-192deg) translateZ(4px) scale(.985)',offset:.52},
+     {transform:'perspective(1450px) rotateX(-315deg) translateZ(8px) scale(1.011)',offset:.83},
+     {transform:'perspective(1450px) rotateX(-360deg) translateZ(0) scale(1)',offset:1}
+   ],{duration:760,easing:'cubic-bezier(.18,.72,.19,1)'});
+   flipButton.dataset.v66FlipCount=String((Number(flipButton.dataset.v66FlipCount)||0)+1);
  };
- flipButton?.addEventListener('click',flip);
+ previews.addEventListener('pointermove',event=>{
+   if(event.pointerType==='mouse'||event.pointerType==='pen')
+     flipOnApproach(event.clientX,event.clientY,105);
+ },{passive:true});
+ previews.addEventListener('pointerleave',()=>{titleNear=false},{passive:true});
+ const onTouchNear=event=>{
+   if(!event.touches?.length)return;
+   const finger=event.touches[0];
+   flipOnApproach(finger.clientX,finger.clientY,48);
+ };
+ previews.addEventListener('touchstart',onTouchNear,{passive:true});
+ previews.addEventListener('touchmove',onTouchNear,{passive:true});
+ previews.addEventListener('touchend',()=>{titleNear=false},{passive:true});
  const spin=delta=>window.dispatchEvent(new CustomEvent('belle:rotunda:step',{detail:{delta}}));
  prev.addEventListener('click',()=>spin(-1));
  next.addEventListener('click',()=>spin(1));
