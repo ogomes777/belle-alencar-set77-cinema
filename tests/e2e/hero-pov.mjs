@@ -24,7 +24,7 @@ async function open(opts = {}, query = 'tier=touch&gov=off&loja=araxa') {
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); });
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
   await page.addInitScript(() => { try { sessionStorage.setItem('belle:v4:intro', '1'); } catch {} });
-  await page.goto(`${BASE}/?${query}`, { waitUntil: 'load' });
+  await page.goto(`${BASE}/?${query}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.evaluate(() => document.querySelector('#sala')?.scrollIntoView({ block: 'center' }));
   await page.waitForFunction(() => document.documentElement.dataset.filmChapter === 'sala' && document.querySelector('.pov.is-on') && window.__belle?.world()?.products.ready > 40, null, { timeout: 240000 });
   return { ctx, page, errors };
