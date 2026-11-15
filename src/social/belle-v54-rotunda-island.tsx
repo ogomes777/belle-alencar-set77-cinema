@@ -20,11 +20,11 @@ export async function mountBelleRotunda(target: HTMLElement, clips: BelleClip[])
     background: 'transparent',
     panelWidth: 690,
     panelHeight: 1180,
-    gap: 8,
+    gap: 1,
     distance: 55,
     speed: 31,
     tilt: 0,
-    rounded: 1,
+    rounded: 0,
     cursor: { hover: 80, damping: 75 },
     style: { minWidth: '100%', minHeight: '100%', width: '100%', height: '100%' },
   }));
