@@ -276,6 +276,7 @@ function wrapPi(x: number): number {
 
 interface ItemProp {
     image?: string
+    video?: string // BELLE: same WebGL cylinder, real video frames rather than a second overlay
 }
 interface CursorGroup {
     damping: number
@@ -323,7 +324,7 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
     // Flattened, so the loop can spot a content change by comparing a string.
     // A useEffect dep on `images` would see a fresh array every render.
     const srcKey = JSON.stringify(
-        (Array.isArray(images) ? images : []).map((i) => i?.image ?? "")
+        (Array.isArray(images) ? images : []).map((i) => [i?.image ?? "", i?.video ?? ""])
     )
 
     const live = useRef({
@@ -473,6 +474,79 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
         const cache = new Map<string, { tex: WebGLTexture; aspect: number }>()
         const pending = new Set<string>()
 
+        // BELLE V62: VIDEO TEXTURES IN THE ORIGINAL ROTUNDA ENGINE.
+        // The original shaders, curved-arc math, pointer ray intersection,
+        // inertia and camera remain the only rendering and interaction engine.
+        // Never render an HTML video layer over the canvas.
+        type MovingTexture = {
+            video: HTMLVideoElement
+            tex: WebGLTexture
+            surface: HTMLCanvasElement
+            ctx: CanvasRenderingContext2D
+            aspect: number
+            lastUpload: number
+            lastSeen: number
+            ready: boolean
+        }
+        const moving = new Map<string, MovingTexture>()
+        let activeVideoCount = 0
+        const getMoving = (src: string, now: number): MovingTexture | undefined => {
+            let entry = moving.get(src)
+            if (entry) { entry.lastSeen = now; return entry }
+            const tex = gl.createTexture()
+            const surface = document.createElement("canvas")
+            const ctx = surface.getContext("2d", { alpha: false })
+            if (!tex || !ctx) return
+            // Compact upload, keeping mobile GPU fill/upload costs bounded.
+            surface.width = 384
+            surface.height = 682
+            gl.bindTexture(gl.TEXTURE_2D, tex)
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, surface.width, surface.height, 0,
+                gl.RGBA, gl.UNSIGNED_BYTE, null)
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+            const video = document.createElement("video")
+            video.muted = true
+            video.defaultMuted = true
+            video.loop = true
+            video.autoplay = true
+            video.playsInline = true
+            video.preload = "auto"
+            video.setAttribute("playsinline", "")
+            video.setAttribute("webkit-playsinline", "")
+            video.crossOrigin = "anonymous"
+            video.src = src
+            entry = { video, tex, surface, ctx, aspect: 9 / 16, lastUpload: 0, lastSeen: now, ready: false }
+            moving.set(src, entry)
+            const start = video.play()
+            if (start) void start.catch(() => { /* poster remains until autoplay is available */ })
+            return entry
+        }
+        const releaseMoving = (src: string, entry: MovingTexture) => {
+            entry.video.pause()
+            entry.video.removeAttribute("src")
+            entry.video.load()
+            gl.deleteTexture(entry.tex)
+            moving.delete(src)
+        }
+        const uploadMoving = (entry: MovingTexture, now: number): boolean => {
+            if (entry.video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return entry.ready
+            if (!entry.video.videoWidth || !entry.video.videoHeight) return entry.ready
+            if (!entry.ready || now - entry.lastUpload >= 45) {
+                entry.ctx.drawImage(entry.video, 0, 0, entry.surface.width, entry.surface.height)
+                gl.bindTexture(gl.TEXTURE_2D, entry.tex)
+                gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0)
+                gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, entry.surface)
+                entry.aspect = entry.video.videoWidth / entry.video.videoHeight
+                entry.lastUpload = now
+                entry.ready = true
+            }
+            return entry.ready
+        }
+
+
         const ensure = (src: string) => {
             if (!src || cache.has(src) || pending.has(src)) return
             pending.add(src)
@@ -575,6 +649,17 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
         // the same numbers or the grabbed point drifts as the dials move.
         const view = { focal: 1, aspect: 1, dist: 0, pitch: 0 }
         let yaw = 0
+        let stepTarget = 0
+        const onStep = (event: Event) => {
+            const detail = (event as CustomEvent<{ delta?: number }>).detail
+            const list = live.current.images
+            const n = Array.isArray(list) ? list.length : 0
+            if (n < 2 || !detail || !Number.isFinite(detail.delta)) return
+            stepTarget += (Math.PI * 2 / n) * Math.max(-2, Math.min(2, detail.delta || 0))
+            drag.current.vel = 0
+        }
+        window.addEventListener("belle:rotunda:step", onStep)
+
 
         // Screen point -> the ring angle its ray lands on, or null if the ray is
         // degenerate. offsetX/offsetY, never getBoundingClientRect: the rect
@@ -675,6 +760,11 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
                 if (cssW <= 0 || cssH <= 0) return
             }
 
+            if (Math.abs(stepTarget) > .0001 && !drag.current.down) {
+                const delta = stepTarget * Math.min(1, dt * 9)
+                yaw += delta
+                stepTarget -= delta
+            }
             const L = live.current
             const list =
                 Array.isArray(L.images) && L.images.length
@@ -755,10 +845,23 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
             gl.clearColor(0, 0, 0, 0)
             gl.clear(gl.COLOR_BUFFER_BIT)
 
+            activeVideoCount = 0
             for (let i = 0; i < n; i++) {
                 const src = list[i]?.image ?? ""
+                const videoSrc = list[i]?.video ?? ""
                 if (src) ensure(src)
-                const hit = src ? cache.get(src) : undefined
+                const poster = src ? cache.get(src) : undefined
+                // Camera faces -Z from INSIDE the cylinder. Allocate decoders only
+                // to nearby wall panels, including one at each edge to avoid pop.
+                const mid = (i + .5) * itemArc + yaw
+                const aroundFront = Math.abs(wrapPi(mid - Math.PI))
+                const active = aroundFront < (cssW < 720 ? .87 : 1.26)
+                const movingHit = videoSrc && active ? getMoving(videoSrc, now) : undefined
+                const hasVideo = movingHit ? uploadMoving(movingHit, now) : false
+                if (movingHit && !movingHit.video.paused) activeVideoCount++
+                const hit = hasVideo && movingHit
+                    ? { tex: movingHit.tex, aspect: movingHit.aspect }
+                    : poster
                 gl.uniform1f(u.arc0, i * itemArc + (itemArc - span) * 0.5)
                 if (hit) {
                     gl.bindTexture(gl.TEXTURE_2D, hit.tex)
@@ -776,6 +879,13 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
                 }
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertCount)
             }
+            for (const [src, entry] of moving) {
+                if (now - entry.lastSeen > 2200) releaseMoving(src, entry)
+            }
+            if (Math.floor(now / 500) !== Math.floor((now - dt * 1000) / 500)) {
+                host.dataset.rotundaPlaying = String(activeVideoCount)
+                host.dataset.rotundaTextures = String(moving.size)
+            }
         }
         raf = requestAnimationFrame(frame)
 
@@ -787,6 +897,8 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
             host.removeEventListener("pointerleave", onLeave)
             host.removeEventListener("pointercancel", onUp)
             window.removeEventListener("pointerup", onUp)
+            window.removeEventListener("belle:rotunda:step", onStep)
+            for (const [src, entry] of moving) releaseMoving(src, entry)
             cache.forEach((v) => gl.deleteTexture(v.tex))
             cache.clear()
             gl.deleteTexture(blank)
@@ -799,6 +911,7 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
     return (
         <div
             ref={hostRef}
+            data-rotunda-engine="originkit-webgl-video"
             style={{
                 // Floor BEFORE the style spread: the canvas is absolutely
                 // positioned, so the root has no in-flow content and collapses
