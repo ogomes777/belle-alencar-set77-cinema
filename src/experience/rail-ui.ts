@@ -17,7 +17,7 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       <button type="button" class="roomrail__prev" aria-label="Peça anterior">←</button>
       <span class="roomrail__name"><span class="roomrail__product" aria-live="polite"></span><span class="roomrail__counter" aria-label="Posição na arara">05 / 30</span></span>
       <button type="button" class="roomrail__next" aria-label="Próxima peça">→</button>
-      <button type="button" class="roomrail__inspect">Explorar peça ↗</button>
+      <button type="button" class="roomrail__inspect">Ver detalhes da peça</button>
       <button type="button" class="roomrail__bag" aria-label="Abrir sacola de interesse">Sacola <b>0</b></button>
     </div>
     <div class="roomrail__gesture">
@@ -25,7 +25,7 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       <button type="button" class="roomrail__switch" aria-label="Olhar para a outra parede da boutique">OUTRA PAREDE ↔</button>
     </div>
     <section class="roomrail__detail" hidden aria-label="Peça selecionada na arara">
-      <p class="roomrail__eyebrow">BELLE ALENCAR · REFERÊNCIA EDITORIAL</p>
+      <p class="roomrail__eyebrow">REFERÊNCIA VISUAL · CONSULTE SUA UNIDADE</p>
       <h3 class="roomrail__title"></h3>
       <p class="roomrail__description">Produto demonstrativo. Preço e estoque sujeitos à confirmação na loja.</p>
       <label class="roomrail__size-label">Tamanho
@@ -34,7 +34,7 @@ export function initRoomRail(stage:HTMLElement,getWorld:()=>World|null):RoomRail
       </label>
       <div class="roomrail__actions">
         <button type="button" class="roomrail__add">Adicionar à sacola</button>
-        <button type="button" class="roomrail__close">Voltar à arara ×</button>
+        <button type="button" class="roomrail__close">Voltar à arara</button>
       </div>
       <p class="roomrail__error" role="alert" hidden>Selecione o tamanho primeiro.</p>
     </section>`;
