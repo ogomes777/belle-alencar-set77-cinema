@@ -43,6 +43,7 @@ import { initBelleInstagramDirectory } from './social/instagram-directory';
 import { initHowFilm } from './how-film';
 import { initStoresChampagne } from './motion/stores-champagne';
 import { initPerfGuard } from './core/perf-guard';
+import './styles/belle-v68-metal-palettes.css'; // V68: final color-only layer; keeps all interactions untouched.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
