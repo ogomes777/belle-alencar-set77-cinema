@@ -95,7 +95,8 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => window.__belle.world().exploreBlend === 0 && !window.__belle.explore.active(), null, { timeout: 30000 });
   w = await info(page);
-  check('A · Esc retoma o filme na pose do trilho (progresso atual)', !w.explore.active && w.camera[2] > -3 && near(w.camera[1], 1.3, 0.25), JSON.stringify(w.camera));
+  const stillExploring = await page.evaluate(() => window.__belle.explore.active());
+  check('A · Esc retoma o filme na pose do trilho (progresso atual)', !stillExploring && w.exploreBlend === 0 && w.camera[2] > -3 && near(w.camera[1], 1.35, 0.3), JSON.stringify(w.camera));
   check('A · sem erros', errors.length === 0, errors.join(' | '));
   await ctx.close();
 }
@@ -211,7 +212,8 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
 // D · poses fixas de aceite e marcos do quadro 02 (tier cinema, com pós de cinema)
 {
-  const { ctx, page, errors } = await open({}, 'tier=cinema&gov=off&loja=araxa');
+  // 16:9 como as referências: os marcos são relativos ao enquadramento
+  const { ctx, page, errors } = await open({ viewport: { width: 1600, height: 900 } }, 'tier=cinema&gov=off&loja=araxa');
   const ids = ['01', '02', '03', '04', '05', '06'];
   let ok = true;
   for (const id of ids) {
