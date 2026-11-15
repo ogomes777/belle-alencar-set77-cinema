@@ -120,3 +120,104 @@ html[data-belle-theme='rose'] #belle-cidades.v54-cinema{--c-bg:#f9edf0;--c-ink:#
  .v54-film-dialog[open] .v54-clip-deck{animation:none}
  .v54-clip{transition:none;will-change:auto}
 }
+
+
+/* BELLE V62 · One Rotunda film, no foreground cards.
+   Camera-obscura glass is coordinated with the chosen live Belle theme. */
+#belleV54FilmDialog{
+ --v62-ink:#372a27;--v62-muted:#7c5c52;
+ --v62-lens:rgba(255,244,227,.33);
+ --v62-camera:#c5a991;--v62-glow:rgba(177,106,62,.20);
+ --v62-frame:rgba(93,59,43,.24);--v62-accent:#93654c;
+ color:var(--v62-ink);background:#ebdfd1
+}
+html[data-belle-theme='dark'] #belleV54FilmDialog{
+ --v62-ink:#f3e4db;--v62-muted:#ccab9d;
+ --v62-lens:rgba(53,40,49,.31);
+ --v62-camera:#241e23;--v62-glow:rgba(231,157,100,.18);
+ --v62-frame:rgba(234,186,145,.27);--v62-accent:#e5bc94;
+ background:#171217
+}
+html[data-belle-theme='rose'] #belleV54FilmDialog{
+ --v62-ink:#513643;--v62-muted:#8d6376;
+ --v62-lens:rgba(255,235,241,.38);
+ --v62-camera:#e7ccd6;--v62-glow:rgba(204,119,149,.21);
+ --v62-frame:rgba(148,93,115,.32);--v62-accent:#ab6683;
+ background:#f0dee6
+}
+#belleV54FilmDialog .v54-film-frame{
+ background:
+ radial-gradient(ellipse 64% 90% at 50% 50%,var(--v62-lens),transparent 87%),
+ radial-gradient(ellipse 72% 23% at 50% 100%,var(--v62-glow),transparent 81%),
+ linear-gradient(145deg,transparent,rgba(255,255,255,.025) 48%,transparent 52%),
+ var(--v62-camera);
+}
+#belleV54FilmDialog .v54-film-header,
+#belleV54FilmDialog .v54-film-footer{
+ position:relative;z-index:10;
+ background:var(--v62-lens);color:var(--v62-ink);
+ border-color:var(--v62-frame);
+ backdrop-filter:blur(17px) saturate(1.15);
+ -webkit-backdrop-filter:blur(17px) saturate(1.15);
+}
+#belleV54FilmDialog .v54-film-header-title small,
+#belleV54FilmDialog .v54-film-footer span{
+ color:var(--v62-muted)
+}
+#belleV54FilmDialog .v54-film-back,
+#belleV54FilmDialog .v54-film-city-select,
+#belleV54FilmDialog .v54-film-arrow{
+ color:var(--v62-ink);
+ background:var(--v62-lens);
+ border-color:var(--v62-frame);
+ backdrop-filter:blur(12px);
+}
+#belleV54FilmDialog .v54-film-footer a{color:var(--v62-ink)}
+#belleV54FilmDialog .v54-clip-deck{display:none!important}
+#belleV54FilmDialog .v54-rotunda-mount{
+ position:absolute;inset:0;z-index:3;
+ opacity:1!important;filter:none!important;
+ background:transparent!important;
+ pointer-events:auto;
+}
+#belleV54FilmDialog .v54-rotunda-mount::after{display:none!important}
+#belleV54FilmDialog .v54-rotunda-mount > div{
+ min-width:100%!important;min-height:100%!important;
+ touch-action:pan-y!important;
+}
+#belleV54FilmDialog .v54-rotunda-mount canvas{
+ width:100%!important;height:100%!important;
+}
+#belleV54FilmDialog .v54-film-world{
+ perspective:none;
+ background:
+ linear-gradient(90deg,var(--v62-lens),transparent 11%,transparent 89%,var(--v62-lens));
+}
+#belleV54FilmDialog .v54-film-world::before{
+ display:block;
+ content:'';
+ position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:
+ radial-gradient(ellipse 100% 80% at 50% 54%,transparent 58%,rgba(0,0,0,.21) 100%),
+ repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.011) 5px 6px);
+}
+#belleV54FilmDialog .v54-film-world::after{
+ content:'';display:block;position:absolute;pointer-events:none;
+ inset:12px 4%;z-index:4;border-radius:37px;
+ border:1px solid var(--v62-frame);
+ box-shadow:inset 0 0 100px -64px var(--v62-glow),0 0 45px -35px var(--v62-glow);
+ background:linear-gradient(118deg,rgba(255,255,255,.035),transparent 18%,transparent 79%,rgba(255,255,255,.018));
+}
+#belleV54FilmDialog .v54-film-arrow{
+ z-index:7;width:44px;height:44px;opacity:.85;
+ transition:opacity .16s ease,background .16s ease;
+}
+#belleV54FilmDialog .v54-film-arrow:hover{opacity:1;background:var(--v62-lens)}
+#belleV54FilmDialog .v54-film-dialog[open] .v54-clip-deck{animation:none}
+@media(max-width:700px){
+ #belleV54FilmDialog .v54-film-world::after{inset:8px 3%;border-radius:20px}
+ #belleV54FilmDialog .v54-film-arrow{width:40px;height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+ #belleV54FilmDialog .v54-rotunda-mount{animation:none}
+}
