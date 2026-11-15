@@ -488,6 +488,9 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
             lastSeen: number
             ready: boolean
         }
+        // Keep all 27 videos looping. Render their visible WebGL textures
+        // at up to 33fps desktop / ~22fps mobile, without pausing decoders.
+        const videoUploadInterval = window.matchMedia("(max-width: 700px)").matches ? 45 : 30
         const moving = new Map<string, MovingTexture>()
         let activeVideoCount = 0
         let allVideoCount = 0
@@ -535,7 +538,7 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
         const uploadMoving = (entry: MovingTexture, now: number): boolean => {
             if (entry.video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return entry.ready
             if (!entry.video.videoWidth || !entry.video.videoHeight) return entry.ready
-            if (!entry.ready || now - entry.lastUpload >= 45) {
+            if (!entry.ready || now - entry.lastUpload >= videoUploadInterval) {
                 entry.ctx.drawImage(entry.video, 0, 0, entry.surface.width, entry.surface.height)
                 gl.bindTexture(gl.TEXTURE_2D, entry.tex)
                 gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0)
