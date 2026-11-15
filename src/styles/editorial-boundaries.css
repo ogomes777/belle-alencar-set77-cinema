@@ -106,7 +106,7 @@
   will-change:auto;
 }
 
-/* 06 · CORTINA LATERAL · → Atendimento — bronze recolhe para a direita. */
+/* V67 · CORTINA LATERAL · → Dúvidas frequentes — bronze recolhe para a direita. */
 .v37-veil--lateral .v37-veil__piece{
   background:linear-gradient(90deg,var(--bronze) 0%,var(--gold-deep) 100%);
   box-shadow:inset 2px 0 0 var(--champ-light);
