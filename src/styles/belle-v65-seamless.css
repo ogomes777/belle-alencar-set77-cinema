@@ -1,0 +1,145 @@
+/* BELLE V65 · SEAMLESS CHAPTERS / SET77 LABS
+   PREVIEWS and FAQ are rendered over ONE shared surface, no replicated
+   section gradient and no visible boundary. Keep all Rotunda video textures. */
+.v65-seamless-chapters{
+  --v65-headline:rgba(87,61,49,.86);
+  --v65-headline-glow:rgba(176,116,71,.19);
+  --v65-arrow-bg:rgba(255,255,255,.80);
+  --v65-arrow-border:rgba(119,89,64,.50);
+  --v65-arrow-text:#33261f;
+  position:relative;
+  isolation:isolate;
+  background:var(--paper);
+  color:var(--ink);
+}
+html[data-belle-theme="dark"] .v65-seamless-chapters{
+  --v65-headline:rgba(239,215,190,.92);
+  --v65-headline-glow:rgba(227,176,114,.22);
+  --v65-arrow-bg:rgba(36,31,33,.90);
+  --v65-arrow-border:rgba(242,214,179,.62);
+  --v65-arrow-text:#f8efe5;
+  background:
+    radial-gradient(ellipse 90% 60% at 88% 3%,rgba(166,115,70,.14),transparent 75%),
+    linear-gradient(135deg,#211c1f,#121215 78%);
+}
+html[data-belle-theme="rose"] .v65-seamless-chapters{
+  --v65-headline:rgba(126,70,92,.91);
+  --v65-headline-glow:rgba(201,125,155,.20);
+  --v65-arrow-bg:rgba(255,247,250,.85);
+  --v65-arrow-border:rgba(155,88,118,.53);
+  --v65-arrow-text:#543143;
+  background:
+    radial-gradient(ellipse 70% 85% at 89% 6%,rgba(227,156,83,.2),transparent 70%),
+    linear-gradient(135deg,#fff1f4 0%,#f4d9e3 61%,#f9ece4 100%);
+}
+/* High specificity overrides the V31 FAQ !important gradients and the
+   V63 preview image: both chapters reveal the SAME wrapper pixels. */
+.v65-seamless-chapters > #belle-previews.v63-previews,
+.v65-seamless-chapters > #duvidas.faq{
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+}
+/* Do not paint a top or bottom curtain that creates an artificial boundary. */
+.v65-seamless-chapters > #belle-previews.v63-previews::before,
+.v65-seamless-chapters > #belle-previews.v63-previews::after{
+  display:none!important;
+}
+/* Light is allowed around the subjects, but it tapers out before FAQ starts. */
+.v65-seamless-chapters #belle-previews .v63-previews-atmosphere{
+  background:
+   radial-gradient(ellipse 65% 52% at 50% 52%,var(--v63-preview-light),transparent 77%),
+   radial-gradient(ellipse 60% 23% at 50% 8%,var(--v63-lens-reflection),transparent 77%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 46%,transparent 93%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 46%,transparent 93%);
+  opacity:.35;
+}
+.v65-seamless-chapters #belle-previews .v63-previews-theater,
+.v65-seamless-chapters #belle-previews .v63-previews-rotunda{
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+/* More sculptural typography with clean outlines. Keep real text accessible. */
+.v65-seamless-chapters #belle-previews .v63-previews-heading h2,
+.v65-seamless-chapters #belle-previews.v63-in-view .v63-previews-heading h2{
+  font-family:"Archivo","Arial Black",Impact,sans-serif;
+  font-weight:900;
+  letter-spacing:-.047em;
+  font-size:clamp(4.5rem,11.35vw,12.25rem);
+  -webkit-text-stroke:clamp(1.25px,.13vw,1.85px) var(--v65-headline);
+  text-rendering:geometricPrecision;
+  transform-style:preserve-3d;
+}
+.v65-seamless-chapters #belle-previews .v64-preview-title-button{
+  -webkit-text-stroke:inherit;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  transform-origin:center 52%;
+  transform-style:preserve-3d;
+  perspective:1600px;
+  filter:drop-shadow(0 5px 14px rgba(110,83,67,.03));
+  transition:filter .3s ease,translate .3s cubic-bezier(.2,.8,.2,1);
+}
+.v65-seamless-chapters #belle-previews .v64-preview-title-button:hover,
+.v65-seamless-chapters #belle-previews .v64-preview-title-button:focus-visible{
+  filter:drop-shadow(0 5px 15px var(--v65-headline-glow));
+  translate:0 -3px;
+}
+/* Vertical flip: bottom goes upward over the top, NOT a horizontal yaw. */
+.v65-seamless-chapters #belle-previews .v64-preview-title-button.v64-title-flipping{
+  animation:v65-preview-vertical-flip .96s cubic-bezier(.22,.74,.18,1) both;
+}
+@keyframes v65-preview-vertical-flip{
+  0%{transform:perspective(1550px) rotateX(0deg) scale(1)}
+  17%{transform:perspective(1550px) rotateX(-62deg) scale(1.024)}
+  49%{transform:perspective(1550px) rotateX(-179deg) scale(.976)}
+  78%{transform:perspective(1550px) rotateX(-312deg) scale(1.014)}
+  100%{transform:perspective(1550px) rotateX(-360deg) scale(1)}
+}
+/* Arrows are easier to find on every chosen palette. */
+.v65-seamless-chapters #belle-previews .v63-previews-arrow{
+  color:var(--v65-arrow-text);
+  background:var(--v65-arrow-bg);
+  border:1.5px solid var(--v65-arrow-border);
+  opacity:1;
+  box-shadow:0 6px 24px rgba(25,16,18,.09)!important;
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+  font-size:2rem;
+  font-weight:500;
+  width:clamp(45px,4.2vw,56px);
+  height:clamp(45px,4.2vw,56px);
+  z-index:8;
+  transition:transform .26s cubic-bezier(.2,.8,.2,1),background .26s ease,
+    box-shadow .26s ease,border-color .26s ease;
+}
+.v65-seamless-chapters #belle-previews .v63-previews-arrow:hover{
+  background:var(--v65-arrow-bg);
+  transform:scale(1.065);
+  box-shadow:0 9px 32px var(--v65-headline-glow)!important;
+}
+.v65-seamless-chapters #belle-previews .v63-previews-arrow:focus-visible{
+  outline:2px solid var(--v65-arrow-text);
+  outline-offset:4px;
+}
+@media(max-width:750px){
+  .v65-seamless-chapters #belle-previews .v63-previews-heading h2,
+  .v65-seamless-chapters #belle-previews.v63-in-view .v63-previews-heading h2{
+    font-size:clamp(2.7rem,14.2vw,5.4rem);
+    letter-spacing:-.062em;
+    -webkit-text-stroke:1.25px var(--v65-headline);
+  }
+  .v65-seamless-chapters #belle-previews .v63-previews-arrow{
+    width:45px;height:45px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .v65-seamless-chapters #belle-previews .v64-preview-title-button{
+    animation:none!important;transition:none!important;translate:none;
+  }
+  .v65-seamless-chapters #belle-previews .v63-previews-arrow{
+    transition:none!important;
+  }
+}
+
