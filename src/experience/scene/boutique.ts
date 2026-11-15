@@ -9,9 +9,10 @@
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { archPanel, archReveal, box, contact, plane, spot, wallWithArches, type Kit } from './kit';
-import { ARCHES, BACK_MIRROR, BAG_PEDESTAL, CURTAIN_ARCH, DOOR, FITTING, HERO_SLOT, HERO_STAND, RAIL, ROOM, SHELF, SIDE_SIGN, TRACKS, WOOD_PANEL, shelfSlotZ, slotZ, type Side } from './layout';
+import { clusterZ, GARMENT_TURN, ARCHES, BACK_MIRROR, BAG_PEDESTAL, CURTAIN_ARCH, DOOR, FITTING, HERO_SLOT, HERO_STAND, RAIL, ROOM, SHELF, SIDE_SIGN, TRACKS, WOOD_PANEL, shelfSlotZ, slotZ, type Side } from './layout';
 import { productById } from '../../commerce/catalog.demo';
 import type { Product } from '../../commerce/types';
+import { cornerShade } from '../textures';
 import { DISPLAY_HEIGHT, cardMetrics, disposeProductDisplay, garmentCardGeometry, placeholderTexture, productTexture, supportedProduct } from './product';
 import type { SidePlan } from '../rack-state';
 import { isAccessory } from '../rack-state';
@@ -32,7 +33,7 @@ export interface BoutiqueCtx {
   /** 0 fechada → 1 aberta (cortina do provador). */
   curtain: number;
   /** espelhos com reflexo em tempo real neste quadro */
-  mirrorsLive: { back: boolean; fitting: boolean };
+  mirrorsLive: { back: boolean; fitting: boolean; floor: boolean };
 }
 
 export interface PickHit { product: Product; side: Side; index: number; kind: 'hanger' | 'shelf' }
@@ -64,7 +65,7 @@ interface Slot {
   side: Side; index: number; kind: 'hanger' | 'shelf';
   pivot: THREE.Group; card: THREE.Mesh; material: THREE.MeshStandardMaterial;
   product: Product | null; hidden: boolean;
-  hook: THREE.Vector3; natural: number; yaw: number;
+  hook: THREE.Vector3; natural: number; yaw: number; z: number;
   ax: number; az: number; vx: number; vz: number; focus: number; focusV: number;
   hangerIndex: number; clipped: boolean;
   mediaSerial: number;
@@ -101,10 +102,50 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   fitCeil.position.set((FITTING.x0 + FITTING.x1) / 2, H, (FITTING.z0 + FITTING.z1) / 2);
   g.add(fitCeil);
 
+  // Reflexo real no piso acetinado (tier cinema): Reflector sob o carvalho semitransparente.
+  let floorReflector: Reflector | null = null;
+  if (cinema) {
+    const rw = Math.round(Math.min(1024, innerWidth * dpr * 0.5));
+    const rh = Math.round(Math.min(1024, innerHeight * dpr * 0.5));
+    floorReflector = new Reflector(new THREE.PlaneGeometry(X * 2, L), { clipBias: 0.003, textureWidth: rw, textureHeight: rh, color: 0x433d38 });
+    floorReflector.rotation.x = -Math.PI / 2;
+    floorReflector.position.set(0, -0.002, zc);
+    floorReflector.userData.dynamic = true;
+    g.add(floorReflector);
+    const glossy = (kit.oakDark as THREE.MeshStandardMaterial).clone();
+    glossy.transparent = true;
+    glossy.opacity = 0.88;
+    glossy.color.set('#8f8882');
+    floor.material = glossy;
+    disposables.push(glossy);
+  }
+  // Oclusão de canto: piso junto às paredes, parede junto ao piso e ao teto.
+  const shadeTex = cornerShade();
+  disposables.push(shadeTex);
+  const shadeMat = new THREE.MeshBasicMaterial({ map: shadeTex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, toneMapped: false });
+  const shade = (w: number, h: number, pos: [number, number, number], rot: [number, number, number]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), shadeMat);
+    m.position.set(...pos); m.rotation.set(...rot); m.renderOrder = 2; g.add(m);
+  };
+  for (const s of [-1, 1] as const) {
+    // no piso, escurece da parede para o centro
+    shade(0.7, L, [s * (X - 0.35), 0.003, zc], [-Math.PI / 2, 0, s > 0 ? -Math.PI / 2 : Math.PI / 2]);
+    // na parede, sobe do piso e desce do teto
+    shade(L, 0.9, [s * (X - 0.004), 0.45, zc], [0, s * -Math.PI / 2, Math.PI]);
+    shade(L, 0.7, [s * (X - 0.004), H - 0.35, zc], [0, s * -Math.PI / 2, 0]);
+  }
+  shade(X * 2, 0.7, [0, 0.003, zBack + 0.35], [-Math.PI / 2, 0, 0]);
+  shade(X * 2, 0.6, [0, H - 0.3, zBack + 0.004], [0, 0, 0]);
+
   // Paredes laterais em travertino com nichos em arco (recuo iluminado).
-  const nicheGlow = new THREE.MeshStandardMaterial({ map: kit.glowTex, color: '#f1e5d2', emissiveMap: kit.glowTex, emissive: new THREE.Color('#f4e0bf'), emissiveIntensity: 0.26, roughness: 0.9 });
+  const nicheGlow = (kit.travertineLight as THREE.MeshStandardMaterial).clone();
+  nicheGlow.color.set('#d9c19c');
+  nicheGlow.emissive = new THREE.Color('#b8925f');
+  nicheGlow.emissiveIntensity = 0.1;
+  disposables.push(nicheGlow);
   for (const side of [-1, 1] as const) {
-    const arches = ARCHES.z.map((z) => ({ x: (z - zc) * side * -1, w: ARCHES.w, h: ARCHES.h }));
+    // Rotação ±90° em Y: o x local da parede vira z do mundo com o sinal do lado.
+    const arches = ARCHES.z.map((z) => ({ x: (z - zc) * side, w: ARCHES.w, h: ARCHES.h }));
     // A parede é construída no plano local (u ao longo de z, v = y) e girada para o lado.
     const wall = wallWithArches(L, H, arches, kit.travertineSlab, 1.6);
     wall.rotation.y = side * -Math.PI / 2;
@@ -188,7 +229,9 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   lensGeo.rotateX(Math.PI / 2);
   const headCount = TRACKS.x.length * Math.ceil(L / TRACKS.step) + 6;
   const heads = new THREE.InstancedMesh(headGeo, kit.black, headCount);
-  const lenses = new THREE.InstancedMesh(lensGeo, kit.light, headCount);
+  const lensMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.9, 0.74).multiplyScalar(1.6) });
+  disposables.push(lensMat);
+  const lenses = new THREE.InstancedMesh(lensGeo, lensMat, headCount);
   let hi = 0;
   const m4 = new THREE.Matrix4();
   for (const x of TRACKS.x) {
@@ -247,12 +290,13 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     const card = new THREE.Mesh(kind === 'hanger' ? CARD_GEO : SHELF_GEO, material);
     card.visible = false;
     card.receiveShadow = true;
+    card.castShadow = cinema;
     card.userData.productMedia = true;
     pivot.add(card);
     g.add(pivot);
     const slot: Slot = {
       side, index, kind, pivot, card, material, product: null, hidden: false,
-      hook, natural, yaw: natural, ax: 0, az: 0, vx: 0, vz: 0, focus: 0, focusV: 0,
+      hook, natural, yaw: natural, z: hook.z, ax: 0, az: 0, vx: 0, vz: 0, focus: 0, focusV: 0,
       hangerIndex: kind === 'hanger' ? hangerCursor++ : -1, clipped: false, mediaSerial: 0,
     };
     slots.push(slot);
@@ -261,7 +305,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   };
   for (const side of ['left', 'right'] as const) {
     const s = SIDE_SIGN[side];
-    const natural = s * -Math.PI / 2;
+    const natural = s * -Math.PI / 2 * (1 - GARMENT_TURN);
     const x = s * RAIL.x;
     // varão, montantes e bases de pedra
     const len = RAIL.z0 - RAIL.z1;
@@ -343,7 +387,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   g.add(curtainRod);
   const curtainPanels: THREE.Mesh[] = [];
   for (const side of [-1, 1] as const) {
-    const geo = pleatedPanel(CURTAIN_ARCH.w / 2 + 0.08, CURTAIN_ARCH.h - 0.14, 40, 0.08);
+    const geo = pleatedPanel(CURTAIN_ARCH.w / 2 + 0.08, CURTAIN_ARCH.h - 0.14, 40, 0.085);
     // origem na borda externa, para abrir deslizando até o montante do arco
     geo.translate(-side * (CURTAIN_ARCH.w / 4 + 0.04), 0, 0);
     const panel = new THREE.Mesh(geo, kit.linen);
@@ -352,7 +396,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     g.add(panel);
     curtainPanels.push(panel);
   }
-  const drape = new THREE.Mesh(pleatedPanel(FITTING.z0 - FITTING.z1 - 0.35, H - 0.12, 64, 0.1), kit.linen);
+  const drape = new THREE.Mesh(pleatedPanel(FITTING.z0 - FITTING.z1 - 0.35, H - 0.12, 64, 0.095), kit.linen);
   drape.rotation.y = -Math.PI / 2;
   drape.position.set(FITTING.x1 - 0.14, (H - 0.12) / 2, (FITTING.z0 + FITTING.z1) / 2 - 0.15);
   g.add(drape);
@@ -385,7 +429,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   let fittingProductId: string | null = null;
 
   // ---------- luz ----------
-  g.add(new THREE.HemisphereLight('#fff0d8', '#a88e6c', 0.72));
+  g.add(new THREE.HemisphereLight('#ffe6c2', '#5a4430', 0.36));
   const lights: THREE.SpotLight[] = [];
   const addSpot = (color: string, intensity: number, from: [number, number, number], to: [number, number, number], angle: number, pen = 0.8) => {
     const s = spot(color, intensity, from, to, angle, pen);
@@ -394,13 +438,22 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     return s;
   };
   for (const s of [-1, 1] as const) {
-    addSpot('#ffe3bd', 52, [s * 1.9, H - 0.06, -5.2], [s * RAIL.x, 0.9, -5.6], 0.95, 0.85);
-    if (cinema) addSpot('#ffe3bd', 46, [s * 1.9, H - 0.06, -8.3], [s * RAIL.x, 0.9, -8.6], 0.95, 0.85);
+    const railKey = addSpot('#ffd9a8', 78, [s * 1.9, H - 0.06, -5.2], [s * RAIL.x, 0.9, -5.6], 0.95, 0.85);
+    if (cinema) {
+      railKey.castShadow = true;
+      railKey.shadow.mapSize.set(1024, 1024);
+      railKey.shadow.bias = -0.0006;
+      railKey.shadow.normalBias = 0.03;
+      railKey.shadow.camera.near = 0.5;
+      railKey.shadow.camera.far = 8;
+    }
+    if (cinema) addSpot('#ffd9a8', 70, [s * 1.9, H - 0.06, -8.3], [s * RAIL.x, 0.9, -8.6], 0.95, 0.85);
     // lavagem quente dos nichos atrás das araras
-    addSpot('#ffdcae', 30, [s * 2.6, H - 0.06, -7.3], [s * (X + 0.2), 2.0, -7.3], 0.75, 0.9);
+    addSpot('#ffcf94', 46, [s * 2.6, H - 0.06, -7.3], [s * (X + 0.2), 2.0, -7.3], 0.75, 0.9);
   }
-  addSpot('#ffe6c7', 44, [0, H - 0.06, -2.6], [0, 0, -3.2], 0.8, 0.9);
-  const heroSpot = addSpot('#ffe9cc', 60, [-0.6, H - 0.06, -11.4], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.5, 0.7);
+  for (const s of [-1, 1] as const) for (const z of [-3.9, -10.7, -14.1]) addSpot('#ffcf94', cinema ? 38 : 30, [s * (X - 0.5), H - 0.06, z + 0.6], [s * (X + 0.1), 1.0, z], 0.6, 0.95);
+  addSpot('#ffdcae', 58, [0, H - 0.06, -2.6], [0, 0, -3.2], 0.8, 0.9);
+  const heroSpot = addSpot('#ffe0b6', 72, [-0.6, H - 0.06, -11.4], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.5, 0.7);
   if (cinema) {
     heroSpot.castShadow = true;
     heroSpot.shadow.mapSize.set(1024, 1024);
@@ -409,11 +462,11 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     heroSpot.shadow.camera.near = 1;
     heroSpot.shadow.camera.far = 7;
   }
-  addSpot('#ffe3c0', 48, [-0.2, H - 0.06, -15.6], [BACK_MIRROR.x, 1.3, zBack], 0.7, 0.85);
-  addSpot('#ffdfb6', 40, [CURTAIN_ARCH.x, H - 0.06, -16.2], [CURTAIN_ARCH.x, 1.3, zBack], 0.7, 0.85);
-  addSpot('#ffe8cf', 50, [2.5, H - 0.06, -20.2], [FITTING.standX, 1.0, FITTING.standZ], 0.7, 0.8);
-  if (cinema) addSpot('#ffe3c0', 34, [1.6, H - 0.06, -20.0], [FITTING.chairX, 0.6, FITTING.chairZ], 0.7, 0.85);
-  addSpot('#ffe0b8', 42, [3.4, H - 0.06, -19.6], [FITTING.x1, 1.2, -20.8], 0.8, 0.9);
+  addSpot('#ffd6a2', 64, [-0.2, H - 0.06, -15.6], [BACK_MIRROR.x, 1.3, zBack], 0.7, 0.85);
+  addSpot('#ffd09a', 70, [CURTAIN_ARCH.x, H - 0.06, -16.2], [CURTAIN_ARCH.x, 1.3, zBack], 0.7, 0.85);
+  addSpot('#ffdcae', 40, [2.5, H - 0.06, -20.2], [FITTING.standX, 1.0, FITTING.standZ], 0.7, 0.8);
+  if (cinema) addSpot('#ffe3c0', 26, [1.6, H - 0.06, -20.0], [FITTING.chairX, 0.6, FITTING.chairZ], 0.7, 0.85);
+  addSpot('#ffcf94', 70, [3.4, H - 0.06, -19.6], [FITTING.x1, 1.2, -20.8], 0.8, 0.9);
   const sweep = spot('#ffd28a', 0, [-2.6, 2.6, -11.6], [HERO_STAND.x, 1.0, HERO_STAND.z], 0.16, 0.55);
   g.add(sweep, sweep.target);
 
@@ -546,12 +599,20 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
   return {
     group: g,
     applyPlan(side, plan) {
-      const hangers = usableHangers(side);
-      const list = plan.hangers.filter((p): p is Product | null => true);
-      // mantém o índice visual: cabide i recebe o i-ésimo produto da página
-      for (let i = 0; i < hangers.length; i++) assign(hangers[i]!, list[i] ?? null);
-      const shelf = sides[side].shelf;
-      for (let i = 0; i < shelf.length; i++) assign(shelf[i]!, plan.shelf[i] ?? null);
+      // Página centralizada no varão/banco: uma categoria pequena fica diante
+      // de quem para na frente da arara, não amontoada junto à porta.
+      const center = <T,>(slots: Slot[], items: (T | null)[], cluster: boolean) => {
+        const list = items.filter((x): x is T => !!x);
+        const start = Math.max(0, Math.floor((slots.length - list.length) / 2));
+        for (let i = 0; i < slots.length; i++) {
+          const k = i - start;
+          const slot = slots[i]!;
+          if (cluster && k >= 0 && k < list.length) slot.z = clusterZ(k, list.length);
+          assign(slot, (k >= 0 && k < list.length ? list[k] : null) as Product | null);
+        }
+      };
+      center(usableHangers(side), plan.hangers, true);
+      center(sides[side].shelf, plan.shelf, false);
     },
     pick(ndc, camera) { const s = hitSlot(ndc, camera); hoverId = s?.product?.id ?? null; return hitOf(s); },
     hover(ndc, camera) { const s = hitSlot(ndc, camera); hoverId = s?.product?.id ?? null; return hitOf(s); },
@@ -570,10 +631,20 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
     impactBag() { bagPulse = 1; },
     bagHit(ndc, camera) { raycaster.setFromCamera(ndc, camera); return raycaster.intersectObject(bag, true).length > 0; },
     hasReflectors() { return reflectors; },
-    dropReflectors() { reflectors = false; backMirror.drop(); fitMirror.drop(); },
+    dropReflectors() {
+      reflectors = false; backMirror.drop(); fitMirror.drop();
+      if (floorReflector) {
+        floorReflector.removeFromParent(); floorReflector.dispose(); floorReflector = null;
+        const m = floor.material as THREE.MeshStandardMaterial; m.transparent = false; m.opacity = 1; m.needsUpdate = true;
+      }
+    },
     update(dt, ctx) {
       t += dt;
       fittingDisplay.visible = !!fittingProductId && ctx.fittingActive;
+      if (floorReflector) {
+        floorReflector.visible = reflectors && ctx.mirrorsLive.floor;
+        (floor.material as THREE.MeshStandardMaterial).opacity = floorReflector.visible ? 0.88 : 1;
+      }
       backMirror.setLive(reflectors && ctx.mirrorsLive.back);
       fitMirror.setLive(reflectors && ctx.mirrorsLive.fitting);
       // cortina: folhas deslizam para os montantes
@@ -591,7 +662,7 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
         s.focus = THREE.MathUtils.clamp(s.focus + s.focusV * dt, 0, 0.85);
         const sign = SIDE_SIGN[s.side];
         if (s.kind === 'hanger') {
-          s.hook.set(sign * (RAIL.x - 0.28 * s.focus), RAIL.y + s.focus * 0.05, slotZ(s.index));
+          s.hook.set(sign * (RAIL.x - 0.28 * s.focus), RAIL.y + s.focus * 0.05, s.z);
           const face = Math.atan2(camPos.x - s.hook.x, camPos.z - s.hook.z);
           const delta = Math.atan2(Math.sin(face - s.natural), Math.cos(face - s.natural));
           const goalYaw = s.natural + THREE.MathUtils.clamp(delta, -0.75, 0.75) * s.focus;
@@ -658,13 +729,17 @@ export function buildBoutique(kit: Kit, tier: Tier, dpr: number): BoutiqueHandle
 
 /** Plano com pregas verticais (seno) e normais recalculadas. */
 function pleatedPanel(w: number, h: number, segments: number, depth: number): THREE.BufferGeometry {
-  const geo = new THREE.PlaneGeometry(w, h, segments, 2);
+  const cols = Math.max(segments, Math.round(w / 0.018));
+  const geo = new THREE.PlaneGeometry(w, h, cols, 6);
   const p = geo.getAttribute('position') as THREE.BufferAttribute;
+  const wave = 0.15; // uma prega a cada 15 cm, como linho pesado
   for (let i = 0; i < p.count; i++) {
     const x = p.getX(i), y = p.getY(i);
-    const pleat = Math.sin((x / w) * Math.PI * segments * 0.5) * depth;
-    // as pregas abrem ligeiramente no pé da cortina
-    p.setZ(i, pleat * (1 + (0.5 - y / h) * 0.25));
+    const k = Math.floor((x + w / 2) / wave);
+    const jitter = 0.75 + 0.5 * Math.abs(Math.sin(k * 12.9898) * 43758.5453 % 1);
+    const phase = ((x + w / 2) / wave) * Math.PI * 2;
+    const foot = 1 + (0.5 - y / h) * 0.35; // abre um pouco no pé
+    p.setZ(i, Math.sin(phase) * depth * jitter * foot + Math.sin(phase * 2.03 + 1.3) * depth * 0.18);
   }
   geo.computeVertexNormals();
   const uv = geo.getAttribute('uv') as THREE.BufferAttribute;

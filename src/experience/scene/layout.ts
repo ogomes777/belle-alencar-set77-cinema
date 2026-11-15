@@ -52,7 +52,16 @@ export function shelfSlotZ(index: number, slots = SHELF.slots): number {
   return SHELF.z0 - inset - (index / Math.max(1, slots - 1)) * span;
 }
 /** Cabide reservado ao vestido protagonista (lado direito). */
-export const HERO_SLOT = 7;
+export const HERO_SLOT = 17;
+/** Passo entre cabides quando a página é agrupada (arara real: peças encostadas). */
+export const RAIL_PITCH = 0.2;
+export const RAIL_CENTER_Z = -6.5;
+/** z do k-ésimo de n cabides agrupados em torno do centro do varão. */
+export function clusterZ(k: number, n: number): number {
+  return RAIL_CENTER_Z + ((n - 1) / 2 - k) * RAIL_PITCH;
+}
+/** Ângulo das peças: 55% voltadas para a porta, como numa arara real vista do corredor. */
+export const GARMENT_TURN = 0.55;
 
 /** Destinos físicos da visita. Identidade fixa na planta, independentemente da orientação do visitante. */
 export type DestinationId = 'entrada' | 'corredor' | 'araraEsquerda' | 'araraDireita' | 'fundo' | 'provador';
@@ -116,7 +125,7 @@ export const POSES: readonly Pose[] = [
   { id: '01', label: 'Fachada', pos: [0, 1.5, 9.2], tgt: [0, 2.05, 0], fov: 38 },
   { id: '02', label: 'Sala e araras', pos: [0, 1.3, 0.55], tgt: [0, 1.52, -18.2], fov: 50 },
   { id: '03', label: 'Arara direita', pos: [0.1, 1.32, -2.5], tgt: [3.0, 1.25, -7.4], fov: 50 },
-  { id: '04', label: 'Provador', pos: [2.95, 1.45, -18.85], tgt: [1.9, 1.28, -22.2], fov: 46 },
+  { id: '04', label: 'Provador', pos: [3.35, 1.42, -18.55], tgt: [2.15, 1.2, -22.2], fov: 50 },
   { id: '05', label: 'Arara esquerda', pos: [-0.75, 1.3, -2.9], tgt: [-2.9, 1.4, -7.9], fov: 50 },
   { id: '06', label: 'Porta por dentro', pos: [0, 1.45, -11.6], tgt: [0, 1.5, 0], fov: 50 },
 ];

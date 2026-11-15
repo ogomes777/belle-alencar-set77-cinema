@@ -342,15 +342,15 @@ export function walnut(size = 512, seed = 11, base = '#3b2719'): THREE.CanvasTex
     x.closePath();
     x.fill();
   }
-  for (let i = 0; i < 900; i++) {
-    x.fillStyle = `rgba(0,0,0,${r() * 0.12})`;
-    x.fillRect(r() * size, r() * size, 1, 2 + r() * 12);
+  for (let i = 0; i < 260; i++) {
+    x.fillStyle = `rgba(0,0,0,${r() * 0.06})`;
+    x.fillRect(r() * size, r() * size, 1, 8 + r() * 30);
   }
   return toTexture(c);
 }
 
 /** Linho/veludo champagne com trama fina e variação por prega (cortina). */
-export function linen(size = 512, seed = 17, base = '#a98a5f'): THREE.CanvasTexture {
+export function linen(size = 512, seed = 17, base = '#b49770'): THREE.CanvasTexture {
   const [c, x] = canvas(size);
   const r = rng(seed);
   x.fillStyle = base;
@@ -436,9 +436,9 @@ export function herringboneDark(size = 1024, seed = 29): THREE.CanvasTexture {
         x.save();
         x.translate(ox + k * pw * 0.70710678 * 2, oy + k * pw * 0.70710678 * 2);
         x.rotate(k === 0 ? Math.PI / 4 : -Math.PI / 4);
-        const hue = 22 + r() * 9;
-        const light = 27 + r() * 11;
-        x.fillStyle = `hsl(${hue}, ${34 + r() * 10}%, ${light}%)`;
+        const hue = 27 + r() * 6;
+        const light = 22 + r() * 9;
+        x.fillStyle = `hsl(${hue}, ${9 + r() * 6}%, ${light}%)`;
         x.fillRect(0, 0, pl, pw);
         for (let g = 0; g < 8; g++) {
           x.strokeStyle = `rgba(30,16,8,${0.08 + r() * 0.12})`;
@@ -457,4 +457,19 @@ export function herringboneDark(size = 1024, seed = 29): THREE.CanvasTexture {
     }
   }
   return toTexture(c);
+}
+
+/** Oclusão ambiente de canto: faixa escura na aresta que desvanece (cantos parede/piso/teto). */
+export function cornerShade(): THREE.CanvasTexture {
+  const [c, x] = canvas(8, 256);
+  const g = x.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, 'rgba(34,22,12,0.62)');
+  g.addColorStop(0.18, 'rgba(34,22,12,0.3)');
+  g.addColorStop(0.55, 'rgba(34,22,12,0.08)');
+  g.addColorStop(1, 'rgba(34,22,12,0)');
+  x.fillStyle = g;
+  x.fillRect(0, 0, 8, 256);
+  const t = toTexture(c);
+  t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+  return t;
 }

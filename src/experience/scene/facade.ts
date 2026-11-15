@@ -6,7 +6,7 @@
  * abrem para dentro conforme o progresso do capítulo "porta".
  */
 import * as THREE from 'three';
-import { box, contact, plane, scaleUV, spot, type Kit } from './kit';
+import { box, contact, glassMaterial, plane, scaleUV, spot, type Kit } from './kit';
 import { signTexture } from '../textures';
 import type { Tier } from '../../core/tier';
 import { supportedProduct } from './product';
@@ -52,7 +52,7 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
   // recuo da entrada: paredes de calcário entre a fachada e a porta, verga e piso de pedra
   const recessDepth = -DOOR.z; // 0,9 m
   for (const side of [-1, 1]) {
-    const wall = plane(recessDepth + 0.02, DOOR.h + 0.5, kit.travertineSlab, 1.6);
+    const wall = plane(recessDepth + 0.02, DOOR.h + 0.5, kit.walnut, 1.6);
     wall.rotation.y = side * -Math.PI / 2;
     wall.position.set(side * (DOOR.halfW + 0.2), (DOOR.h + 0.5) / 2, -recessDepth / 2);
     g.add(wall);
@@ -69,15 +69,17 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
 
   // ---------- letreiro oficial em latão sobre a pedra ----------
   const signTex = signTexture();
-  const signMat = new THREE.MeshStandardMaterial({ map: signTex, transparent: true, alphaTest: 0.08, metalness: 0.75, roughness: 0.38, envMapIntensity: 1.2, color: '#b98a44', emissive: new THREE.Color('#5a3d14'), emissiveIntensity: 0.45 });
+  const signMat = new THREE.MeshStandardMaterial({ map: signTex, transparent: true, alphaTest: 0.08, metalness: 0.75, roughness: 0.38, envMapIntensity: 1.2, color: '#b98a44', emissive: new THREE.Color('#7a5420'), emissiveIntensity: 0.7 });
   const signH = 1.3;
   const aspect = (signTex.userData.aspect as number) || 2.07;
   const sign = plane(signH * aspect, signH, signMat);
   sign.position.set(0, 4.55, 0.03);
   g.add(sign);
-  // luz de realce do letreiro vinda do teto do shopping
-  if (cinema) {
-    const sp = spot('#ffe2b6', 40, [0, 5.5, 2.6], [0, 4.4, 0], 0.5, 0.85);
+  // downlights do teto do shopping lavando o calcário do pórtico e o letreiro
+  for (const x of [-6.9, -4.1, 4.1, 6.9]) {
+    const sp = new THREE.SpotLight('#ffd3a0', 20, 8, 0.5, 0.75, 2);
+    sp.position.set(x, 5.5, 0.45);
+    sp.target.position.set(x, 1.6, 0);
     g.add(sp, sp.target);
   }
 
@@ -93,7 +95,8 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
   frame(WIN.x0, WIN.x1, WIN.y0, WIN.y1, 0.01);
 
   // ---------- vitrines: caixas de pedra com fundo quente ----------
-  const windowBack = new THREE.MeshStandardMaterial({ map: kit.glowTex, color: '#efe2cc', emissive: new THREE.Color('#f3dfbd'), emissiveIntensity: 0.3, emissiveMap: kit.glowTex, roughness: 0.9 });
+  const windowBack = new THREE.MeshStandardMaterial({ map: kit.glowTex, color: '#cdb796', emissive: new THREE.Color('#e9c99a'), emissiveIntensity: 0.1, emissiveMap: kit.glowTex, roughness: 0.9 });
+  const stripMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.86, 0.66).multiplyScalar(0.62) });
   for (const side of [-1, 1] as const) {
     const cx = side * (WIN.x0 + WIN.x1) / 2;
     const w = WIN.x1 - WIN.x0;
@@ -113,7 +116,7 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
     top.rotation.x = Math.PI / 2;
     top.position.set(cx, WIN.y1, -WIN.depth / 2);
     g.add(top);
-    g.add(box(w - 0.3, 0.03, 0.05, kit.light, cx, WIN.y1 - 0.02, -0.25));
+    g.add(box(w - 0.3, 0.02, 0.04, stripMat, cx, WIN.y1 - 0.015, -0.25));
     if (side === -1) {
       // vitrine esquerda: dois expositores de pedra, vaso com ramos vinho e bolsa
       const tall = box(0.62, 0.95, 0.62, kit.travertineLight, cx - 0.55, WIN.y0 + 0.475, -0.85);
@@ -137,13 +140,14 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
     glass.position.set(cx, (WIN.y0 + WIN.y1) / 2, 0.012);
     g.add(glass);
     if (cinema) {
-      const sp = spot('#ffe7c2', 16, [cx, WIN.y1 - 0.1, -0.2], [cx, WIN.y0 + 0.6, -0.8], 0.8, 0.9);
+      const sp = spot('#ffdcae', 22, [cx, WIN.y1 - 0.1, -0.2], [cx, WIN.y0 + 0.6, -0.8], 0.8, 0.9);
       g.add(sp, sp.target);
     }
   }
 
   // ---------- portas: duas folhas de vidro com moldura fina e puxadores longos ----------
   const leaves: THREE.Group[] = [];
+  const doorGlass = glassMaterial();
   for (const side of [-1, 1]) {
     const pivot = new THREE.Group();
     pivot.userData.dynamic = true;
@@ -151,7 +155,7 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
     const leaf = new THREE.Group();
     const w = DOOR.leafW;
     leaf.position.x = -side * w / 2;
-    const glass = plane(w - 0.02, DOOR.h - 0.08, kit.glass);
+    const glass = plane(w - 0.02, DOOR.h - 0.08, doorGlass);
     glass.position.y = DOOR.h / 2;
     leaf.add(glass);
     leaf.add(box(w, 0.045, 0.04, kit.brassSatin, 0, 0.025, 0));
@@ -182,6 +186,9 @@ export function buildFacade(kit: Kit, tier: Tier): FacadeHandle {
       const a = open * 1.5;
       leaves[0]!.rotation.y = a;
       leaves[1]!.rotation.y = -a;
+      // de raspão (aberta, colada ao batente) o vidro não deve virar uma faixa cinza
+      doorGlass.uniforms.uFres!.value = 1 - open * 0.9;
+      doorGlass.uniforms.uOpacity!.value = 0.045 * (1 - open * 0.6);
     },
   };
 }

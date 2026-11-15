@@ -20,9 +20,9 @@ export interface Kit {
   travertineSlab: THREE.MeshStandardMaterial;
   travertineLight: THREE.MeshStandardMaterial;
   oakDark: THREE.MeshStandardMaterial;
-  walnut: THREE.MeshStandardMaterial;
+  walnut: THREE.MeshPhysicalMaterial;
   brassSatin: THREE.MeshStandardMaterial;
-  linen: THREE.MeshStandardMaterial;
+  linen: THREE.MeshPhysicalMaterial;
   boucle: THREE.MeshStandardMaterial;
   black: THREE.MeshStandardMaterial;
   ceramic: THREE.MeshStandardMaterial;
@@ -57,13 +57,13 @@ export function createKit(): Kit {
   const shadow = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, toneMapped: false });
   const light = new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.94, 0.84).multiplyScalar(2.4) });
 
-  const travertineSlab = new THREE.MeshStandardMaterial({ map: slabTex, color: '#efe3cf', roughness: 0.74, metalness: 0, envMapIntensity: 0.35 });
-  const ceiling = new THREE.MeshStandardMaterial({ map: plas, color: '#f4ede2', emissive: new THREE.Color('#cfc2ae'), emissiveIntensity: 0.5, roughness: 0.95 });
-  const travertineLight = new THREE.MeshStandardMaterial({ map: slabLightTex, color: '#f3ebdd', roughness: 0.7, metalness: 0, envMapIntensity: 0.4 });
-  const oakDark = new THREE.MeshStandardMaterial({ map: oakDarkTex, roughness: 0.42, metalness: 0, envMapIntensity: 0.9 });
-  const walnut = new THREE.MeshStandardMaterial({ map: walnutTex, roughness: 0.48, metalness: 0, envMapIntensity: 0.7 });
+  const travertineSlab = new THREE.MeshStandardMaterial({ map: slabTex, bumpMap: slabTex, bumpScale: 0.35, color: '#e3cfae', roughness: 0.7, metalness: 0, envMapIntensity: 0.3 });
+  const ceiling = new THREE.MeshStandardMaterial({ map: plas, color: '#e9dcc6', emissive: new THREE.Color('#b79d77'), emissiveIntensity: 0.16, roughness: 0.95 });
+  const travertineLight = new THREE.MeshStandardMaterial({ map: slabLightTex, bumpMap: slabLightTex, bumpScale: 0.45, color: '#ead9bd', roughness: 0.66, metalness: 0, envMapIntensity: 0.35 });
+  const oakDark = new THREE.MeshStandardMaterial({ map: oakDarkTex, bumpMap: oakDarkTex, bumpScale: 0.25, roughness: 0.3, metalness: 0.05, envMapIntensity: 1.6 });
+  const walnut = new THREE.MeshPhysicalMaterial({ map: walnutTex, color: '#9a7458', roughness: 0.8, metalness: 0, envMapIntensity: 0.06, specularIntensity: 0.18 });
   const brassSatin = new THREE.MeshStandardMaterial({ color: '#c8a568', roughness: 0.36, metalness: 1, envMapIntensity: 1.15 });
-  const linen = new THREE.MeshStandardMaterial({ map: linenTex, color: '#c9a981', roughness: 0.9, metalness: 0, side: THREE.DoubleSide });
+  const linen = new THREE.MeshPhysicalMaterial({ map: linenTex, color: '#c8a77f', roughness: 0.92, metalness: 0, sheen: 0.7, sheenRoughness: 0.45, sheenColor: new THREE.Color('#f0d6ad'), side: THREE.DoubleSide });
   const boucle = new THREE.MeshStandardMaterial({ map: boucleTex, bumpMap: boucleTex, bumpScale: 0.6, roughness: 0.95, metalness: 0 });
   const black = new THREE.MeshStandardMaterial({ color: '#1a1512', roughness: 0.55, metalness: 0.4 });
   const ceramic = new THREE.MeshStandardMaterial({ color: '#e9e0d1', roughness: 0.38, metalness: 0, envMapIntensity: 0.8 });
@@ -81,12 +81,12 @@ export function createKit(): Kit {
  * faixas diagonais que se movem com o ponto de vista). Barato e convincente,
  * sem passe de transmissão.
  */
-export function glassMaterial(tint = '#dfe6e2', opacity = 0.07): THREE.ShaderMaterial {
+export function glassMaterial(tint = '#c9b79c', opacity = 0.045): THREE.ShaderMaterial {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
     side: THREE.DoubleSide,
-    uniforms: { uTint: { value: new THREE.Color(tint) }, uOpacity: { value: opacity } },
+    uniforms: { uTint: { value: new THREE.Color(tint) }, uOpacity: { value: opacity }, uFres: { value: 1 } },
     vertexShader: /* glsl */ `
       varying vec3 vW; varying vec3 vN;
       void main(){
@@ -95,19 +95,19 @@ export function glassMaterial(tint = '#dfe6e2', opacity = 0.07): THREE.ShaderMat
         gl_Position = projectionMatrix * viewMatrix * w;
       }`,
     fragmentShader: /* glsl */ `
-      uniform vec3 uTint; uniform float uOpacity;
+      uniform vec3 uTint; uniform float uOpacity; uniform float uFres;
       varying vec3 vW; varying vec3 vN;
       void main(){
         vec3 V = normalize(vW - cameraPosition);
         vec3 N = normalize(vN); if (dot(V,N) > 0.0) N = -N;
         float fres = pow(1.0 - abs(dot(V, N)), 3.0);
         vec3 R = reflect(V, N);
-        vec3 env = mix(vec3(0.52,0.47,0.41), vec3(1.0,0.97,0.92), smoothstep(-0.25, 0.55, R.y));
+        vec3 env = mix(vec3(0.36,0.29,0.22), vec3(0.98,0.9,0.78), smoothstep(-0.25, 0.55, R.y));
         float s1 = smoothstep(0.94, 1.0, sin((vW.x + vW.y * 0.55) * 1.6 + R.x * 2.6));
         float s2 = smoothstep(0.985, 1.0, sin((vW.x * 1.25 - vW.y * 0.35) * 4.2 + R.x * 3.4));
         float streak = s1 * 0.22 + s2 * 0.18;
         vec3 col = mix(uTint, env, 0.55 + fres * 0.4) + streak;
-        float a = clamp(uOpacity + fres * 0.42 + streak * 0.55, 0.0, 0.8);
+        float a = clamp(uOpacity + (fres * 0.1 + streak * 0.3) * uFres, 0.0, 0.32);
         gl_FragColor = vec4(col, a);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>

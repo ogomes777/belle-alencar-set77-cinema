@@ -28,19 +28,22 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
   g.add(floor);
 
   let reflector: Reflector | null = null;
-  if (tier === 'cinema' && capturePoster) {
+  if (tier === 'cinema') {
+    void capturePoster;
     // reflexo planar real sob o piso semitransparente (só no tier CINEMA)
     reflector = new Reflector(new THREE.PlaneGeometry(W, L), {
       clipBias: 0.003,
       textureWidth: Math.round(innerWidth * dpr * 0.5),
       textureHeight: Math.round(innerHeight * dpr * 0.5),
-      color: 0x8f8678,
+      color: 0x6f675c,
     });
     reflector.rotation.x = -Math.PI / 2;
     reflector.position.set(0, -0.003, L / 2 + 0.2);
     g.add(reflector);
     floorMat.transparent = true;
-    floorMat.opacity = 0.8;
+    floorMat.opacity = 0.58;
+    floorMat.color.set('#c2b5a1');
+    floorMat.roughness = 0.32;
   }
 
   if (!reflector) {
@@ -48,7 +51,9 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
     floorMat.roughness = 0.18;
     floorMat.metalness = 0.12;
     floorMat.envMapIntensity = 0.9;
-    floorMat.color.set('#d9d1c4');
+    floorMat.color.set('#cfc4b3');
+    floorMat.emissive = new THREE.Color('#5c4f3e');
+    floorMat.emissiveIntensity = 0.55;
   }
 
   // teto e sancas de luz
@@ -56,15 +61,19 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
   ceil.rotation.x = Math.PI / 2;
   ceil.position.set(0, H, L / 2 + 0.2);
   g.add(ceil);
+  const mallStrip = new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.9, 0.76).multiplyScalar(1.05) });
   for (const x of [-3.2, 3.2]) {
-    g.add(box(0.36, 0.05, L, kit.light, x, H - 0.03, L / 2 + 0.2));
+    g.add(box(0.36, 0.05, L, mallStrip, x, H - 0.03, L / 2 + 0.2));
     g.add(box(0.6, 0.18, L, kit.plaster, x, H - 0.12, L / 2 + 0.2));
   }
 
   // paredes laterais com vitrines vizinhas (neutras, sem identidade)
   const glowMat = new THREE.MeshBasicMaterial({ map: kit.glowTex, color: new THREE.Color('#e8d5b5').multiplyScalar(1.05) });
+  const mallStone = kit.travertine.clone();
+  mallStone.emissive = new THREE.Color('#6b5a44');
+  mallStone.emissiveIntensity = 0.5;
   for (const side of [-1, 1]) {
-    const wall = plane(L, H, kit.travertine, 2);
+    const wall = plane(L, H, mallStone, 2);
     wall.rotation.y = side * -Math.PI / 2;
     wall.position.set(side * W / 2, H / 2, L / 2 + 0.2);
     g.add(wall);
@@ -97,10 +106,24 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
   }
 
   // fundo da galeria: parede de travertino com vitrine vizinha iluminada (sem marca)
-  const far = plane(W, H, kit.travertine, 2);
+  const far = plane(W, H, mallStone, 2);
   far.rotation.y = Math.PI;
   far.position.set(0, H / 2, L + 0.2);
   g.add(far);
+  // pavimento superior da galeria (laje e guarda-corpo de vidro iluminado)
+  g.add(box(W, 0.32, 3.2, kit.plaster, 0, 3.6, L - 1.4));
+  g.add(box(W, 0.9, 0.04, kit.glass, 0, 4.2, L - 3.0));
+  g.add(box(W, 0.04, 0.06, kit.brass, 0, 4.65, L - 3.0));
+  for (const x of [-5.6, -1.9, 1.9, 5.6]) {
+    const shop = plane(3.2, 2.6, glowMat);
+    shop.rotation.y = Math.PI;
+    shop.position.set(x, 1.6, L + 0.17);
+    g.add(shop);
+    const upper = plane(3.2, 1.2, glowMat);
+    upper.rotation.y = Math.PI;
+    upper.position.set(x, 4.5, L + 0.17);
+    g.add(upper);
+  }
   const farGlow = plane(6.4, 3.1, glowMat);
   farGlow.rotation.y = Math.PI;
   farGlow.position.set(0, 1.95, L + 0.18);
@@ -108,10 +131,13 @@ export function buildMall(kit: Kit, tier: Tier, dpr: number, capturePoster = fal
   for (const x of [-3.3, 3.3]) g.add(box(0.06, 3.3, 0.06, kit.brass, x, 1.95, L + 0.16));
 
   // luz de fim de tarde vinda da claraboia + destaque do letreiro
-  const sun = new THREE.DirectionalLight('#ffe6c4', 0.95);
-  sun.position.set(5, 11, 16);
-  sun.target.position.set(0, 1, 0);
-  g.add(sun, sun.target);
+  // Galeria iluminada pelo próprio teto: spots com alcance limitado (não entram na loja).
+  for (const [x, z] of [[-3.2, 12], [3.2, 18], [-3.2, 26]] as const) {
+    const s = new THREE.SpotLight('#ffe6c4', 48, 10, 0.9, 0.9, 2);
+    s.position.set(x, H - 0.1, z);
+    s.target.position.set(x, 0, z - (z < 4 ? 2.4 : 0));
+    g.add(s, s.target);
+  }
   if (tier === 'cinema') {
     const sign = spot('#ffe2b6', 55, [0, 5.3, 3.2], [0, 4.2, 0], 0.55, 0.8);
     g.add(sign, sign.target);

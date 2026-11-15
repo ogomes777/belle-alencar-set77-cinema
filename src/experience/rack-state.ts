@@ -48,8 +48,9 @@ export function categoryItems(catalog: readonly Product[], category: Category): 
  */
 export function entrySelection(catalog: readonly Product[], side: Side, cap: Capacity): { hangers: Product[]; shelf: Product[] } {
   const clothing = catalog.filter((p) => p.active && !isAccessory(p.category));
-  const dark = clothing.filter((p) => DARK_TONES.has(p.tone) || MID_TONES.has(p.tone));
-  const light = clothing.filter((p) => !DARK_TONES.has(p.tone) && !MID_TONES.has(p.tone));
+  void MID_TONES;
+  const dark = clothing.filter((p) => DARK_TONES.has(p.tone));
+  const light = clothing.filter((p) => !DARK_TONES.has(p.tone));
   const byCategory = (list: Product[]) => [...list].sort((a, b) => CLOTHING_ORDER.indexOf(a.category) - CLOTHING_ORDER.indexOf(b.category));
   const mine = byCategory(side === 'left' ? light : dark);
   const other = byCategory(side === 'left' ? dark : light);

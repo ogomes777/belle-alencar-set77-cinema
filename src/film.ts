@@ -31,6 +31,7 @@ interface FilmDebug {
   setPose: (id: string | null) => boolean;
   landmarks: () => ReturnType<World['landmarks']> | null;
   snapshot: () => string | null;
+  qaPick: (x: number, y: number) => unknown;
   explore: { enter: () => boolean; exit: () => void; goTo: (id: string) => void; lookEntrance: () => void; look: (dx: number, dy: number) => void; active: () => boolean };
 }
 
@@ -68,6 +69,7 @@ export function initFilm(director: Director): void {
     setPose: (id) => world?.setPose(id) ?? false,
     landmarks: () => world?.landmarks() ?? null,
     snapshot: () => world?.snapshot() ?? null,
+    qaPick: (x, y) => world?.qaPick(x, y) ?? null,
     explore: {
       enter: () => { const ok = !!world?.enterExplore(); pov.refresh(); return ok; },
       exit: () => { pov.exitExplore(); },

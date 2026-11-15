@@ -21,6 +21,7 @@ import { FITTING, LANDMARKS_02, POSES, ROOM, type DestinationId, type Side } fro
 import type { SidePlan } from './rack-state';
 import type { Tier } from '../core/tier';
 import type { DressParams } from '../core/dress';
+import { createCinemaPost, type CinemaPost } from './cinema-post';
 
 export interface WorldOptions {
   container: HTMLElement;
@@ -53,6 +54,7 @@ export interface WorldInfo {
   reflectors: boolean;
   shadows: boolean;
   pose: string | null;
+  post: boolean;
 }
 
 export interface LandmarkResult { name: string; x: number; y: number; targetX: number; targetY: number; dx: number; dy: number }
@@ -110,6 +112,7 @@ export class World {
   private readonly ePos = new THREE.Vector3();
   private readonly eTgt = new THREE.Vector3();
   private readonly fwd = new THREE.Vector3();
+  private post: CinemaPost | null = null;
 
   constructor(private opts: WorldOptions) {
     const { tier, container } = opts;
@@ -119,8 +122,8 @@ export class World {
     this.renderer = new THREE.WebGLRenderer({ antialias: tier === 'cinema' || !!opts.poster, powerPreference: 'high-performance', preserveDrawingBuffer: !!opts.poster });
     this.renderer.setPixelRatio(this.dpr);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.98;
+    this.renderer.toneMapping = THREE.AgXToneMapping;
+    this.renderer.toneMappingExposure = 1.05;
     this.shadows = tier === 'cinema' && !lessCapable;
     this.renderer.shadowMap.enabled = this.shadows;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -131,11 +134,11 @@ export class World {
     });
 
     this.camera = new THREE.PerspectiveCamera(40, 1, 0.05, 90);
-    this.scene.background = new THREE.Color('#e7ddcd');
-    this.scene.fog = new THREE.Fog('#e7ddcd', 42, 120);
+    this.scene.background = new THREE.Color('#cbbda7');
+    this.scene.fog = new THREE.Fog('#cbbda7', 42, 120);
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    this.scene.environmentIntensity = 0.46;
+    this.scene.environmentIntensity = 0.2;
     pmrem.dispose();
 
     const kit = createKit();
@@ -145,10 +148,27 @@ export class World {
     this.scene.add(this.mall.group, this.facade.group, this.boutique.group);
     bakeStatic(this.scene);
 
+    // Reflexos de ambiente a partir da PRÓPRIA boutique (uma vez, no centro do salão).
+    try {
+      const cubeTarget = new THREE.WebGLCubeRenderTarget(tier === 'cinema' || opts.poster ? 256 : 128, { type: THREE.HalfFloatType });
+      const cube = new THREE.CubeCamera(0.1, 60, cubeTarget);
+      cube.position.set(0, 1.7, -8.5);
+      this.scene.add(cube);
+      cube.update(this.renderer, this.scene);
+      this.scene.remove(cube);
+      const envFromStore = new THREE.PMREMGenerator(this.renderer).fromCubemap(cubeTarget.texture).texture;
+      this.scene.environment = envFromStore;
+      this.scene.environmentIntensity = 0.55;
+      cubeTarget.dispose();
+    } catch { /* mantém o RoomEnvironment */ }
+
     const q = tier === 'cinema' || opts.poster ? { cols: 40, rows: 26, iterations: 7 } : { cols: 28, rows: 17, iterations: 5 };
     this.dress = new DressRig(q, kit.weave);
     this.dress.addTo(this.scene);
 
+    if (tier === 'cinema' || opts.poster) {
+      try { this.post = createCinemaPost(this.renderer, this.scene, this.camera); } catch { this.post = null; }
+    }
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(container);
     this.resize();
@@ -276,8 +296,19 @@ export class World {
   /** QA: renderiza um quadro e devolve PNG (independe de preserveDrawingBuffer). */
   snapshot(): string {
     this.step(0, true);
-    this.renderer.render(this.scene, this.camera);
+    this.draw(0);
     return this.renderer.domElement.toDataURL('image/png');
+  }
+
+  /** QA: o que o raio da câmera atinge num ponto NDC (diagnóstico de composição). */
+  qaPick(x: number, y: number): { name: string; type: string; material: string; color: string; transparent: boolean; opacity: number; dist: number; point: number[] }[] {
+    this.camera.updateMatrixWorld();
+    const r = new THREE.Raycaster();
+    r.setFromCamera(new THREE.Vector2(x, y), this.camera);
+    return r.intersectObjects(this.scene.children, true).slice(0, 4).map((h) => {
+      const m = (h.object as THREE.Mesh).material as THREE.MeshStandardMaterial;
+      return { name: h.object.name || h.object.parent?.name || '', type: h.object.type, material: m?.type ?? '', color: m?.color ? '#' + m.color.getHexString() : '', transparent: !!m?.transparent, opacity: m?.opacity ?? 1, dist: Math.round(h.distance * 100) / 100, point: [h.point.x, h.point.y, h.point.z].map((v) => Math.round(v * 100) / 100) };
+    });
   }
 
   // ---------- QA: poses fixas e marcos ----------
@@ -337,7 +368,7 @@ export class World {
     this.step(0, true);
     this.dress.settle(2.2);
     for (let i = 0; i < 8; i++) this.step(1 / 60, true);
-    this.renderer.render(this.scene, this.camera);
+    this.draw(0);
   }
 
   info(): WorldInfo {
@@ -352,7 +383,7 @@ export class World {
       camera: [c.x, c.y, c.z].map((v) => Math.round(v * 100) / 100),
       lookTarget: [this.lookTgt.x, this.lookTgt.y, this.lookTgt.z].map((v) => Math.round(v * 100) / 100),
       explore: this.explorer.info(), exploreBlend: round1(this.exploreBlend), sideLook: round1(this.sideLook),
-      reflectors: this.boutique.hasReflectors(), shadows: this.renderer.shadowMap.enabled, pose: this.fixedPose,
+      reflectors: this.boutique.hasReflectors(), shadows: this.renderer.shadowMap.enabled, pose: this.fixedPose, post: !!this.post,
     };
   }
 
@@ -370,7 +401,7 @@ export class World {
     const dt = Math.min(.055, elapsed);
     this.last = now;
     this.step(dt, false);
-    this.renderer.render(this.scene, this.camera);
+    this.draw(dt);
     this.frames++;
     if (!this.firstFrameSent) {
       this.firstFrameSent = true;
@@ -513,8 +544,16 @@ export class World {
       mirrorsLive: {
         back: cam.z > ROOM.zBack && backDist < 12 && backFacing,
         fitting: fitFacing && (inFitting || (cam.z < -15.5 && cam.x > 0.8)),
+        floor: cam.z < ROOM.zFront + 0.6 && cam.z > ROOM.zBack && !inFitting,
       },
     });
+  }
+
+  private draw(dt: number): void {
+    this.renderer.info.autoReset = false;
+    this.renderer.info.reset();
+    if (this.post) this.post.render(dt);
+    else this.renderer.render(this.scene, this.camera);
   }
 
   private govern(dt: number): void {
@@ -527,7 +566,10 @@ export class World {
     if (this.slowFor > 2) {
       this.slowFor = 0;
       // Ordem: reflexos e sombras primeiro, depois resolução. Controles e IDs permanecem.
-      if (this.mall.reflector || this.boutique.hasReflectors()) {
+      if (this.post) {
+        this.post.dispose();
+        this.post = null;
+      } else if (this.mall.reflector || this.boutique.hasReflectors()) {
         if (this.mall.reflector) this.mall.reflector.removeFromParent();
         this.mall.reflector = null;
         this.boutique.dropReflectors();
@@ -561,6 +603,7 @@ export class World {
     const w = el.clientWidth || innerWidth;
     const h = el.clientHeight || innerHeight;
     this.renderer.setSize(w, h, false);
+    this.post?.setSize(w, h, this.dpr);
     this.camera.aspect = w / h;
     // retrato: lens shift vertical — o assunto sobe para a metade livre acima da folha de texto
     if (w / h < 0.85) this.camera.setViewOffset(w, h, 0, Math.round(h * 0.17), w, h);
@@ -584,6 +627,7 @@ export class World {
     document.removeEventListener('visibilitychange', this.onVis);
     this.resizeObs.disconnect();
     this.boutique.dispose();
+    this.post?.dispose();
     this.scene.traverse((o) => {
       const m = o as THREE.Mesh;
       m.geometry?.dispose?.();
