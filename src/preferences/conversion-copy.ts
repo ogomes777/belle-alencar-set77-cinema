@@ -1,5 +1,5 @@
 /** V74 conversion-first copy for the editorial relaunch. Preserve PT sources and 4 supported locales. */
-export const conversionPairs: ReadonlyArray<readonly [string, string, string, string]> = [
+export const conversionPairs: ReadonlyArray<readonly [string, string, string, string]> =  [
   [
     "Peças para escolher. Uma loja para conversar.",
     "Pieces to discover. A store to talk to.",
@@ -815,5 +815,47 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Back to the rack",
     "Volver al perchero",
     "Torna all'appendiabiti"
+  ],
+  [
+    "Ver no Google Maps",
+    "View on Google Maps",
+    "Ver en Google Maps",
+    "Vedi su Google Maps"
+  ],
+  [
+    "Ver cidade no Google Maps",
+    "View city on Google Maps",
+    "Ver ciudad en Google Maps",
+    "Vedi città su Google Maps"
+  ],
+  [
+    "Ver os perfis no Instagram",
+    "View Instagram profiles",
+    "Ver perfiles en Instagram",
+    "Vedi i profili Instagram"
+  ],
+  [
+    "Referência visual · consultar detalhes",
+    "Visual reference · view details",
+    "Referencia visual · ver detalles",
+    "Riferimento visivo · vedi dettagli"
+  ],
+  [
+    "Ver mais",
+    "See more",
+    "Ver más",
+    "Vedi altri"
+  ],
+  [
+    "deste catálogo",
+    "from this catalog",
+    "de este catálogo",
+    "di questo catalogo"
+  ],
+  [
+    "Categorias procuradas",
+    "Popular categories",
+    "Categorías buscadas",
+    "Categorie ricercate"
   ]
 ];
