@@ -649,11 +649,13 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
         // the same numbers or the grabbed point drifts as the dials move.
         const view = { focal: 1, aspect: 1, dist: 0, pitch: 0 }
         let yaw = 0
+        let revolution = 0
         let stepTarget = 0
         const onStep = (event: Event) => {
             const detail = (event as CustomEvent<{ delta?: number }>).detail
             const list = live.current.images
-            const n = Array.isArray(list) ? list.length : 0
+            const total = Array.isArray(list) ? list.length : 0
+            const n = total > 18 ? 12 : total
             if (n < 2 || !detail || !Number.isFinite(detail.delta)) return
             stepTarget += (Math.PI * 2 / n) * Math.max(-2, Math.min(2, detail.delta || 0))
             drag.current.vel = 0
@@ -770,8 +772,13 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
                 Array.isArray(L.images) && L.images.length
                     ? L.images
                     : DEFAULT_ITEMS
-            const n = list.length
-
+            const total = list.length
+            // Preserve the large, immersive original Rotunda panel size.
+            // A physical ring of 47 tiny videos would collapse into a strip.
+            // Instead 12 physical panels expose all 47 supplied manifest entries
+            // sequentially, by refreshing each panel only behind the viewer.
+            const n = total > 18 ? 12 : total
+            const virtualized = total > n
             const d = drag.current
             // Hover eases in so the slow-down reads as the wall noticing the
             // pointer, not as a jump cut.
@@ -789,9 +796,15 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
                 const slow = 1 - (L.hover / 100) * d.hoverAmt
                 yaw += (L.speed / 50) * SPIN_AT_50 * slow * dt
             }
-            // Bounded: unbounded it eventually costs float32 precision inside
-            // the shader's sin/cos.
-            yaw = yaw % (Math.PI * 2)
+            // The shader still receives a bounded angle. Keep a separate
+            // revolution count so the 47-item virtual reel never resets after
+            // one lap; this does not alter the original projection physics.
+            const tau = Math.PI * 2
+            const wrappedTurns = Math.floor(yaw / tau)
+            if (wrappedTurns) {
+                revolution += wrappedTurns
+                yaw -= wrappedTurns * tau
+            }
 
             /* ---- geometry from the item count ---- */
             // The ring closes around n panels and n gaps, so the circumference
@@ -847,15 +860,28 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
 
             activeVideoCount = 0
             for (let i = 0; i < n; i++) {
-                const src = list[i]?.image ?? ""
-                const videoSrc = list[i]?.video ?? ""
+                // The seam is at angle 0, behind the inward-facing camera.
+                // Each reused physical panel switches media at that seam,
+                // NEVER in the visitor's visible field of view. With positive
+                // yaw the sequence advances 0,1,2,…46,0 seamlessly.
+                const lap = Math.floor(((i + .5) * itemArc + yaw) / tau) + revolution
+                const shift = Math.ceil((n - 1) / 2)
+                const raw = n - 1 - i + lap * n - shift
+                const sourceIndex = virtualized ? ((raw % total) + total) % total : i
+                const src = list[sourceIndex]?.image ?? ""
+                const videoSrc = list[sourceIndex]?.video ?? ""
                 if (src) ensure(src)
                 const poster = src ? cache.get(src) : undefined
                 // Camera faces -Z from INSIDE the cylinder. Allocate decoders only
                 // to nearby wall panels, including one at each edge to avoid pop.
                 const mid = (i + .5) * itemArc + yaw
                 const aroundFront = Math.abs(wrapPi(mid - Math.PI))
-                const active = aroundFront < (cssW < 720 ? .87 : 1.26)
+                // With all 47 approved preview slots in one ring, do not start
+                // 15-20 simultaneous decoders on mobile hardware. Keep every
+                // poster visible and activate only the nearest live video wall.
+                const maxLive = cssW < 720 ? 5 : 8
+                const sector = Math.min(cssW < 720 ? .87 : 1.26, Math.PI * maxLive / Math.max(1, n))
+                const active = aroundFront < sector
                 const movingHit = videoSrc && active ? getMoving(videoSrc, now) : undefined
                 const hasVideo = movingHit ? uploadMoving(movingHit, now) : false
                 if (movingHit && !movingHit.video.paused) activeVideoCount++
@@ -912,6 +938,8 @@ function __OriginkitBase_RotundaCarousel(props: Props) {
         <div
             ref={hostRef}
             data-rotunda-engine="originkit-webgl-video"
+            data-rotunda-items={String(images.length)}
+            data-rotunda-physical={String(images.length > 18 ? 12 : images.length)}
             style={{
                 // Floor BEFORE the style spread: the canvas is absolutely
                 // positioned, so the root has no in-flow content and collapses
