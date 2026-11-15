@@ -42,10 +42,10 @@ export const BOUNDARIES: Boundary[] = [
   { section: '#colecao', veil: 'varredura', chapter: '03 · Coleção', title: ['A coleção', '.'] },
   { section: '#como-comprar', veil: 'dobra', chapter: '04 · Como comprar', title: ['Do clique', ' à loja.'] },
   { section: '#lojas', veil: 'circulo', chapter: '05 · Lojas', title: ['Quatro cidades', '.'] },
-  // V43: permuta de micro-intros. Identidades visuais, não os blocos de conteúdo.
-  // O capítulo 06 segue antes do 07 para manter a ordem narrativa.
+  // V67: move the EXISTING lateral gold micro-intro from Finale to the FAQ.
+  // Only this entrance moves; actual FAQ/finale content and other motion stay intact.
   { section: '#atendimento', veil: 'veludo', chapter: '06 · Assinatura', title: ['Belle', ' Alencar.'] },
-  { section: '.finale', veil: 'lateral', chapter: '07 · Atendimento', title: ['Com', ' você.'] },
+  { section: '#duvidas', veil: 'lateral', chapter: '07 · Dúvidas', title: ['Dúvidas', '.'] },
 ];
 
 /** Smoothstep progress; complete while the anchor still sits in the lower viewport. */
