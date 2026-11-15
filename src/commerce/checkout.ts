@@ -30,10 +30,10 @@ export function buildStoreMessage(store: Store, items: CartItem[]): string {
     return `${i + 1}. ${name} (${sku}) · ${size} · ${it.qty} un.`;
   });
   return [
-    `Olá, Belle ${store.city}! Separei estas peças no site:`,
+    `Olá, Belle ${store.city}! Separei estas referências no site para consultar:`,
     ...lines,
     '',
-    'Obs.: são referências demonstrativas do pré-lançamento do site.',
-    'Pode me ajudar com disponibilidade, preço e retirada?',
+    'Observação: as imagens do site são ilustrativas, não confirmação de estoque.',
+    'Vocês podem confirmar modelos disponíveis, tamanhos, preços e opções de retirada ou entrega?',
   ].join('\n');
 }
