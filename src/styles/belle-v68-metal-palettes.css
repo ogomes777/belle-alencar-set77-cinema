@@ -56,6 +56,9 @@ html:not([data-belle-theme="rose"]) #lojas.stores .section-head .display{
   background:repeating-linear-gradient(90deg,
     #664008 0px,#976000 70px,#d8950d 118px,#ffe274 157px,
     #e5a519 198px,#a36b04 255px,#724709 335px,#724709 400px)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
 }
 html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #lojas.stores{
   background:linear-gradient(96deg,#fffaea 0%,#fff5d7 28%,#fae8ae 45%,
@@ -145,6 +148,9 @@ html[data-belle-theme="rose"] #lojas.stores .section-head .display{
     #de68a8 198px,#9b356f 255px,#662345 335px,#662345 400px)!important;
   -webkit-text-stroke:.35px rgba(104,31,65,.38)!important;
   text-shadow:0 5px 22px rgba(220,84,147,.14)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
 }
 html[data-belle-theme="rose"] #lojas.stores .section-head .eyebrow,
 html[data-belle-theme="rose"] #lojas.stores .store-card__uf,
