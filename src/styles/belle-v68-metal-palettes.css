@@ -1,0 +1,277 @@
+
+/* BELLE V68 | COLOR ONLY: brighter metallic gold / pink-on-pink Rosé.
+ * No changes to geometry, scroll, typography, animation, media or JavaScript. */
+:root{
+  --gold:#c58b09!important;--gold-deep:#865700!important;--gold-light:#ffcf51!important;
+  --sand:#f1e4bd!important;--stone:#dec070!important;
+  --v51-accent-1:#835400!important;--v51-accent-2:#ffd24b!important;--v51-accent-3:#aa6a05!important;
+  --settings-stroke:rgba(187,127,8,.38)!important;--settings-glow:rgba(242,177,20,.19)!important;
+}
+:root[data-belle-theme="dark"]{
+  --gold:#f6c32e!important;--gold-deep:#ffe16b!important;--gold-light:#fff0a0!important;
+  --v51-accent-1:#ffcc45!important;--v51-accent-2:#fff1a2!important;--v51-accent-3:#e5a216!important;
+  --settings-stroke:rgba(250,192,54,.46)!important;--settings-glow:rgba(255,198,43,.24)!important;
+}
+:root[data-belle-theme="rose"]{
+  --ivory:#fceaf4!important;--paper:#fff3fa!important;--sand:#f8c5e0!important;--stone:#eaa2c8!important;
+  --gold:#d94f98!important;--gold-deep:#8f285a!important;--gold-light:#ffa4d4!important;
+  --v51-accent-1:#8d285c!important;--v51-accent-2:#f283b9!important;--v51-accent-3:#b53479!important;
+  --settings-stroke:rgba(194,70,133,.40)!important;--settings-glow:rgba(242,103,175,.20)!important;
+}
+/* Gold material: film, couture glass, storefronts and editorial copy. */
+html:not([data-belle-theme="rose"]) #filme{
+  --v49-highlight:#8c5904!important;--v49-gold:rgba(255,188,27,.30)!important;
+  --v49-inner:rgba(222,151,20,.30)!important;--v49-rim:rgba(255,215,91,.85)!important;
+}
+html[data-belle-theme="dark"] #filme{
+  --v49-highlight:#ffd765!important;--v49-gold:rgba(255,192,42,.32)!important;
+  --v49-inner:rgba(252,193,68,.36)!important;--v49-rim:rgba(255,215,103,.75)!important;
+}
+html:not([data-belle-theme="rose"]) #como-comprar.how--couture{
+  --impact-gold:#e3a819!important;--impact-champagne:#ffdb69!important;
+  --v46-gold:#986307!important;--v46-rim:rgba(230,169,24,.43)!important;
+  --v46-edge:rgba(246,203,86,.85)!important;--v46-bottom:rgba(255,197,54,.17)!important;
+}
+html[data-belle-theme="dark"] #como-comprar.how--couture{
+  --v46-gold:#ffdd74!important;--v46-edge:rgba(251,204,91,.67)!important;
+  --v46-rim:rgba(255,195,55,.45)!important;--v46-bottom:rgba(206,150,24,.15)!important;
+}
+html:not([data-belle-theme="rose"]) #atendimento.concierge--brand-story{--story-accent:#965e00!important}
+html:not([data-belle-theme="rose"]) #atendimento.concierge--brand-story .concierge__body.brand-story{
+  --v42-gold:#a56e03!important;--v42-glint:rgba(255,201,59,.55)!important;
+}
+html[data-belle-theme="dark"] #atendimento.concierge--brand-story{--story-accent:#ffda66!important}
+html[data-belle-theme="dark"] #atendimento.concierge--brand-story .concierge__body.brand-story{
+  --v42-gold:#ffe084!important;--v42-glint:rgba(255,195,36,.45)!important;
+}
+html:not([data-belle-theme="rose"]) #lojas.stores{
+  --geo-gold:#9b6400!important;--city-kicker:#995f02!important;
+  --city-link:#865500!important;--stores-edge:rgba(191,137,24,.38)!important;
+}
+html[data-belle-theme="dark"] #lojas.stores{
+  --geo-gold:#ffd458!important;--city-kicker:#ffdb6a!important;
+  --city-link:#ffe28b!important;--stores-edge:rgba(251,196,63,.38)!important;
+}
+html:not([data-belle-theme="rose"]) #lojas.stores .section-head .display{
+  background:repeating-linear-gradient(90deg,
+    #664008 0px,#976000 70px,#d8950d 118px,#ffe274 157px,
+    #e5a519 198px,#a36b04 255px,#724709 335px,#724709 400px)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #lojas.stores{
+  background:linear-gradient(96deg,#fffdf9 0%,#fdfaf4 28%,#faf6ec 48%,
+    #f4ebdb 69%,#eadcc5 88%,#e7d8c1 100%)!important;
+}
+html:not([data-belle-theme="rose"]) #lojas.stores .store-card::before{
+  background:linear-gradient(90deg,#be8009,#ffe17a)!important;
+}
+html:not([data-belle-theme="rose"]) #lojas.stores .btn--line{
+  --bd:rgba(194,131,13,.70)!important;--fill:#dfaa20!important;border-color:var(--bd)!important;
+}
+html:not([data-belle-theme="rose"]) #belle-cidades.v63-phones{
+  --v63-accent:#c38a0f!important;--v63-glow:rgba(230,169,36,.26)!important;
+}
+html[data-belle-theme="dark"] #belle-cidades.v63-phones{
+  --v63-accent:#ffcd53!important;--v63-glow:rgba(255,187,35,.30)!important;
+}
+html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #belle-cidades.v63-phones{
+  background:radial-gradient(ellipse 60% 56% at 50% 43%,#fffbed 0%,#f9e9bb 65%,#e6c979 100%)!important;
+}
+html:not([data-belle-theme="rose"]) #como-comprar .how__steps li{
+  border-color:rgba(211,155,35,.56)!important;
+}
+html:not([data-belle-theme="rose"]) #como-comprar.how--enhanced .how__steps li::after{
+  background:radial-gradient(ellipse 70% 70% at 63% 0,rgba(255,219,92,.69),
+    rgba(236,171,25,.23) 49%,transparent 86%),
+    linear-gradient(125deg,transparent 25%,rgba(255,255,255,.32) 43%,transparent 59%)!important;
+}
+html:not([data-belle-theme="rose"]) #como-comprar .how__foot .how__collection-cta{
+  border-color:#efbc37!important;
+  background:radial-gradient(ellipse 110% 90% at 12% 0%,rgba(244,179,37,.28),transparent 76%),
+    linear-gradient(143deg,#302415,#0d0b07 58%,#3a280d)!important;
+  box-shadow:0 14px 28px -17px rgba(20,11,5,.50),0 0 23px rgba(255,188,32,.30),
+    inset 0 1px 0 rgba(255,223,129,.27)!important;
+}
+html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) .manifesto--ticker .band{
+  background:linear-gradient(100deg,#fff9e8,#fbe9bb 54%,#fff7df)!important;
+}
+html:not([data-belle-theme="rose"]) .belle-settings__sample--light{
+  background:linear-gradient(130deg,#fff6cf,#e8b93e)!important;color:#865500!important;
+}
+html:not([data-belle-theme="rose"]) .belle-settings__sample--dark{color:#ffd45d!important}
+html:not([data-belle-theme="rose"]) .belle-settings__sample::before{
+  background:conic-gradient(from 25deg,transparent 14%,rgba(255,207,59,.89),transparent 64%)!important;
+  box-shadow:0 0 14px rgba(245,179,24,.23)!important;
+}
+/* Same choreography, now genuinely metallic rather than beige-bronze. */
+html:not([data-belle-theme="rose"]) .v37-veil{
+  --gold:#d69a15!important;--gold-rich:#ffc73b!important;--gold-deep:#a96a07!important;
+  --bronze:#79501a!important;--champ-light:#ffe18a!important;
+}
+html[data-belle-theme="dark"] .v37-veil{
+  --night-gold:#ad790b!important;--night-gold-hi:#ffda65!important;--accent:#ffe178!important;
+}
+html[data-belle-theme="dark"] .v37-veil--colunas .v37-veil__piece:nth-child(4){
+  background:#b87c12!important;
+}
+html[data-belle-theme="dark"] .v37-veil--veludo{--accent:#ffdc75!important}
+/* Rosé: pink layered with pink, not copper or champagne. */
+html[data-belle-theme="rose"] body{background:#fceaf4!important}
+html[data-belle-theme="rose"] .manifesto,
+html[data-belle-theme="rose"] .runway,
+html[data-belle-theme="rose"] .occasions,
+html[data-belle-theme="rose"] .looks,
+html[data-belle-theme="rose"] .how,
+html[data-belle-theme="rose"] .concierge,
+html[data-belle-theme="rose"] .faq,
+html[data-belle-theme="rose"] .finale,
+html[data-belle-theme="rose"] #como-comprar,
+html[data-belle-theme="rose"] #colecao,
+html[data-belle-theme="rose"] .site-footer{
+  background:radial-gradient(ellipse 76% 90% at 88% 7%,rgba(238,111,176,.25),transparent 70%),
+    linear-gradient(132deg,#fff1fa 0%,#f9d3e8 53%,#f0b9da 100%)!important;
+}
+html[data-belle-theme="rose"] .v65-seamless-chapters{
+  background:radial-gradient(ellipse 75% 85% at 88% 6%,rgba(231,86,161,.23),transparent 73%),
+    linear-gradient(135deg,#fff0f9 0%,#f7c9e2 58%,#efacd3 100%)!important;
+}
+html[data-belle-theme="rose"] #lojas.stores{
+  --geo-gold:#a52d6b!important;--city-kicker:#982b65!important;--city-link:#a12a69!important;
+  --stores-edge:rgba(186,62,121,.35)!important;
+  background:linear-gradient(115deg,#fff0f9 0%,#ffe4f2 30%,#facce5 60%,#ecadd0 100%)!important;
+}
+html[data-belle-theme="rose"] #lojas.stores .section-head .display{
+  background:repeating-linear-gradient(90deg,
+    #662345 0px,#8d2f62 70px,#cb4b90 118px,#ffb0d7 157px,
+    #de68a8 198px,#9b356f 255px,#662345 335px,#662345 400px)!important;
+  -webkit-text-stroke:.35px rgba(104,31,65,.38)!important;
+  text-shadow:0 5px 22px rgba(220,84,147,.14)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+html[data-belle-theme="rose"] #lojas.stores .section-head .eyebrow,
+html[data-belle-theme="rose"] #lojas.stores .store-card__uf,
+html[data-belle-theme="rose"] #lojas.stores .store-card__map{color:#8f295e!important}
+html[data-belle-theme="rose"] #lojas.stores .store-card h3{color:#52253f!important}
+html[data-belle-theme="rose"] #lojas.stores .store-card__addr,
+html[data-belle-theme="rose"] #lojas.stores .stores__note{color:#633c52!important}
+html[data-belle-theme="rose"] #lojas.stores .store-card::before{
+  background:linear-gradient(90deg,#bb3979,#ffadd9)!important;
+}
+html[data-belle-theme="rose"] #lojas.stores .btn--line{
+  --bg:rgba(255,234,247,.55)!important;--fg:#832455!important;
+  --bd:rgba(176,43,108,.62)!important;--fill:#d9579b!important;
+  border-color:var(--bd)!important;color:var(--fg)!important;
+}
+html[data-belle-theme="rose"] #lojas.stores .btn--line[aria-pressed="true"]{
+  --bg:#f7bddd!important;--bd:#b43d7d!important;--fg:#692447!important;
+  color:var(--fg)!important;border-color:var(--bd)!important;
+}
+html[data-belle-theme="rose"] #filme{
+  --v49-glass:rgba(255,230,247,.48)!important;
+  --v49-rim:rgba(250,156,208,.83)!important;
+  --v49-inner:rgba(215,73,143,.25)!important;
+  --v49-gold:rgba(241,96,166,.23)!important;
+  --v49-highlight:#982958!important;
+  --v49-sheen:rgba(255,241,250,.66)!important;
+}
+html[data-belle-theme="rose"] #como-comprar.how--couture{
+  --impact-gold:#d95399!important;--impact-champagne:#ffa3d0!important;
+  --v46-gold:#a22d69!important;--v46-edge:rgba(244,144,195,.72)!important;
+  --v46-rim:rgba(198,70,131,.45)!important;--v46-bottom:rgba(241,130,190,.23)!important;
+  --v46-base:rgba(255,232,245,.49)!important;
+}
+html[data-belle-theme="rose"] #como-comprar .how__steps li{
+  border-color:rgba(203,81,143,.45)!important;
+}
+html[data-belle-theme="rose"] #como-comprar.how--enhanced .how__steps li::after{
+  background:radial-gradient(ellipse 70% 70% at 63% 0,rgba(255,158,211,.58),
+    rgba(226,84,156,.23) 49%,transparent 86%),
+    linear-gradient(125deg,transparent 25%,rgba(255,255,255,.30) 43%,transparent 59%)!important;
+}
+html[data-belle-theme="rose"] #como-comprar.how--enhanced .how__gold-veil{
+  background:radial-gradient(ellipse 58% 85% at 65% 46%,rgba(244,114,183,.46),
+    rgba(237,157,201,.24) 53%,transparent 84%),
+    linear-gradient(135deg,rgba(255,242,250,.80),rgba(249,205,230,.78) 58%,rgba(236,163,204,.77))!important;
+}
+html[data-belle-theme="rose"] #como-comprar .how__visual::after{
+  background:linear-gradient(90deg,rgba(255,235,247,.77),
+    rgba(255,235,247,.28) 46%,rgba(255,235,247,.16))!important;
+}
+html[data-belle-theme="rose"] #como-comprar::after{
+  background:linear-gradient(180deg,rgba(255,225,243,0),
+    rgba(245,182,219,.30) 48%,#f4c8e2 100%)!important;
+}
+html[data-belle-theme="rose"] #como-comprar .how__foot .how__collection-cta{
+  border-color:#e976b1!important;
+  background:radial-gradient(ellipse 110% 90% at 12% 0%,rgba(243,96,168,.25),transparent 76%),
+    linear-gradient(143deg,#552038,#250e21 58%,#632449)!important;
+  box-shadow:0 14px 28px -17px rgba(43,9,30,.48),0 0 22px rgba(241,104,176,.27),
+    inset 0 1px 0 rgba(255,185,220,.25)!important;
+}
+html[data-belle-theme="rose"] #atendimento.concierge--brand-story{--story-accent:#a33171!important}
+html[data-belle-theme="rose"] #atendimento.concierge--brand-story .concierge__body.brand-story{
+  --v42-gold:#bc4382!important;--v42-glint:rgba(246,127,186,.40)!important;
+}
+html[data-belle-theme="rose"] #belle-cidades.v63-phones{
+  --v63-accent:#c64b8f!important;--v63-glow:rgba(220,79,152,.29)!important;
+  background:radial-gradient(ellipse 60% 55% at 50% 43%,#fff1fa 0%,#facfe7 64%,#e9a6c9 100%)!important;
+}
+html[data-belle-theme="rose"] .manifesto--ticker .band{
+  background:linear-gradient(95deg,#fff1fa,#f8cce4 52%,#f4b4d8)!important;
+  border-color:rgba(191,71,138,.25)!important;
+}
+html[data-belle-theme="rose"] .belle-settings__sample--rose{
+  background:linear-gradient(130deg,#ffe7f5,#df79b0)!important;color:#842456!important;
+}
+html[data-belle-theme="rose"] .belle-settings__sample::before{
+  background:conic-gradient(from 25deg,transparent 14%,rgba(244,105,179,.82),transparent 64%)!important;
+  box-shadow:0 0 14px rgba(224,77,153,.25)!important;
+}
+html[data-belle-theme="rose"] #colecao .collection__handoff{
+  background:linear-gradient(180deg,transparent,rgba(249,169,211,.61),#f3c0de)!important;
+}
+html[data-belle-theme="rose"] .v37-veil{
+  --blush:#ffcae5!important;--rose:#df70a8!important;--rose-gold:#d85c9e!important;
+  --rose-deep:#852b62!important;--pink-gold:#e65b9f!important;--pink-gold-hi:#ffc4e4!important;
+  --gold:#d95198!important;--gold-rich:#ff8bc6!important;--gold-deep:#9b2f6c!important;
+  --bronze:#832b61!important;--champ-light:#ffc5e4!important;--accent:#ffc5e4!important;
+}
+html[data-belle-theme="rose"] .v37-veil--dobra .v37-veil__piece{
+  background:linear-gradient(135deg,#f48cbf 0%,#df69aa 38%,#b93e86 49.6%,#6a214d 50%)!important;
+}
+html[data-belle-theme="rose"] .v37-veil--lateral{--accent:#b33478!important}
+html[data-belle-theme="rose"] .v37-veil--lateral .v37-veil__piece{
+  background:linear-gradient(90deg,#ffd3e9 0%,#ed98c6 100%)!important;
+  box-shadow:inset 2px 0 0 #cc4b92!important;
+}
+html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece:nth-child(4){
+  background:#ef9bc5!important;
+}
+
+/* V68 responsive finish: retain the chapter's vertical light journey on phones. */
+@media(max-width:959px){
+  html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #lojas.stores{
+    background:linear-gradient(180deg,#fffdf9 0%,#fdfaf5 22%,#f9f5ec 43%,
+      #f5ecdd 65%,#f0e5d4 82%,#fcf9f2 100%)!important;
+  }
+  html[data-belle-theme="rose"] #lojas.stores{
+    background:linear-gradient(180deg,#fff1fa 0%,#fbd7eb 24%,#eda9cf 52%,
+      #d88eb9 69%,#ffe7f3 100%)!important;
+  }
+}
+/* Keep the existing solid-text fallback legible when motion is disabled. */
+@media(prefers-reduced-motion:reduce){
+  html:not([data-belle-theme="rose"]) #lojas.stores .section-head .display{
+    background:none!important;-webkit-text-fill-color:#765000!important;
+  }
+  html[data-belle-theme="dark"] #lojas.stores .section-head .display{
+    background:none!important;-webkit-text-fill-color:#ffe179!important;
+  }
+  html[data-belle-theme="rose"] #lojas.stores .section-head .display{
+    background:none!important;-webkit-text-fill-color:#862858!important;
+  }
+}

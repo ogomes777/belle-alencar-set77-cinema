@@ -1,0 +1,46 @@
+/* BELLE V53 — responsive city selector. No synthetic videos or profile screenshots. */
+#belle-cidades{--pv-ink:#34271f;--pv-muted:#79685a;--pv-accent:#98703e;--pv-line:rgba(123,89,51,.24);--pv-surface:#f6f0e5;--pv-glow:rgba(192,150,82,.24);position:relative;isolation:isolate;overflow:clip;background:linear-gradient(125deg,#f7f2eb,#eae0d0 65%,#eee4d8);color:var(--pv-ink);padding:clamp(64px,8vw,118px) clamp(20px,5vw,72px)}
+html[data-belle-theme="dark"] #belle-cidades{--pv-ink:#f2e8dc;--pv-muted:#c6b4a4;--pv-accent:#e5c18d;--pv-line:rgba(230,199,156,.27);--pv-surface:#272126;--pv-glow:rgba(216,165,103,.17);background:linear-gradient(125deg,#181619,#2b2428 67%,#201b1e)}
+html[data-belle-theme="rose"] #belle-cidades{--pv-ink:#492d3a;--pv-muted:#826372;--pv-accent:#a25d79;--pv-line:rgba(163,100,127,.26);--pv-surface:#fff1f2;--pv-glow:rgba(188,105,130,.23);background:linear-gradient(125deg,#fff6f5,#f3e4e6 69%,#fae8e7)}
+#belle-cidades:before{content:"";position:absolute;inset:6% 0 auto 17%;height:70%;pointer-events:none;background:radial-gradient(ellipse,var(--pv-glow),transparent 65%);filter:blur(38px)}
+#belle-cidades .pv-wrap{width:min(1220px,100%);margin:auto;position:relative;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(24px,6vw,86px);align-items:center}
+#belle-cidades .pv-kicker{display:block;color:var(--pv-accent);font:700 .73rem/1.5 var(--sans,Arial,sans-serif);letter-spacing:.20em;text-transform:uppercase;margin:0 0 17px}
+#belle-cidades .pv-title{margin:0 0 17px;font:500 clamp(2.75rem,5vw,5.3rem)/1.04 "Bodoni Moda Variable",Georgia,serif;letter-spacing:-.045em;max-width:11ch;color:var(--pv-ink)}
+#belle-cidades .pv-title em{font-weight:400;color:var(--pv-accent)}
+#belle-cidades .pv-lede{font:450 clamp(.96rem,1.1vw,1.10rem)/1.65 var(--sans,Arial,sans-serif);color:var(--pv-muted);max-width:48ch;margin:0 0 30px}
+#belle-cidades .pv-tabs{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 25px}
+#belle-cidades .pv-tab{border:1px solid var(--pv-line);border-radius:999px;min-height:45px;min-width:80px;padding:11px 16px;color:var(--pv-ink);font:700 .81rem/1.3 var(--sans,Arial,sans-serif);background:transparent;transition:background .2s ease,color .2s ease,transform .2s ease,border-color .2s ease}
+#belle-cidades .pv-tab[aria-pressed="true"]{background:var(--pv-ink);color:var(--pv-surface);border-color:var(--pv-ink)}
+#belle-cidades .pv-tab:hover{transform:translateY(-2px);border-color:var(--pv-accent)}
+#belle-cidades .pv-tab:focus-visible,#belle-cidades a:focus-visible{outline:3px solid var(--pv-accent);outline-offset:4px}
+#belle-cidades .pv-state{color:var(--pv-accent);font:700 .75rem/1.5 var(--sans,Arial,sans-serif);letter-spacing:.13em;text-transform:uppercase;margin:0 0 9px}
+#belle-cidades .pv-city{font:500 clamp(2rem,3.2vw,3.4rem)/1.1 "Bodoni Moda Variable",Georgia,serif;color:var(--pv-ink);margin:0 0 9px}
+#belle-cidades .pv-handle{color:var(--pv-muted);font:600 .94rem/1.5 var(--sans,Arial,sans-serif);margin:0 0 17px;overflow-wrap:anywhere}
+#belle-cidades .pv-note{font:.86rem/1.65 var(--sans,Arial,sans-serif);color:var(--pv-muted);margin:0 0 21px;max-width:38ch;min-height:2.7em}
+#belle-cidades .pv-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+#belle-cidades .pv-action{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:11px 17px;border:1px solid var(--pv-accent);border-radius:999px;color:var(--pv-ink);background:transparent;text-decoration:none;font:700 .82rem/1.4 var(--sans,Arial,sans-serif);transition:transform .2s ease,background .2s ease}
+#belle-cidades .pv-action--primary{background:var(--pv-accent);color:#fff9f0}
+#belle-cidades .pv-action:hover{transform:translateY(-2px)}
+#belle-cidades .pv-stage{position:relative;min-width:0;display:grid;place-items:center;min-height:640px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#belle-cidades .pv-halo{position:absolute;width:min(70%,370px);aspect-ratio:1;border:1px solid var(--pv-line);border-radius:50%;box-shadow:0 0 0 45px rgba(176,142,99,.035),0 0 0 95px rgba(176,142,99,.025);pointer-events:none}
+#belle-cidades .pv-phone{position:relative;width:clamp(234px,26vw,292px);aspect-ratio:9 / 19.4;border:6px solid #201f24;border-radius:43px;padding:7px;background:#28272d;box-shadow:0 34px 78px rgba(14,13,18,.33),0 2px 0 #85828b inset,0 0 0 2px rgba(255,255,255,.45) inset;transform:perspective(1100px) rotateY(-10deg) rotateX(3deg);transform-origin:center;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+#belle-cidades .pv-phone:after{content:"";position:absolute;right:-9px;top:23%;height:76px;width:3px;border-radius:2px;background:linear-gradient(#a2a0a7,#37343a,#a2a0a7)}
+#belle-cidades .pv-screen{height:100%;min-width:0;overflow:hidden;border-radius:32px;background:var(--pv-surface);display:flex;flex-direction:column;position:relative;color:var(--pv-ink)}
+#belle-cidades .pv-island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:25px;border-radius:20px;background:#151419;z-index:2}
+#belle-cidades .pv-status{min-height:44px;display:flex;align-items:center;justify-content:flex-start;padding:5px 18px;font:700 .67rem/1 var(--sans,Arial,sans-serif)}
+#belle-cidades .pv-profile-head{border-block:1px solid var(--pv-line);padding:11px 13px;font:700 .76rem/1.25 var(--sans,Arial,sans-serif);text-align:center;overflow-wrap:anywhere}
+#belle-cidades .pv-profile{display:flex;align-items:center;gap:11px;padding:18px 13px 14px}
+#belle-cidades .pv-avatar{width:67px;height:67px;flex:0 0 67px;border:1.5px solid var(--pv-accent);border-radius:50%;display:grid;place-items:center;font:500 2.3rem/1 Georgia,serif;color:var(--pv-accent);background:linear-gradient(140deg,rgba(196,158,102,.20),transparent)}
+#belle-cidades .pv-profile-name{font:700 .85rem/1.35 var(--sans,Arial,sans-serif);margin:0;color:var(--pv-ink)}
+#belle-cidades .pv-profile-place{font:500 .7rem/1.5 var(--sans,Arial,sans-serif);margin:4px 0 0;color:var(--pv-muted)}
+#belle-cidades .pv-phone-message{margin:0 13px;padding:10px 12px;border:1px solid var(--pv-line);border-radius:12px;font:600 .69rem/1.5 var(--sans,Arial,sans-serif);color:var(--pv-muted)}
+#belle-cidades .pv-visual{flex:1;min-height:125px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:radial-gradient(ellipse at 50% 30%,var(--pv-glow),transparent 70%);border-block:1px solid var(--pv-line);margin-top:13px;text-align:center;padding:16px}
+#belle-cidades .pv-visual-mark{font:500 clamp(3.5rem,7vw,5.6rem)/.9 "Bodoni Moda Variable",Georgia,serif;color:var(--pv-accent)}
+#belle-cidades .pv-visual-caption{font:600 .67rem/1.7 var(--sans,Arial,sans-serif);letter-spacing:.16em;text-transform:uppercase;color:var(--pv-muted)}
+#belle-cidades .pv-phone-footer{display:flex;align-items:center;justify-content:space-evenly;min-height:48px;font:600 .71rem/1 var(--sans,Arial,sans-serif);color:var(--pv-muted)}
+#belle-cidades .pv-stage-caption{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:var(--pv-muted);font:600 .77rem/1.5 var(--sans,Arial,sans-serif)}
+#belle-cidades .pv-legal{margin:27px 0 0;font:450 .72rem/1.55 var(--sans,Arial,sans-serif);color:var(--pv-muted);max-width:66ch}
+#belle-cidades .pv-ib-note{font-weight:750;color:var(--pv-accent)}
+@media(max-width:850px){#belle-cidades .pv-wrap{grid-template-columns:1fr;gap:24px}#belle-cidades .pv-stage{min-height:590px}#belle-cidades .pv-copy{text-align:center}#belle-cidades .pv-title,#belle-cidades .pv-lede,#belle-cidades .pv-note{margin-inline:auto}#belle-cidades .pv-tabs,#belle-cidades .pv-actions{justify-content:center}#belle-cidades .pv-stage-caption{bottom:0}}
+@media(max-width:420px){#belle-cidades{padding:58px 16px 48px}#belle-cidades .pv-tabs{gap:7px}#belle-cidades .pv-tab{min-width:0;min-height:42px;padding:9px 12px;font-size:.76rem}#belle-cidades .pv-stage{min-height:540px}#belle-cidades .pv-phone{width:238px}#belle-cidades .pv-title{font-size:2.9rem}}
+@media(prefers-reduced-motion:reduce){#belle-cidades .pv-tab,#belle-cidades .pv-action,#belle-cidades .pv-phone{transition:none;transform:none}}

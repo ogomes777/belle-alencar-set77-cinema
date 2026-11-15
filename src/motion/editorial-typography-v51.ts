@@ -25,8 +25,12 @@ export function initTypographyCinema(): void {
       if(reduced.matches || document.documentElement.classList.contains('perf-lite'))continue;
       const el=entry.target as HTMLElement;
       const now=performance.now();
+      // A copy must not blink again when IntersectionObserver crosses its
+      // threshold during a slow trackpad/touch scroll or browser chrome resize.
+      if(el.dataset.typoAnimated==='true')continue;
       if(now-(last.get(el)??-Infinity)<800)continue;
       last.set(el,now);
+      observer.unobserve(el);
       const micro=el.classList.contains('eyebrow');
       const lede=el.classList.contains('lede');
       // Serif headers reveal horizontally like a fashion editorial title.

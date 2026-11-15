@@ -44,9 +44,7 @@ export function initHowFilm(director: Director): () => void {
     // A video under 2 MB can buffer when the chapter approaches; do not
     // aggressively fetch it during the first hero's LCP.
     video.preload = 'auto';
-    video.src = matchMedia('(max-width: 699px)').matches
-      ? '/media/belle-scroll-mobile.mp4'
-      : '/media/belle-scroll-desktop.mp4';
+    video.src = '/media/belle-scroll-original-v69.mp4';
     video.load();
   };
 

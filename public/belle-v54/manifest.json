@@ -1,0 +1,331 @@
+[
+  {
+    "city": "mineiros",
+    "order": 0,
+    "src": "/belle-v54/media/e839766001f216db.mp4",
+    "poster": "/belle-v54/media/e839766001f216db.webp",
+    "id": "e839766001f216db"
+  },
+  {
+    "city": "mineiros",
+    "order": 1,
+    "src": "/belle-v54/media/b78e08c041b2a181.mp4",
+    "poster": "/belle-v54/media/b78e08c041b2a181.webp",
+    "id": "b78e08c041b2a181"
+  },
+  {
+    "city": "mineiros",
+    "order": 2,
+    "src": "/belle-v54/media/59ffc873186b5ae6.mp4",
+    "poster": "/belle-v54/media/59ffc873186b5ae6.webp",
+    "id": "59ffc873186b5ae6"
+  },
+  {
+    "city": "mineiros",
+    "order": 3,
+    "src": "/belle-v54/media/df7f3df6ffc6dd52.mp4",
+    "poster": "/belle-v54/media/df7f3df6ffc6dd52.webp",
+    "id": "df7f3df6ffc6dd52"
+  },
+  {
+    "city": "mineiros",
+    "order": 4,
+    "src": "/belle-v54/media/5fc5bd283a24cfd5.mp4",
+    "poster": "/belle-v54/media/5fc5bd283a24cfd5.webp",
+    "id": "5fc5bd283a24cfd5"
+  },
+  {
+    "city": "mineiros",
+    "order": 5,
+    "src": "/belle-v54/media/fab6678587893ab0.mp4",
+    "poster": "/belle-v54/media/fab6678587893ab0.webp",
+    "id": "fab6678587893ab0"
+  },
+  {
+    "city": "mineiros",
+    "order": 6,
+    "src": "/belle-v54/media/bfec82bc7dfa46ba.mp4",
+    "poster": "/belle-v54/media/bfec82bc7dfa46ba.webp",
+    "id": "bfec82bc7dfa46ba"
+  },
+  {
+    "city": "mineiros",
+    "order": 7,
+    "src": "/belle-v54/media/a03b75e497fb794c.mp4",
+    "poster": "/belle-v54/media/a03b75e497fb794c.webp",
+    "id": "a03b75e497fb794c"
+  },
+  {
+    "city": "mineiros",
+    "order": 8,
+    "src": "/belle-v54/media/cd6052b433d85f8a.mp4",
+    "poster": "/belle-v54/media/cd6052b433d85f8a.webp",
+    "id": "cd6052b433d85f8a"
+  },
+  {
+    "city": "mineiros",
+    "order": 9,
+    "src": "/belle-v54/media/499cb43fe64ea656.mp4",
+    "poster": "/belle-v54/media/499cb43fe64ea656.webp",
+    "id": "499cb43fe64ea656"
+  },
+  {
+    "city": "mineiros",
+    "order": 10,
+    "src": "/belle-v54/media/c07205369048fbb4.mp4",
+    "poster": "/belle-v54/media/c07205369048fbb4.webp",
+    "id": "c07205369048fbb4"
+  },
+  {
+    "city": "catalao",
+    "order": 0,
+    "src": "/belle-v54/media/b78e08c041b2a181.mp4",
+    "poster": "/belle-v54/media/b78e08c041b2a181.webp",
+    "id": "b78e08c041b2a181"
+  },
+  {
+    "city": "catalao",
+    "order": 1,
+    "src": "/belle-v54/media/cd6052b433d85f8a.mp4",
+    "poster": "/belle-v54/media/cd6052b433d85f8a.webp",
+    "id": "cd6052b433d85f8a"
+  },
+  {
+    "city": "catalao",
+    "order": 2,
+    "src": "/belle-v54/media/bfec82bc7dfa46ba.mp4",
+    "poster": "/belle-v54/media/bfec82bc7dfa46ba.webp",
+    "id": "bfec82bc7dfa46ba"
+  },
+  {
+    "city": "catalao",
+    "order": 3,
+    "src": "/belle-v54/media/59ffc873186b5ae6.mp4",
+    "poster": "/belle-v54/media/59ffc873186b5ae6.webp",
+    "id": "59ffc873186b5ae6"
+  },
+  {
+    "city": "catalao",
+    "order": 4,
+    "src": "/belle-v54/media/751496002b38eb4a.mp4",
+    "poster": "/belle-v54/media/751496002b38eb4a.webp",
+    "id": "751496002b38eb4a"
+  },
+  {
+    "city": "catalao",
+    "order": 5,
+    "src": "/belle-v54/media/5fc5bd283a24cfd5.mp4",
+    "poster": "/belle-v54/media/5fc5bd283a24cfd5.webp",
+    "id": "5fc5bd283a24cfd5"
+  },
+  {
+    "city": "catalao",
+    "order": 6,
+    "src": "/belle-v54/media/c07205369048fbb4.mp4",
+    "poster": "/belle-v54/media/c07205369048fbb4.webp",
+    "id": "c07205369048fbb4"
+  },
+  {
+    "city": "catalao",
+    "order": 7,
+    "src": "/belle-v54/media/fab6678587893ab0.mp4",
+    "poster": "/belle-v54/media/fab6678587893ab0.webp",
+    "id": "fab6678587893ab0"
+  },
+  {
+    "city": "catalao",
+    "order": 8,
+    "src": "/belle-v54/media/5297619eb3f86e1d.mp4",
+    "poster": "/belle-v54/media/5297619eb3f86e1d.webp",
+    "id": "5297619eb3f86e1d"
+  },
+  {
+    "city": "catalao",
+    "order": 9,
+    "src": "/belle-v54/media/e839766001f216db.mp4",
+    "poster": "/belle-v54/media/e839766001f216db.webp",
+    "id": "e839766001f216db"
+  },
+  {
+    "city": "catalao",
+    "order": 10,
+    "src": "/belle-v54/media/a03b75e497fb794c.mp4",
+    "poster": "/belle-v54/media/a03b75e497fb794c.webp",
+    "id": "a03b75e497fb794c"
+  },
+  {
+    "city": "catalao",
+    "order": 11,
+    "src": "/belle-v54/media/499cb43fe64ea656.mp4",
+    "poster": "/belle-v54/media/499cb43fe64ea656.webp",
+    "id": "499cb43fe64ea656"
+  },
+  {
+    "city": "frutal",
+    "order": 0,
+    "src": "/belle-v54/media/5fed4b975e8d7037.mp4",
+    "poster": "/belle-v54/media/5fed4b975e8d7037.webp",
+    "id": "5fed4b975e8d7037"
+  },
+  {
+    "city": "frutal",
+    "order": 1,
+    "src": "/belle-v54/media/b78e08c041b2a181.mp4",
+    "poster": "/belle-v54/media/b78e08c041b2a181.webp",
+    "id": "b78e08c041b2a181"
+  },
+  {
+    "city": "frutal",
+    "order": 2,
+    "src": "/belle-v54/media/751496002b38eb4a.mp4",
+    "poster": "/belle-v54/media/751496002b38eb4a.webp",
+    "id": "751496002b38eb4a"
+  },
+  {
+    "city": "frutal",
+    "order": 3,
+    "src": "/belle-v54/media/e839766001f216db.mp4",
+    "poster": "/belle-v54/media/e839766001f216db.webp",
+    "id": "e839766001f216db"
+  },
+  {
+    "city": "frutal",
+    "order": 4,
+    "src": "/belle-v54/media/5fc5bd283a24cfd5.mp4",
+    "poster": "/belle-v54/media/5fc5bd283a24cfd5.webp",
+    "id": "5fc5bd283a24cfd5"
+  },
+  {
+    "city": "frutal",
+    "order": 5,
+    "src": "/belle-v54/media/fab6678587893ab0.mp4",
+    "poster": "/belle-v54/media/fab6678587893ab0.webp",
+    "id": "fab6678587893ab0"
+  },
+  {
+    "city": "frutal",
+    "order": 6,
+    "src": "/belle-v54/media/bfec82bc7dfa46ba.mp4",
+    "poster": "/belle-v54/media/bfec82bc7dfa46ba.webp",
+    "id": "bfec82bc7dfa46ba"
+  },
+  {
+    "city": "frutal",
+    "order": 7,
+    "src": "/belle-v54/media/1ee59857b426a6dc.mp4",
+    "poster": "/belle-v54/media/1ee59857b426a6dc.webp",
+    "id": "1ee59857b426a6dc"
+  },
+  {
+    "city": "frutal",
+    "order": 8,
+    "src": "/belle-v54/media/045b1906da8432bd.mp4",
+    "poster": "/belle-v54/media/045b1906da8432bd.webp",
+    "id": "045b1906da8432bd"
+  },
+  {
+    "city": "frutal",
+    "order": 9,
+    "src": "/belle-v54/media/4bf7dd9346d84f04.mp4",
+    "poster": "/belle-v54/media/4bf7dd9346d84f04.webp",
+    "id": "4bf7dd9346d84f04"
+  },
+  {
+    "city": "frutal",
+    "order": 10,
+    "src": "/belle-v54/media/723ee2035a255d46.mp4",
+    "poster": "/belle-v54/media/723ee2035a255d46.webp",
+    "id": "723ee2035a255d46"
+  },
+  {
+    "city": "araxa",
+    "order": 0,
+    "src": "/belle-v54/media/bebe032c4612b046.mp4",
+    "poster": "/belle-v54/media/bebe032c4612b046.webp",
+    "id": "bebe032c4612b046"
+  },
+  {
+    "city": "araxa",
+    "order": 1,
+    "src": "/belle-v54/media/cd6052b433d85f8a.mp4",
+    "poster": "/belle-v54/media/cd6052b433d85f8a.webp",
+    "id": "cd6052b433d85f8a"
+  },
+  {
+    "city": "araxa",
+    "order": 2,
+    "src": "/belle-v54/media/44126eeccd678328.mp4",
+    "poster": "/belle-v54/media/44126eeccd678328.webp",
+    "id": "44126eeccd678328"
+  },
+  {
+    "city": "araxa",
+    "order": 3,
+    "src": "/belle-v54/media/c07205369048fbb4.mp4",
+    "poster": "/belle-v54/media/c07205369048fbb4.webp",
+    "id": "c07205369048fbb4"
+  },
+  {
+    "city": "araxa",
+    "order": 4,
+    "src": "/belle-v54/media/fbd6c749d4e46558.mp4",
+    "poster": "/belle-v54/media/fbd6c749d4e46558.webp",
+    "id": "fbd6c749d4e46558"
+  },
+  {
+    "city": "araxa",
+    "order": 5,
+    "src": "/belle-v54/media/f8dc2c94f2557f34.mp4",
+    "poster": "/belle-v54/media/f8dc2c94f2557f34.webp",
+    "id": "f8dc2c94f2557f34"
+  },
+  {
+    "city": "araxa",
+    "order": 6,
+    "src": "/belle-v54/media/926794486f9ab9c9.mp4",
+    "poster": "/belle-v54/media/926794486f9ab9c9.webp",
+    "id": "926794486f9ab9c9"
+  },
+  {
+    "city": "araxa",
+    "order": 7,
+    "src": "/belle-v54/media/5fc5bd283a24cfd5.mp4",
+    "poster": "/belle-v54/media/5fc5bd283a24cfd5.webp",
+    "id": "5fc5bd283a24cfd5"
+  },
+  {
+    "city": "araxa",
+    "order": 8,
+    "src": "/belle-v54/media/045b1906da8432bd.mp4",
+    "poster": "/belle-v54/media/045b1906da8432bd.webp",
+    "id": "045b1906da8432bd"
+  },
+  {
+    "city": "araxa",
+    "order": 9,
+    "src": "/belle-v54/media/c7142fc2c6033665.mp4",
+    "poster": "/belle-v54/media/c7142fc2c6033665.webp",
+    "id": "c7142fc2c6033665"
+  },
+  {
+    "city": "araxa",
+    "order": 10,
+    "src": "/belle-v54/media/b63319ed37e9fd91.mp4",
+    "poster": "/belle-v54/media/b63319ed37e9fd91.webp",
+    "id": "b63319ed37e9fd91"
+  },
+  {
+    "city": "araxa",
+    "order": 11,
+    "src": "/belle-v54/media/bc0cb874e0f4c2a7.mp4",
+    "poster": "/belle-v54/media/bc0cb874e0f4c2a7.webp",
+    "id": "bc0cb874e0f4c2a7"
+  },
+  {
+    "city": "franca",
+    "order": 0,
+    "src": "/belle-v54/media/ff2103fe5696b5ba.mp4",
+    "poster": "/belle-v54/media/ff2103fe5696b5ba.webp",
+    "id": "ff2103fe5696b5ba"
+  }
+]

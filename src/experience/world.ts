@@ -8,6 +8,7 @@
  * categoria (rack-state.ts) e as seis poses de aceite são reproduzíveis.
  */
 import * as THREE from 'three';
+import { advanceFilmScrub } from './film-scrub-v55';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { bakeStatic, createKit } from './scene/kit';
 import { buildMall } from './scene/mall';
@@ -141,7 +142,7 @@ export class World {
     this.scene.environmentIntensity = 0.2;
     pmrem.dispose();
 
-    const kit = createKit();
+    const kit = createKit(tier);
     this.mall = buildMall(kit, tier, this.dpr, !!opts.poster);
     this.facade = buildFacade(kit, tier);
     this.boutique = buildBoutique(kit, tier, this.dpr);
@@ -186,9 +187,8 @@ export class World {
 
   setProgress(p: number, immediate = false): void {
     this.target = THREE.MathUtils.clamp(p, 0, 1);
-    // A large chapter jump (fast wheel, PageUp, scrollbar grab or BFCache)
-    // must not replay every missed chapter over several seconds.
-    if (immediate || Math.abs(this.target - this.shown) > .16) this.shown = this.target;
+    // V55 (produção): só restauração explícita salta; rolagem percorre cada plano.
+    if (immediate) this.shown = this.target;
     this.kick();
   }
 
@@ -431,10 +431,9 @@ export class World {
 
   private step(dt: number, exact: boolean): void {
     this.time += dt;
-    const k = exact ? 1 : 1 - Math.exp(-dt * (this.opts.tier === 'cinema' ? 4.2 : 6));
+    // progresso suavizado (V55: scrub contínuo, sem pular planos)
     const before = this.shown;
-    this.shown += (this.target - this.shown) * k;
-    if (Math.abs(this.target - this.shown) < 1e-5) this.shown = this.target;
+    this.shown = advanceFilmScrub(this.shown, this.target, dt, exact);
     const p = this.shown;
     const scrollSpeed = dt > 0 ? Math.abs(this.shown - before) / dt : 0;
     this.scrollEnergy += (Math.min(1, scrollSpeed * 18) - this.scrollEnergy) * Math.min(1, dt * 3);

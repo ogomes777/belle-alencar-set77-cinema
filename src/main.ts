@@ -1,8 +1,6 @@
 import { initConciergeReveal } from './concierge-reveal';
 import { initEditorialBoundaries } from './motion/editorial-boundaries';
-import { initStoreMap } from './astral/store-map';
 import './styles/city-globe.css';
-import { initStoreOrbit } from './astral/orbit';
 /**
  * BELLE ALENCAR · boot.
  * Ordem: estilos → monogramas → intro → shell → comércio → filme (3D lazy).
@@ -11,6 +9,7 @@ import { initStoreOrbit } from './astral/orbit';
 import './styles/base.css';
 import './styles/shell.css';
 import './styles/film.css';
+import './styles/film-first-frame-v57.css';
 import './styles/luxe-glass.css';
 import './styles/header-glass.css';
 import './styles/search-atelier.css';
@@ -44,6 +43,8 @@ import { initBelleInstagramDirectory } from './social/instagram-directory';
 import { initHowFilm } from './how-film';
 import { initStoresChampagne } from './motion/stores-champagne';
 import { initPerfGuard } from './core/perf-guard';
+import './styles/belle-v68-metal-palettes.css'; // V68: final color-only layer; keeps all interactions untouched.
+import './styles/belle-v72-couture-ticker.css'; // V72: seamless premium category rail, scoped to the film/passarela separator.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
@@ -54,6 +55,10 @@ initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
+// V57: boot the hero before below-the-fold enhancements and costly DOM
+// choreography. Download/compile proceeds while the intro is visible.
+const director = initDirector();
+initFilm(director);
 initTypographyCinema(); // Lightweight scroll-based editorial text reveals, separate from film.
 initSections();
 initBelleInstagramDirectory(); // Accessible Instagram profile selector; no changes to existing navigation.
@@ -62,7 +67,6 @@ initConciergeReveal(); // Codex: local pointer/touch reveal in concierge only.
 // Leave the original 3D film, runway, carousel, video scrub, collections,
 // city globe and all their own scroll-based interactions undisturbed.
 initStoresChampagne(); // V22: stores-only scroll choreography; globe untouched.
-const director = initDirector();
 initEditorialBoundaries();
 initHowFilm(director); // Scroll Couture: reversible scroll-synced editorial video.
 // A coleção contém peças renderizadas dinamicamente. O módulo de movimento
@@ -111,10 +115,42 @@ if (occasionSection && !matchMedia('(prefers-reduced-motion: reduce)').matches) 
     bootOccasionCarousel();
   }
 }
-initFilm(director);
-
-initStoreOrbit();
-initStoreMap();
-void import('./finale/ba-solid').then(({initFinaleSolid})=>initFinaleSolid()).catch(()=>{
-  // Authenticated BA foil remains visible in fallback, including no WebGL.
-});
+// The globe builds a dense connection graph. Keep CPU/GPU headroom for
+// the opening film; initialize it only as its section approaches.
+const geoSection=document.getElementById('lojas');
+if(geoSection){
+  let geographyBooted=false;
+  const bootGeography=()=>{
+    if(geographyBooted)return;
+    geographyBooted=true;
+    void Promise.all([import('./astral/orbit'),import('./astral/store-map')])
+      .then(([orbit,map])=>{orbit.initStoreOrbit();map.initStoreMap();})
+      .catch(error=>console.warn('[belle] globe deferred; store links remain available',error));
+  };
+  if('IntersectionObserver' in window){
+    const nearby=new IntersectionObserver(entries=>{
+      if(!entries.some(entry=>entry.isIntersecting))return;
+      nearby.disconnect();bootGeography();
+    },{rootMargin:'1500px 0px'});
+    nearby.observe(geoSection);
+  }else bootGeography();
+}
+// V57: the finale's WebGL, extrusion and foil texture cannot compete
+// with the first frame of the opening film. Boot near its own section only.
+const finaleSection=document.querySelector<HTMLElement>('[data-finale-solid]');
+if(finaleSection){
+  let finaleStarted=false;
+  const bootFinale=()=>{
+    if(finaleStarted)return;finaleStarted=true;
+    void import('./finale/ba-solid').then(({initFinaleSolid})=>initFinaleSolid()).catch(()=>{
+      // The existing static brand foil remains visible when WebGL is unavailable.
+    });
+  };
+  if('IntersectionObserver' in window){
+    const finaleProximity=new IntersectionObserver(entries=>{
+      if(!entries.some(entry=>entry.isIntersecting))return;
+      finaleProximity.disconnect();bootFinale();
+    },{rootMargin:'1200px 0px'});
+    finaleProximity.observe(finaleSection);
+  }else bootFinale();
+}

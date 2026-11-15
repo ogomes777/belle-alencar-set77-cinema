@@ -139,7 +139,9 @@ export function initFilm(director: Director): void {
     posterEls.forEach((p, key) => p.classList.toggle('is-active', key === id));
     // pré-carrega o próximo
     const next = CHAPTERS[CHAPTERS.indexOf(id) + 1];
-    if (next && tier === 'static') poster(next);
+    // While WebGL shaders warm up, the next chapter is already decoded
+    // so a customer can scroll before the first 3D frame without a blank cut.
+    if (next && !stage!.classList.contains('is-live')) poster(next);
     void el;
   }
 
@@ -161,10 +163,22 @@ export function initFilm(director: Director): void {
     document.documentElement.classList.toggle('in-film',inFilm);
     debug.progress=progress;
     if(bar)bar.style.setProperty('--p',progress.toFixed(4));
-    world?.setProgress(progress,Math.abs(progress-previous)>.16);
+    // Preserve native scroll immediacy in the UI, but never teleport the 3D camera.
+    world?.setProgress(progress);
     let current:ChapterId=spans[0]?.id??'vitrine';
     for(const sp of spans)if(progress>=sp.s-.012)current=sp.id;
     if(current!==active)setActive(current);
+    if(tier!=='static' && !posterMode && !stage!.classList.contains('is-live')){
+      // Progressive first-paint: a light transform-only camera impression
+      // responds to scroll immediately while heavy WebGL shaders compile.
+      // The full camera takes over as soon as the real first frame renders.
+      const span=spans.find(sp=>sp.id===current);
+      const local=span?clamp((progress-span.s)/Math.max(.0001,span.e-span.s),0,1):progress;
+      const narrow=innerWidth<900;
+      stage!.style.setProperty('--film-warm-x',((local-.5)*(narrow?3.8:5.0)).toFixed(2)+'%');
+      stage!.style.setProperty('--film-warm-y',((.5-local)*(narrow?1.6:2.5)).toFixed(2)+'%');
+      stage!.style.setProperty('--film-warm-scale',(1.045+local*.068).toFixed(4));
+    }
   }
   function onScroll():void{
     const current=scrollY;
@@ -262,10 +276,9 @@ export function initFilm(director: Director): void {
   const glassObserver=new IntersectionObserver(entries=>{
     for(const entry of entries){
       const card=entry.target as HTMLElement;
-      if(!entry.isIntersecting){
-        card.classList.remove('is-glass-appeared');
-        continue;
-      }
+      // Never erase a readable caption when sticky cards hover near an
+      // IntersectionObserver threshold. Reset only well outside the viewport.
+      if(!entry.isIntersecting)continue;
       if(card.classList.contains('is-glass-appeared'))continue;
       card.classList.add('is-glass-appeared');
       const now=performance.now();
@@ -288,7 +301,13 @@ export function initFilm(director: Director): void {
       ],{duration:narrow?700:850,easing:'cubic-bezier(.16,1,.30,1)'});
     }
   },{threshold:0.12,rootMargin:'0px 0px -5% 0px'});
-  glassCards.forEach(card=>glassObserver.observe(card));
+  const glassExitObserver=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      if(!entry.isIntersecting)
+        (entry.target as HTMLElement).classList.remove('is-glass-appeared');
+    }
+  },{rootMargin:'120px 0px 120px 0px',threshold:0});
+  glassCards.forEach(card=>{glassObserver.observe(card);glassExitObserver.observe(card);});
 
   // ---------- 3D sob demanda ----------
   async function startWorld(): Promise<void> {
@@ -297,28 +316,13 @@ export function initFilm(director: Director): void {
     const serial=++startSerial;
     stage!.classList.add('is-loading');
     try {
-      // The original 1.05s hard wait was additive to 1.5s font + 2s brand
-      // preflight and delayed camera updates until every product loaded.
-      // Wait for the ACTUAL short intro if playing, never a blind extra delay.
-      if (!posterMode && document.documentElement.classList.contains('intro-playing')) {
-        await new Promise<void>(resolve=>{
-          const root=document.documentElement;
-          let settled=false;
-          let timeout=0;
-          const observer=new MutationObserver(()=>{
-            if(root.classList.contains('intro-done'))finish();
-          });
-          const finish=()=>{
-            if(settled)return;
-            settled=true;observer.disconnect();clearTimeout(timeout);resolve();
-          };
-          observer.observe(root,{attributes:true,attributeFilter:['class']});
-          timeout=window.setTimeout(finish,2900);
-        });
-      }
+      // V57: start downloading the 3D chunk immediately, DURING the intro.
+      // The first paint remains free: building starts after one browser frame.
+      // Scroll never waits for intro animation, fonts or brand preflight.
+      const worldModule = import('./experience');
       await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
       if(serial!==startSerial || (tier as Tier)==='static')return;
-      const mod = await import('./experience');
+      const mod = await worldModule;
       if(serial!==startSerial || (tier as Tier)==='static')return;
       const created = await mod.createWorld({
         container: canvasHost!,
@@ -333,7 +337,7 @@ export function initFilm(director: Director): void {
           if(!current)return;
           void Promise.race([
             current.readyEntranceMedia().catch(()=>undefined),
-            new Promise<void>(resolve=>setTimeout(resolve,1950)),
+            new Promise<void>(resolve=>setTimeout(resolve,240)),
           ]).then(()=>{
             if(world!==current||tier==='static')return;
             stage!.classList.remove('is-loading');
@@ -418,12 +422,20 @@ export function initFilm(director: Director): void {
     document.documentElement.classList.add('poster-mode', 'intro-seen');
     startWorld();
   } else if (tier !== 'static') {
-    const preload = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      preload.disconnect();
+    // V57: do not wait for IntersectionObserver's async delivery for above-
+    // the-fold entry. It can arrive one or more frames after main has finished.
+    // Still avoid booting WebGL on a deep link far below the first film.
+    const initialRect = film.getBoundingClientRect();
+    if (initialRect.bottom > -innerHeight * 0.3 && initialRect.top < innerHeight * 1.3) {
       void startWorld();
-    }, { rootMargin: '200px' });
-    preload.observe(film);
+    } else {
+      const preload = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        preload.disconnect();
+        void startWorld();
+      }, { rootMargin: '1200px 0px' });
+      preload.observe(film);
+    }
   }
 
   director.onChange((intensity) => {

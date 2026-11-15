@@ -19,6 +19,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Belle Alencar — Araxá","description":"Moda feminina e acessórios.","sameAs":["https://www.instagram.com/belle.alencar/"],"address":{"@type":"PostalAddress","streetAddress":"Av. Vereador João Sena, 103, Centro","addressLocality":"Araxá","addressRegion":"MG","addressCountry":"BR"}}</script>
 <link rel="preload" as="image" href="/posters/vitrine.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/brand/belle-alencar-logo.svg" fetchpriority="high">
 <link rel="preload" as="image" href="/assets/belle/products/cutouts/vestidos-02.webp" crossorigin="anonymous">
 <link rel="preload" as="image" href="/assets/belle/products/cutouts/bolsas-05.webp" crossorigin="anonymous">
 <script>
@@ -40,6 +41,12 @@
       if (selected === 'dark' || selected === 'rose') document.documentElement.dataset.belleTheme = selected;
     } catch (_) {}
   </script>
+<link rel="stylesheet" href="/src/styles/belle-cinema-v54.css">
+<link rel="stylesheet" href="/src/styles/belle-v63-previews.css">
+<link rel="stylesheet" href="/src/styles/belle-v64-borderless.css">
+<link rel="stylesheet" href="/src/styles/belle-v65-seamless.css">
+<link rel="stylesheet" href="/src/styles/belle-v66-title.css">
+<script type="module" src="/src/social/belle-cinema-v54.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#colecao">Pular para a coleção</a>
@@ -240,9 +247,36 @@
   </section>
 
 
-  <!-- TRANSIÇÃO DA EXPERIÊNCIA: manifesto sem linha estática de categorias; faixa contínua preservada -->
-  <section class="manifesto manifesto--ticker" aria-label="Coleções Belle Alencar">
-    <div class="band" aria-hidden="true"><div class="band__track"><span>VESTIDOS ✦ CONJUNTOS ✦ BOLSAS ✦ ANÉIS ✦ CROPPEDS ✦ SAIAS ✦ ESTILO BELLE ✦  </span><span>VESTIDOS ✦ CONJUNTOS ✦ BOLSAS ✦ ANÉIS ✦ CROPPEDS ✦ SAIAS ✦ ESTILO BELLE ✦  </span></div></div>
+  <!-- TRANSIÇÃO DA EXPERIÊNCIA: faixa couture com ciclo contínuo entre filme e passarela -->
+  <section class="manifesto manifesto--ticker" aria-label="Coleções Belle Alencar: vestidos, conjuntos, bolsas, anéis, croppeds, saias e estilo Belle">
+    <div class="band band--couture">
+      <div class="band__identity" aria-hidden="true">
+        <span class="band__monogram">B</span>
+        <span class="band__identity-text"><strong>BELLE</strong><small>CURADORIA</small></span>
+      </div>
+      <div class="band__viewport" aria-hidden="true">
+        <div class="band__track">
+          <div class="band__sequence">
+            <span class="band__category" data-rank="01">VESTIDOS</span>
+            <span class="band__category" data-rank="02">CONJUNTOS</span>
+            <span class="band__category" data-rank="03">BOLSAS</span>
+            <span class="band__category" data-rank="04">ANÉIS</span>
+            <span class="band__category" data-rank="05">CROPPEDS</span>
+            <span class="band__category" data-rank="06">SAIAS</span>
+            <span class="band__category band__category--signature" data-rank="07">ESTILO BELLE</span>
+          </div>
+          <div class="band__sequence">
+            <span class="band__category" data-rank="01">VESTIDOS</span>
+            <span class="band__category" data-rank="02">CONJUNTOS</span>
+            <span class="band__category" data-rank="03">BOLSAS</span>
+            <span class="band__category" data-rank="04">ANÉIS</span>
+            <span class="band__category" data-rank="05">CROPPEDS</span>
+            <span class="band__category" data-rank="06">SAIAS</span>
+            <span class="band__category band__category--signature" data-rank="07">ESTILO BELLE</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- PASSARELA: experiência editorial após filme, manifesto e faixa -->
@@ -382,8 +416,8 @@
   <section class="how how--couture" id="como-comprar" aria-labelledby="howTitle">
     <div class="how__stage">
       <div class="how__visual" aria-hidden="true">
-        <img class="how__poster" src="/media/belle-scroll-poster.webp" alt="" loading="lazy" decoding="async" width="1280" height="720">
-        <video class="how__video" data-how-video muted playsinline preload="none" tabindex="-1" poster="/media/belle-scroll-poster.webp"></video>
+        <img class="how__poster" src="/media/belle-scroll-original-v71-first-frame.png" alt="" loading="lazy" decoding="async" width="1916" height="1080">
+        <video class="how__video" data-how-video muted playsinline preload="none" tabindex="-1" poster="/media/belle-scroll-original-v71-first-frame.png"></video>
       </div>
       <div class="how__gold-veil" aria-hidden="true"></div>
       <header class="how__intro sec-head">
@@ -482,6 +516,55 @@
     </div>
   </section>
 
+  <!-- BELLE V63 · six Instagram destinations · cinematic, no editorial clutter -->
+  <section id="belle-cidades" class="v54-cinema v63-phones" aria-label="Seis lojas Belle Alencar, seis Instagrams">
+    <div class="v54-sticky">
+      <div class="v63-phone-atmosphere" aria-hidden="true"></div>
+      <div class="v63-phone-stage" data-v54-stage>
+        <span class="v63-phone-orbit v63-phone-orbit--one" aria-hidden="true"></span>
+        <span class="v63-phone-orbit v63-phone-orbit--two" aria-hidden="true"></span>
+        <span class="v63-phone-floor" aria-hidden="true"></span>
+        <a class="v63-peek v63-peek--left" data-v63-peek-left href="https://www.instagram.com/bellealencar.franca/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram da Belle Franca">
+          <img data-v63-peek-photo-left src="/belle-v54/phones/franca.webp" alt="" width="960" height="1280" decoding="async">
+        </a>
+        <a class="v54-phone-hit v63-phone-link" data-v54-tap href="https://www.instagram.com/belle.alencar/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram da Belle Araxá">
+          <span class="v54-phone-core">
+            <img class="v54-phone-photo" data-v54-phone src="/belle-v54/phones/araxa.webp" width="960" height="1280"
+              alt="iPhone 17 Pro Max exibindo o perfil Instagram da Belle Araxá" decoding="async">
+          </span>
+        </a>
+        <a class="v63-peek v63-peek--right" data-v63-peek-right href="https://www.instagram.com/frutal.bellealencar/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram da Belle Frutal">
+          <img data-v63-peek-photo-right src="/belle-v54/phones/frutal.webp" alt="" width="960" height="1280" decoding="async">
+        </a>
+      </div>
+      <p class="v63-phone-guide">Clique no mockup para acessar o Instagram da loja</p>
+      <span class="v63-sr-only" data-v63-phone-announcement aria-live="polite">Araxá, primeira de seis lojas</span>
+    </div>
+  </section>
+
+  <div class="v65-seamless-chapters" aria-label="Cinema Belle e dúvidas frequentes">
+  <!-- BELLE V63 · all 47 supplied city preview slots, one original Originkit cylinder -->
+  <section id="belle-previews" class="v63-previews" aria-labelledby="v63PreviewsTitle">
+    <div class="v63-previews-atmosphere" aria-hidden="true"></div>
+    <header class="v63-previews-heading">
+      <span class="v63-previews-rule" aria-hidden="true"></span>
+      <h2 id="v63PreviewsTitle" data-v63-previews-title><span class="v64-preview-title-button" data-v64-title-flip>PREVIEWS</span></h2>
+      <span class="v63-previews-rule v63-previews-rule--end" aria-hidden="true"></span>
+    </header>
+    <div class="v63-previews-theater" data-v63-previews-theater>
+      
+      <div class="v54-rotunda-mount v63-previews-rotunda" data-v54-rotunda role="region"
+        aria-label="Rotunda interativa com todos os vídeos reais da Belle, em loop contínuo"></div>
+      <button class="v63-previews-arrow v63-previews-arrow--prev" type="button" data-v54-prev aria-label="Girar a Rotunda para o vídeo anterior">
+        <span aria-hidden="true">‹</span>
+      </button>
+      <button class="v63-previews-arrow v63-previews-arrow--next" type="button" data-v54-next aria-label="Girar a Rotunda para o próximo vídeo">
+        <span aria-hidden="true">›</span>
+      </button>
+      <span class="v63-previews-hint" aria-hidden="true">ARRASTE · EXPLORE · LOOP CONTÍNUO</span>
+    </div>
+  </section>
+
   <!-- DÚVIDAS FREQUENTES -->
   <section class="faq" id="duvidas" aria-labelledby="faqTitle">
     <header class="sec-head">
@@ -497,6 +580,8 @@
       <details><summary>Minha sacola some se eu trocar de cidade?</summary><p>Não. Cada loja tem sua própria sacola. Ao trocar, você escolhe levar as peças ou manter a sacola anterior salva.</p></details>
     </div>
   </section>
+
+  </div><!-- /.v65-seamless-chapters -->
 
   <!-- 11 · ÚLTIMA PÁGINA -->
   <section class="finale" aria-labelledby="finaleTitle">

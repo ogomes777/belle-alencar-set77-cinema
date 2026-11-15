@@ -1,0 +1,100 @@
+/* BELLE V66 · ARCHIVE COUTURE TYPE / SET77 LABS.
+ * Real Bodoni Moda Variable already bundled in this project.
+ * Large editorial-fashion outlined display, not the previous Archivo block.
+ * No click affordance. Proximity flip uses Web Animations compositor only. */
+.v65-seamless-chapters #belle-previews .v63-previews-heading h2,
+.v65-seamless-chapters #belle-previews.v63-in-view .v63-previews-heading h2 {
+  font-family:"Bodoni Moda Variable","Bodoni Moda",Didot,Georgia,serif!important;
+  font-optical-sizing:auto;
+  font-weight:850;
+  font-size:clamp(4.5rem,12.15vw,13rem);
+  letter-spacing:-.064em;
+  line-height:1.14;
+  text-transform:uppercase;
+  -webkit-text-stroke:clamp(1.15px,.13vw,1.9px) var(--v65-headline);
+  text-rendering:geometricPrecision;
+  overflow:visible;
+  transform-style:preserve-3d;
+}
+.v65-seamless-chapters #belle-previews .v64-preview-title-button {
+  display:block;
+  font-family:"Bodoni Moda Variable","Bodoni Moda",Didot,Georgia,serif!important;
+  font-weight:inherit;
+  font-size:inherit;
+  line-height:inherit;
+  letter-spacing:inherit;
+  font-feature-settings:"kern" 1,"liga" 1;
+  -webkit-text-stroke:inherit;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  text-shadow:0 0 1px rgba(90,64,50,.02);
+  user-select:none;
+  -webkit-user-select:none;
+  cursor:default;
+  touch-action:pan-y;
+  pointer-events:none;
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+  will-change:transform;
+  filter:drop-shadow(0 7px 9px rgba(37,18,17,.045));
+  transition:none!important;
+}
+.v65-seamless-chapters #belle-previews .v64-preview-title-button:hover,
+.v65-seamless-chapters #belle-previews .v64-preview-title-button:focus-visible {
+  translate:none;
+  filter:drop-shadow(0 7px 9px rgba(37,18,17,.045));
+}
+.v65-seamless-chapters #belle-previews .v63-previews-heading {
+  padding-top:clamp(6px,1.2vh,15px);
+  padding-bottom:clamp(8px,1.8vh,19px);
+  perspective:1450px;
+}
+/* The user wanted LOWER opacity, not brighter buttons. */
+.v65-seamless-chapters #belle-previews .v63-previews-arrow {
+  opacity:.43;
+  background:color-mix(in srgb,var(--v65-arrow-bg) 37%,transparent);
+  border-color:color-mix(in srgb,var(--v65-arrow-border) 60%,transparent);
+  box-shadow:none!important;
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+  transition:opacity .18s ease,transform .22s cubic-bezier(.2,.75,.2,1),
+    background .18s ease;
+}
+.v65-seamless-chapters #belle-previews .v63-previews-arrow:hover,
+.v65-seamless-chapters #belle-previews .v63-previews-arrow:active {
+  opacity:.72;
+  background:color-mix(in srgb,var(--v65-arrow-bg) 70%,transparent);
+  box-shadow:none!important;
+}
+.v65-seamless-chapters #belle-previews .v63-previews-arrow:focus-visible {
+  opacity:1;
+  background:var(--v65-arrow-bg);
+}
+/* Keep the whole word on screen, even at 320-390px phones. */
+@media(max-width:750px){
+ .v65-seamless-chapters #belle-previews .v63-previews-heading h2,
+ .v65-seamless-chapters #belle-previews.v63-in-view .v63-previews-heading h2 {
+   font-family:"Bodoni Moda Variable","Bodoni Moda",Didot,Georgia,serif!important;
+   font-weight:850;
+   font-size:clamp(2.45rem,12.9vw,6.2rem);
+   line-height:1.15;
+   letter-spacing:-.073em;
+   -webkit-text-stroke:1.15px var(--v65-headline);
+ }
+ .v65-seamless-chapters #belle-previews .v63-previews-heading {
+   padding-left:clamp(10px,3vw,18px);
+   padding-right:clamp(10px,3vw,18px);
+ }
+ .v65-seamless-chapters #belle-previews .v63-previews-arrow {opacity:.46}
+}
+@media(prefers-reduced-motion:reduce){
+ .v65-seamless-chapters #belle-previews .v64-preview-title-button {
+   will-change:auto;
+   transition:none!important;
+   animation:none!important;
+ }
+ .v65-seamless-chapters #belle-previews .v63-previews-arrow {
+   transition:none!important;
+ }
+}
+

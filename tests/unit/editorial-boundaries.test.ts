@@ -57,36 +57,36 @@ describe('V37 boundary progress contract',()=>{
   });
 });
 
-describe('V43: ceremonial reveals exchanged without moving the sections',()=>{
-  it('plays Assinatura / Belle Alencar on the founder story, then Atendimento / Com você on the final page',()=>{
+describe('V67: lateral ceremonial entrance belongs to FAQ, not final page',()=>{
+  it('keeps the established story transition and moves the lateral veil to Dúvidas',()=>{
     const story=BOUNDARIES.find(x=>x.section==='#atendimento');
-    const finale=BOUNDARIES.find(x=>x.section==='.finale');
+    const faq=BOUNDARIES.find(x=>x.section==='#duvidas');
     expect(story).toMatchObject({veil:'veludo',chapter:'06 · Assinatura',title:['Belle',' Alencar.']});
-    expect(finale).toMatchObject({veil:'lateral',chapter:'07 · Atendimento',title:['Com',' você.']});
+    expect(faq).toMatchObject({veil:'lateral',chapter:'07 · Dúvidas',title:['Dúvidas','.']});
+    expect(BOUNDARIES.some(x=>x.section==='.finale')).toBe(false);
     expect(BOUNDARIES).toHaveLength(7);
     expect(BOUNDARIES.slice(0,5).map(x=>x.veil)).toEqual(['cortina','colunas','varredura','dobra','circulo']);
   });
-  it('mounts the correct decorative veils only on their original anchors',()=>{
-    document.body.innerHTML='<section id="atendimento"><div class="brand-story">Historia Belle</div><div data-concierge-reveal></div></section><section class="finale"><div id="atendimento-final"><button>Falar</button></div></section>';
+  it('shows the gold lateral Dúvidas reveal on FAQ while leaving final CTA clear',()=>{
+    document.body.innerHTML='<section id="atendimento"><div data-concierge-reveal></div></section><section id="duvidas"><h2 id="faqTitle">Antes de escolher.</h2><details><summary>Comprar?</summary><p>Contato</p></details></section><section class="finale"><div id="atendimento-final"><button>Falar</button></div></section>';
     const mq={matches:false,addEventListener:()=>{},removeEventListener:()=>{}};
     vi.stubGlobal('matchMedia',()=>mq);
     vi.stubGlobal('innerHeight',900);
     const first=document.querySelector<HTMLElement>('#atendimento')!;
-    const last=document.querySelector<HTMLElement>('.finale')!;
-    for(const el of [first,last])vi.spyOn(el,'getBoundingClientRect').mockImplementation(()=>({top:550,bottom:1250,left:0,right:800,width:800,height:700,x:0,y:550,toJSON:()=>({})}));
+    const faq=document.querySelector<HTMLElement>('#duvidas')!;
+    const finale=document.querySelector<HTMLElement>('.finale')!;
+    for(const el of [first,faq,finale])vi.spyOn(el,'getBoundingClientRect').mockImplementation(()=>({top:550,bottom:1250,left:0,right:800,width:800,height:700,x:0,y:550,toJSON:()=>({})}));
     const destroy=initEditorialBoundaries();
     const intro=first.querySelector<HTMLElement>('.v37-veil')!;
-    const outro=last.querySelector<HTMLElement>('.v37-veil')!;
+    const questionIntro=faq.querySelector<HTMLElement>('.v37-veil')!;
     expect(intro.classList.contains('v37-veil--veludo')).toBe(true);
-    expect(outro.classList.contains('v37-veil--lateral')).toBe(true);
-    expect(intro.querySelector('.v37-veil__chapter')?.textContent).toBe('06 · Assinatura');
-    expect(intro.querySelector('.v37-veil__title')?.textContent).toBe('Belle Alencar.');
-    expect(outro.querySelector('.v37-veil__chapter')?.textContent).toBe('07 · Atendimento');
-    expect(outro.querySelector('.v37-veil__title')?.textContent).toBe('Com você.');
-    expect(first.querySelector('[data-concierge-reveal]')).toBeTruthy();
-    expect(last.querySelector('#atendimento-final button')?.textContent).toBe('Falar');
-    expect(intro.getAttribute('aria-hidden')).toBe('true');
-    expect(outro.getAttribute('aria-hidden')).toBe('true');
+    expect(questionIntro.classList.contains('v37-veil--lateral')).toBe(true);
+    expect(questionIntro.querySelector('.v37-veil__chapter')?.textContent).toBe('07 · Dúvidas');
+    expect(questionIntro.querySelector('.v37-veil__title')?.textContent).toBe('Dúvidas.');
+    expect(questionIntro.getAttribute('aria-hidden')).toBe('true');
+    expect(faq.querySelector('summary')?.textContent).toBe('Comprar?');
+    expect(finale.querySelector('.v37-veil')).toBeNull();
+    expect(finale.querySelector('#atendimento-final button')?.textContent).toBe('Falar');
     destroy();
     expect(document.querySelectorAll('.v37-veil')).toHaveLength(0);
   });
