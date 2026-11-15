@@ -4,8 +4,8 @@
   "label": "sala (trilho)",
   "draw": 290,
   "tri": 109473,
-  "p50": 0,
-  "p95": 0,
+  "p50": 116.7,
+  "p95": 250,
   "dpr": 1,
   "reflectors": true
  },
@@ -14,8 +14,8 @@
   "label": "visita · entrada",
   "draw": 284,
   "tri": 109281,
-  "p50": 0,
-  "p95": 0,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": true
  },
@@ -24,8 +24,8 @@
   "label": "visita · arara direita",
   "draw": 68,
   "tri": 53153,
-  "p50": 0,
-  "p95": 0,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": true
  },
@@ -34,8 +34,8 @@
   "label": "visita · arara esquerda",
   "draw": 64,
   "tri": 46885,
-  "p50": 0,
-  "p95": 0,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": true
  },
@@ -44,24 +44,24 @@
   "label": "visita · provador",
   "draw": 394,
   "tri": 145812,
-  "p50": 0,
-  "p95": 0,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": true
  },
  {
   "tier": "cinema",
   "label": "primeiro frame 3D (ms desde navegação)",
-  "firstFrame": 24878,
+  "firstFrame": 23307,
   "heapMB": 14
  },
  {
   "tier": "touch",
   "label": "sala (trilho)",
-  "draw": 92,
-  "tri": 35402,
-  "p50": 0,
-  "p95": 0,
+  "draw": 93,
+  "tri": 35414,
+  "p50": 83.3,
+  "p95": 250,
   "dpr": 1,
   "reflectors": false
  },
@@ -70,18 +70,18 @@
   "label": "visita · entrada",
   "draw": 87,
   "tri": 35268,
-  "p50": 0,
-  "p95": 0,
+  "p50": 249.9,
+  "p95": 250,
   "dpr": 1,
   "reflectors": false
  },
  {
   "tier": "touch",
   "label": "visita · arara direita",
-  "draw": 28,
-  "tri": 22420,
-  "p50": 0,
-  "p95": 0,
+  "draw": 24,
+  "tri": 22308,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": false
  },
@@ -90,8 +90,8 @@
   "label": "visita · arara esquerda",
   "draw": 31,
   "tri": 22504,
-  "p50": 0,
-  "p95": 0,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": false
  },
@@ -100,15 +100,15 @@
   "label": "visita · provador",
   "draw": 18,
   "tri": 14101,
-  "p50": 0,
-  "p95": 0,
+  "p50": 250,
+  "p95": 250,
   "dpr": 1,
   "reflectors": false
  },
  {
   "tier": "touch",
   "label": "primeiro frame 3D (ms desde navegação)",
-  "firstFrame": 15977,
-  "heapMB": 14
+  "firstFrame": 19805,
+  "heapMB": 13
  }
 ]
