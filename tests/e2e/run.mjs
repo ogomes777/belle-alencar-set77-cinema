@@ -334,7 +334,8 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
   const f2 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);
   check('CINEMA: render loop roda dentro do filme', f2 > f1, `${f1}→${f2}`);
   const info = await page.evaluate(() => window.__belle?.world());
-  check('CINEMA: draw calls ≤ 120', (info?.drawCalls ?? 999) <= 120, JSON.stringify(info));
+  // Tier cinema inclui passes de reflexo real e sombras (o governador os remove primeiro em quadro lento).
+  check('CINEMA: draw calls ≤ 260 (com reflexos e sombras)', (info?.drawCalls ?? 999) <= 260, JSON.stringify(info));
   await page.evaluate(() => document.getElementById('lojas')?.scrollIntoView());
   await page.waitForTimeout(2000); // deixa terminar um quadro lento (render por software) já em curso
   const g1 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);

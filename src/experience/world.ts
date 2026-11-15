@@ -221,9 +221,11 @@ export class World {
   }
 
   // ---------- visita em primeira pessoa ----------
-  exploring(): boolean { return this.explorer.active; }
+  /** Intenção do visitante (não a animação): sair fora da tela não deixa o estado preso. */
+  exploring(): boolean { return this.explorer.active && this.exploreGoal === 1; }
   enterExplore(): boolean {
-    if (this.explorer.active) return true;
+    if (this.explorer.active && this.exploreGoal === 1) return true;
+    if (this.explorer.active) { this.exploreGoal = 1; this.kick(); return true; }
     this.explorer.enter(this.lookPos, this.lookTgt);
     this.exploreGoal = 1;
     this.kick();
@@ -232,6 +234,8 @@ export class World {
   exitExplore(): void {
     if (!this.explorer.active) return;
     this.exploreGoal = 0;
+    // fora da tela o loop está pausado: conclui a saída imediatamente
+    if (!this.visible || document.hidden) { this.exploreBlend = 0; this.explorer.exit(); }
     this.explorer.cancelRoute();
     this.explorer.clearKeys();
     this.kick();
