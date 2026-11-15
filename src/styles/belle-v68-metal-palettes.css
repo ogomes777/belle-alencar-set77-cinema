@@ -245,3 +245,27 @@ html[data-belle-theme="rose"] .v37-veil--lateral .v37-veil__piece{
 html[data-belle-theme="rose"] .v37-veil--colunas .v37-veil__piece:nth-child(4){
   background:#ef9bc5!important;
 }
+
+/* V68 responsive finish: retain the chapter's vertical light journey on phones. */
+@media(max-width:959px){
+  html:not([data-belle-theme="dark"]):not([data-belle-theme="rose"]) #lojas.stores{
+    background:linear-gradient(180deg,#fffbea 0%,#fff2ca 21%,#e6c064 38%,
+      #a4712c 54%,#d6b570 75%,#fff3d8 100%)!important;
+  }
+  html[data-belle-theme="rose"] #lojas.stores{
+    background:linear-gradient(180deg,#fff1fa 0%,#fbd7eb 24%,#eda9cf 52%,
+      #d88eb9 69%,#ffe7f3 100%)!important;
+  }
+}
+/* Keep the existing solid-text fallback legible when motion is disabled. */
+@media(prefers-reduced-motion:reduce){
+  html:not([data-belle-theme="rose"]) #lojas.stores .section-head .display{
+    background:none!important;-webkit-text-fill-color:#765000!important;
+  }
+  html[data-belle-theme="dark"] #lojas.stores .section-head .display{
+    background:none!important;-webkit-text-fill-color:#ffe179!important;
+  }
+  html[data-belle-theme="rose"] #lojas.stores .section-head .display{
+    background:none!important;-webkit-text-fill-color:#862858!important;
+  }
+}
