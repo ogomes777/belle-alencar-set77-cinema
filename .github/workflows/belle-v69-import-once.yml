@@ -1,0 +1,32 @@
+name: Belle V69 - import user supplied MP4 once
+on:
+  push:
+    branches:
+      - feat/belle-v69-original-video-map-title
+    paths:
+      - .github/workflows/belle-v69-import-once.yml
+permissions:
+  contents: write
+jobs:
+  import-video:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download original 1:1 without transcoding
+        env:
+          VIDEO_DOWNLOAD_URL: https://at.adobe.com/uQd7zuINPsynwKEf
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/media
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 "$VIDEO_DOWNLOAD_URL" -o public/media/belle-scroll-original-v69.mp4
+          echo "2ae0503b94a0bd84c4a56713f9958b86b7bc31629631a827e46228d4ece992ce  public/media/belle-scroll-original-v69.mp4" | sha256sum --check
+          test "$(stat -c %s public/media/belle-scroll-original-v69.mp4)" -eq 14168222
+      - name: Commit original source media
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/media/belle-scroll-original-v69.mp4
+          git commit -m "asset(v69): add original untouched 5.04s 1916x1080 source video"
+          git push origin HEAD:feat/belle-v69-original-video-map-title
