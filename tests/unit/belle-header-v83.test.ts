@@ -1,11 +1,11 @@
+/// <reference types="vite/client" />
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
-
-const source=(path:string)=>readFileSync(new URL('../../'+path, import.meta.url),'utf8');
-const html=source('index.html');
-const css=source('src/styles/belle-v83-atelier-header.css');
-const menu=source('src/shell/couture-menu.ts');
-const commerce=source('src/commerce/ui/header.ts');
+import html from '../../index.html?raw';
+import css from '../../src/styles/belle-v83-atelier-header.css?raw';
+import menu from '../../src/shell/couture-menu.ts?raw';
+import commerce from '../../src/commerce/ui/header.ts?raw';
+import settings from '../../src/preferences/settings.ts?raw';
+import main from '../../src/main.ts?raw';
 
 describe('Belle V83 · clean header and accessible commerce navigation',()=>{
   const header=html.slice(html.indexOf('<header class="site-header"'),html.indexOf('</header>')+9);
@@ -15,7 +15,7 @@ describe('Belle V83 · clean header and accessible commerce navigation',()=>{
   it('keeps exactly three essential header controls including dynamic settings',()=>{
     expect(header).toContain('id="searchButton"');
     expect(header).toContain('id="belleMenuButton"');
-    expect(source('src/preferences/settings.ts')).toContain("trigger.id='belleSettingsButton'");
+    expect(settings).toContain("trigger.id='belleSettingsButton'");
     expect(header).not.toContain('id="storeButton"');
     expect(header).not.toContain('id="wishlistButton"');
     expect(header).not.toContain('id="bagButton"');
@@ -50,6 +50,6 @@ describe('Belle V83 · clean header and accessible commerce navigation',()=>{
     expect(css).toContain('data-belle-theme="rose"');
     expect(css).toContain('@media(max-width:375px)');
     expect(css).toContain('min-height:44px');
-    expect(source('src/main.ts')).toContain('belle-v83-atelier-header.css');
+    expect(main).toContain('belle-v83-atelier-header.css');
   });
 });
