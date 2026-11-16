@@ -255,7 +255,7 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
         const el = outerRef.current
         if (!el) return
         const observer = new ResizeObserver(([entry]) => {
-            const { width, height } = entry.contentRect
+            const { width, height } = entry!.contentRect
             if (width > 0 && height > 0) setContainerSize({ w: width, h: height })
         })
         observer.observe(el)
