@@ -887,5 +887,17 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Price, payment and availability are confirmed directly with the store during your conversation.",
     "Precio, pago y disponibilidad se confirman directamente con la tienda durante la atención.",
     "Prezzo, pagamento e disponibilità vengono confermati direttamente con il negozio durante l'assistenza."
+  ],
+  [
+    "SUA BELLE",
+    "YOUR BELLE STORE",
+    "TU TIENDA BELLE",
+    "IL TUO NEGOZIO BELLE"
+  ],
+  [
+    "Acesso rápido aos seus itens",
+    "Quick access to saved items",
+    "Acceso rápido a tus artículos",
+    "Accesso rapido ai tuoi articoli"
   ]
 ];
