@@ -1,0 +1,135 @@
+/* BELLE V81 · SET77 LABS
+ * Editorial phone chapter + preview headline only.
+ * Mousewheel and vertical touch scroll move the DOCUMENT, never the Spin wheel.
+ * The wheel rotates only by direct mouse/touch drag. Three theme backgrounds kept.
+ */
+
+/* Exactly one viewport: no 148/136svh dead scroll and no sticky holding zone. */
+#belle-cidades.v54-cinema.v63-phones.v79-spin-phones {
+  height:100svh!important;
+  min-height:100svh!important;
+  max-height:none!important;
+  scroll-snap-align:none;
+  scroll-snap-stop:normal;
+}
+#belle-cidades.v79-spin-phones .v54-sticky {
+  position:relative!important;
+  inset:auto!important;
+  top:auto!important;
+  height:100svh!important;
+  min-height:0!important;
+  padding:clamp(61px,7.5svh,86px) 0 clamp(22px,3.8svh,44px)!important;
+  overflow:hidden;
+}
+#belle-cidades.v79-spin-phones .v79-spin-stage {
+  width:min(100vw,1700px);
+  height:min(85svh,880px);
+  max-height:calc(100svh - clamp(91px,11svh,128px));
+  overflow:hidden;
+  touch-action:pan-y;
+}
+#belle-cidades .v79-spin-live,
+#belle-cidades .v79-spin-live > div {
+  touch-action:pan-y!important;
+}
+#belle-cidades .v79-spin-guide {
+  bottom:clamp(7px,1.6svh,15px);
+}
+
+/* PREVIEWS: a true editorial fashion serif instead of thick hollow Archivo.
+   Existing intro reveal, rotate interaction and Rotunda are NOT changed. */
+.v65-seamless-chapters #belle-previews.v63-previews {
+  --v81-preview-title:#553a2b;
+  --v81-preview-shadow:rgba(148,92,47,.14);
+}
+html[data-belle-theme="dark"] .v65-seamless-chapters #belle-previews.v63-previews {
+  --v81-preview-title:#f4dfc4;
+  --v81-preview-shadow:rgba(238,182,128,.13);
+}
+html[data-belle-theme="rose"] .v65-seamless-chapters #belle-previews.v63-previews {
+  --v81-preview-title:#783b58;
+  --v81-preview-shadow:rgba(192,77,136,.13);
+}
+.v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading h2,
+.v65-seamless-chapters #belle-previews.v63-previews.v63-in-view .v63-previews-heading h2 {
+  font-family:"Playfair Display","Bodoni Moda",Georgia,serif!important;
+  font-size:clamp(4.2rem,9.4vw,9.4rem)!important;
+  font-style:italic!important;
+  font-weight:500!important;
+  line-height:1.08!important;
+  letter-spacing:-.058em!important;
+  text-rendering:optimizeLegibility;
+  font-kerning:normal;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-stroke:0!important;
+  -webkit-text-fill-color:var(--v81-preview-title)!important;
+  color:var(--v81-preview-title)!important;
+  text-shadow:0 10px 35px var(--v81-preview-shadow)!important;
+}
+.v65-seamless-chapters #belle-previews.v63-previews .v64-preview-title-button {
+  font:inherit!important;
+  font-family:inherit!important;
+  font-size:inherit!important;
+  font-weight:inherit!important;
+  font-style:inherit!important;
+  letter-spacing:inherit!important;
+  -webkit-text-fill-color:var(--v81-preview-title)!important;
+  -webkit-text-stroke:0!important;
+  color:var(--v81-preview-title)!important;
+  text-shadow:inherit!important;
+}
+@media(max-width:900px){
+  #belle-cidades.v79-spin-phones .v54-sticky {
+    padding:clamp(60px,8svh,78px) 0 clamp(22px,3svh,35px)!important;
+  }
+  #belle-cidades.v79-spin-phones .v79-spin-stage{
+    width:100%;
+    height:min(78svh,690px);
+    max-height:calc(100svh - 100px);
+  }
+}
+@media(max-width:600px){
+  #belle-cidades.v54-cinema.v63-phones.v79-spin-phones{
+    height:100svh!important;
+    min-height:100svh!important;
+  }
+  #belle-cidades.v79-spin-phones .v54-sticky{
+    height:100svh!important;
+    min-height:0!important;
+    padding:clamp(57px,8svh,77px) 0 clamp(22px,3svh,35px)!important;
+  }
+  #belle-cidades.v79-spin-phones .v79-spin-stage {
+    width:100%;
+    height:min(74svh,620px);
+    max-height:calc(100svh - 96px);
+  }
+  #belle-cidades .v79-spin-guide{
+    left:20px;right:20px;
+    bottom:clamp(6px,1.3svh,13px);
+    font-size:clamp(.7rem,2.5vw,.8rem);
+    line-height:1.4;
+    text-wrap:balance;
+  }
+  #belle-cidades .v79-spin-fallback img{
+    height:min(51svh,390px);
+    max-width:66vw;
+  }
+  .v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading h2,
+  .v65-seamless-chapters #belle-previews.v63-previews.v63-in-view .v63-previews-heading h2{
+    font-size:clamp(2.5rem,10.3vw,4.9rem)!important;
+    letter-spacing:-.068em!important;
+    line-height:1.14!important;
+  }
+}
+@media(max-height:570px){
+  #belle-cidades.v79-spin-phones .v79-spin-stage{
+    height:calc(100svh - 86px);
+    max-height:calc(100svh - 86px);
+  }
+  #belle-cidades .v79-spin-guide{font-size:.64rem;bottom:2px}
+}
+@media(prefers-reduced-motion:reduce){
+  .v65-seamless-chapters #belle-previews.v63-previews .v64-preview-title-button{
+    transition:none!important;
+  }
+}
