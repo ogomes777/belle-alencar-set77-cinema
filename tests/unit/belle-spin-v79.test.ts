@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BELLE_SPIN_PHONES, BELLE_SPIN_DESTINATIONS } from '../../src/social/belle-spin-island';
+import { BELLE_SPIN_PHONES, BELLE_SPIN_DESTINATIONS, belleSpinScale } from '../../src/social/belle-spin-island';
 import { createSpinCards } from '../../src/components/originkit/SpinCarousel';
 
 describe('Belle V79 · Originkit Spin Carousel integration', () => {
@@ -26,6 +26,21 @@ describe('Belle V79 · Originkit Spin Carousel integration', () => {
       const rotated=cards.map((_,idx)=>cards[(idx+steps)%6]?.src);
       expect(new Set(rotated).size).toBe(6);
     }
+  });
+  it('grows the wheel on desktop without cropping the phone ring', () => {
+    expect(belleSpinScale(1920)).toBe(101);
+    expect(belleSpinScale(1440)).toBe(101);
+    expect(belleSpinScale(1200)).toBe(101);
+    expect(belleSpinScale(901)).toBe(101);
+    // 101 percent of a 96 percent safe-fit keeps the wheel below full-frame size.
+    expect((belleSpinScale(1920) / 100) * 0.96).toBeLessThan(1);
+  });
+  it('preserves generous mobile margins and tablet proportions', () => {
+    expect(belleSpinScale(390)).toBe(84);
+    expect(belleSpinScale(600)).toBe(84);
+    expect(belleSpinScale(601)).toBe(92);
+    expect(belleSpinScale(900)).toBe(92);
+    expect(belleSpinScale(320)).toBeLessThan(belleSpinScale(1920));
   });
   it('keeps real Instagram destinations aligned with the six phones', () => {
     expect(BELLE_SPIN_DESTINATIONS).toEqual([
