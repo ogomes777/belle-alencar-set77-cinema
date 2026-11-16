@@ -71,6 +71,10 @@ const scaleAtRatio = (ratio: number) => SCALE_NEAR - ratio * SCALE_FALLOFF
 /** Breathing room left around the fitted wheel. */
 const FIT_MARGIN = 0.96
 
+/** Exactly one original image per wheel card; no artificial repetition. */
+export const createSpinCards = (sources: string[]) =>
+    sources.map((src, index) => ({ src, id: `img-${index}` }))
+
 /**
  * Frozen default of the cut `Size` control (rule 11b: the panel row goes, the
  * render path does not). It was a control that lied — the card width AND the
@@ -122,7 +126,6 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
         scale = 64,
         aspect = 136,
         rounded = 24,
-        speed = 100,
         transition = DEFAULT_TRANSITION,
         style,
         ...rest
@@ -142,7 +145,6 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
     const animFrameRef = useRef<number>(0)
     const snapAnim = useRef<{ stop: () => void } | null>(null)
     const isDraggingRef = useRef<boolean>(false)
-    const autoPlayTimerRef = useRef<number>(0)
 
     const [containerSize, setContainerSize] = useState({ w: 1200, h: 800 })
 
@@ -160,18 +162,9 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
         return list.length > 0 ? list : DEFAULT_IMAGES
     }, [items])
 
-    const multiplier = useMemo(
-        () => (sources.length === 0 ? 0 : Math.max(1, Math.ceil(10 / sources.length))),
-        [sources.length]
-    )
-
-    const CARDS = useMemo(
-        () =>
-            Array(multiplier)
-                .fill(null)
-                .flatMap((_, i) => sources.map((src, j) => ({ src, id: `img-${i}-${j}` }))),
-        [sources, multiplier]
-    )
+    // V80: render one physical card per supplied store, never duplicate the
+    // six real Belle phones just to fill an arbitrary 10-item demo wheel.
+    const CARDS = useMemo(() => createSpinCards(sources), [sources])
 
     const anglePerCard = CARDS.length > 0 ? 360 / CARDS.length : 0
     // The props drive the box directly — no ResizeObserver on a card, because
@@ -424,27 +417,6 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
         [anglePerCard, animateTo, goToIndex]
     )
 
-    const handleWheel = useCallback(
-        (e: React.WheelEvent<HTMLDivElement>) => {
-            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return
-            cancelAnimationFrame(animFrameRef.current)
-            snapAnim.current?.stop()
-            const delta = e.deltaY * 0.15
-            rotationRef.current -= delta
-            if (carouselRef.current) {
-                carouselRef.current.style.transform = `rotate(${rotationRef.current}deg)`
-            }
-            updateCardScales()
-
-            window.clearTimeout((handleWheel as any).timeout)
-            ;(handleWheel as any).timeout = window.setTimeout(() => {
-                const snapped = Math.round(rotationRef.current / anglePerCard) * anglePerCard
-                animateTo(snapped, FLICK_SCALE)
-            }, 150)
-        },
-        [anglePerCard, animateTo, updateCardScales]
-    )
-
     // First card front-of-wheel on mount, and re-seed when the ring is rebuilt.
     useEffect(() => {
         if (CARDS.length === 0) return
@@ -454,20 +426,6 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
         }
         updateCardScales()
     }, [anglePerCard, updateCardScales, CARDS.length, radius])
-
-    useEffect(() => {
-        if (speed === 0 || CARDS.length === 0) return
-        // One signed dial: the sign is the direction, the magnitude the rate.
-        // 50 reproduces the 3000ms step the carousel shipped with.
-        const dir = speed < 0 ? -1 : 1
-        const autoPlayInterval = (3000 * 50) / Math.abs(speed)
-        autoPlayTimerRef.current = window.setInterval(() => {
-            if (!isDraggingRef.current) {
-                navigate(dir)
-            }
-        }, autoPlayInterval)
-        return () => clearInterval(autoPlayTimerRef.current)
-    }, [speed, navigate, CARDS.length])
 
     useEffect(() => {
         return () => {
@@ -506,8 +464,17 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
-                onPointerCancel={handlePointerUp}
-                onWheel={handleWheel}
+                onPointerCancel={(e) => {
+                    isDraggingRef.current = false
+                    dragInfo.current.downIndex = -1
+                    dragInfo.current.moved = CLICK_SLOP + 1
+                    if (containerRef.current) {
+                        containerRef.current.style.cursor = "grab"
+                        if (containerRef.current.hasPointerCapture(e.pointerId))
+                            containerRef.current.releasePointerCapture(e.pointerId)
+                    }
+                }}
+                // Vertical mouse wheel is reserved for the page; wheel never rotates the phones.
             >
                 <div
                     style={{
