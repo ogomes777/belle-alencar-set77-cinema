@@ -254,7 +254,7 @@ export function initFilm(director: Director): void {
   // A single number is sampled 6x/second, without a permanent RAF or
   // any DOM writes while scroll and chapter state are already in sync.
   window.setInterval(()=>{
-    if(document.hidden)return;
+    if(document.hidden||!experienceUnlocked)return;
     const current=scrollY;
     const expected=clamp((current-filmTop)/range,0,1);
     if(current===lastScrollPosition&&Math.abs(expected-progress)<.0005)return;
