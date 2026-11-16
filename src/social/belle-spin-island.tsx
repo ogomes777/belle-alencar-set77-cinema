@@ -15,6 +15,12 @@ const CITIES: BelleCity[] = [
 export const BELLE_SPIN_PHONES = CITIES.map(city => '/belle-v54/phones/' + city.id + '.webp');
 export const BELLE_SPIN_DESTINATIONS = CITIES.map(city => 'https://www.instagram.com/' + city.profile + '/');
 
+/** Viewport-safe visual size; desktop gets the full fashion-film presence.
+ * Mobile keeps more breathing room around all six phones.
+ */
+export const belleSpinScale = (width: number) =>
+  width <= 600 ? 84 : width <= 900 ? 92 : 101;
+
 type Press = { index: number; front: number; x: number; y: number };
 
 /** The original Originkit implementation lives unchanged in components/originkit.
@@ -26,6 +32,8 @@ function BelleSpinPhones() {
   const shell = React.useRef<HTMLDivElement>(null);
   const pressed = React.useRef<Press | null>(null);
   const [reduceMotion, setReduceMotion] = React.useState(false);
+  const [wheelScale, setWheelScale] = React.useState(() =>
+    belleSpinScale(window.innerWidth));
 
   React.useEffect(() => {
     const media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -36,6 +44,12 @@ function BelleSpinPhones() {
     media.addEventListener('change', update);
     update();
     return () => { observer.disconnect(); media.removeEventListener('change', update); };
+  }, []);
+
+  React.useEffect(() => {
+    const syncScale = () => setWheelScale(belleSpinScale(window.innerWidth));
+    window.addEventListener('resize', syncScale, { passive: true });
+    return () => window.removeEventListener('resize', syncScale);
   }, []);
 
   function frontCardIndex(): number {
@@ -77,7 +91,7 @@ function BelleSpinPhones() {
         <SpinCarousel
           items={BELLE_SPIN_PHONES}
           background="transparent"
-          scale={92}
+          scale={wheelScale}
           aspect={145}
           rounded={0}
           speed={0}
