@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { BELLE_SPIN_PHONES, BELLE_SPIN_DESTINATIONS } from '../../src/social/belle-spin-island';
+import { createSpinCards } from '../../src/components/originkit/SpinCarousel';
 
 describe('Belle V79 · Originkit Spin Carousel integration', () => {
   it('uses exactly the six real Belle city phone mockups', () => {
@@ -12,6 +13,19 @@ describe('Belle V79 · Originkit Spin Carousel integration', () => {
       '/belle-v54/phones/franca.webp',
     ]);
     expect(BELLE_SPIN_PHONES.every(src => !src.startsWith('blob:') && !src.startsWith('http'))).toBe(true);
+  });
+  it('creates one visible card per city with no hidden duplicates', () => {
+    const cards=createSpinCards(BELLE_SPIN_PHONES);
+    expect(cards).toHaveLength(6);
+    expect(cards.map(card=>card.src)).toEqual(BELLE_SPIN_PHONES);
+    expect(new Set(cards.map(card=>card.id)).size).toBe(6);
+  });
+  it('keeps all six cards distinct throughout one full wheel rotation', () => {
+    const cards=createSpinCards(BELLE_SPIN_PHONES);
+    for(let steps=0;steps<6;steps++){
+      const rotated=cards.map((_,idx)=>cards[(idx+steps)%6]?.src);
+      expect(new Set(rotated).size).toBe(6);
+    }
   });
   it('keeps real Instagram destinations aligned with the six phones', () => {
     expect(BELLE_SPIN_DESTINATIONS).toEqual([
