@@ -11,7 +11,7 @@ let count=0;const check=(ok,msg)=>{if(!ok)throw new Error(msg);console.log('PASS
 const errors=[];
 function watch(page){page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`)});}
 async function goto(page,url='?tier=static&loja=araxa'){await page.goto(base+'/'+url);await page.evaluate(()=>document.fonts.ready);await page.waitForSelector('.pcard');}
-async function chapter(page,id){await page.evaluate(id=>{const e=document.getElementById(id);scrollTo(0,e.getBoundingClientRect().top+scrollY+(id==='sala'?e.offsetHeight*.3:0)-68)},id);if(id==='sala')await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala');await page.waitForTimeout(350);}
+async function chapter(page,id){if(['sala','porta','vestido','detalhe','categorias','provador'].includes(id)){const b=page.locator('#filmEnter');if(await b.count()&&await b.isVisible().catch(()=>false)){await b.click();await page.waitForFunction(()=>document.querySelector('#filme')?.classList.contains('is-unlocked'));}}await page.evaluate(id=>{const e=document.getElementById(id);scrollTo(0,e.getBoundingClientRect().top+scrollY+(id==='sala'?e.offsetHeight*.3:0)-68)},id);if(id==='sala')await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala');await page.waitForTimeout(350);}
 try{
 const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
 const page=await context.newPage();watch(page);await goto(page);
