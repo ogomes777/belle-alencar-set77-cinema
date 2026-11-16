@@ -64,7 +64,7 @@ for (const vp of viewports) {
   check(`[${vp.name}] sem overflow horizontal em ${stops.length} paradas`, overflowOk);
   check(`[${vp.name}] zero erros de console`, errors.length === 0, errors.slice(0, 2).join(' | '));
   check(`[${vp.name}] zero recursos 4xx/5xx`, failed.length === 0, failed.slice(0, 3).join(' | '));
-  const headerOk = await page.evaluate(() => ['#storeButton', '#searchButton', '#bagButton'].every((s) => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && r.width >= 40 && r.height >= 40 && r.right <= innerWidth; }));
+  const headerOk = await page.evaluate(() => ['#storeButton', '#searchButton', document.querySelector('#bagButton')?.offsetParent ? '#bagButton' : '#belleMenuButton'].every((s) => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && r.width >= 40 && r.height >= 40 && r.right <= innerWidth; }));
   check(`[${vp.name}] loja, busca e sacola sempre visíveis (≥40px)`, headerOk);
   await ctx.close();
 }
@@ -157,6 +157,8 @@ for (const vp of viewports) {
   await page.waitForTimeout(300);
   const hidden = await page.locator('[data-bag-count]').isHidden();
   check('nova loja começa com sacola própria (itens não migram sem escolha)', hidden);
+  // V83+: favoritos e sacola ficam no menu couture; abre o menu antes, como o visitante.
+  if (!(await page.locator('#bagButton').isVisible().catch(() => false))) { await page.click('#belleMenuButton'); await page.waitForTimeout(500); }
   await page.click('#bagButton');
   await page.waitForTimeout(300);
   const other = await page.locator('[data-goto-store="araxa"]').isVisible();
