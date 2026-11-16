@@ -1,0 +1,67 @@
+/* BELLE V82 · SET77 LABS
+ * PREVIEWS wordmark only. Keep Playfair Display's fashion-editorial italic,
+ * lighten it and let the final italic S breathe beyond the scroll reveal mask.
+ * Rotunda, title scroll timing, hover/flip and all three themes stay untouched.
+ */
+.v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading{
+  overflow:visible!important;
+  padding-inline:clamp(18px,3.6vw,56px);
+}
+.v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading h2,
+.v65-seamless-chapters #belle-previews.v63-previews.v63-in-view .v63-previews-heading h2{
+  font-family:"Playfair Display",Georgia,serif!important;
+  font-style:italic!important;
+  font-weight:400!important;
+  font-optical-sizing:auto;
+  font-kerning:normal;
+  font-feature-settings:"kern" 1,"liga" 1;
+  font-size:clamp(3.3rem,8.2vw,8.7rem)!important;
+  letter-spacing:-.025em!important;
+  line-height:1.22!important;
+  width:max-content!important;
+  max-width:100%!important;
+  box-sizing:border-box;
+  padding:.08em .24em .13em!important;
+  margin:0 auto!important;
+  overflow:visible!important;
+  text-align:center;
+  /* Negative margins on the reveal mask allow italic swashes to extend beyond
+     the glyph box. The same --v64-reveal-pct keeps the original scroll reveal. */
+  clip-path:inset(-.28em calc(100% - var(--v64-reveal-pct,0%) - .32em) -.28em -.32em)!important;
+  -webkit-clip-path:inset(-.28em calc(100% - var(--v64-reveal-pct,0%) - .32em) -.28em -.32em)!important;
+}
+.v65-seamless-chapters #belle-previews.v63-previews .v64-preview-title-button{
+  display:inline-block;
+  max-width:none!important;
+  width:auto!important;
+  padding:.02em .06em .06em!important;
+  box-sizing:content-box;
+  overflow:visible!important;
+  font-family:inherit!important;
+  font-style:inherit!important;
+  font-weight:inherit!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+  letter-spacing:inherit!important;
+  -webkit-text-fill-color:var(--v81-preview-title)!important;
+  color:var(--v81-preview-title)!important;
+}
+@media(max-width:750px){
+  .v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading{
+    padding-inline:clamp(12px,3.8vw,22px)!important;
+  }
+  .v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading h2,
+  .v65-seamless-chapters #belle-previews.v63-previews.v63-in-view .v63-previews-heading h2{
+    font-size:clamp(2rem,10vw,5rem)!important;
+    letter-spacing:-.027em!important;
+    line-height:1.23!important;
+    padding:.09em .23em .14em!important;
+  }
+}
+@media(max-width:380px){
+  .v65-seamless-chapters #belle-previews.v63-previews .v63-previews-heading h2,
+  .v65-seamless-chapters #belle-previews.v63-previews.v63-in-view .v63-previews-heading h2{
+    font-size:clamp(1.86rem,9.2vw,2.4rem)!important;
+    padding-inline:.18em!important;
+  }
+}
