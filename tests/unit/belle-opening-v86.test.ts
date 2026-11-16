@@ -38,7 +38,7 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(slider).toContain('touchend');
     expect(slider).toContain('ArrowLeft');
     expect(slider).toContain('ArrowRight');
-    expect(slider).not.toContain('preventDefault()');
+    expect(slider).toContain('event.preventDefault()'); // only keyboard arrows, never wheel/touch
     expect(slider).not.toContain("addEventListener('wheel'");
     expect(slider).toContain('intro-done');
     expect(slider).toContain('prefers-reduced-motion');
