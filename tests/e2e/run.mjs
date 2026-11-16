@@ -287,12 +287,13 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
   check('boutique '+width+': assets 3D prontos',start.canvas&&start.ready>40);
   check('boutique '+width+': sem arara HTML duplicada',start.oldRack===0);
   check('boutique '+width+': draw calls ≤ 120',start.draw<=120,String(start.draw));
-  check('boutique '+width+': mão "Explorar a loja" visível',await page.locator('.pov__enter').isVisible());
+  check('boutique '+width+': mão "Explorar a loja" visível',await page.locator('.pov__enter').waitFor({state:'visible',timeout:20000}).then(()=>true).catch(()=>false));
   await page.locator('[data-side-look="1"]').click({timeout:60000});
-  await page.waitForFunction(()=>window.__belle.world().sideLook>.6,null,{timeout:90000});
+  // Com o scrub contínuo (V55) a câmera ainda pode estar chegando à sala: espera o olhar virar de fato.
+  await page.waitForFunction(()=>window.__belle.world().sideLook>.6&&window.__belle.world().lookTarget[0]>1,null,{timeout:120000}).catch(()=>undefined);
   const right=await page.evaluate(()=>window.__belle.world().lookTarget);
   await page.locator('[data-side-look="-1"]').click({timeout:60000});
-  await page.waitForFunction(()=>window.__belle.world().sideLook<-.6,null,{timeout:90000});
+  await page.waitForFunction(()=>window.__belle.world().sideLook<-.6&&window.__belle.world().lookTarget[0]<-1,null,{timeout:120000}).catch(()=>undefined);
   const left=await page.evaluate(()=>window.__belle.world().lookTarget);
   check('boutique '+width+': direita olha para +x e esquerda para −x, sem sair do cômodo',right[0]>1&&left[0]<-1&&(await page.evaluate(()=>document.documentElement.dataset.filmChapter))==='sala');
   await page.locator('[data-side-look="1"]').click();
