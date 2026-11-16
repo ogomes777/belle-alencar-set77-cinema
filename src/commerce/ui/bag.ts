@@ -6,7 +6,7 @@ import { createOverlay } from './overlay';
 import { STORES } from '../stores';
 import { countItems, MAX_QTY } from '../cart';
 import { AVAILABILITY_LABEL } from '../availability';
-import { buildStoreMessage, checkoutGateway } from '../checkout';
+import { buildStoreMessage } from '../checkout';
 import { plural } from '../format';
 import { minus, plus, trash, heart } from './icons';
 import type { Ctx } from './context';
@@ -103,13 +103,11 @@ export function createBag(ctx: Ctx) {
       h('p', { class: 'fineprint', text: 'Sua lista foi preparada para copiar. Abra o WhatsApp oficial, cole a mensagem e peça à equipe para confirmar modelos, preços e tamanhos. O canal orienta você sobre a unidade.' }),
       h('a', { class: 'link-btn', href: store.contact.whatsappUrl, target: '_blank', rel: 'noopener noreferrer', text: 'Abrir o WhatsApp de novo' }),
     );
-    const co = checkoutGateway.status();
     const foot = h('footer', { class: 'drawer-foot' },
       h('p', { class: 'drawer-foot__sum' }, h('span', { text: plural(countItems(items), 'peça', 'peças') }), h('strong', { text: 'Preço sob consulta' })),
       h('button', { type: 'button', class: 'btn btn--solid btn--block', 'data-send': true, text: `Enviar para a Belle ${store.city}` }),
       send,
-      h('button', { type: 'button', class: 'btn btn--line btn--block', disabled: true, 'aria-describedby': 'checkoutReason', text: 'Checkout online' }),
-      h('p', { class: 'fineprint', id: 'checkoutReason', text: co.enabled ? '' : co.reason }),
+      h('p', { class: 'fineprint', text: 'Preço, pagamento e disponibilidade são combinados diretamente com a unidade no atendimento.' }),
     );
     ov.body.replaceChildren(head, list, otherNote ?? '', foot);
   }
