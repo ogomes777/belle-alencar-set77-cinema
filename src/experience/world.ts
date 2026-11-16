@@ -372,6 +372,8 @@ export class World {
     if (!v) {
       if (this.raf) cancelAnimationFrame(this.raf);
       this.raf = 0;
+      // saída da visita em andamento quando o filme sai da tela: conclui já (o loop vai parar)
+      if (this.exploreGoal === 0 && this.explorer.active) { this.exploreBlend = 0; this.explorer.exit(); }
       return;
     }
     // Re-entry from a long tab switch or another section must not consume
