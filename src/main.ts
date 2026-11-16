@@ -50,6 +50,7 @@ import './styles/belle-v75-editorial-ribbon.css'; // V75: couture lettering and 
 import './styles/belle-v79-originkit-spin.css'; // V79: borderless transparent original Originkit Spin for Belle phones only.
 import './styles/belle-v81-phone-flow-preview-title.css'; // V81: immediate native scroll, viewport-safe carousel and luxury Previews serif.
 import './styles/belle-v82-preview-calligraphy.css'; // V82: thinner italic preview headline, no clipped S; no video changes.
+import './styles/belle-v83-atelier-header.css'; // V83: central Belle logo, floating store selector, commerce inside couture menu.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
