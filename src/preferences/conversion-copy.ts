@@ -899,5 +899,59 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Quick access to saved items",
     "Acceso rápido a tus artículos",
     "Accesso rapido ai tuoi articoli"
+  ],
+  [
+    "BELLE ALENCAR · VISITA IMERSIVA",
+    "BELLE ALENCAR · IMMERSIVE VISIT",
+    "BELLE ALENCAR · VISITA INMERSIVA",
+    "BELLE ALENCAR · VISITA IMMERSIVA"
+  ],
+  [
+    "Entre na",
+    "Step inside the",
+    "Entra en la",
+    "Entra nella"
+  ],
+  [
+    "boutique.",
+    "boutique.",
+    "boutique.",
+    "boutique."
+  ],
+  [
+    "Explore a loja em uma experiência cinematográfica, conduzida por você.",
+    "Explore the boutique in a cinematic experience you control.",
+    "Explora la boutique en una experiencia cinematográfica que tú controlas.",
+    "Esplora la boutique in un'esperienza cinematografica guidata da te."
+  ],
+  [
+    "Entrar na experiência",
+    "Enter the experience",
+    "Entrar en la experiencia",
+    "Entra nell'esperienza"
+  ],
+  [
+    "Prefere continuar? Basta rolar a página.",
+    "Want to keep browsing? Just scroll down.",
+    "¿Prefieres continuar? Solo desplázate.",
+    "Preferisci proseguire? Scorri la pagina."
+  ],
+  [
+    "Voltar à landing",
+    "Back to the website",
+    "Volver al sitio",
+    "Torna al sito"
+  ],
+  [
+    "Arraste para ver combinações. Continue para conhecer a boutique.",
+    "Drag to explore outfits. Continue to visit the boutique.",
+    "Arrastra para explorar conjuntos. Continúa para conocer la boutique.",
+    "Trascina per esplorare gli outfit. Continua per visitare la boutique."
+  ],
+  [
+    "Filme: uma visita à boutique Belle Alencar",
+    "Film: a visit to the Belle Alencar boutique",
+    "Película: una visita a la boutique Belle Alencar",
+    "Film: una visita alla boutique Belle Alencar"
   ]
 ];
