@@ -48,6 +48,7 @@ import './styles/belle-v72-couture-ticker.css'; // V72: seamless premium categor
 import './styles/belle-v74-editorial-cleanup.css'; // V74: conversion-first mobile readability and restrained ornament.
 import './styles/belle-v75-editorial-ribbon.css'; // V75: couture lettering and fine metallic ribbon borders only.
 import './styles/belle-v79-originkit-spin.css'; // V79: borderless transparent original Originkit Spin for Belle phones only.
+import './styles/belle-v81-phone-flow-preview-title.css'; // V81: immediate native scroll, viewport-safe carousel and luxury Previews serif.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
