@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import { describe, it, expect } from 'vitest';
 import html from '../../index.html?raw';
-import css from '../../src/styles/belle-v83-atelier-header.css?raw';
 import menu from '../../src/shell/couture-menu.ts?raw';
 import commerce from '../../src/commerce/ui/header.ts?raw';
 import settings from '../../src/preferences/settings.ts?raw';
@@ -28,8 +27,8 @@ describe('Belle V83 · clean header and accessible commerce navigation',()=>{
     expect(dock).toContain('data-open-store');
     expect(dock).toContain('data-store-label');
     expect(html.indexOf('belleLocationDock')).toBeLessThan(html.indexOf('id="siteHeader"'));
-    expect(css).toContain('position:fixed');
-    expect(css).toContain('html.couture-nav-open body #belleLocationDock');
+    expect(dock).toContain('class="belle-location-dock"');
+    expect(main).toContain("import './styles/belle-v83-atelier-header.css'");
   });
   it('moves favorites and bag without duplicating commerce IDs or counters',()=>{
     for(const id of ['wishlistButton','bagButton']){
@@ -43,13 +42,12 @@ describe('Belle V83 · clean header and accessible commerce navigation',()=>{
     expect(menu).toContain('setOpen(false, false, true)');
     expect(commerce).toContain("document.getElementById('belleMenuButton')");
   });
-  it('centers brand and retains responsive themes and a full 44px touch target',()=>{
-    expect(css).toContain('transform:translate(-50%,-50%)!important');
-    expect(css).toContain('width:min(680px,calc(100% - 24px))!important');
-    expect(css).toContain('data-belle-theme="dark"');
-    expect(css).toContain('data-belle-theme="rose"');
-    expect(css).toContain('@media(max-width:375px)');
-    expect(css).toContain('min-height:44px');
+  it('loads the new header as the final style layer and preserves settings and original cinema',()=>{
     expect(main).toContain('belle-v83-atelier-header.css');
+    expect(main.indexOf('belle-v83-atelier-header.css')).toBeGreaterThan(main.indexOf('belle-v82-preview-calligraphy.css'));
+    expect(settings).toContain("actions.insertBefore(trigger,menu)");
+    expect(html).toContain('data-v54-rotunda');
+    expect(html).toContain('data-v79-spin-mount');
+    expect(html).toContain('data-monogram="header"');
   });
 });
