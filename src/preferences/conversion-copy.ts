@@ -954,4 +954,13 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Película: una visita a la boutique Belle Alencar",
     "Film: una visita alla boutique Belle Alencar"
   ]
+  ["Campanha Belle Alencar","Belle Alencar campaign","Campaña Belle Alencar","Campagna Belle Alencar"],
+  ["Campanhas Belle Alencar","Belle Alencar campaigns","Campañas Belle Alencar","Campagne Belle Alencar"],
+  ["Navegar entre banners","Navigate banners","Navegar entre banners","Naviga tra i banner"],
+  ["Banner anterior","Previous banner","Banner anterior","Banner precedente"],
+  ["Próximo banner","Next banner","Banner siguiente","Banner successivo"],
+  ["Mostrar banner 1","Show banner 1","Mostrar banner 1","Mostra banner 1"],
+  ["Mostrar banner 2","Show banner 2","Mostrar banner 2","Mostra banner 2"],
+  ["Assinatura Belle Alencar em dourado sobre seda vinho","Belle Alencar gold signature on wine satin","Firma dorada Belle Alencar sobre seda color vino","Firma dorata Belle Alencar su seta color vino"],
+  ["Coleção Belle Alencar com vestido dourado em boutique de travertino","Belle Alencar gold dress in a travertine boutique","Vestido dorado Belle Alencar en boutique de travertino","Abito dorato Belle Alencar in boutique di travertino"],
 ];
