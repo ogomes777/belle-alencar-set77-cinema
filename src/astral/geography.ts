@@ -16,6 +16,11 @@ export const spherePoint=(lat:number,lon:number)=>{
   const a=lat*Math.PI/180,b=lon*Math.PI/180;
   return {x:Math.cos(a)*Math.cos(b),y:-Math.sin(a),z:Math.cos(a)*Math.sin(b)};
 };
+/** On the front-facing globe, west must appear screen-left, not mirrored.
+ * Keep northern latitudes screen-up and do not alter geographic coordinates.
+ */
+export const globeScreenX=(rotatedX:number,scale:number,center:number)=>
+  center-rotatedX*scale;
 export const smooth=(x:number)=>{const p=Math.max(0,Math.min(1,x));return p*p*(3-2*p);};
 /** Deliberate country → state → city stops, with continuous camera position. */
 export function journey(city:typeof CITIES[number],elapsed:number){
