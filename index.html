@@ -187,8 +187,10 @@
           <span class="film__gateway-skip">Prefere continuar? Basta rolar a página.</span>
         </div>
       </div>
-      <button type="button" class="film__gateway-exit" id="filmExit" hidden>Voltar à landing <span aria-hidden="true">×</span></button>
     </div>
+    <!-- Outside the sticky canvas stacking context so the exit stays above
+         every chapter card, but below the global Belle navigation. -->
+    <button type="button" class="film__gateway-exit" id="filmExit" hidden>Voltar à landing <span aria-hidden="true">×</span></button>
 
     <nav class="chapter-rail" id="chapterRail" aria-label="Capítulos do filme">
       <ol>
