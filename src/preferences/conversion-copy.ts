@@ -881,5 +881,11 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Illustrative image. Open details",
     "Imagen ilustrativa. Abrir detalles",
     "Immagine illustrativa. Apri dettagli"
+  ],
+  [
+    "Preço, pagamento e disponibilidade são combinados diretamente com a unidade no atendimento.",
+    "Price, payment and availability are confirmed directly with the store during your conversation.",
+    "Precio, pago y disponibilidad se confirman directamente con la tienda durante la atención.",
+    "Prezzo, pagamento e disponibilità vengono confermati direttamente con il negozio durante l'assistenza."
   ]
 ];
