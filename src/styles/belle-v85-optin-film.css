@@ -168,7 +168,7 @@ html.poster-mode #filme .film__gateway{display:none!important}
 /* Exit remains visible while original sticky scroll-film is active.
    It never adds a new scroll capture; one click returns to the short storefront. */
 #filme .film__gateway-exit{
-  position:absolute;
+  position:fixed;
   z-index:30;
   right:clamp(14px,2.8vw,42px);
   top:calc(var(--header-h,64px) + 14px);
@@ -190,6 +190,7 @@ html.poster-mode #filme .film__gateway{display:none!important}
   cursor:pointer;
 }
 #filme .film__gateway-exit span{font:400 1.3rem/1 Arial,sans-serif}
+html:not(.in-film) #filme .film__gateway-exit,
 #filme:not(.is-unlocked) .film__gateway-exit,
 #filme .film__gateway-exit[hidden],
 html.poster-mode #filme .film__gateway-exit{display:none!important}
