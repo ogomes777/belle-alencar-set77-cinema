@@ -101,6 +101,8 @@ function computedText(source:string,to:Exclude<BelleLocale,'pt'>):string{
   const targetTail=w[tail]||tail;
   return number[1]+' '+w[noun]+' '+targetTail;
  }
+ const moreCatalog=source.match(/^Ver mais (\d+) (peça|peças) deste catálogo$/);
+ if(moreCatalog)return translate('Ver mais',to)+' '+moreCatalog[1]!+' '+translate(moreCatalog[2]!,to)+' '+translate('deste catálogo',to);
  const explore=source.match(/^Explore mais (\d+) (peças?) da seleção$/);
  if(explore)return w.Explore+' '+explore[1]+' '+w[explore[2]!]+' '+w['da seleção'];
  const fav=source.match(/^Favoritar (.+)$/);
