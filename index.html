@@ -108,8 +108,8 @@
   <div class="couture-nav__inner">
     <nav class="couture-nav__primary" aria-label="Capítulos">
       <ol class="couture-nav__list" style="--last:5">
-        <li class="couture-nav__item" style="--i:0"><a class="couture-nav__link" href="#inicio" data-mobile-nav data-split>A loja</a></li>
-        <li class="couture-nav__item" style="--i:1"><a class="couture-nav__link" href="#passarela" data-mobile-nav data-split>Passarela</a></li>
+        <li class="couture-nav__item" style="--i:0"><a class="couture-nav__link" href="#passarela" data-mobile-nav data-split>Passarela</a></li>
+        <li class="couture-nav__item" style="--i:1"><a class="couture-nav__link" href="#filme" data-mobile-nav data-split>Experiência</a></li>
         <li class="couture-nav__item" style="--i:2"><a class="couture-nav__link" href="#ocasioes" data-mobile-nav data-split>Ocasiões</a></li>
         <li class="couture-nav__item" style="--i:3"><a class="couture-nav__link" href="#colecao" data-mobile-nav data-split>Coleção</a></li>
         <li class="couture-nav__item" style="--i:4"><a class="couture-nav__link" href="#lojas" data-mobile-nav data-split>Lojas</a></li>
@@ -139,6 +139,27 @@
 <main id="main">
 
 
+  <!-- V85 · Passarela primeiro, boutique opt-in logo a seguir. -->
+  <h1 class="sr-only">Belle Alencar · Moda &amp; Acessórios</h1>
+  <span id="inicio" class="v85-home-anchor" aria-hidden="true"></span>
+  <!-- V85: passarela editorial de abertura, navegação nativa -->
+  <section class="runway" id="passarela" aria-label="Belle Alencar — lookbook em profundidade" data-media="fallback">
+    <div class="runway__layout">
+      <div class="runway__stage" tabindex="0" role="region" aria-label="Passarela. Arraste para os lados ou use as setas para trocar de look." aria-describedby="runwayHint">
+        <div class="runway__line"></div>
+        <div class="runway__intro"><p class="runway__eyebrow">Belle Alencar · Combinações</p><h2>Combine três peças. Veja cada detalhe.</h2></div>
+        <p class="runway__media-note"><span class="runway__fallback-note">Composição ilustrativa · consulte peças disponíveis</span><span class="runway__reference-note">Imagem de referência · não representa estoque</span></p>
+        <div class="runway__tag"><div class="runway__look" aria-hidden="true"><span>Look</span><span class="runway__window"><span class="runway__roll"></span></span></div><p class="runway__styleline">Vestido + bolsa + anel</p><button type="button" class="runway__shop">Ver detalhes da peça</button></div>
+        <div class="runway__controls"><button type="button" data-runway-prev aria-label="Look anterior">←</button><button type="button" data-runway-next aria-label="Próximo look">→</button></div>
+        <p class="runway__hint" id="runwayHint">Arraste para ver combinações. Continue para filtrar por ocasião.</p>
+        <span class="runway__status sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
+        <div class="runway__ring" aria-hidden="true"></div>
+      </div>
+      <aside class="runway__rail" aria-label="Três peças de cada conjunto · referências demonstrativas"></aside>
+    </div>
+    <noscript><p>Conheça a <a href="#colecao">coleção Belle</a> ou <a href="#lojas">encontre sua loja</a>.</p></noscript>
+  </section>
+
   <!-- O FILME: um plano-sequência controlado pelo scroll nativo -->
   <section class="film" id="filme" aria-label="Filme: uma visita à boutique Belle Alencar">
     <div class="film__stage" id="filmStage">
@@ -149,11 +170,29 @@
       <div class="film__veil" aria-hidden="true"></div>
       <p class="film__label" id="filmLabel" hidden>Estudo 3D procedural · não é uma peça do acervo</p>
       <div class="film__loading" id="filmLoading" aria-hidden="true"><i></i></div>
+      <!-- V85: boutique film is opt-in. The facade stays on screen; the
+           full 3D/scroll chapter system starts only after explicit entry. -->
+      <div class="film__gateway" id="filmGateway" aria-labelledby="filmGatewayTitle">
+        <div class="film__gateway-card">
+          <div class="film__gateway-seal" aria-hidden="true">
+            <span class="film__gateway-lock-arch"></span>
+            <span class="film__gateway-monogram" data-monogram="header"></span>
+          </div>
+          <span class="film__gateway-kicker">BELLE ALENCAR · VISITA IMERSIVA</span>
+          <h2 id="filmGatewayTitle">Entre na <em>boutique.</em></h2>
+          <p>Explore a loja em uma experiência cinematográfica, conduzida por você.</p>
+          <button type="button" class="film__gateway-enter" id="filmEnter" aria-controls="filmChapters" aria-expanded="false">
+            Entrar na experiência <span aria-hidden="true">↗</span>
+          </button>
+          <span class="film__gateway-skip">Prefere continuar? Basta rolar a página.</span>
+        </div>
+      </div>
+      <button type="button" class="film__gateway-exit" id="filmExit" hidden>Voltar à landing <span aria-hidden="true">×</span></button>
     </div>
 
     <nav class="chapter-rail" id="chapterRail" aria-label="Capítulos do filme">
       <ol>
-        <li><a href="#inicio" data-chapter-link="inicio"><span>01</span><b>Vitrine</b></a></li>
+        <li><a href="#filme-vitrine" data-chapter-link="filme-vitrine"><span>01</span><b>Vitrine</b></a></li>
         <li><a href="#porta" data-chapter-link="porta"><span>02</span><b>Porta</b></a></li>
         <li><a href="#sala" data-chapter-link="sala"><span>03</span><b>Arara</b></a></li>
         <li><a href="#vestido" data-chapter-link="vestido"><span>04</span><b>Vestido</b></a></li>
@@ -164,8 +203,8 @@
       <div class="chapter-rail__bar" aria-hidden="true"><i id="filmProgress"></i></div>
     </nav>
 
-    <div class="film__chapters">
-      <article class="chapter chapter--hero" id="inicio" data-chapter="vitrine">
+    <div class="film__chapters" id="filmChapters">
+      <article class="chapter chapter--hero" id="filme-vitrine" data-chapter="vitrine">
         <div class="chapter__card">
           <p class="eyebrow">Belle Alencar · Moda &amp; Acessórios</p>
           <h1 class="display" data-split>Explore vestidos e acessórios.<br><em>Consulte sua loja.</em></h1>
@@ -311,23 +350,7 @@
     </div>
   </section>
 
-  <!-- PASSARELA: experiência editorial após filme, manifesto e faixa -->
-  <section class="runway" id="passarela" aria-label="Belle Alencar — lookbook em profundidade" data-media="fallback">
-    <div class="runway__layout">
-      <div class="runway__stage" tabindex="0" role="region" aria-label="Passarela. Arraste para os lados ou use as setas para trocar de look." aria-describedby="runwayHint">
-        <div class="runway__line"></div>
-        <div class="runway__intro"><p class="runway__eyebrow">Belle Alencar · Combinações</p><h2>Combine três peças. Veja cada detalhe.</h2></div>
-        <p class="runway__media-note"><span class="runway__fallback-note">Composição ilustrativa · consulte peças disponíveis</span><span class="runway__reference-note">Imagem de referência · não representa estoque</span></p>
-        <div class="runway__tag"><div class="runway__look" aria-hidden="true"><span>Look</span><span class="runway__window"><span class="runway__roll"></span></span></div><p class="runway__styleline">Vestido + bolsa + anel</p><button type="button" class="runway__shop">Ver detalhes da peça</button></div>
-        <div class="runway__controls"><button type="button" data-runway-prev aria-label="Look anterior">←</button><button type="button" data-runway-next aria-label="Próximo look">→</button></div>
-        <p class="runway__hint" id="runwayHint">Arraste para ver combinações. Continue para filtrar por ocasião.</p>
-        <span class="runway__status sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
-        <div class="runway__ring" aria-hidden="true"></div>
-      </div>
-      <aside class="runway__rail" aria-label="Três peças de cada conjunto · referências demonstrativas"></aside>
-    </div>
-    <noscript><p>Conheça a <a href="#colecao">coleção Belle</a> ou <a href="#lojas">encontre sua loja</a>.</p></noscript>
-  </section>
+
 
   <!-- COMPRE POR OCASIÃO -->
   <section class="occasions" id="ocasioes" aria-labelledby="ocasioesTitle">
