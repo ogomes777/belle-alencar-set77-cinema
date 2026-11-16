@@ -857,5 +857,29 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Popular categories",
     "Categorías buscadas",
     "Categorie ricercate"
+  ],
+  [
+    "Consulte a cidade e abra a localização no Google Maps.",
+    "Check the city and open the location on Google Maps.",
+    "Consulta la ciudad y abre la ubicación en Google Maps.",
+    "Controlla la città e apri la posizione su Google Maps."
+  ],
+  [
+    "Escolha a unidade Belle",
+    "Choose a Belle store",
+    "Elige una tienda Belle",
+    "Scegli un negozio Belle"
+  ],
+  [
+    "Escolha a unidade para consultar a loja.",
+    "Choose a store to contact.",
+    "Elige la tienda que quieres consultar.",
+    "Scegli il negozio da contattare."
+  ],
+  [
+    "Imagem ilustrativa. Abrir detalhes",
+    "Illustrative image. Open details",
+    "Imagen ilustrativa. Abrir detalles",
+    "Immagine illustrativa. Apri dettagli"
   ]
 ];
