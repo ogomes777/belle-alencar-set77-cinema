@@ -68,7 +68,7 @@ export function initRack(stage: HTMLElement, card: HTMLElement | null): RackCont
     el.className = 'rack__piece';
     el.tabIndex = i === Math.floor(products.length / 2) ? 0 : -1;
     el.dataset.id = p.id;
-    el.setAttribute('aria-label', `${p.title}. Packshot sintético demonstrativo. Abrir ficha`);
+    el.setAttribute('aria-label', `${p.title}. Imagem ilustrativa. Abrir detalhes`);
     const clips = p.category === 'saias' || p.category === 'calcas';
     const hanger = `<svg viewBox="0 0 100 40" aria-hidden="true"><path d="M50 17v-4c0-4 7-3 7-8 0-6-10-6-10 0"/><path d="${clips ? 'M50 17v6M10 25h80M15 24v10m70-10v10' : 'M50 17 8 35q42 5 84 0L50 17'}"/></svg>`;
     el.innerHTML = `<span class="rack__shadow" aria-hidden="true"></span><span class="rack__hanger">${hanger}</span><span class="rack__cloth"><img src="${p.cutout}" alt="" draggable="false" decoding="async"><span class="rack__hem" style="background-image:url('${p.cutout}')"></span></span>`;
