@@ -474,7 +474,6 @@ function __OriginkitBase_RadialCardCarousel(props: RadialCardCarouselProps) {
                             containerRef.current.releasePointerCapture(e.pointerId)
                     }
                 }}
-                // Vertical mouse wheel is reserved for the page; wheel never rotates the phones.
             >
                 <div
                     style={{
