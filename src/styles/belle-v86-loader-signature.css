@@ -1,0 +1,50 @@
+/* V86 signature: preserve original loader timings and skip mechanism;
+   change only the lettering to a fine, fluid pen-signature aesthetic. */
+html.js .intro__signature{
+  min-height:clamp(148px,18vw,262px);
+  overflow:visible!important
+}
+html.js .intro__signature-ink{
+  font-family:"Pinyon Script","Allura","Snell Roundhand",cursive!important;
+  font-weight:400!important;
+  font-style:normal!important;
+  font-size:clamp(67px,11.3vw,164px)!important;
+  line-height:1.33!important;
+  letter-spacing:-.026em!important;
+  color:#f8e7d3!important;
+  text-shadow:0 4px 26px rgba(230,185,126,.2);
+  transform:rotate(-3deg);
+  animation:v86Signing 1.76s cubic-bezier(.52,.025,.27,1) .14s both!important
+}
+html.js .intro__flourish{
+  width:min(91%,714px)!important;
+  bottom:-8%!important;
+  stroke:#e7c8a2!important;
+  stroke-width:1.9!important;
+  transform:translateX(-50%) rotate(-1.6deg)
+}
+html.js .intro__flourish-main{
+  animation:introFlourish .68s cubic-bezier(.28,.04,.12,1) 1.19s forwards!important
+}
+html.js .intro__flourish-tail{
+  stroke-width:1.1!important;
+  animation:introFlourishTail .42s ease-out 1.46s forwards!important
+}
+@keyframes v86Signing{
+  0%{clip-path:inset(-26% 103% -28% 0);opacity:.7}
+  16%{clip-path:inset(-26% 86% -28% 0);opacity:1}
+  39%{clip-path:inset(-26% 63% -28% 0)}
+  67%{clip-path:inset(-26% 35% -28% 0)}
+  100%{clip-path:inset(-26% -8% -28% -6%);opacity:1}
+}
+@media(max-width:600px){
+  html.js .intro__signature{min-height:148px}
+  html.js .intro__signature-ink{
+    font-size:clamp(53px,12.6vw,89px)!important;
+    letter-spacing:-.025em!important
+  }
+  html.js .intro__flourish{bottom:-6%!important;width:96%!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html.js .intro__signature-ink{animation:none!important;clip-path:none!important}
+}

@@ -43,6 +43,7 @@ import { initBelleInstagramDirectory } from './social/instagram-directory';
 import { initHowFilm } from './how-film';
 import { initStoresChampagne } from './motion/stores-champagne';
 import { initPerfGuard } from './core/perf-guard';
+import { initBelleOpeningV86 } from './hero/belle-opening-v86';
 import './styles/belle-v68-metal-palettes.css'; // V68: final color-only layer; keeps all interactions untouched.
 import './styles/belle-v72-couture-ticker.css'; // V72: seamless premium category rail, scoped to the film/passarela separator.
 import './styles/belle-v74-editorial-cleanup.css'; // V74: conversion-first mobile readability and restrained ornament.
@@ -53,11 +54,14 @@ import './styles/belle-v82-preview-calligraphy.css'; // V82: thinner italic prev
 import './styles/belle-v83-atelier-header.css'; // V83: central Belle logo, floating store selector, commerce inside couture menu.
 import './styles/belle-v84-header-breathing.css'; // V84: prevent search from overlapping the centered Belle logo.
 import './styles/belle-v85-optin-film.css'; // V85: runway leads, film locked until explicit entry; original scroll film on opt-in.
+import './styles/belle-v86-opening.css'; // V86: original banners and pink Cube Roll reveal.
+import './styles/belle-v86-loader-signature.css'; // V86: fine calligraphic loader handwriting.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
 mountMonograms();
 initIntro(); // Run before costly commerce and canvas modules.
+initBelleOpeningV86(); // V86 banner autoplay/swipe; 3D wordmark on-demand; no wheel hijack.
 initHeader();
 initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
