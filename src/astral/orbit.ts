@@ -1,7 +1,7 @@
-import { CITIES, REGIONS, spherePoint, journey } from './geography';
+import { CITIES, REGIONS, spherePoint, globeScreenX, journey } from './geography';
 import { docBox, scrollTop } from '../core/scroll-geometry';
 import { commerceApi } from '../commerce/api';
-import { clampGlobeZoom, wheelGlobeZoom, pinchGlobeZoom, easeGlobeZoom } from './gestures';
+import { clampGlobeZoom, wheelGlobeZoom, pinchGlobeZoom, easeGlobeZoom, globeAutoSpinFactor } from './gestures';
 /** Original lightweight decorative approximation; not React Bits Astral Shell. */
 export function initStoreOrbit(): void {
   const section = document.querySelector<HTMLElement>('#lojas');
@@ -181,11 +181,15 @@ export function initStoreOrbit(): void {
     if (!visible || document.hidden) return;
     const delta=Math.min(40,Math.max(1,now-last||16));
     if (!still() && last && !dragging && touches.size<2 && !navigation) {
-      // Rotação 360° contínua nos dois eixos; gestos adicionam inércia.
-      rotate(delta*.00024,delta*.000072);
+      // Keep the geographic north upright during idle rotation: horizontal spin only.
+      // Zooming suppresses the automatic movement to near-still for inspecting cities.
+      const closeZoom=Math.max(manualZoom,manualZoomTarget);
+      rotate(delta*.00024*globeAutoSpinFactor(closeZoom),0);
       if (Math.abs(velocityX)+Math.abs(velocityY)>.00003) {
-        rotate(velocityX*delta,velocityY*delta);
-        const damping=Math.exp(-delta/660);
+        // Touch/mouse drags remain precise; inertia fades quickly at close zoom.
+        const inertialScale=Math.max(.06,Math.sqrt(globeAutoSpinFactor(closeZoom)));
+        rotate(velocityX*delta*inertialScale,velocityY*delta*inertialScale);
+        const damping=Math.exp(-delta/(closeZoom>1.2?180:660));
         velocityX*=damping;velocityY*=damping;
       } else {velocityX=0;velocityY=0;}
     }
@@ -216,7 +220,7 @@ export function initStoreOrbit(): void {
     function project(p:{x:number;y:number;z:number},scale=radius) {
       const x=p.x*c+p.z*s,z=-p.x*s+p.z*c,y=p.y;
       const tx=2*(qy*z-qz*y),ty=2*(qz*x-qx*z),tz=2*(qx*y-qy*x);
-      return {x:w/2+(x+qw*tx+qy*tz-qz*ty)*scale,
+      return {x:globeScreenX(x+qw*tx+qy*tz-qz*ty,scale,w/2),
         y:w/2+(y+qw*ty+qz*tx-qx*tz)*scale,z:z+qw*tz+qx*ty-qy*tx};
     }
     // Superfície profunda, sem anel preto nem stroke rígido no contorno.
@@ -383,8 +387,9 @@ export function initStoreOrbit(): void {
     if(still()||event.type==='pointercancel'){
       velocityX=velocityY=0;
     }else if(dragTravel<6){
-      // Um toque breve dá impulso, sem impedir um clique nos marcadores.
-      velocityX=.004;velocityY=.0013;
+      // At inspection zoom, a tap should not spin the map away from the city.
+      if(manualZoomTarget<=1.05){velocityX=.004;velocityY=.0013;}
+      else {velocityX=velocityY=0;}
     }else if(performance.now()-lastDragTime>120){
       velocityX=velocityY=0;
     }
