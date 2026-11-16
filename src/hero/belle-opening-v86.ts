@@ -89,7 +89,7 @@ export function initBelleOpeningV86(): void {
   // Keep the next original art cached while avoiding duplicate first-frame downloads.
   const warmSecond=()=>{const image=new Image();image.src='/media/banner-v86-travertino.webp';};
   if('requestIdleCallback' in window)window.requestIdleCallback(warmSecond,{timeout:2200});
-  else window.setTimeout(warmSecond,1400);
+  else setTimeout(warmSecond,1400);
 
   // Original Originkit loop is mounted only while in view. Unmounting stops
   // Framer Motion's perpetual 3D animations offscreen and on hidden tabs.
