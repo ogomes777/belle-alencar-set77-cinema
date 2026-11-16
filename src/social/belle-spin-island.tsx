@@ -20,13 +20,12 @@ type Press = { index: number; front: number; x: number; y: number };
 /** The original Originkit implementation lives unchanged in components/originkit.
  * Only this small React island connects its existing wheel to Belle's six REAL mockups.
  * Side-card tap focuses through Originkit's own click-to-center; a front-card tap
- * opens its real Instagram. Drag, inertia, auto-step and wheel stay inside Originkit.
+ * opens its real Instagram. Native page wheel scroll stays normal; only drag spins.
  */
 function BelleSpinPhones() {
   const shell = React.useRef<HTMLDivElement>(null);
   const pressed = React.useRef<Press | null>(null);
   const [reduceMotion, setReduceMotion] = React.useState(false);
-  const [inView, setInView] = React.useState(false);
 
   React.useEffect(() => {
     const media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -37,18 +36,6 @@ function BelleSpinPhones() {
     media.addEventListener('change', update);
     update();
     return () => { observer.disconnect(); media.removeEventListener('change', update); };
-  }, []);
-
-  React.useEffect(() => {
-    if (!shell.current || typeof IntersectionObserver === 'undefined') {
-      setInView(true);
-      return;
-    }
-    const observer = new IntersectionObserver(entries => {
-      setInView(entries.some(entry => entry.isIntersecting));
-    }, { rootMargin: '180px 0px', threshold: 0 });
-    observer.observe(shell.current);
-    return () => observer.disconnect();
   }, []);
 
   function frontCardIndex(): number {
@@ -85,16 +72,16 @@ function BelleSpinPhones() {
         onPointerDownCapture={onPointerDownCapture}
         onPointerUpCapture={onPointerUpCapture}
         onPointerCancelCapture={() => { pressed.current = null; }}
-        aria-label="Carrossel circular com os seis Instagrams Belle. Arraste ou role para girar. Toque no mockup central para abrir a unidade."
+        aria-label="Carrossel com seis Instagrams Belle. Arraste na horizontal para girar. Role a página normalmente. Toque no mockup central para abrir a unidade."
       >
         <SpinCarousel
           items={BELLE_SPIN_PHONES}
           background="transparent"
-          scale={122}
+          scale={92}
           aspect={145}
           rounded={0}
-          speed={reduceMotion || !inView ? 0 : 22}
-          transition={{ type: 'tween', duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
+          speed={0}
+          transition={{ type: 'tween', duration: reduceMotion ? 0 : 0.4, ease: [0.33, 1, 0.68, 1] }}
           style={{
             width: '100%', height: '100%',
             minWidth: '100%', minHeight: '100%',
