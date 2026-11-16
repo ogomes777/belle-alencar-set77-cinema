@@ -953,7 +953,7 @@ export const conversionPairs: ReadonlyArray<readonly [string, string, string, st
     "Film: a visit to the Belle Alencar boutique",
     "Película: una visita a la boutique Belle Alencar",
     "Film: una visita alla boutique Belle Alencar"
-  ]
+  ],
   ["Campanha Belle Alencar","Belle Alencar campaign","Campaña Belle Alencar","Campagna Belle Alencar"],
   ["Campanhas Belle Alencar","Belle Alencar campaigns","Campañas Belle Alencar","Campagne Belle Alencar"],
   ["Navegar entre banners","Navigate banners","Navegar entre banners","Naviga tra i banner"],
