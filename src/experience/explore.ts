@@ -5,7 +5,7 @@
  * fullscreen. Contrato: docs/hero-pov/06_EXPLORACAO_360.md.
  */
 import * as THREE from 'three';
-import { Navigator, type P2 } from './nav';
+import { insideStore, Navigator, type P2 } from './nav';
 import { CURTAIN_ARCH, DESTINATIONS, DOOR, EYE, FITTING, ROOM, type DestinationId } from './scene/layout';
 
 const PITCH_LIMIT = THREE.MathUtils.degToRad(35);
@@ -34,12 +34,19 @@ export class Explorer {
 
   /** Entra na visita a partir da pose atual do filme. */
   enter(pos: THREE.Vector3, tgt: THREE.Vector3): void {
+    const inside = insideStore({ x: pos.x, z: pos.z });
     const start = this.nav.nearestFree({ x: pos.x, z: pos.z });
     this.x = start.x;
     this.z = start.z;
-    const dx = tgt.x - pos.x, dz = tgt.z - pos.z, dy = tgt.y - pos.y;
-    this.yaw = Math.atan2(dx, -dz);
-    this.pitch = THREE.MathUtils.clamp(Math.atan2(dy, Math.hypot(dx, dz)), -PITCH_LIMIT, PITCH_LIMIT);
+    if (inside) {
+      const dx = tgt.x - pos.x, dz = tgt.z - pos.z, dy = tgt.y - pos.y;
+      this.yaw = Math.atan2(dx, -dz);
+      this.pitch = THREE.MathUtils.clamp(Math.atan2(dy, Math.hypot(dx, dz)), -PITCH_LIMIT, PITCH_LIMIT);
+    } else {
+      // câmera ainda chegando pelo filme: olha para dentro do salão
+      this.yaw = 0;
+      this.pitch = 0;
+    }
     this.yawTarget = null;
     this.pitchTarget = null;
     this.route = [];

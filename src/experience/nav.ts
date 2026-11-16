@@ -3,7 +3,14 @@
  * rota por grafo de pontos de passagem. Puro (sem Three.js) para testes.
  * Contrato: docs/hero-pov/06_EXPLORACAO_360.md.
  */
-import { buildObstacles, DESTINATIONS, WAYPOINTS, WALK_RADIUS, type Box, type DestinationId } from './scene/layout';
+import { buildObstacles, DESTINATIONS, FITTING, ROOM, WAYPOINTS, WALK_RADIUS, type Box, type DestinationId } from './scene/layout';
+
+/** Dentro da planta navegável (salão ou provador)? */
+export function insideStore(p: P2): boolean {
+  const hall = Math.abs(p.x) < ROOM.x && p.z < ROOM.zFront && p.z > ROOM.zBack;
+  const fitting = p.x > FITTING.x0 && p.x < FITTING.x1 && p.z <= ROOM.zBack && p.z > FITTING.z1;
+  return hall || fitting;
+}
 
 export interface P2 { x: number; z: number }
 
@@ -101,8 +108,10 @@ export class Navigator {
 
   /** Ponto navegável mais próximo (usado ao entrar na visita a partir de qualquer pose do filme). */
   nearestFree(p: P2): P2 {
+    // Fora da loja (câmera ainda no shopping/vestíbulo): começa na entrada, por dentro.
+    if (!insideStore(p)) return { x: DESTINATIONS.entrada.x, z: DESTINATIONS.entrada.z };
     const r = this.resolve(p);
-    if (!this.blocked(r)) return r;
+    if (!this.blocked(r) && insideStore(r)) return r;
     let best = r, bestD = Infinity;
     for (const w of WAYPOINTS) {
       const d = Math.hypot(w.x - p.x, w.z - p.z);

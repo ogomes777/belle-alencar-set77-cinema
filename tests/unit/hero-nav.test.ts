@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Navigator } from '../../src/experience/nav';
+import { insideStore, Navigator } from '../../src/experience/nav';
 import { buildObstacles, DESTINATIONS, RAIL, ROOM, FITTING, WAYPOINTS, CURTAIN_ARCH, DOOR } from '../../src/experience/scene/layout';
 
 const nav = new Navigator();
@@ -63,5 +63,13 @@ describe('Hero POV · navegação com colisão', () => {
     expect(nav.blocked(free)).toBe(false);
     const obstacles = buildObstacles();
     expect(obstacles.length).toBeGreaterThan(10);
+  });
+  it('câmera ainda fora da loja (shopping/vestíbulo) começa a visita na entrada, por dentro', () => {
+    for (const p of [{ x: 0, z: 9.2 }, { x: 0.4, z: -0.5 }, { x: 9.3, z: -0.5 }, { x: -6, z: 3 }]) {
+      const s = nav.nearestFree(p);
+      expect(insideStore(s), JSON.stringify(p)).toBe(true);
+      expect(s).toEqual({ x: DESTINATIONS.entrada.x, z: DESTINATIONS.entrada.z });
+    }
+    expect(insideStore(nav.nearestFree({ x: 1.0, z: -6 }))).toBe(true);
   });
 });
