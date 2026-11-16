@@ -19,123 +19,35 @@ const cityUrl=city=>'https://www.instagram.com/'+city.profile+'/';
 const phoneSrc=city=>'/belle-v54/phones/'+city.id+'.webp';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 if(section){
- const stage=section.querySelector('[data-v54-stage]');
- const main=section.querySelector('[data-v54-tap]');
- const photo=section.querySelector('[data-v54-phone]');
- const announcer=section.querySelector('[data-v63-phone-announcement]');
- const left=section.querySelector('[data-v63-peek-left]');
- const right=section.querySelector('[data-v63-peek-right]');
- const leftImg=section.querySelector('[data-v63-peek-photo-left]');
- const rightImg=section.querySelector('[data-v63-peek-photo-right]');
- let current=-1,frame=0,near=false,gesture=null,preventTap=false;
- const preload=new Set();
- function prewarm(index){
-   for(const n of [(index+5)%6,index,(index+1)%6]){
-     const src=phoneSrc(cities[n]);
-     if(preload.has(src))continue;
-     preload.add(src);
-     const img=new Image();
-     img.decoding='async';
-     img.src=src;
-   }
- }
- function bindPhone(anchor,image,city,animate=false){
-   anchor.href=cityUrl(city);
-   anchor.setAttribute('aria-label','Abrir Instagram da Belle '+city.name);
-   if(image.src.endsWith(phoneSrc(city)))return;
-   image.src=phoneSrc(city);
-   if(image===photo){
-     image.alt='iPhone 17 Pro Max mostrando o Instagram da Belle '+city.name;
-   }
-   if(animate&&!reduced.matches && image.animate){
-     image.animate([
-       {opacity:.28,filter:'blur(8px)',transform:'translate3d(0,15px,-40px) scale(.93)'},
-       {opacity:1,filter:'blur(0)',transform:'translate3d(0,0,0) scale(1)'}
-     ],{duration:620,easing:'cubic-bezier(.18,.9,.22,1)'});
-   }
- }
- function paint(index){
-   index=clamp(index,0,5);
-   if(index===current)return;
-   const city=cities[index];
-   prewarm(index);
-   bindPhone(main,photo,city,current!==-1);
-   bindPhone(left,leftImg,cities[(index+5)%6],current!==-1);
-   bindPhone(right,rightImg,cities[(index+1)%6],current!==-1);
-   section.dataset.v63City=city.id;
-   stage.style.setProperty('--v63-chapter',String(index));
-   announcer.textContent=city.name+', '+(index+1)+' de seis lojas. Clique no mockup para abrir o Instagram.';
-   current=index;
- }
- function moveTo(index){
-   index=(index+6)%6;
-   const rect=section.getBoundingClientRect();
-   const abs=window.scrollY+rect.top;
-   const travel=Math.max(1,section.offsetHeight-window.innerHeight);
-   const y=abs+(index+.48)/6*travel;
-   window.scrollTo({top:y,behavior:reduced.matches?'instant':'smooth'});
- }
- function tick(){
-   frame=0;
-   if(!near||document.hidden)return;
-   const rect=section.getBoundingClientRect();
-   const travel=Math.max(1,section.offsetHeight-innerHeight);
-   const p=clamp(-rect.top/travel,0,1);
-   const idx=Math.min(5,Math.floor(p*6));
-   paint(idx);
-   section.style.setProperty('--v63-progress',String(p));
-   // Smooth optical assembly: depth, proximity and opacity, never shattered pieces.
-   const r=reduced.matches?1:clamp(p*10+.48,0,1);
-   const ease=1-Math.pow(1-r,3);
-   section.style.setProperty('--v63-reveal',String(ease));
-   section.style.setProperty('--v63-entrance-y',((1-ease)*69).toFixed(1)+'px');
-   section.style.setProperty('--v63-entrance-z',(-(1-ease)*110).toFixed(1)+'px');
-   section.style.setProperty('--v63-entrance-scale',(0.86+ease*.14).toFixed(3));
- }
- const schedule=()=>{if(!frame)frame=requestAnimationFrame(tick)};
- const observer=typeof IntersectionObserver!=='undefined'
-   ?new IntersectionObserver(entries=>{
-     near=entries.some(x=>x.isIntersecting);
-     if(near){paint(Math.max(0,current));schedule();}
-   },{rootMargin:'600px 0px'}):null;
- if(observer)observer.observe(section);
- else{near=true;paint(0);}
- stage.addEventListener('pointermove',event=>{
-   if(!near)return;
-   const r=stage.getBoundingClientRect();
-   const x=clamp((event.clientX-r.left)/Math.max(r.width,1)*2-1,-1,1);
-   const y=clamp((event.clientY-r.top)/Math.max(r.height,1)*2-1,-1,1);
-   stage.style.setProperty('--v63-pointer-x',x.toFixed(3));
-   stage.style.setProperty('--v63-pointer-y',y.toFixed(3));
-   section.style.setProperty('--v63-shift-x',(x*13).toFixed(1)+'px');
-   section.style.setProperty('--v63-shift-y',(y*9).toFixed(1)+'px');
-   section.style.setProperty('--v63-pitch',(-y*7.5).toFixed(2)+'deg');
-   section.style.setProperty('--v63-yaw',(x*9).toFixed(2)+'deg');
- },{passive:true});
- stage.addEventListener('pointerleave',()=>{
-   stage.style.setProperty('--v63-pointer-x','0');
-   stage.style.setProperty('--v63-pointer-y','0');
-   for(const [key,value] of [['--v63-shift-x','0px'],['--v63-shift-y','0px'],
-     ['--v63-pitch','0deg'],['--v63-yaw','0deg']])section.style.setProperty(key,value);
- });
- stage.addEventListener('pointerdown',event=>{
-   if(event.pointerType==='touch')gesture={x:event.clientX,y:event.clientY};
- },{passive:true});
- stage.addEventListener('pointerup',event=>{
-   if(event.pointerType!=='touch'||!gesture)return;
-   const dx=event.clientX-gesture.x,dy=event.clientY-gesture.y;
-   gesture=null;
-   if(Math.abs(dx)>54 && Math.abs(dx)>Math.abs(dy)*1.4){
-     preventTap=true;
-     moveTo(current+(dx<0?1:-1));
-   }
- },{passive:true});
- for(const link of [main,left,right])link.addEventListener('click',event=>{
-   if(preventTap){event.preventDefault();preventTap=false}
- });
- window.addEventListener('scroll',schedule,{passive:true});
- window.addEventListener('resize',schedule,{passive:true});
- paint(0);schedule();
+  const mountEl=section.querySelector('[data-v79-spin-mount]');
+  let mounting=false, mounted=false;
+  async function mountSpin(){
+    if(!mountEl||mounting||mounted||!mountEl.isConnected)return;
+    mounting=true;
+    try{
+      // Lazy React island: loads the exact Originkit source only near this chapter.
+      const { mountBelleSpinPhones }=await import('./belle-spin-island');
+      if(!mountEl.isConnected)return;
+      mountBelleSpinPhones(mountEl);
+      mounted=true;
+      section.classList.add('v79-ready');
+    }catch(error){
+      // A real original Belle iPhone stays visible if the carousel fails.
+      console.warn('BELLE SPIN: Originkit carousel unavailable; keeping original mockup.',error);
+      section.dataset.spinStatus='fallback';
+    }finally{
+      mounting=false;
+    }
+  }
+  if(typeof IntersectionObserver!=='undefined'){
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){
+        observer.disconnect();
+        void mountSpin();
+      }
+    },{rootMargin:'750px 0px'});
+    observer.observe(section);
+  }else void mountSpin();
 }
 if(previews){
  const title=previews.querySelector('[data-v63-previews-title]');
