@@ -19,7 +19,7 @@ export function mountBelleOpeningCube(target: HTMLElement): () => void {
       font={{
         fontFamily:'"DM Sans Variable", "DM Sans", sans-serif',
         fontWeight:100,
-        fontSize:'clamp(1.72rem, 6.0vw, 7.35rem)',
+        fontSize:'clamp(2rem, 8.2vw, 8.25rem)',
         letterSpacing:'-.042em',
         lineHeight:1.28,
         textAlign:'center',
