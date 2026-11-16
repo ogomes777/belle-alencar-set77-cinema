@@ -38,12 +38,12 @@ function toTexture(c: HTMLCanvasElement, repeat: [number, number] = [1, 1], colo
 export function travertine(size = 1024, seed = 3): THREE.CanvasTexture {
   const [c, x] = canvas(size);
   const r = rng(seed);
-  x.fillStyle = '#e4d9c6';
+  x.fillStyle = '#cfbaa5';
   x.fillRect(0, 0, size, size);
   for (let i = 0; i < 90; i++) {
     const y = r() * size;
     const hgt = 2 + r() * 22;
-    const l = 70 + r() * 18;
+    const l = 64 + r() * 16;
     x.fillStyle = `hsla(${34 + r() * 8}, ${18 + r() * 14}%, ${l}%, ${0.08 + r() * 0.18})`;
     x.beginPath();
     x.moveTo(0, y);
@@ -105,7 +105,7 @@ export function polishedStone(size = 1024, seed = 9): THREE.CanvasTexture {
 export function herringbone(size = 1024, seed = 21): THREE.CanvasTexture {
   const [c, x] = canvas(size);
   const r = rng(seed);
-  x.fillStyle = '#b89470';
+  x.fillStyle = '#9c7656';
   x.fillRect(0, 0, size, size);
   const pw = size / 16; // largura da tábua
   const pl = pw * 4; // comprimento
@@ -119,7 +119,7 @@ export function herringbone(size = 1024, seed = 21): THREE.CanvasTexture {
         x.translate(ox + k * pw * 0.70710678 * 2, oy + k * pw * 0.70710678 * 2);
         x.rotate(k === 0 ? Math.PI / 4 : -Math.PI / 4);
         const hue = 28 + r() * 8;
-        const light = 60 + r() * 9;
+        const light = 46 + r() * 10;
         x.fillStyle = `hsl(${hue}, ${20 + r() * 8}%, ${light}%)`;
         x.fillRect(0, 0, pl, pw);
         for (let g = 0; g < 7; g++) {
@@ -143,7 +143,7 @@ export function herringbone(size = 1024, seed = 21): THREE.CanvasTexture {
 }
 
 /** Gesso marfim com textura sutil. */
-export function plaster(size = 512, seed = 5, base = '#efe7da'): THREE.CanvasTexture {
+export function plaster(size = 512, seed = 5, base = '#dfd2c3'): THREE.CanvasTexture {
   const [c, x] = canvas(size);
   const r = rng(seed);
   x.fillStyle = base;
