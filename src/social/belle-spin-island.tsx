@@ -26,6 +26,7 @@ function BelleSpinPhones() {
   const shell = React.useRef<HTMLDivElement>(null);
   const pressed = React.useRef<Press | null>(null);
   const [reduceMotion, setReduceMotion] = React.useState(false);
+  const [inView, setInView] = React.useState(false);
 
   React.useEffect(() => {
     const media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -36,6 +37,18 @@ function BelleSpinPhones() {
     media.addEventListener('change', update);
     update();
     return () => { observer.disconnect(); media.removeEventListener('change', update); };
+  }, []);
+
+  React.useEffect(() => {
+    if (!shell.current || typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    const observer = new IntersectionObserver(entries => {
+      setInView(entries.some(entry => entry.isIntersecting));
+    }, { rootMargin: '180px 0px', threshold: 0 });
+    observer.observe(shell.current);
+    return () => observer.disconnect();
   }, []);
 
   function frontCardIndex(): number {
@@ -80,12 +93,13 @@ function BelleSpinPhones() {
           scale={83}
           aspect={145}
           rounded={0}
-          speed={reduceMotion ? 0 : 22}
+          speed={reduceMotion || !inView ? 0 : 22}
           transition={{ type: 'tween', duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
           style={{
             width: '100%', height: '100%',
             minWidth: '100%', minHeight: '100%',
             backgroundColor: 'transparent',
+            touchAction: 'pan-y',
           }}
         />
       </div>
