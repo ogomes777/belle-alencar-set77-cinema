@@ -47,6 +47,7 @@ import './styles/belle-v68-metal-palettes.css'; // V68: final color-only layer; 
 import './styles/belle-v72-couture-ticker.css'; // V72: seamless premium category rail, scoped to the film/passarela separator.
 import './styles/belle-v74-editorial-cleanup.css'; // V74: conversion-first mobile readability and restrained ornament.
 import './styles/belle-v75-editorial-ribbon.css'; // V75: couture lettering and fine metallic ribbon borders only.
+import './styles/belle-v79-originkit-spin.css'; // V79: borderless transparent original Originkit Spin for Belle phones only.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
