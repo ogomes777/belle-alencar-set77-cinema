@@ -30,7 +30,7 @@ export function initBelleOpeningV86(): void {
     });
   }
   function pause(){if(interval)window.clearInterval(interval);interval=0;}
-  function shouldRun(){return visible&&!document.hidden&&!hovered&&!focused&&!reduce.matches;}
+  function shouldRun(){return visible&&!document.hidden&&!hovered&&!focused&&!reduce.matches&&document.documentElement.classList.contains('intro-done');}
   function play(){
     pause();
     if(shouldRun())interval=window.setInterval(()=>sync(current+1),scheduleMs);
@@ -76,7 +76,20 @@ export function initBelleOpeningV86(): void {
       play();
     },{threshold:.1}).observe(frame);
   }
+  // Autoplay begins only AFTER the one-shot Belle signature loader clears.
+  // Otherwise the first banner would already be halfway through its dwell.
+  const html=document.documentElement;
+  if(!html.classList.contains('intro-done')){
+    const observer=new MutationObserver(()=>{
+      if(html.classList.contains('intro-done')){observer.disconnect();play();}
+    });
+    observer.observe(html,{attributes:true,attributeFilter:['class']});
+  }
   play();
+  // Keep the next original art cached while avoiding duplicate first-frame downloads.
+  const warmSecond=()=>{const image=new Image();image.src='/media/banner-v86-travertino.webp';};
+  if('requestIdleCallback' in window)window.requestIdleCallback(warmSecond,{timeout:2200});
+  else window.setTimeout(warmSecond,1400);
 
   // Original Originkit loop is mounted only while in view. Unmounting stops
   // Framer Motion's perpetual 3D animations offscreen and on hidden tabs.
