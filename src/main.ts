@@ -52,6 +52,7 @@ import './styles/belle-v81-phone-flow-preview-title.css'; // V81: immediate nati
 import './styles/belle-v82-preview-calligraphy.css'; // V82: thinner italic preview headline, no clipped S; no video changes.
 import './styles/belle-v83-atelier-header.css'; // V83: central Belle logo, floating store selector, commerce inside couture menu.
 import './styles/belle-v84-header-breathing.css'; // V84: prevent search from overlapping the centered Belle logo.
+import './styles/belle-v85-optin-film.css'; // V85: runway leads, film locked until explicit entry; original scroll film on opt-in.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
