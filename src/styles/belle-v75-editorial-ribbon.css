@@ -1,6 +1,6 @@
 /* BELLE V75 | SET77 LABS
  * Editorial ribbon only. Same words, same two seamless cycles, same timing.
- * One luxury type treatment and restrained 1px metal hairlines.
+ * Fine fashion-film typography with restrained 1px metal hairlines.
  */
 .manifesto--ticker .band.band--couture{
   --v75-type:#594024;
@@ -27,16 +27,16 @@
   opacity:.5!important;
 }
 .manifesto--ticker .band--couture .band__category{
-  font-family:"Bodoni Moda","Playfair Display",Georgia,serif!important;
-  font-size:clamp(1.25rem,1.03rem + .70vw,1.72rem)!important;
-  font-weight:650!important;
+  font-family:"Italiana","Playfair Display",Georgia,serif!important;
+  font-size:clamp(1.45rem,1.22rem + .68vw,1.9rem)!important;
+  font-weight:400!important;
   font-style:normal!important;
   font-optical-sizing:auto;
   font-kerning:normal;
   font-feature-settings:"kern" 1,"liga" 1;
   font-synthesis:none;
-  line-height:1.08!important;
-  letter-spacing:.069em!important;
+  line-height:1.1!important;
+  letter-spacing:.04em!important;
   text-transform:uppercase;
   color:var(--v75-type)!important;
   text-shadow:none!important;
@@ -65,9 +65,9 @@ html[data-belle-theme="rose"] .manifesto--ticker .band.band--couture{
 @media(max-width:680px){
   .manifesto--ticker .band.band--couture{height:61px}
   .manifesto--ticker .band--couture .band__category{
-    font-size:clamp(1.15rem,3.85vw,1.4rem)!important;
-    font-weight:640!important;
-    letter-spacing:.055em!important;
+    font-size:clamp(1.29rem,4.45vw,1.52rem)!important;
+    font-weight:400!important;
+    letter-spacing:.032em!important;
     padding-left:23px!important;
     padding-right:23px!important;
   }
