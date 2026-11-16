@@ -1,0 +1,95 @@
+/* BELLE V84 · SET77 LABS
+ * Targeted fix: search must NEVER sit over the Belle logo/wordmark.
+ * Desktop remains in V83 order (brand center, search + settings + menu right).
+ * Mobile uses balanced left controls, right menu, true center brand.
+ * No commerce, animation, palette or panel logic touched.
+ */
+
+/* The former 680px capsule had only about 220px available right of center,
+   allowing the search button to overlap the full Belle signature. */
+@media (min-width:861px) {
+  html body #siteHeader.site-header,
+  html body #siteHeader.site-header.is-compact {
+    width:min(860px,calc(100% - 44px))!important;
+    max-width:calc(100% - 28px)!important;
+  }
+  html body #siteHeader.site-header > .brand{
+    max-width:calc(100% - 280px)!important;
+  }
+}
+
+/* Use the empty left side of the header on smaller viewports. Keep the
+   two left buttons in the SAME header, including all their original IDs
+   and handlers. This is layout-only, not re-creation of controls. */
+@media(max-width:860px){
+  html body #siteHeader.site-header,
+  html body #siteHeader.site-header.is-compact{
+    width:calc(100% - 18px)!important;
+    max-width:680px!important;
+  }
+  html body #siteHeader.site-header > .site-actions{
+    position:static!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    margin-left:auto!important;
+    width:auto!important;
+  }
+  html body #siteHeader.site-header .site-actions > #searchButton,
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton{
+    position:absolute!important;
+    top:50%!important;
+    margin:0!important;
+    transform:translate3d(0,-50%,0)!important;
+    z-index:3;
+  }
+  html body #siteHeader.site-header .site-actions > #searchButton{
+    left:clamp(12px,2vw,20px)!important;
+  }
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton{
+    left:calc(clamp(12px,2vw,20px) + 49px)!important;
+  }
+  html body #siteHeader.site-header > .brand{
+    max-width:calc(100% - 230px)!important;
+  }
+  html body #siteHeader.site-header .site-actions > #belleMenuButton{
+    position:relative!important;
+    margin:0!important;
+    flex:none!important;
+  }
+}
+
+@media(max-width:500px){
+  html body #siteHeader.site-header > .brand{
+    max-width:calc(100% - 216px)!important;
+  }
+  html body #siteHeader.site-header .site-actions > #searchButton,
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton{
+    min-width:41px!important;
+    width:41px!important;
+    flex:0 0 41px!important;
+  }
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton{
+    left:calc(clamp(9px,2vw,15px) + 45px)!important;
+  }
+  html body #siteHeader.site-header .site-actions > #searchButton{
+    left:clamp(9px,2vw,15px)!important;
+  }
+}
+
+@media(max-width:375px){
+  /* Wordmark already collapses to the Belle monogram in V83 at this width;
+     preserve that intentional accessible narrow-screen behavior. */
+  html body #siteHeader.site-header > .brand{
+    max-width:calc(100% - 190px)!important;
+  }
+}
+
+/* Correct the V47 hover/focus lift on absolutely positioned mobile controls
+   without losing their alignment or click targets. */
+@media(max-width:860px) and (hover:hover){
+  html body #siteHeader.site-header .site-actions > #searchButton:hover,
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton:hover{
+    transform:translate3d(0,-50%,0)!important;
+  }
+}
