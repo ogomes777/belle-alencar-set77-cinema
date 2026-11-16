@@ -1,0 +1,184 @@
+/* BELLE V79 | SET77 LABS
+ * Existing Belle phones chapter only. Original Originkit carousel engine stays
+ * untouched. No demo backgrounds, rings, floors, glass cards or fake mockups.
+ */
+#belle-cidades.v79-spin-phones{
+  --v79-ink:#735e49;
+  --v79-ground:#fdfbf7;
+  --v79-shine:rgba(226,192,136,.12);
+  height:600svh;
+  min-height:600svh;
+  background:radial-gradient(ellipse 75% 68% at 50% 48%,#fffefa 4%,var(--v79-ground) 78%)!important;
+  color:var(--v79-ink)!important;
+  isolation:isolate;
+  overflow:clip;
+}
+html[data-belle-theme="light"] #belle-cidades.v79-spin-phones,
+html:not([data-belle-theme]) #belle-cidades.v79-spin-phones{
+  --v79-ink:#735e49;
+  --v79-ground:#fdfbf7;
+  --v79-shine:rgba(226,192,136,.12);
+  background:radial-gradient(ellipse 75% 68% at 50% 48%,#fffefa 4%,var(--v79-ground) 78%)!important;
+}
+html[data-belle-theme="dark"] #belle-cidades.v79-spin-phones{
+  --v79-ink:#f0dcc8;
+  --v79-ground:#191719;
+  --v79-shine:rgba(238,189,125,.08);
+  background:radial-gradient(ellipse 69% 62% at 50% 48%,#282125 0%,#1b181b 68%,#151416 100%)!important;
+}
+html[data-belle-theme="rose"] #belle-cidades.v79-spin-phones{
+  --v79-ink:#915574;
+  --v79-ground:#fdf4fa;
+  --v79-shine:rgba(230,146,192,.10);
+  background:radial-gradient(ellipse 73% 66% at 50% 47%,#fff9fd 0%,#fdf4fa 70%,#fbecf5 100%)!important;
+}
+#belle-cidades.v79-spin-phones .v54-sticky{
+  height:100svh;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(62px,8vh,89px) 0 clamp(28px,4vh,44px);
+  overflow:hidden;
+}
+#belle-cidades.v79-spin-phones .v79-spin-stage{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:min(100vw,1540px);
+  height:min(81svh,790px);
+  max-height:none;
+  min-height:0;
+  margin-inline:auto;
+  overflow:hidden;
+  perspective:none;
+  transform:none;
+  transform-style:flat;
+  touch-action:pan-y;
+}
+#belle-cidades .v79-spin-mount,
+#belle-cidades .v79-spin-content,
+#belle-cidades .v79-spin-live{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  min-width:0;
+  min-height:0;
+  background:transparent!important;
+}
+#belle-cidades .v79-spin-content{isolation:isolate;overflow:hidden}
+#belle-cidades .v79-spin-live{z-index:2;touch-action:pan-y}
+#belle-cidades .v79-spin-live > div{
+  min-width:0!important;
+  min-height:0!important;
+  width:100%!important;
+  height:100%!important;
+  touch-action:pan-y!important;
+  background:transparent!important;
+}
+/* Originkit creates image cards with a dark color behind each picture.
+   Strip that authored demo fill so the REAL iPhones keep their transparency. */
+#belle-cidades .v79-spin-live img{
+  background:transparent!important;
+  object-fit:contain!important;
+  border-radius:0!important;
+  -webkit-user-drag:none;
+  user-select:none;
+}
+#belle-cidades .v79-spin-fallback{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  display:grid;
+  place-items:center;
+  pointer-events:none;
+  visibility:visible;
+  opacity:.9;
+  transition:opacity .32s ease,visibility .32s ease;
+}
+#belle-cidades .v79-spin-fallback img{
+  display:block;
+  width:auto;
+  height:min(64svh,580px);
+  max-width:min(62vw,470px);
+  object-fit:contain;
+  filter:drop-shadow(0 22px 22px rgba(45,28,18,.13));
+}
+#belle-cidades.v79-ready .v79-spin-fallback{
+  opacity:0;
+  visibility:hidden;
+}
+#belle-cidades .v79-spin-guide{
+  position:absolute;
+  z-index:4;
+  left:12px;right:12px;
+  bottom:clamp(7px,2vh,20px);
+  width:auto;
+  margin:0;
+  text-align:center;
+  color:var(--v79-ink)!important;
+  font:600 clamp(.69rem,.79vw,.85rem)/1.45 "Archivo",Arial,sans-serif;
+  text-transform:none;
+  letter-spacing:.035em;
+  opacity:.85;
+  pointer-events:none;
+  text-wrap:balance;
+}
+#belle-cidades .v79-spin-screenreader-links{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+}
+#belle-cidades .v79-spin-screenreader-links a:focus-visible{
+  position:fixed!important;
+  z-index:100;
+  top:85px;
+  left:16px;
+  clip:auto!important;
+  display:inline-block;
+  background:#fff;
+  color:#261d1c;
+  border:2px solid #b5894d;
+  padding:12px 15px;
+}
+#belle-cidades .v79-spin-stage noscript{
+  position:absolute;z-index:6;inset:auto 8% 14%;
+  color:var(--v79-ink);text-align:center;
+}
+#belle-cidades .v79-spin-stage noscript a{display:inline-block;padding:9px;color:inherit}
+@media(max-width:750px){
+  #belle-cidades.v79-spin-phones{
+    height:600svh;min-height:600svh;
+  }
+  #belle-cidades.v79-spin-phones .v54-sticky{
+    min-height:0;
+    padding:clamp(63px,9svh,83px) 0 clamp(32px,5svh,48px);
+  }
+  #belle-cidades.v79-spin-phones .v79-spin-stage{
+    width:100%;
+    height:min(79svh,670px);
+  }
+  #belle-cidades .v79-spin-guide{
+    bottom:clamp(4px,1.5vh,16px);
+    left:14px;right:14px;
+    font-size:clamp(.7rem,2.55vw,.82rem);
+    line-height:1.4;
+    letter-spacing:0;
+    opacity:.94;
+  }
+  #belle-cidades .v79-spin-fallback img{
+    height:min(57svh,475px);
+    max-width:72vw;
+  }
+}
+@media(max-height:570px){
+  #belle-cidades.v79-spin-phones .v79-spin-stage{height:78svh}
+  #belle-cidades .v79-spin-guide{font-size:.65rem;bottom:3px}
+}
+@media(prefers-reduced-motion:reduce){
+  #belle-cidades .v79-spin-fallback{transition:none}
+}
