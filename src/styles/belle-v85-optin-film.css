@@ -1,0 +1,258 @@
+/* BELLE V85 · SET77 LABS | passarela first, opt-in boutique film second.
+   One still storefront when locked; only explicit entry expands the original
+   seven chapters. No altered footage, camera choreography, cards or shaders. */
+
+html:not(.poster-mode) #filme.film:not(.is-unlocked){
+  height:100svh!important;
+  min-height:100svh!important;
+  max-height:100svh!important;
+  overflow:hidden!important;
+}
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__stage{
+  position:relative!important;
+  top:auto!important;
+  height:100svh!important;
+  min-height:100svh!important;
+  overflow:hidden!important;
+}
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__chapters,
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .chapter-rail,
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__canvas,
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__loading,
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__label{
+  display:none!important;
+}
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__posters{
+  opacity:1!important;
+  visibility:visible!important;
+}
+html:not(.poster-mode) #filme.film:not(.is-unlocked) .film__poster.is-active{
+  opacity:1!important;
+}
+/* A new DOM anchor identifies the actual first page without colliding with
+   the original movie's first in-film chapter. */
+.v85-home-anchor{display:block;position:absolute;top:0;width:1px;height:1px;pointer-events:none}
+
+/* Storefront invitation overlays the preserved first frame. */
+#filme .film__gateway{
+  --gate-panel:rgba(255,249,240,.88);
+  --gate-ink:#2d211b;
+  --gate-soft:#6c5847;
+  --gate-line:rgba(167,116,55,.43);
+  --gate-metal:#a87936;
+  --gate-button:#2b241e;
+  --gate-button-text:#fff6e6;
+  position:absolute;
+  z-index:28;
+  inset:0;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  padding:calc(var(--header-h,64px) + 22px) clamp(18px,4.2vw,80px) clamp(28px,5svh,70px);
+  box-sizing:border-box;
+  pointer-events:none;
+  background:linear-gradient(90deg,rgba(21,17,13,.27),rgba(21,17,13,.07) 47%,transparent 75%);
+}
+#filme .film__gateway-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  width:min(395px,100%);
+  max-height:100%;
+  padding:clamp(25px,2.8vw,39px);
+  box-sizing:border-box;
+  overflow:auto;
+  color:var(--gate-ink);
+  border:1px solid var(--gate-line);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.32),transparent 67%),var(--gate-panel);
+  box-shadow:0 27px 85px -35px rgba(23,17,11,.34),inset 0 1px 0 rgba(255,255,255,.55);
+  -webkit-backdrop-filter:blur(16px) saturate(1.12);
+  backdrop-filter:blur(16px) saturate(1.12);
+  pointer-events:auto;
+}
+#filme .film__gateway-seal{
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:73px;
+  height:86px;
+  margin:0 0 14px;
+  color:var(--gate-metal);
+}
+#filme .film__gateway-lock-arch{
+  position:absolute;
+  z-index:1;
+  top:3px;
+  left:19px;
+  right:19px;
+  height:37px;
+  border:2px solid currentColor;
+  border-bottom:0;
+  border-radius:36px 36px 0 0;
+}
+#filme .film__gateway-monogram{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:68px;
+  height:62px;
+  margin-top:19px;
+  color:inherit;
+  background:color-mix(in srgb,var(--gate-panel) 72%,transparent);
+  border:1px solid currentColor;
+  border-radius:12px;
+  box-shadow:0 7px 15px -10px rgba(0,0,0,.22);
+}
+#filme .film__gateway-monogram .mono{
+  width:40px;
+  height:45px;
+  max-width:100%;
+}
+#filme .film__gateway-kicker{
+  display:block;
+  margin:0 0 13px;
+  font:700 clamp(.62rem,.71vw,.72rem)/1.4 "Archivo",Arial,sans-serif;
+  letter-spacing:.17em;
+  color:var(--gate-metal);
+}
+#filme .film__gateway-card h2{
+  font:400 clamp(2.6rem,3.8vw,4.7rem)/.98 "Playfair Display",Georgia,serif;
+  letter-spacing:-.058em;
+  max-width:11ch;
+  margin:0;
+  text-wrap:balance;
+}
+#filme .film__gateway-card h2 em{font-weight:400;letter-spacing:-.045em}
+#filme .film__gateway-card p{
+  color:var(--gate-soft);
+  font:400 clamp(.89rem,.94vw,1rem)/1.54 "Archivo",Arial,sans-serif;
+  margin:19px 0 22px;
+  max-width:32ch;
+}
+#filme .film__gateway-enter{
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:17px;
+  min-height:52px;
+  width:100%;
+  padding:0 18px;
+  border:1px solid var(--gate-button);
+  border-radius:11px;
+  background:var(--gate-button);
+  color:var(--gate-button-text);
+  font:650 .86rem/1.2 "Archivo",Arial,sans-serif;
+  letter-spacing:.018em;
+  cursor:pointer;
+  transition:transform .18s ease,background-color .18s ease;
+}
+#filme .film__gateway-enter span{font-size:1.45rem;font-weight:400;line-height:1}
+#filme .film__gateway-enter:hover{transform:translateY(-2px)}
+#filme .film__gateway-enter:focus-visible,
+#filme .film__gateway-exit:focus-visible{
+  outline:2px solid var(--gate-metal);
+  outline-offset:4px;
+}
+#filme .film__gateway-skip{
+  display:block;
+  padding-top:15px;
+  font:500 .73rem/1.45 "Archivo",Arial,sans-serif;
+  color:var(--gate-soft);
+}
+#filme.film.is-unlocked .film__gateway{display:none!important}
+html.poster-mode #filme .film__gateway{display:none!important}
+
+/* Exit remains visible while original sticky scroll-film is active.
+   It never adds a new scroll capture; one click returns to the short storefront. */
+#filme .film__gateway-exit{
+  position:absolute;
+  z-index:30;
+  right:clamp(14px,2.8vw,42px);
+  top:calc(var(--header-h,64px) + 14px);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  min-height:46px;
+  padding:0 17px;
+  border:1px solid rgba(255,231,187,.7);
+  border-radius:999px;
+  background:rgba(35,27,24,.84);
+  color:#fff2df;
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  box-shadow:0 12px 28px -15px rgba(0,0,0,.5);
+  font:600 .75rem/1 "Archivo",Arial,sans-serif;
+  letter-spacing:.035em;
+  cursor:pointer;
+}
+#filme .film__gateway-exit span{font:400 1.3rem/1 Arial,sans-serif}
+#filme:not(.is-unlocked) .film__gateway-exit,
+#filme .film__gateway-exit[hidden],
+html.poster-mode #filme .film__gateway-exit{display:none!important}
+
+/* Put runway copy safely below the persistent capsule when it becomes hero.
+   Leave the runway's actual look motion, sizing and 3-piece rail untouched. */
+#passarela.runway .runway__intro{
+  top:clamp(90px,10svh,132px)!important;
+}
+html[data-belle-theme="dark"] #filme .film__gateway{
+  --gate-panel:rgba(25,21,22,.9);
+  --gate-ink:#fff3de;
+  --gate-soft:#e2cdb9;
+  --gate-line:rgba(230,180,104,.55);
+  --gate-metal:#f2cd8d;
+  --gate-button:#f4dfbc;
+  --gate-button-text:#251d1a;
+}
+html[data-belle-theme="rose"] #filme .film__gateway{
+  --gate-panel:rgba(255,236,249,.91);
+  --gate-ink:#572b45;
+  --gate-soft:#8f5573;
+  --gate-line:rgba(189,88,151,.44);
+  --gate-metal:#b24a87;
+  --gate-button:#8e396b;
+  --gate-button-text:#fff3fc;
+}
+@media(max-width:899px){
+  #filme .film__gateway{
+    align-items:center;
+    justify-content:center;
+    padding:calc(var(--header-h,64px) + 16px) 16px 20px;
+    background:linear-gradient(180deg,rgba(0,0,0,.035),rgba(17,14,12,.11) 85%);
+  }
+  #filme .film__gateway-card{
+    width:min(400px,100%);
+    max-height:calc(100svh - var(--header-h,64px) - 38px);
+    padding:clamp(20px,4.5vw,30px);
+  }
+  #filme .film__gateway-card h2{font-size:clamp(2.25rem,8vw,3.6rem)}
+  #filme .film__gateway-seal{width:59px;height:68px;margin-bottom:7px}
+  #filme .film__gateway-lock-arch{height:29px;left:14px;right:14px}
+  #filme .film__gateway-monogram{width:56px;height:49px;margin-top:13px}
+  #filme .film__gateway-monogram .mono{width:32px;height:37px}
+  #filme .film__gateway-exit{
+    top:calc(var(--header-h,64px) + 9px);
+    right:12px;
+    min-height:44px;
+    padding-inline:14px;
+  }
+  #passarela.runway .runway__intro{top:clamp(90px,12svh,118px)!important}
+}
+@media(max-height:660px){
+  #filme .film__gateway-card{padding:17px 22px;max-height:calc(100svh - 70px)}
+  #filme .film__gateway-seal{height:57px;margin-bottom:3px}
+  #filme .film__gateway-lock-arch{height:22px}
+  #filme .film__gateway-monogram{height:40px;width:52px;margin-top:10px}
+  #filme .film__gateway-monogram .mono{height:30px;width:29px}
+  #filme .film__gateway-card h2{font-size:clamp(1.9rem,5vh,3rem)}
+  #filme .film__gateway-card p{margin:11px 0 14px}
+  #filme .film__gateway-enter{min-height:46px}
+  #filme .film__gateway-skip{padding-top:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  #filme .film__gateway-enter{transition:none!important}
+}
