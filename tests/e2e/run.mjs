@@ -249,6 +249,8 @@ for(const [label,width,height] of [['mobile',390,844],['desktop',1440,900]]){
   check('provador '+label+': 5 vestidos e 5 cores do catálogo',state.options===5&&state.tones===5);
   check('manifesto '+label+': sem categorias estáticas, faixa preservada',!state.line&&state.band);
   check('transição '+label+': luz entre o filme e o manifesto',state.filmFade.includes('gradient'));
+  { const b = page.locator('#filmEnter'); if (await b.count() && await b.isVisible().catch(() => false)) { await b.click(); await page.waitForFunction(() => document.querySelector('#filme')?.classList.contains('is-unlocked')); } } // V85+: filme opt-in
+  await page.locator('#provador').scrollIntoViewIfNeeded().catch(() => undefined);
   await page.locator('#fittingChoices button').nth(1).click({timeout:12000});
   check('provador '+label+': vestido vinho muda o recorte real',
     await page.locator('#fittingStatic').getAttribute('data-product-id')==='belle-demo-vestidos-02');
