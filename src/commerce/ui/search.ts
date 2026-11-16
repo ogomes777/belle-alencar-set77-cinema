@@ -160,7 +160,7 @@ export function createSearch(ctx: Ctx) {
     const shown=currentView==='all'?total:amounts[currentView];
     if(!shown){
       const title=!n&&currentView==='stores'
-        ? 'Encontre sua Belle.'
+        ? 'Escolha a unidade para consultar a loja.'
         :!n&&currentView==='chapters'
           ?'Encontre uma seção do site.'
           :'Não encontramos resultados para essa busca.';
