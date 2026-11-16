@@ -90,7 +90,7 @@ function BelleSpinPhones() {
         <SpinCarousel
           items={BELLE_SPIN_PHONES}
           background="transparent"
-          scale={83}
+          scale={122}
           aspect={145}
           rounded={0}
           speed={reduceMotion || !inView ? 0 : 22}
