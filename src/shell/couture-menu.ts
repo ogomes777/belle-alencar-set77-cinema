@@ -193,14 +193,15 @@ export function initCoutureMenu(): void {
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
   // Commerce dialogs opened from the header close the menu first.
-  document.addEventListener('pointerdown', event => {
-    if (!open) return;
-    const target = event.target as Element;
-    if (target.closest?.('#belleMenuPanel #wishlistButton,#belleMenuPanel #bagButton')) {
+  // Let the original delegated commerce click fire, then remove the menu:
+  // making the panel inert on pointerdown would swallow that click on Safari.
+  document.addEventListener('click', event => {
+    if (open && (event.target as Element).closest?.('#belleMenuPanel #wishlistButton,#belleMenuPanel #bagButton'))
       setOpen(false, false, true);
-    } else if (target.closest?.('#storeButton,#searchButton,#belleSettingsButton')) {
+  });
+  document.addEventListener('pointerdown', event => {
+    if (open && (event.target as Element).closest?.('#storeButton,#searchButton,#belleSettingsButton'))
       setOpen(false, false);
-    }
   }, { passive: true });
   window.addEventListener('pagehide', () => setOpen(false, false));
   void OPEN_MS;
