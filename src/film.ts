@@ -52,6 +52,9 @@ export function initFilm(director: Director): void {
 
   const params = new URLSearchParams(location.search);
   const posterMode = params.get('poster') as ChapterId | null;
+  // The seven-chapter film is opt-in. Poster capture mode is exempt.
+  let experienceUnlocked=Boolean(posterMode);
+  if(experienceUnlocked)film.classList.add('is-unlocked');
   const forced = params.get('tier');
   const caps = detectCapabilities();
   let tier: Tier = posterMode ? 'cinema' : resolveTier(caps, director.get(), forced);
@@ -86,9 +89,62 @@ export function initFilm(director: Director): void {
   window.__belle = debug;
   const pov = initPovUi(stage!, () => world);
 
+  // V85: opt-in cinematic visit. The default storefront stays one viewport;
+  // landing scroll does not start shaders, chapters or camera motion.
+  const enterButton=film.querySelector<HTMLButtonElement>('#filmEnter');
+  const exitButton=film.querySelector<HTMLButtonElement>('#filmExit');
+  const gateway=film.querySelector<HTMLElement>('#filmGateway');
+
+  function enterExperience():void{
+    if(experienceUnlocked)return;
+    experienceUnlocked=true;
+    film!.classList.add('is-unlocked');
+    document.documentElement.classList.add('experience-active');
+    enterButton?.setAttribute('aria-expanded','true');
+    gateway?.setAttribute('aria-hidden','true');
+    if(exitButton)exitButton.hidden=false;
+    // Restore the actual chapter geometry only after expansion.
+    measure();
+    const top=film!.getBoundingClientRect().top+scrollY;
+    window.scrollTo(0,top);
+    lastScrollPosition=scrollY;
+    applyScrollPosition();
+    if(tier!=='static')void startWorld();
+    exitButton?.focus({preventScroll:true});
+  }
+
+  function leaveExperience():void{
+    if(!experienceUnlocked || posterMode)return;
+    const top=film!.getBoundingClientRect().top+scrollY;
+    experienceUnlocked=false; // stop scroll listeners before contracting layout
+    window.scrollTo(0,top);
+    stopWorld(); // abort any in-flight renderer; return GPU resources
+    film!.classList.remove('is-unlocked');
+    document.documentElement.classList.remove('experience-active','in-film');
+    enterButton?.setAttribute('aria-expanded','false');
+    gateway?.removeAttribute('aria-hidden');
+    if(exitButton)exitButton.hidden=true;
+    progress=0;
+    debug.progress=0;
+    if(bar)bar.style.setProperty('--p','0');
+    setActive('vitrine');
+    measure();
+    window.scrollTo(0,filmTop);
+    enterButton?.focus({preventScroll:true});
+  }
+
+  enterButton?.addEventListener('click',enterExperience);
+  exitButton?.addEventListener('click',leaveExperience);
+
   // ---------- medição ----------
   const articles = CHAPTERS.map((id) => $(`[data-chapter="${id}"]`, film)).filter(Boolean) as HTMLElement[];
   function measure(): void {
+    if(!experienceUnlocked){
+      filmTop=film!.getBoundingClientRect().top+scrollY;
+      range=1;
+      spans=[];
+      return;
+    }
     const fr = film!.getBoundingClientRect();
     filmTop = fr.top + scrollY;
     range = Math.max(1, film!.offsetHeight - innerHeight);
@@ -153,6 +209,7 @@ export function initFilm(director: Director): void {
   // the chapter poster, rail and debug state must reflect scrollY right away.
   let ticking=false,lastScrollPosition=scrollY,lastInFilm:boolean|null=null;
   function applyScrollPosition():void{
+    if(!experienceUnlocked)return; // locked facade never scrubs on landing scroll.
     const previous=progress;
     const sy=scrollY;
     progress=clamp((sy-filmTop)/range,0,1);
@@ -181,6 +238,7 @@ export function initFilm(director: Director): void {
     }
   }
   function onScroll():void{
+    if(!experienceUnlocked)return;
     const current=scrollY;
     const jumped=Math.abs(current-lastScrollPosition)>innerHeight*.65;
     lastScrollPosition=current;
@@ -199,7 +257,7 @@ export function initFilm(director: Director): void {
     debug.chapter = id;
     document.documentElement.dataset.filmChapter = id;
     $$('[data-chapter-link]').forEach((a) => {
-      const on = a.dataset.chapterLink === (id === 'vitrine' ? 'inicio' : id);
+      const on = a.dataset.chapterLink === (id === 'vitrine' ? 'filme-vitrine' : id);
       a.toggleAttribute('aria-current', on);
       if (on) a.setAttribute('aria-current', 'step');
     });
@@ -219,7 +277,7 @@ export function initFilm(director: Director): void {
   // A single number is sampled 6x/second, without a permanent RAF or
   // any DOM writes while scroll and chapter state are already in sync.
   window.setInterval(()=>{
-    if(document.hidden)return;
+    if(document.hidden||!experienceUnlocked)return;
     const current=scrollY;
     const expected=clamp((current-filmTop)/range,0,1);
     if(current===lastScrollPosition&&Math.abs(expected-progress)<.0005)return;
@@ -311,7 +369,7 @@ export function initFilm(director: Director): void {
 
   // ---------- 3D sob demanda ----------
   async function startWorld(): Promise<void> {
-    if (world || loading || tier === 'static') return;
+    if (!experienceUnlocked || world || loading || tier === 'static') return;
     loading = true;
     const serial=++startSerial;
     stage!.classList.add('is-loading');
@@ -321,9 +379,9 @@ export function initFilm(director: Director): void {
       // Scroll never waits for intro animation, fonts or brand preflight.
       const worldModule = import('./experience');
       await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
-      if(serial!==startSerial || (tier as Tier)==='static')return;
+      if(serial!==startSerial || !experienceUnlocked || (tier as Tier)==='static')return;
       const mod = await worldModule;
-      if(serial!==startSerial || (tier as Tier)==='static')return;
+      if(serial!==startSerial || !experienceUnlocked || (tier as Tier)==='static')return;
       const created = await mod.createWorld({
         container: canvasHost!,
         tier,
@@ -339,7 +397,7 @@ export function initFilm(director: Director): void {
             current.readyEntranceMedia().catch(()=>undefined),
             new Promise<void>(resolve=>setTimeout(resolve,240)),
           ]).then(()=>{
-            if(world!==current||tier==='static')return;
+            if(world!==current||!experienceUnlocked||tier==='static')return;
             stage!.classList.remove('is-loading');
             stage!.classList.add('is-live');
           });
@@ -353,7 +411,7 @@ export function initFilm(director: Director): void {
           showPoster(active);
         },
       });
-      if(serial!==startSerial || (tier as Tier)==='static'){
+      if(serial!==startSerial || !experienceUnlocked || (tier as Tier)==='static'){
         created.destroy();
         return;
       }
@@ -416,12 +474,12 @@ export function initFilm(director: Director): void {
     scheduleMeasure();
     applyScrollPosition();
     world?.setProgress(progress,true);
-    if(tier!=='static'&&!world&&!loading)void startWorld();
+    if(experienceUnlocked&&tier!=='static'&&!world&&!loading)void startWorld();
   });
   if (posterMode) {
     document.documentElement.classList.add('poster-mode', 'intro-seen');
     startWorld();
-  } else if (tier !== 'static') {
+  } else if (experienceUnlocked && tier !== 'static') {
     // V57: do not wait for IntersectionObserver's async delivery for above-
     // the-fold entry. It can arrive one or more frames after main has finished.
     // Still avoid booting WebGL on a deep link far below the first film.
@@ -445,7 +503,7 @@ export function initFilm(director: Director): void {
     document.documentElement.dataset.tier = tier;
     debug.tier = tier;
     if (tier === 'static') stopWorld();
-    else startWorld();
+    else if(experienceUnlocked)startWorld();
   });
 
   // ---------- ponteiro e arraste ----------
@@ -581,7 +639,8 @@ export function initFilm(director: Director): void {
     if(requested)selectDress(requested.id);
     const sp = spans.find((s) => s.id === 'provador');
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (sp) scrollTo({ top: filmTop + (sp.s + (sp.e - sp.s) * 0.3) * range, behavior: reduce ? 'auto' : 'smooth' });
+    if (sp && experienceUnlocked) scrollTo({ top: filmTop + (sp.s + (sp.e - sp.s) * 0.3) * range, behavior: reduce ? 'auto' : 'smooth' });
+    else if(!experienceUnlocked) film?.scrollIntoView({behavior:'smooth',block:'start'});
   });
   syncFitting();
 }

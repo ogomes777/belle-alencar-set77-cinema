@@ -42,7 +42,7 @@ export function initPovUi(stage: HTMLElement, getWorld: () => World | null): Pov
     <div class="pov__top">
       <span class="pov__hint pov__hint--film">Arraste para olhar as araras · toque numa peça · role para continuar o filme</span>
       <span class="pov__hint pov__hint--explore">Arraste para olhar em 360° · role para continuar o filme</span>
-      <button type="button" class="pov__resume">Retomar o filme <span aria-hidden="true">×</span></button>
+      <button type="button" class="pov__resume">Retomar o filme</button>
     </div>
     <div class="pov__sides" role="group" aria-label="Olhar para">
       <button type="button" data-side-look="-1">Arara esquerda</button>
@@ -78,12 +78,12 @@ export function initPovUi(stage: HTMLElement, getWorld: () => World | null): Pov
       <ol class="pov__list" aria-label="Peças nesta página"></ol>
       <p class="pov__empty" hidden>Nenhuma peça nesta categoria.</p>
       <div class="pov__product" hidden>
-        <p class="pov__eyebrow">BELLE ALENCAR · REFERÊNCIA EDITORIAL</p>
+        <p class="pov__eyebrow">REFERÊNCIA VISUAL · CONSULTE SUA UNIDADE</p>
         <h3 class="pov__title"></h3>
         <p class="pov__desc"></p>
         <div class="pov__sizes" role="group" aria-label="Tamanhos disponíveis"></div>
         <div class="pov__actions">
-          <button type="button" class="pov__view">Ver peça</button>
+          <button type="button" class="pov__view">Ver detalhes da peça</button>
           <button type="button" class="pov__add">Adicionar à sacola</button>
           <button type="button" class="pov__close" aria-label="Fechar ficha">×</button>
         </div>

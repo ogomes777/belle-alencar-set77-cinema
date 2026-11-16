@@ -69,8 +69,17 @@ export function bindHeader(ctx: Ctx) {
     }
     const btn = t.closest<HTMLElement>('#searchButton, #wishlistButton, #bagButton');
     if (btn?.id === 'searchButton') ctx.openSearch(btn);
-    else if (btn?.id === 'wishlistButton') ctx.openWishlist(btn);
-    else if (btn?.id === 'bagButton') ctx.openBag(btn);
+    else if (btn?.id === 'wishlistButton') {
+      // Menu closes when the drawer opens; restore focus to the visible menu
+      // trigger after closing, not to the now-inert favorite button inside it.
+      const returnTo = btn.closest('#belleMenuPanel')
+        ? document.getElementById('belleMenuButton') ?? btn : btn;
+      ctx.openWishlist(returnTo);
+    } else if (btn?.id === 'bagButton') {
+      const returnTo = btn.closest('#belleMenuPanel')
+        ? document.getElementById('belleMenuButton') ?? btn : btn;
+      ctx.openBag(returnTo);
+    }
   });
 
   sync();

@@ -32,7 +32,7 @@ export function initStoreMap(): void {
     <form method="dialog"><button autofocus aria-label="Voltar ao globo">← Voltar ao globo</button></form>
   </div>
   <div class="stores-map__heading"><h2>Encontre sua Belle</h2>
-    <p class="stores-map__sub">Seu destino, sua experiência.</p></div>
+    <p class="stores-map__sub">Consulte a cidade e abra a localização no Google Maps.</p></div>
   <div class="stores-map__frame"><iframe title="Google Maps — endereço da loja"
     loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
   <div class="stores-map__foot"><span class="stores-map__address"></span>
@@ -56,7 +56,7 @@ export function initStoreMap(): void {
       ?`${resolved.name} · localização da cidade (endereço da loja a confirmar)`
       :(query??'Localização da loja');
     const city=CITIES.find(c=>query?.toLowerCase().includes(c.name.toLowerCase()));
-    dialog.querySelector('h2')!.textContent=city?`Belle em ${city.name}`:'Encontre sua Belle';
+    dialog.querySelector('h2')!.textContent=city?`Belle em ${city.name}`:'Escolha a unidade Belle';
     if(!dialog.open)dialog.show();
     stage.classList.add('is-map');
     dialog.querySelector('button')!.focus();

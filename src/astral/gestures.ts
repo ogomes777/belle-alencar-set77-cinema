@@ -19,3 +19,11 @@ export function easeGlobeZoom(current:number,target:number,deltaMs:number):numbe
   const next=clampGlobeZoom(current+(desired-current)*t);
   return Math.abs(next-desired)<.001?desired:next;
 }
+
+/** Keep a living globe when zoomed out, but nearly freeze idle drift near cities.
+ * The scale also applies immediately to the requested zoom, before easing finishes.
+ */
+export function globeAutoSpinFactor(zoom:number):number{
+  const distance=clampGlobeZoom(zoom)-MIN_GLOBE_ZOOM;
+  return Math.max(.003,1/(1+90*distance*distance));
+}

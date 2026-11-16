@@ -102,9 +102,9 @@ export function initCoutureMenu(): void {
   button.addEventListener('focus', warmFont, { once: true });
   button.addEventListener('touchstart', warmFont, { once: true, passive: true });
 
-  const focusables = () => [button, ...Array.from(panel.querySelectorAll<HTMLElement>('a[href]'))];
+  const focusables = () => [button, ...Array.from(panel.querySelectorAll<HTMLElement>('a[href],button:not([disabled])'))];
 
-  function setOpen(next: boolean, restoreFocus = true) {
+  function setOpen(next: boolean, restoreFocus = true, immediate = false) {
     if (next === open) return;
     open = next;
     window.clearTimeout(timer);
@@ -129,13 +129,21 @@ export function initCoutureMenu(): void {
       }, reduced() ? 0 : 420);
     } else {
       panel!.classList.remove('is-open');
-      panel!.classList.add('is-closing');
-      root.classList.remove('couture-nav-open');
-      root.style.removeProperty('--cn-scrollbar');
-      timer = window.setTimeout(() => {
+      if (immediate) {
+        // Commerce dialogs need focus straight away, not after the 975ms exit.
         panel!.classList.remove('is-closing');
         panel!.inert = true;
-      }, reduced() ? 0 : CLOSE_MS);
+      } else {
+        panel!.classList.add('is-closing');
+      }
+      root.classList.remove('couture-nav-open');
+      root.style.removeProperty('--cn-scrollbar');
+      if (!immediate) {
+        timer = window.setTimeout(() => {
+          panel!.classList.remove('is-closing');
+          panel!.inert = true;
+        }, reduced() ? 0 : CLOSE_MS);
+      }
       if (restoreFocus) (lastFocus && lastFocus !== document.body ? lastFocus : button!).focus({ preventScroll: true });
     }
   }
@@ -185,8 +193,15 @@ export function initCoutureMenu(): void {
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
   // Commerce dialogs opened from the header close the menu first.
+  // Let the original delegated commerce click fire, then remove the menu:
+  // making the panel inert on pointerdown would swallow that click on Safari.
+  document.addEventListener('click', event => {
+    if (open && (event.target as Element).closest?.('#belleMenuPanel #wishlistButton,#belleMenuPanel #bagButton'))
+      setOpen(false, false, true);
+  });
   document.addEventListener('pointerdown', event => {
-    if (open && (event.target as Element).closest?.('#storeButton,#searchButton,#wishlistButton,#bagButton,#belleSettingsButton')) setOpen(false, false);
+    if (open && (event.target as Element).closest?.('#storeButton,#searchButton,#belleSettingsButton'))
+      setOpen(false, false);
   }, { passive: true });
   window.addEventListener('pagehide', () => setOpen(false, false));
   void OPEN_MS;

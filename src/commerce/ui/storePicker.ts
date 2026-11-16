@@ -12,9 +12,9 @@ export function createStorePicker(ctx: Ctx) {
   const ov = createOverlay({ id: 'storeDialog', labelledBy: 'storeDialogTitle', variant: 'dialog', className: 'ov--store' });
   const list = h('ul', { class: 'store-options' });
   ov.body.append(
-    h('p', { class: 'eyebrow', text: 'Sua loja Belle' }),
-    h('h2', { class: 'ov__title', id: 'storeDialogTitle', html: 'Em qual cidade<br><em>você está?</em>' }),
-    h('p', { class: 'ov__lede', text: 'A sacola e a disponibilidade seguem a loja escolhida. Você pode trocar quando quiser.' }),
+    h('p', { class: 'eyebrow', text: 'ATENDIMENTO POR CIDADE' }),
+    h('h2', { class: 'ov__title', id: 'storeDialogTitle', html: 'Qual unidade Belle<br><em>quer consultar?</em>' }),
+    h('p', { class: 'ov__lede', text: 'Escolha uma das seis cidades. Sua lista fica associada à unidade, e você pode trocar quando quiser.' }),
     list,
     h('p', { class: 'fineprint', text: 'Preferência salva somente neste navegador. Não criamos conta nem pedimos dados pessoais.' }),
   );

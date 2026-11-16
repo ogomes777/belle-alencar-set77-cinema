@@ -21,7 +21,7 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
   });
   const image = h('span', { class: 'pcard__ill pcard__ill--cutout', 'data-flip-id': `ill-${p.id}` });
   image.append(productImage(p));
-  media.append(image, h('span', { class: 'badge', 'aria-hidden': 'true', text: 'Packshot sintético · demonstração' }));
+  media.append(image, h('span', { class: 'badge', 'aria-hidden': 'true', text: 'Imagem ilustrativa' }));
   const wish = h('button', {
     type: 'button',
     class: 'pcard__wish wish-btn',
@@ -36,10 +36,10 @@ export function productCard(p: Product, wished: boolean, i: number): HTMLElement
       wish,
       h('div', { class: 'pcard__info' },
         h('p', { class: 'pcard__meta', text: `${CATEGORY_LABEL[p.category]} · ${p.sku}` }),
-        h('h3', { class: 'pcard__title' }, h('button', { type: 'button', 'data-qv': p.id }, p.title, h('span', { class: 'sr-only', text: ' — ilustração demonstrativa, ver detalhes' }))),
+        h('h3', { class: 'pcard__title' }, h('button', { type: 'button', 'data-qv': p.id }, p.title, h('span', { class: 'sr-only', text: ' — referência visual, consultar detalhes' }))),
         h('div', { class: 'pcard__foot' },
           h('p', { class: 'pcard__price', text: formatPrice(p.price) }),
-          h('span', { class: 'pcard__microcta', 'aria-hidden': 'true', text: 'VER PEÇA ↗' }),
+          h('span', { class: 'pcard__microcta', 'aria-hidden': 'true', text: 'VER DETALHES' }),
         ),
       ),
     ),
@@ -87,8 +87,8 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
   );
   const emptyClear = h('button', { type: 'button', class: 'btn btn--line', 'data-clear': true, text: 'Limpar filtros' });
   const empty = h('div', { class: 'cat-empty', hidden: true },
-    h('p', { class: 'cat-empty__title', text: 'Nenhuma peça com essa combinação.' }),
-    h('p', { text: 'Tente outro tamanho ou ocasião, ou fale com a loja: a seleção real é maior que esta prévia.' }),
+    h('p', { class: 'cat-empty__title', text: 'Nenhuma referência encontrada com estes filtros.' }),
+    h('p', { text: 'Mude os filtros ou consulte a unidade sobre os modelos disponíveis.' }),
     emptyClear,
   );
 
@@ -112,7 +112,7 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
     const remaining = filteredProducts.length - visibleLimit;
     moreHint.textContent = expanded
       ? `${plural(filteredProducts.length, 'peça exibida', 'peças exibidas')}`
-      : `Explore mais ${plural(remaining, 'peça', 'peças')} da seleção`;
+      : `Ver mais ${plural(remaining, 'peça', 'peças')} deste catálogo`;
   }
 
   function render() {
@@ -125,7 +125,7 @@ export function createCatalog(ctx: Ctx, mount: HTMLElement) {
     void grid.offsetWidth;
     grid.classList.add('is-entering');
     empty.hidden = filteredProducts.length > 0;
-    count.textContent = `${plural(filteredProducts.length, 'peça', 'peças')} ${isFiltered(filters) ? 'com estes filtros' : 'na prévia'}`;
+    count.textContent = `${plural(filteredProducts.length, 'peça', 'peças')} ${isFiltered(filters) ? 'com estes filtros' : 'neste catálogo ilustrativo'}`;
     updateMore();
     clear.hidden = !isFiltered(filters);
     segButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === filters.category)));

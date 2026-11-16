@@ -45,7 +45,7 @@ export function createQuickView(ctx: Ctx) {
     const media = h('div', { class: 'qv__media' });
     const image = h('span', { class: 'qv__ill qv__ill--cutout', 'data-flip-id': `ill-${p.id}` });
     image.append(productImage(p, { eager: true }));
-    media.append(image, h('span', { class: 'badge', text: 'Packshot sintético · demonstração' }));
+    media.append(image, h('span', { class: 'badge', text: 'Imagem ilustrativa' }));
     // zoom do detalhe: botão acessível + lupa que acompanha ponteiro/dedo
     const zoomBtn = h('button', { type: 'button', class: 'qv__zoom', 'aria-pressed': 'false', text: 'Ampliar' });
     const setZoom = (on: boolean) => {
@@ -92,7 +92,7 @@ export function createQuickView(ctx: Ctx) {
           h('p', { class: 'qv__price', text: formatPrice(p.price) }),
           h('p', { class: 'qv__desc', text: p.description }),
           sizes, avail, err, actions, extra,
-          h('p', { class: 'fineprint', text: 'Estudo sintético demonstrativo. Não representa uma peça real, grade disponível ou estoque da Belle. O provador é uma apresentação frontal; não simula vestir nem giro 360°.' }),
+          h('p', { class: 'fineprint', text: 'Referência visual, sem vínculo com o estoque. A loja confirma modelos e tamanhos disponíveis. O provador é ilustrativo, não uma prova virtual.' }),
         ),
       ),
     );
@@ -132,7 +132,7 @@ export function createQuickView(ctx: Ctx) {
           const result = ctx.commerce.add(p.id, chosen);
           if (result.ok) {
             toast(`${p.title} (${chosen}) está na sacola de ${STORES[storeId].city}.`);
-            if (button && ov.isOpen()) button.textContent = 'Adicionado à sacola ✓';
+            if (button && ov.isOpen()) button.textContent = 'Adicionado à sacola';
           } else if (result.reason) toast(result.reason, 'warn');
         };
         const source = ov.body.querySelector<HTMLImageElement>('.qv__ill img');

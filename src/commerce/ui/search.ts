@@ -16,11 +16,11 @@ import { plural } from '../format';
 import type { Ctx } from './context';
 
 const CHAPTERS = [
-  { id: 'inicio', label: 'A vitrine', k: 'inicio vitrine fachada shopping' },
-  { id: 'porta', label: 'A porta', k: 'porta entrada' },
-  { id: 'sala', label: 'Sala viva · araras', k: 'sala arara cabide' },
-  { id: 'vestido', label: 'O vestido desperta', k: 'vestido 3d' },
-  { id: 'detalhe', label: 'Fio e caimento', k: 'detalhe tecido trama' },
+  { id: 'inicio', label: 'Vitrine', k: 'inicio vitrine fachada shopping' },
+  { id: 'porta', label: 'Boutique', k: 'porta entrada' },
+  { id: 'sala', label: 'Araras de peças', k: 'sala arara cabide' },
+  { id: 'vestido', label: 'Vestido em movimento', k: 'vestido 3d' },
+  { id: 'detalhe', label: 'Acabamentos', k: 'detalhe tecido trama' },
   { id: 'categorias', label: 'Categorias', k: 'categorias vestidos conjuntos acessorios' },
   { id: 'provador', label: 'Provador', k: 'provador silhueta tom' },
   { id: 'ocasioes', label: 'Compre por ocasião', k: 'ocasiao dia sair noite festa celebrar casamento formatura' },
@@ -48,7 +48,7 @@ export function createSearch(ctx: Ctx) {
   type View = 'all' | 'products' | 'stores' | 'chapters';
   const views: ReadonlyArray<{id:View;label:string}> = [
     {id:'all',label:'Tudo'}, {id:'products',label:'Peças'},
-    {id:'stores',label:'Lojas'}, {id:'chapters',label:'Experiência'},
+    {id:'stores',label:'Lojas'}, {id:'chapters',label:'Seções'},
   ];
   let currentView:View='all';
   const viewTabs=h('div',{
@@ -62,7 +62,7 @@ export function createSearch(ctx: Ctx) {
     h('span',{class:'ba-search-view__count','aria-hidden':'true',text:'0'})
   )));
 
-  const chips = h('div', { class: 'ba-search-chips', role: 'group', 'aria-label': 'Buscas populares' },
+  const chips = h('div', { class: 'ba-search-chips', role: 'group', 'aria-label': 'Categorias procuradas' },
     ...QUICK_SEARCHES.map((label) =>
       h('button', { type: 'button', class: 'ba-search-chip', 'data-search-term': label, text: label })));
   const quick = h('div', { class: 'ba-search-popular' },
@@ -76,24 +76,24 @@ export function createSearch(ctx: Ctx) {
     input, clear);
   ov.body.append(
     h('div', { class: 'ba-search-intro' },
-      h('p', { class: 'ba-search-kicker', text: 'BELLE ALENCAR · DESCUBRA SUA PRÓXIMA PEÇA' }),
-      h('h2', { id: 'searchTitle', class: 'ba-search-title', text: 'Encontre o seu look.' }),
-      h('p', { class: 'ba-search-subtitle', text: 'Uma busca simples por peças, acessórios e estilo.' }),
+      h('p', { class: 'ba-search-kicker', text: 'BUSQUE PEÇAS E LOJAS' }),
+      h('h2', { id: 'searchTitle', class: 'ba-search-title', text: 'Busque por peça ou cidade.' }),
+      h('p', { class: 'ba-search-subtitle', text: 'Veja referências de produtos e encontre a unidade Belle que quer consultar.' }),
     ),
     h('label', { class: 'search-label', for: 'searchInput', text: 'O que você procura?' }),
     inputWrap,
     quick,
     h('div', { class: 'ba-search-explore-bar' },
       h('div', { class: 'ba-search-explore-bar__intro' },
-        h('span', { class: 'ba-search-explore-bar__eyebrow', text: 'CURADORIA BELLE' }),
-        h('strong', { class: 'ba-search-explore-bar__headline', text: 'Sua próxima descoberta.' }),
+        h('span', { class: 'ba-search-explore-bar__eyebrow', text: 'CONTINUE PELA COLEÇÃO' }),
+        h('strong', { class: 'ba-search-explore-bar__headline', text: 'Escolha uma categoria ou procure pelo nome da peça.' }),
       ),
       viewTabs,
     ),
     h('div', { class: 'ba-search-result-summary' }, count,
-      h('button', { type: 'button', class: 'ba-search-go-collection', 'data-hit-anchor': 'colecao', text: 'VER COLEÇÃO COMPLETA' })),
+      h('button', { type: 'button', class: 'ba-search-go-collection', 'data-hit-anchor': 'colecao', text: 'VER TODAS AS REFERÊNCIAS' })),
     results,
-    h('p', { class: 'ba-search-disclaimer', text: 'Imagens e produtos desta prévia são demonstrativos. Confirme o acervo e os detalhes com a loja.' }),
+    h('p', { class: 'ba-search-disclaimer', text: 'Este catálogo é ilustrativo. A unidade confirma modelos disponíveis, preços e tamanhos.' }),
   );
 
   function group(title: string, items: HTMLElement[], kind: string) {
@@ -126,7 +126,7 @@ export function createSearch(ctx: Ctx) {
         h('span', { class: 'ba-search-product-description' },
           h('small', { class: 'ba-search-product-category', text: CATEGORY_LABEL[p.category] }),
           h('span', { class: 'ba-search-product-title', text: p.title }),
-          h('small', { class: 'ba-search-product-note', text: 'Produto demonstrativo · ver detalhes' })
+          h('small', { class: 'ba-search-product-note', text: 'Imagem ilustrativa · ver peça' })
         )
       )
     );
@@ -137,7 +137,7 @@ export function createSearch(ctx: Ctx) {
     const chapterItems = chapters.map((c) => h('button', {
       type: 'button', class: 'search-hit search-hit--chapter', 'data-hit-anchor': c.id
     }, h('span', { text: c.label }),
-      h('small', { text: 'Explorar na landing' })));
+      h('small', { text: 'Abrir seção' })));
 
     const amounts:Record<Exclude<View,'all'>,number>={
       products:prods.length, stores:stores.length, chapters:chapters.length
@@ -151,33 +151,33 @@ export function createSearch(ctx: Ctx) {
     }
     const groups = [
       currentView==='all'||currentView==='products'
-        ?group(n?'Peças encontradas':'Explore algumas peças',productItems,'products'):null,
+        ?group(n?'Peças encontradas':'Referências de peças',productItems,'products'):null,
       currentView==='all'||currentView==='stores'
         ?group('Lojas Belle',storeItems,'stores'):null,
       currentView==='all'||currentView==='chapters'
-        ?group('Na experiência',chapterItems,'chapters'):null
+        ?group('Seções do site',chapterItems,'chapters'):null
     ].filter((g):g is HTMLElement=>!!g);
     const shown=currentView==='all'?total:amounts[currentView];
     if(!shown){
       const title=!n&&currentView==='stores'
-        ? 'Encontre sua Belle.'
+        ? 'Escolha a unidade para consultar a loja.'
         :!n&&currentView==='chapters'
-          ?'Explore a experiência.'
-          :'Não encontramos essa peça.';
+          ?'Encontre uma seção do site.'
+          :'Não encontramos resultados para essa busca.';
       const detail=!n&&currentView==='stores'
         ?'Digite o nome da cidade para encontrar sua loja.'
         :!n&&currentView==='chapters'
-          ?'Pesquise por uma parte da experiência, como provador ou coleção.'
+          ?'Busque por coleção, provador ou pelo nome da peça.'
           :'Experimente buscar por vestido, bolsa, anel ou pela cidade da sua loja.';
       results.replaceChildren(h('div',{class:'ba-search-empty'},
-        h('span',{class:'ba-search-empty__symbol','aria-hidden':'true',text:'✧'}),
+        h('span',{class:'ba-search-empty__symbol','aria-hidden':'true',text:''}),
         h('h3',{text:title}),h('p',{text:detail}),
         h('button',{type:'button',class:'ba-search-empty__return',
           'data-search-reset':true,text:'Recomeçar busca'})));
     }else results.replaceChildren(...groups);
     count.textContent=n
       ?(shown?plural(shown,'resultado','resultados'):'Nenhum resultado')
-      :'SELEÇÃO DE PEÇAS · ESTUDO EDITORIAL';
+      :'CATÁLOGO DEMONSTRATIVO';
     quick.hidden=Boolean(n);
     clear.hidden=!n;
   }

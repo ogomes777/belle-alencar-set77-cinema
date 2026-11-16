@@ -1193,5 +1193,23 @@ export const additionalPairs = [
     "See the collection by category",
     "Ver la colección por categoría",
     "Vedi la collezione per categoria"
+  ],
+  [
+    "Toque numa peça e a arara mostra toda a categoria. Abra os detalhes, salve suas referências e explore a loja quando quiser. A unidade confirma o que tem disponível.",
+    "Tap an item and the rack shows the whole category. Open the details, save your references and explore the store whenever you like. Your store confirms what is available.",
+    "Toca una prenda y el perchero muestra toda la categoría. Abre los detalles, guarda tus referencias y explora la tienda cuando quieras. Tu tienda confirma lo disponible.",
+    "Tocca un capo e l'appendiabiti mostra tutta la categoria. Apri i dettagli, salva i tuoi riferimenti ed esplora il negozio quando vuoi. Il negozio conferma la disponibilità."
+  ],
+  [
+    "REFERÊNCIA VISUAL · CONSULTE SUA UNIDADE",
+    "VISUAL REFERENCE · CHECK WITH YOUR STORE",
+    "REFERENCIA VISUAL · CONSULTA TU TIENDA",
+    "RIFERIMENTO VISIVO · CHIEDI AL TUO NEGOZIO"
+  ],
+  [
+    "Ver detalhes da peça",
+    "View item details",
+    "Ver detalles de la prenda",
+    "Vedi i dettagli del capo"
   ]
 ] as const;

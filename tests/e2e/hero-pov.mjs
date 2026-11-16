@@ -17,6 +17,9 @@ const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  · ' + detail : ''}`); };
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 
+/** V85+: o filme é opt-in; entra pelo botão como um visitante. */
+const enterFilm = async (page) => { const b = page.locator('#filmEnter'); if (await b.count() && await b.isVisible().catch(() => false)) { await b.click({ timeout: 60000 }); await page.waitForFunction(() => document.querySelector('#filme')?.classList.contains('is-unlocked'), null, { timeout: 60000 }); } };
+
 async function open(opts = {}, query = 'tier=touch&gov=off&loja=araxa') {
   const ctx = await browser.newContext({ deviceScaleFactor: 1, viewport: { width: 1440, height: 900 }, ...opts });
   const page = await ctx.newPage();
@@ -25,6 +28,7 @@ async function open(opts = {}, query = 'tier=touch&gov=off&loja=araxa') {
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
   await page.addInitScript(() => { try { sessionStorage.setItem('belle:v4:intro', '1'); } catch {} });
   await page.goto(`${BASE}/?${query}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  await enterFilm(page);
   await page.evaluate(() => document.querySelector('#sala')?.scrollIntoView({ block: 'center' }));
   await page.waitForFunction(() => document.documentElement.dataset.filmChapter === 'sala' && document.querySelector('.pov.is-on') && window.__belle?.world()?.products.ready > 40, null, { timeout: 240000 });
   return { ctx, page, errors };
@@ -190,7 +194,7 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
   await page.locator('[data-go="provador"]').click();
   check('C · caminha até a frente do provador no touch', await arrived(page) && (await info(page)).explore.z < -15);
   // rolar para fora da área explorável encerra a visita
-  await page.evaluate(() => document.querySelector('#inicio')?.scrollIntoView({ block: 'start' }));
+  await page.evaluate(() => document.querySelector('#filme-vitrine, #inicio')?.scrollIntoView({ block: 'start' }));
   await page.waitForFunction(() => !window.__belle.explore.active() && window.__belle.world().exploreBlend === 0, null, { timeout: 30000 });
   check('C · rolar até a vitrine encerra a visita e devolve o trilho', true);
   // três ciclos entrada/saída

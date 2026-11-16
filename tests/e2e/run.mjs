@@ -267,7 +267,9 @@ for(const [label,width,height] of [['mobile',390,844],['desktop',1440,900]]){
 }
 
 // 6c · WEBGL: LOJA ÚNICA · OLHAR LATERAL, PEÇA → CATEGORIA → TAMANHO → SACOLA (desktop, touch, motion reduzido)
+const enterFilm=async (page) => { const b = page.locator('#filmEnter'); if (await b.count() && await b.isVisible().catch(() => false)) { await b.click({ timeout: 60000 }); await page.waitForFunction(() => document.querySelector('#filme')?.classList.contains('is-unlocked'), null, { timeout: 60000 }); } };
 const gotoRoom=async(page)=>{
+  await enterFilm(page);
   await page.evaluate(()=>document.querySelector('#sala')?.scrollIntoView({block:'center'}));
   await page.waitForFunction(()=>document.documentElement.dataset.filmChapter==='sala'&&document.querySelector('.pov.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:60000});
 };
@@ -275,7 +277,7 @@ const settleFrames=async(page,n=8)=>{const f0=await page.evaluate(()=>window.__b
 for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-preference'],[1280,800,'reduce']]){
   const {ctx,page,errors}=await newPage({viewport:{width,height},reducedMotion:motion,isMobile:width===390,hasTouch:width===390});
   await skipIntro(page);
-  await page.goto(BASE+'/?tier=touch&loja=araxa',{waitUntil:'load'});
+  await page.goto(BASE+'/?tier=touch&loja=araxa',{waitUntil:'domcontentloaded'});
   await gotoRoom(page);
   const start=await page.evaluate(()=>({ready:window.__belle?.world()?.products.ready,canvas:!!document.querySelector('#filmCanvas canvas'),oldRack:document.querySelectorAll('.rack,.roomrail').length,draw:window.__belle.world().drawCalls}));
   check('boutique '+width+': assets 3D prontos',start.canvas&&start.ready>40);
@@ -324,8 +326,9 @@ for(const [width,height,motion] of [[1440,900,'no-preference'],[390,844,'no-pref
 {
   const { ctx, page, errors } = await newPage({ viewport: { width: 1280, height: 800 } });
   await skipIntro(page);
-  await page.goto(`${BASE}/?tier=cinema`, { waitUntil: 'load' });
-  await page.locator('#inicio').scrollIntoViewIfNeeded();
+  await page.goto(`${BASE}/?tier=cinema`, { waitUntil: 'domcontentloaded' });
+  await enterFilm(page);
+  await page.locator('#filme-vitrine, #inicio').first().scrollIntoViewIfNeeded();
   const live = await page.waitForSelector('.film__stage.is-live', { timeout: 60000 }).then(() => true).catch(() => false);
   check('CINEMA: palco 3D ativo (1º frame)', live);
   const f1 = await page.evaluate(() => window.__belle?.world()?.frames ?? 0);

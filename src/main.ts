@@ -45,6 +45,14 @@ import { initStoresChampagne } from './motion/stores-champagne';
 import { initPerfGuard } from './core/perf-guard';
 import './styles/belle-v68-metal-palettes.css'; // V68: final color-only layer; keeps all interactions untouched.
 import './styles/belle-v72-couture-ticker.css'; // V72: seamless premium category rail, scoped to the film/passarela separator.
+import './styles/belle-v74-editorial-cleanup.css'; // V74: conversion-first mobile readability and restrained ornament.
+import './styles/belle-v75-editorial-ribbon.css'; // V75: couture lettering and fine metallic ribbon borders only.
+import './styles/belle-v79-originkit-spin.css'; // V79: borderless transparent original Originkit Spin for Belle phones only.
+import './styles/belle-v81-phone-flow-preview-title.css'; // V81: immediate native scroll, viewport-safe carousel and luxury Previews serif.
+import './styles/belle-v82-preview-calligraphy.css'; // V82: thinner italic preview headline, no clipped S; no video changes.
+import './styles/belle-v83-atelier-header.css'; // V83: central Belle logo, floating store selector, commerce inside couture menu.
+import './styles/belle-v84-header-breathing.css'; // V84: prevent search from overlapping the centered Belle logo.
+import './styles/belle-v85-optin-film.css'; // V85: runway leads, film locked until explicit entry; original scroll film on opt-in.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.

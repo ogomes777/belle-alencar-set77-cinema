@@ -1,0 +1,110 @@
+/* BELLE V74 / SET77 LABS · Editorial restraint + mobile legibility.
+   Scope: remove gratuitous decoration, never navigation icons, controls or disclosure.
+   Content and interactions stay accessible in all three themes. */
+
+/* A couture marquee does not need a decorative star after every word. */
+.manifesto--ticker .band--couture .band__category::after{
+  content:none!important;
+  display:none!important;
+}
+.manifesto--ticker .band--couture .band__category{
+  padding-left:clamp(21px,1.9vw,34px)!important;
+  padding-right:clamp(21px,1.9vw,34px)!important;
+}
+/* The search empty state should speak instead of displaying an ornamental glyph. */
+.ba-search-empty__symbol{display:none!important}
+
+/* Mobile readability comes before microscopic editorial labels.
+   Do not change camera, timeline, scroll triggers or 3D controls. */
+@media(max-width:899px){
+  html #filme .film__chapters .chapter__card .lede{
+    font-size:clamp(.86rem,2.75vw,.97rem)!important;
+    line-height:1.43!important;
+  }
+  html #filme .film__chapters .chapter__card .eyebrow{
+    font-size:clamp(.68rem,2.2vw,.76rem)!important;
+    line-height:1.35!important;
+    letter-spacing:.12em!important;
+  }
+  html #filme .film__chapters .chapter__card .fineprint{
+    font-size:clamp(.69rem,2.08vw,.77rem)!important;
+    line-height:1.39!important;
+  }
+  html #filme .film__chapters .chapter__card .btn{
+    font-size:clamp(.75rem,2.15vw,.84rem)!important;
+    line-height:1.2!important;
+    letter-spacing:.025em!important;
+    min-height:44px;
+  }
+  html #filme .film__chapters .chapter__card .portal-list button span{
+    font-size:.65rem!important;
+  }
+  body .pcard__meta,
+  body .occ-card__n{
+    font-size:clamp(.7rem,2vw,.8rem)!important;
+    line-height:1.32!important;
+    letter-spacing:.08em!important;
+  }
+}
+@media(max-width:600px){
+  html #filme .film__chapters .chapter__card,
+  html #filme .film__chapters .chapter--rack .chapter__card,
+  html #filme .film__chapters .chapter--fitting .chapter__card{
+    width:min(85vw,308px);
+    max-width:308px;
+    max-height:min(40svh,336px);
+  }
+  html #filme .film__chapters .chapter--hero .chapter__card{
+    max-height:min(43svh,348px);
+  }
+  html #filme .film__chapters .chapter__card .display{
+    font-size:clamp(1.58rem,5.8vw,2.05rem);
+    line-height:1.05!important;
+  }
+  /* The old 10px storyboard labels were unreadable in phone previews. */
+  #como-comprar.how--couture.how--enhanced .how__steps li{
+    min-height:109px;
+    padding:12px 12px;
+  }
+  #como-comprar.how--couture.how--enhanced .how__steps h3{
+    font-size:clamp(.84rem,3.25vw,.95rem)!important;
+    line-height:1.19!important;
+    letter-spacing:-.01em!important;
+    margin-bottom:5px;
+  }
+  #como-comprar.how--couture.how--enhanced .how__steps p{
+    font-size:clamp(.76rem,2.8vw,.84rem)!important;
+    line-height:1.35!important;
+    -webkit-line-clamp:3;
+  }
+  #como-comprar.how--couture.how--enhanced .btn{
+    font-size:clamp(.74rem,2.65vw,.86rem)!important;
+    min-height:44px;
+    letter-spacing:0!important;
+  }
+  .pcard .badge{
+    display:none!important;
+  }
+  .pcard__title{
+    line-height:1.24;
+  }
+  .faq summary{
+    font-size:clamp(1.1rem,4.5vw,1.35rem)!important;
+    line-height:1.33!important;
+    padding-block:18px;
+  }
+  .faq details p,
+  .brand-story__paragraph,
+  .finale__consult-desc,
+  .stores .lede{
+    font-size:clamp(.9rem,3.55vw,1rem)!important;
+    line-height:1.6!important;
+  }
+  .manifesto--ticker .band--couture .band__category{
+    padding-left:22px!important;
+    padding-right:22px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .manifesto--ticker .band--couture .band__track{animation:none!important}
+}

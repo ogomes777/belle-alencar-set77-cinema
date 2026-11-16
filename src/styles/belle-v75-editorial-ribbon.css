@@ -1,0 +1,75 @@
+/* BELLE V75 | SET77 LABS
+ * Editorial ribbon only. Same words, same two seamless cycles, same timing.
+ * Fine fashion-film typography with restrained 1px metal hairlines.
+ */
+.manifesto--ticker .band.band--couture{
+  --v75-type:#594024;
+  --v75-hairline:rgba(166,111,35,.48);
+  --v75-inner:rgba(255,255,255,.72);
+  --v75-shade:rgba(94,60,23,.12);
+  border-top:1px solid var(--v75-hairline)!important;
+  border-bottom:1px solid var(--v75-hairline)!important;
+  box-shadow:
+    inset 0 1px 0 var(--v75-inner),
+    inset 0 -1px 0 rgba(255,255,255,.38),
+    0 3px 14px -9px var(--v75-shade)!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.23),transparent 35%,rgba(125,77,22,.028) 100%),
+    linear-gradient(112deg,var(--band-bg-start),var(--band-bg-mid) 49%,var(--band-bg-end))!important;
+}
+.manifesto--ticker .band--couture::before{
+  height:1px!important;
+  opacity:.54!important;
+  background:linear-gradient(90deg,transparent 0%,var(--band-metal) 26%,var(--band-light) 51%,var(--band-metal) 75%,transparent 100%)!important;
+}
+.manifesto--ticker .band--couture::after{
+  background:radial-gradient(ellipse 38% 115% at 49% 50%,var(--band-glow),transparent 82%)!important;
+  opacity:.5!important;
+}
+.manifesto--ticker .band--couture .band__category{
+  font-family:"Italiana","Playfair Display",Georgia,serif!important;
+  font-size:clamp(1.45rem,1.22rem + .68vw,1.9rem)!important;
+  font-weight:400!important;
+  font-style:normal!important;
+  font-optical-sizing:auto;
+  font-kerning:normal;
+  font-feature-settings:"kern" 1,"liga" 1;
+  font-synthesis:none;
+  line-height:1.1!important;
+  letter-spacing:.04em!important;
+  text-transform:uppercase;
+  color:var(--v75-type)!important;
+  text-shadow:none!important;
+  -webkit-font-smoothing:antialiased;
+  padding-left:clamp(24px,2.15vw,39px)!important;
+  padding-right:clamp(24px,2.15vw,39px)!important;
+}
+.manifesto--ticker .band--couture .band__category::before,
+.manifesto--ticker .band--couture .band__category::after{
+  content:none!important;
+  display:none!important;
+}
+/* The three palettes share one typographic structure, not three different styles. */
+html[data-belle-theme="dark"] .manifesto--ticker .band.band--couture{
+  --v75-type:#f9e5ba;
+  --v75-hairline:rgba(247,200,104,.54);
+  --v75-inner:rgba(255,225,151,.17);
+  --v75-shade:rgba(0,0,0,.42);
+}
+html[data-belle-theme="rose"] .manifesto--ticker .band.band--couture{
+  --v75-type:#742b50;
+  --v75-hairline:rgba(184,69,129,.43);
+  --v75-inner:rgba(255,255,255,.63);
+  --v75-shade:rgba(127,40,84,.15);
+}
+@media(max-width:680px){
+  .manifesto--ticker .band.band--couture{height:61px}
+  .manifesto--ticker .band--couture .band__category{
+    font-size:clamp(1.29rem,4.45vw,1.52rem)!important;
+    font-weight:400!important;
+    letter-spacing:.032em!important;
+    padding-left:23px!important;
+    padding-right:23px!important;
+  }
+}
+/* No overrides to existing animation, motion preferences or chapter scroll. */

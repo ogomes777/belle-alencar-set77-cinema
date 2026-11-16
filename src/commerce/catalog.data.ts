@@ -706,7 +706,7 @@ export const CATALOG_MANIFEST = [
     "category": "calcas",
     "name": "Calça chocolate de caimento amplo",
     "color": "Chocolate",
-    "description": "Peça marrom ampla com cintura ajustada e caimento fluido. Revisar silhueta no controle visual.",
+    "description": "Calça marrom de cintura marcada, pernas amplas e caimento solto.",
     "cutoutDimensions": [
       316,
       491

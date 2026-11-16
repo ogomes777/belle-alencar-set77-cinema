@@ -6,7 +6,7 @@ import { createOverlay } from './overlay';
 import { STORES } from '../stores';
 import { countItems, MAX_QTY } from '../cart';
 import { AVAILABILITY_LABEL } from '../availability';
-import { buildStoreMessage, checkoutGateway } from '../checkout';
+import { buildStoreMessage } from '../checkout';
 import { plural } from '../format';
 import { minus, plus, trash, heart } from './icons';
 import type { Ctx } from './context';
@@ -55,7 +55,7 @@ export function createBag(ctx: Ctx) {
     if (!store) {
       ov.body.replaceChildren(head,
         h('div', { class: 'drawer-empty' },
-          h('p', { text: 'Cada loja tem a própria sacola e o próprio estoque. Escolha a sua para começar.' }),
+          h('p', { text: 'Escolha a unidade para guardar referências e consultar modelos disponíveis.' }),
           h('button', { type: 'button', class: 'btn btn--solid', 'data-change-store': true, text: 'Escolher minha loja' })));
       return;
     }
@@ -100,16 +100,14 @@ export function createBag(ctx: Ctx) {
     const send = h('div', { class: 'send-box', hidden: true },
       h('p', { class: 'send-box__status', role: 'status', 'data-send-status': true }),
       area,
-      h('p', { class: 'fineprint', text: 'O link oficial do WhatsApp da Belle não aceita texto pré-preenchido: cole a mensagem na conversa. O contato de cada unidade ainda está em confirmação; a equipe direciona você para a loja certa.' }),
+      h('p', { class: 'fineprint', text: 'Sua lista foi preparada para copiar. Abra o WhatsApp oficial, cole a mensagem e peça à equipe para confirmar modelos, preços e tamanhos. O canal orienta você sobre a unidade.' }),
       h('a', { class: 'link-btn', href: store.contact.whatsappUrl, target: '_blank', rel: 'noopener noreferrer', text: 'Abrir o WhatsApp de novo' }),
     );
-    const co = checkoutGateway.status();
     const foot = h('footer', { class: 'drawer-foot' },
       h('p', { class: 'drawer-foot__sum' }, h('span', { text: plural(countItems(items), 'peça', 'peças') }), h('strong', { text: 'Preço sob consulta' })),
       h('button', { type: 'button', class: 'btn btn--solid btn--block', 'data-send': true, text: `Enviar para a Belle ${store.city}` }),
       send,
-      h('button', { type: 'button', class: 'btn btn--line btn--block', disabled: true, 'aria-describedby': 'checkoutReason', text: 'Checkout online' }),
-      h('p', { class: 'fineprint', id: 'checkoutReason', text: co.enabled ? '' : co.reason }),
+      h('p', { class: 'fineprint', text: 'Preço, pagamento e disponibilidade são combinados diretamente com a unidade no atendimento.' }),
     );
     ov.body.replaceChildren(head, list, otherNote ?? '', foot);
   }
@@ -176,11 +174,11 @@ export function createWishlist(ctx: Ctx) {
     const ids = ctx.commerce.get().wishlist;
     const head = h('header', { class: 'drawer-head' },
       h('p', { class: 'eyebrow', text: 'Favoritos' }),
-      h('h2', { class: 'ov__title', id: 'wishTitle', html: 'Peças que <em>ficaram</em>' }),
+      h('h2', { class: 'ov__title', id: 'wishTitle', html: 'Peças <em>salvas</em>' }),
       h('p', { class: 'drawer-head__store', text: 'Salvos neste navegador.' }));
     if (!ids.length) {
       ov.body.replaceChildren(head, h('div', { class: 'drawer-empty' },
-        h('p', { text: 'Toque no coração de uma peça para guardar aqui.' }),
+        h('p', { text: 'Use o botão de favoritos nas referências de peças para encontrá-las aqui.' }),
         h('button', { type: 'button', class: 'btn btn--line', 'data-browse': true, text: 'Ver a coleção' })));
       return;
     }

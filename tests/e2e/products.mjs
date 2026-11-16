@@ -58,6 +58,7 @@ await context.close();
 const motion=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
 const mp=await motion.newPage();watch(mp);
 await mp.goto(base+'/?tier=touch&loja=araxa');
+{const b=mp.locator('#filmEnter');if(await b.count()&&await b.isVisible().catch(()=>false)){await b.click();await mp.waitForFunction(()=>document.querySelector('#filme')?.classList.contains('is-unlocked'));}}
 await chapter(mp,'sala');
 await mp.waitForFunction(()=>document.querySelector('.pov.is-on')&&window.__belle?.world()?.products.ready>40,null,{timeout:30000});
 await mp.locator('[data-side-look="1"]').click();
