@@ -72,26 +72,23 @@
   <button type="button" class="intro__skip" id="introSkip" tabindex="-1">Pular intro</button>
 </div>
 
+<!-- V83 · Official Belle store switcher: fixed outside the header capsule, always reachable. -->
+<aside class="belle-location-dock" id="belleLocationDock" aria-label="Unidade Belle">
+  <span class="belle-location-dock__eyebrow">SUA BELLE</span>
+  <button type="button" class="store-pill" id="storeButton" data-open-store aria-haspopup="dialog">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+  <span class="store-pill__label" data-store-label>Escolher loja</span>
+  </button>
+</aside>
+
 <header class="site-header" id="siteHeader">
   <a class="brand" href="#inicio" aria-label="Belle Alencar, voltar ao início">
     <span class="brand__mark" data-monogram="header" aria-hidden="true"></span>
     <span class="brand__word">BELLE ALENCAR<small>MODA &amp; ACESSÓRIOS</small></span>
   </a>
   <div class="site-actions">
-    <button type="button" class="store-pill" id="storeButton" data-open-store aria-haspopup="dialog">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      <span class="store-pill__label" data-store-label>Escolher loja</span>
-    </button>
     <button type="button" class="icon-btn" id="searchButton" aria-label="Buscar" aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
-    </button>
-    <button type="button" class="icon-btn" id="wishlistButton" aria-label="Favoritos, 0 peças" aria-haspopup="dialog">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20Z"/></svg>
-      <span class="icon-btn__count" data-wishlist-count hidden>0</span>
-    </button>
-    <button type="button" class="icon-btn" id="bagButton" aria-label="Sacola de interesse, 0 peças" aria-haspopup="dialog">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
-      <span class="icon-btn__count" data-bag-count hidden>0</span>
     </button>
     <button type="button" class="couture-toggle" id="belleMenuButton" aria-label="Abrir menu" aria-controls="belleMenuPanel" aria-expanded="false">
       <span class="couture-toggle__pill" aria-hidden="true"><span class="couture-toggle__track">
@@ -119,6 +116,16 @@
         <li class="couture-nav__item" style="--i:5"><a class="couture-nav__link" href="#atendimento-final" data-mobile-nav data-split>Atendimento</a></li>
       </ol>
     </nav>
+    <div class="couture-nav__commerce" role="group" aria-label="Acesso rápido aos seus itens">
+      <button type="button" class="couture-nav__commerce-action" id="wishlistButton" aria-label="Favoritos, 0 peças" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20Z"/></svg>
+        <span>Favoritos</span><span class="icon-btn__count" data-wishlist-count hidden>0</span>
+      </button>
+      <button type="button" class="couture-nav__commerce-action" id="bagButton" aria-label="Sacola de interesse, 0 peças" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span>Sacola</span><span class="icon-btn__count" data-bag-count hidden>0</span>
+      </button>
+    </div>
     <ul class="couture-nav__secondary">
       <li style="--i:6"><a href="#como-comprar" data-mobile-nav data-split>Como comprar</a></li>
       <li style="--i:7"><a href="#duvidas" data-mobile-nav data-split>Dúvidas</a></li>
