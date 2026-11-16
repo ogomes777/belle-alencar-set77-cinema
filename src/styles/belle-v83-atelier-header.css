@@ -1,0 +1,327 @@
+/* BELLE V83 / SET77 LABS · centered brand, three essentials, independent city chip.
+   Only the global header + couture menu are affected. All commerce IDs stay intact. */
+
+/* Compact luxury header with the actual Belle wordmark geometrically centered. */
+html body #siteHeader.site-header,
+html body #siteHeader.site-header.is-compact {
+  left:50%!important;
+  right:auto!important;
+  width:min(680px,calc(100% - 24px))!important;
+  max-width:calc(100% - 12px)!important;
+  transform:translate3d(-50%,0,0)!important;
+  padding-inline:clamp(9px,1.25vw,17px)!important;
+  gap:0!important;
+  justify-content:flex-end;
+}
+html body #siteHeader.site-header {
+  height:64px!important;
+  border-radius:24px!important;
+}
+html body #siteHeader.site-header.is-compact {
+  height:58px!important;
+  border-radius:21px!important;
+}
+html body #siteHeader.site-header > .brand {
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:2;
+  width:max-content;
+  max-width:calc(100% - 224px);
+  margin:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:9px!important;
+  text-align:center;
+  white-space:nowrap;
+}
+html body #siteHeader.site-header .brand__mark {
+  width:clamp(29px,2.8vw,36px)!important;
+  flex:0 0 clamp(29px,2.8vw,36px)!important;
+}
+html body #siteHeader.site-header .brand__word {
+  display:block!important;
+  font-size:clamp(.79rem,1.12vw,.99rem)!important;
+  line-height:1!important;
+  letter-spacing:.14em!important;
+  white-space:nowrap!important;
+}
+html body #siteHeader.site-header .brand__word small {
+  display:block!important;
+  font-size:.47rem!important;
+  letter-spacing:.24em!important;
+  margin-top:5px;
+}
+html body #siteHeader.site-header > .site-actions {
+  position:relative;
+  z-index:3;
+  margin-left:auto!important;
+  gap:clamp(3px,.48vw,7px)!important;
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+}
+html body #siteHeader.site-header .site-actions > #searchButton,
+html body #siteHeader.site-header .site-actions > #belleSettingsButton {
+  min-width:42px!important;
+  width:42px!important;
+  height:42px!important;
+  flex:0 0 42px!important;
+  border-radius:14px!important;
+}
+html body #siteHeader.site-header .site-actions > #belleMenuButton{
+  margin:0!important;
+}
+html body #siteHeader.site-header .site-actions #searchButton svg,
+html body #siteHeader.site-header .site-actions #belleSettingsButton svg{
+  width:19px;height:19px;
+}
+
+/* The chosen shop is part of persistent navigation, but NOT part of the bar.
+   Keeping the ORIGINAL #storeButton preserves click handlers and selected city. */
+html body #belleLocationDock.belle-location-dock{
+  --dock-text:#3b2b21;
+  --dock-soft:#805d3c;
+  --dock-line:rgba(161,112,57,.40);
+  --dock-glass:rgba(255,250,242,.83);
+  --dock-highlight:rgba(255,255,255,.75);
+  position:fixed;
+  z-index:38;
+  top:clamp(12px,1.25vw,19px);
+  left:clamp(12px,2vw,32px);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+  width:max-content;
+  max-width:min(180px,calc(100vw - 24px));
+  transition:opacity .2s ease,visibility .2s ease;
+  color:var(--dock-text);
+}
+html body #belleLocationDock .belle-location-dock__eyebrow{
+  display:block;
+  padding-left:10px;
+  font-family:"Archivo","Playfair Display",Arial,sans-serif!important;
+  font-size:9px!important;
+  font-weight:650!important;
+  letter-spacing:.16em!important;
+  line-height:1.4;
+  color:var(--dock-soft);
+}
+html body #belleLocationDock #storeButton.store-pill{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  min-width:144px;
+  max-width:180px;
+  min-height:44px;
+  margin:0!important;
+  padding:0 13px!important;
+  border:1px solid var(--dock-line)!important;
+  border-radius:999px;
+  color:var(--dock-text)!important;
+  background:linear-gradient(142deg,var(--dock-highlight),transparent 74%),var(--dock-glass)!important;
+  backdrop-filter:blur(15px) saturate(1.3);
+  -webkit-backdrop-filter:blur(15px) saturate(1.3);
+  box-shadow:0 8px 23px -15px rgba(40,28,21,.31),inset 0 1px 0 rgba(255,255,255,.61);
+  cursor:pointer;
+  transition:border-color .18s ease,transform .18s ease,background-color .2s ease;
+}
+html body #belleLocationDock #storeButton:hover,
+html body #belleLocationDock #storeButton:focus-visible{
+  border-color:var(--dock-soft)!important;
+  transform:translateY(-1px);
+}
+html body #belleLocationDock #storeButton:focus-visible{
+  outline:2px solid var(--dock-soft);outline-offset:3px;
+}
+html body #belleLocationDock #storeButton svg{
+  display:block;
+  width:17px!important;height:17px!important;
+  flex:0 0 17px;
+  fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;
+}
+html body #belleLocationDock #storeButton .store-pill__label{
+  display:block!important;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-family:"Playfair Display",Georgia,serif!important;
+  font-size:clamp(.73rem,1vw,.84rem)!important;
+  font-weight:500!important;
+  letter-spacing:.005em!important;
+}
+html[data-belle-theme="dark"] body #belleLocationDock{
+  --dock-text:#fff0d8;
+  --dock-soft:#f3ce93;
+  --dock-line:rgba(229,178,105,.53);
+  --dock-glass:rgba(36,29,29,.91);
+  --dock-highlight:rgba(95,71,55,.28);
+}
+html[data-belle-theme="rose"] body #belleLocationDock{
+  --dock-text:#64314a;
+  --dock-soft:#a44d7b;
+  --dock-line:rgba(179,76,128,.45);
+  --dock-glass:rgba(255,237,246,.91);
+  --dock-highlight:rgba(255,255,255,.80);
+}
+/* No stray location control over the full-screen menu or commerce overlays. */
+html.couture-nav-open body #belleLocationDock{
+  opacity:0;visibility:hidden;pointer-events:none;
+}
+
+/* FAVORITES + BAG: useful commerce actions, placed inside the original couture
+   menu instead of leaving duplicated icons in the header. */
+html body #belleMenuPanel .couture-nav__commerce{
+  position:absolute;
+  z-index:2;
+  top:clamp(96px,11svh,132px);
+  right:clamp(16px,3.6vw,54px);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+html body #belleMenuPanel .couture-nav__commerce-action{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:46px;
+  padding:0 clamp(12px,1.3vw,18px);
+  color:var(--cn-ink)!important;
+  background:color-mix(in srgb,var(--cn-bg) 75%,transparent);
+  border:1px solid var(--cn-line);
+  border-radius:999px;
+  font-family:"Playfair Display",Georgia,serif!important;
+  font-size:clamp(.86rem,1.1vw,1.03rem)!important;
+  letter-spacing:.01em;
+  cursor:pointer;
+  transition:border-color .2s ease,background-color .2s ease,transform .2s ease;
+}
+html body #belleMenuPanel .couture-nav__commerce-action svg{
+  display:block;
+  width:19px;height:19px;
+  flex:0 0 19px;
+  fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+}
+html body #belleMenuPanel .couture-nav__commerce-action:hover,
+html body #belleMenuPanel .couture-nav__commerce-action:focus-visible{
+  border-color:var(--cn-active);
+  background:color-mix(in srgb,var(--cn-bg) 64%,var(--cn-active) 12%);
+  transform:translateY(-1px);
+}
+html body #belleMenuPanel .couture-nav__commerce-action:focus-visible{
+  outline:2px solid var(--cn-active);outline-offset:3px;
+}
+html body #belleMenuPanel .couture-nav__commerce-action .icon-btn__count{
+  position:static!important;
+  display:inline-grid;
+  place-items:center;
+  min-width:19px;height:19px;
+  padding:0 4px;
+  border-radius:999px;
+  background:var(--cn-active);color:var(--cn-bg);
+  box-shadow:none!important;
+  font:700 .65rem/1 "Archivo",sans-serif!important;
+}
+html body #belleMenuPanel .couture-nav__commerce-action .icon-btn__count[hidden]{
+  display:none!important;
+}
+@media(max-width:1060px){
+  html body #belleLocationDock.belle-location-dock{
+    top:calc(77px + env(safe-area-inset-top));
+    left:clamp(13px,2.1vw,22px);
+  }
+}
+@media(max-width:860px){
+  html body #siteHeader.site-header,
+  html body #siteHeader.site-header.is-compact{
+    width:calc(100% - 18px)!important;
+    max-width:680px!important;
+    height:58px!important;
+    top:8px!important;
+    border-radius:20px!important;
+  }
+  html body #siteHeader.site-header > .brand{
+    gap:5px!important;
+    max-width:calc(100% - 158px);
+  }
+  html body #siteHeader.site-header .brand__mark{
+    width:29px!important;flex-basis:29px!important;
+  }
+  html body #siteHeader.site-header .brand__word{
+    font-size:.76rem!important;letter-spacing:.105em!important;
+  }
+  html body #siteHeader.site-header .brand__word small{
+    font-size:.42rem!important;letter-spacing:.17em!important;
+  }
+  html body #siteHeader.site-header > .site-actions{gap:2px!important}
+  html body #siteHeader.site-header .site-actions > #searchButton,
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton{
+    min-width:44px!important;width:44px!important;
+    height:44px!important;flex:0 0 44px!important;
+  }
+  html body #belleLocationDock.belle-location-dock{
+    top:calc(75px + env(safe-area-inset-top));
+    max-width:146px;
+  }
+  html body #belleLocationDock #storeButton.store-pill{
+    min-width:125px;max-width:146px;padding:0 11px!important;
+  }
+  html body #belleMenuPanel .couture-nav__commerce{
+    top:calc(88px + env(safe-area-inset-top));
+    right:clamp(14px,4vw,28px);
+  }
+}
+@media(max-width:500px){
+  html body #siteHeader.site-header,
+  html body #siteHeader.site-header.is-compact{
+    width:calc(100% - 12px)!important;
+    padding-left:8px!important;padding-right:7px!important;
+  }
+  html body #siteHeader.site-header .brand__mark{
+    width:23px!important;flex-basis:23px!important;
+  }
+  html body #siteHeader.site-header .brand__word{
+    font-size:.65rem!important;letter-spacing:.07em!important;
+  }
+  html body #siteHeader.site-header .brand__word small{
+    font-size:.39rem!important;letter-spacing:.10em!important;
+  }
+  html body #siteHeader.site-header .site-actions > #searchButton,
+  html body #siteHeader.site-header .site-actions > #belleSettingsButton{
+    min-width:41px!important;width:41px!important;
+    height:44px!important;flex:0 0 41px!important;
+  }
+  html body #belleLocationDock .belle-location-dock__eyebrow{font-size:8px!important}
+  html body #belleMenuPanel .couture-nav__commerce{gap:7px}
+  html body #belleMenuPanel .couture-nav__commerce-action{
+    min-height:44px;padding:0 11px;
+    gap:6px;font-size:.82rem!important;
+  }
+  html body #belleMenuPanel .couture-nav__commerce-action svg{width:17px;height:17px;flex-basis:17px}
+}
+@media(max-width:375px){
+  /* On the narrowest phones keep the real monogram dead center instead of
+     overlapping the three essential 44px actions. Accessible brand label remains. */
+  html body #siteHeader.site-header .brand__word{display:none!important}
+  html body #siteHeader.site-header .brand__mark{width:32px!important;flex-basis:32px!important}
+  html body #belleMenuPanel .couture-nav__commerce{left:12px;right:12px;justify-content:center}
+}
+@media(max-height:600px){
+  html body #belleMenuPanel .couture-nav__commerce{
+    top:calc(76px + env(safe-area-inset-top));
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body #belleLocationDock,
+  html body #belleLocationDock #storeButton,
+  html body #belleMenuPanel .couture-nav__commerce-action{
+    transition:none!important;
+  }
+}
