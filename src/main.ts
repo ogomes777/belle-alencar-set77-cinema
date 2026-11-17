@@ -57,6 +57,8 @@ import './styles/belle-v85-optin-film.css'; // V85: runway leads, film locked un
 import './styles/belle-v86-opening.css'; // V86: original banners and pink Cube Roll reveal.
 import './styles/belle-v86-loader-signature.css'; // V86: fine calligraphic loader handwriting.
 import './styles/belle-v88-navbar-marquee.css'; // V88: solid header + theme-synced outlined straight marquee only.
+import './styles/belle-v92-faq-footer.css'; // V92: approved FAQ & SET77 closing footer only.
+import './styles/belle-v92-finale-cta.css'; // V92: only the final WhatsApp/Instagram pair, V91 Signature styling.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
@@ -68,6 +70,8 @@ initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
+// V92: real accordion + global i18n for approved FAQ/footer. Theme is controlled in the original navbar.
+void import('./study/v92-faq-footer').then(({initBelleV89Study})=>initBelleV89Study());
 // V57: boot the hero before below-the-fold enhancements and costly DOM
 // choreography. Download/compile proceeds while the intro is visible.
 const director = initDirector();
