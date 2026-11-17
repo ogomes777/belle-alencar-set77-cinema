@@ -59,6 +59,10 @@ export const phrasePairs = [
     "Elegir tienda",
     "Scegli negozio"
   ],
+  ["Loja", "Store", "Tienda", "Negozio"],
+  ["Temas", "Themes", "Temas", "Temi"],
+  ["Claro", "Light", "Claro", "Chiaro"],
+  ["Idiomas", "Languages", "Idiomas", "Lingue"],
   [
     "UM CONVITE PARA SE VESTIR BEM.",
     "AN INVITATION TO DRESS BEAUTIFULLY.",

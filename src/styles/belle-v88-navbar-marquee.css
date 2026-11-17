@@ -299,3 +299,111 @@ html body #belleLocationDock.belle-location-dock { z-index:41!important; }
  html body #siteHeader.site-header,
  html body #siteHeader.site-header.is-compact{transition:none!important}
 }
+
+/* The original search, store picker and couture menu share the right edge. */
+html body #siteHeader.site-header .site-actions > #searchButton,
+html body #siteHeader.site-header .site-actions > #storeButton {
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  margin:0!important;
+  min-height:44px;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  color:inherit!important;
+}
+html body #siteHeader.site-header .site-actions > #searchButton::before,
+html body #siteHeader.site-header .site-actions > #searchButton::after { display:none!important; }
+html body #siteHeader.site-header .site-actions > #searchButton:hover { transform:none!important; }
+html body #siteHeader.site-header .site-actions > #storeButton {
+  min-width:44px;
+  max-width:none;
+  gap:5px;
+  font:500 .83rem var(--serif);
+  letter-spacing:0;
+  text-transform:none;
+}
+#siteHeader #storeButton .store-pill__label { max-width:6em; }
+html body #siteHeader.site-header .site-actions > #belleMenuButton {
+  justify-content:center;
+  min-width:44px;
+  min-height:44px;
+}
+html body #siteHeader.site-header .couture-toggle__disc {
+  width:24px!important;
+  height:24px!important;
+  background:transparent!important;
+  border:0!important;
+}
+html body #siteHeader.site-header .couture-toggle__disc::before { display:none; }
+html body #siteHeader.site-header .couture-toggle__diamond {
+  width:9px;
+  height:9px;
+  background:var(--v87-metal)!important;
+}
+html body #siteHeader.site-header .couture-toggle[aria-expanded="true"] .couture-toggle__close {
+  stroke:var(--v87-navbar-open-ink)!important;
+}
+
+#siteHeader .belle-nav-preferences {
+  position:absolute;
+  left:clamp(8px,1.5vw,26px);
+  bottom:4px;
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+#siteHeader .belle-nav-themes { display:grid; }
+#siteHeader .belle-nav-languages { display:flex; }
+#siteHeader .belle-nav-preferences button {
+  display:grid;
+  place-items:center;
+  min-height:24px;
+  min-width:24px;
+  padding:0;
+  color:inherit;
+  background:none;
+  border:0;
+  font:500 .66rem var(--sans);
+}
+#siteHeader .belle-nav-preferences [data-theme-option]::after {
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:1px solid #8b6659;
+  background:#cf9089;
+}
+#siteHeader .belle-nav-preferences [data-theme-option="light"]::after { background:#fbf4e8; }
+#siteHeader .belle-nav-preferences [data-theme-option][aria-pressed="true"]::after {
+  outline:1px solid currentColor;
+  outline-offset:2px;
+}
+#siteHeader .belle-nav-languages button[aria-pressed="true"] {
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+#siteHeader.is-nav-open .belle-nav-preferences { visibility:hidden; }
+
+@media(max-width:620px) {
+  html body #siteHeader.site-header,
+  html body #siteHeader.site-header.is-compact {
+    --belle-mobile-header:94px;
+    height:var(--belle-mobile-header)!important;
+    align-items:flex-end!important;
+    padding:0 8px 3px!important;
+  }
+  html body #siteHeader.site-header > .brand { top:24px!important; }
+  html body #siteHeader.site-header > .site-actions { gap:0!important; }
+  #siteHeader .belle-nav-preferences { bottom:0; }
+  #siteHeader #storeButton .store-pill__label { max-width:4.5em; }
+  html body #inicio .v86-opening__titleband {
+    flex-basis:calc(clamp(158px,25svh,194px) + 31px)!important;
+  }
+  .v87-marquee { top:94px!important; }
+  html { scroll-padding-top:106px; }
+}

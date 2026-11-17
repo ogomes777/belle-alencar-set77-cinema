@@ -9,10 +9,10 @@ const base=process.env.BASE || 'http://127.0.0.1:4173';
 const browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const requireCheck=(ok,message)=>{if(!ok)throw new Error(message)};
 const expected={
- pt:['A loja','Passarela','Ocasiões','Coleção','Lojas','Atendimento','Como comprar','Dúvidas','WhatsApp','Instagram'],
- en:['The boutique','Runway','Occasions','Collection','Stores','Personal assistance','How to shop','Questions','WhatsApp','Instagram'],
- es:['La boutique','Pasarela','Ocasiones','Colección','Tiendas','Atención personalizada','Cómo comprar','Preguntas','WhatsApp','Instagram'],
- it:['La boutique','Passerella','Occasioni','Collezione','Negozi','Assistenza','Come acquistare','Domande','WhatsApp','Instagram']
+ pt:['Passarela','Experiência','Ocasiões','Coleção','Lojas','Atendimento','Como comprar','Dúvidas','WhatsApp','Instagram'],
+ en:['Runway','Experience','Occasions','Collection','Stores','Personal assistance','How to shop','Questions','WhatsApp','Instagram'],
+ es:['Pasarela','Experiencia','Ocasiones','Colección','Tiendas','Atención personalizada','Cómo comprar','Preguntas','WhatsApp','Instagram'],
+ it:['Passerella','Esperienza','Occasioni','Collezione','Negozi','Assistenza','Come acquistare','Domande','WhatsApp','Instagram']
 };
 await mkdir('artifacts/i18n-v39',{recursive:true});
 try{
@@ -25,12 +25,10 @@ try{
     try{sessionStorage.setItem('belle:v4:intro','1')}catch{}
   });
   await page.goto(base+'/?tier=static',{waitUntil:'load'});
-  await page.locator('#belleSettingsButton').waitFor({state:'visible',timeout:15000});
+  await page.locator('#siteHeader [data-lang-option="pt"]').waitFor({state:'visible',timeout:15000});
   for(const lang of ['en','es','it','pt']){
-    await page.locator('#belleSettingsButton').click();
-    await page.locator('#belleSettingsPanel [data-lang-option="'+lang+'"]').click();
+    await page.locator('#siteHeader [data-lang-option="'+lang+'"]').click();
     await page.waitForFunction(locale=>document.documentElement.lang.startsWith(locale),lang);
-    await page.locator('#belleSettingsPanel [data-close-settings]').click();
     await page.locator('#belleMenuButton').click();
     await page.waitForFunction(()=>document.getElementById('belleMenuPanel')?.classList.contains('is-open'));
     const menu=await page.evaluate(()=>{
@@ -60,7 +58,7 @@ try{
     await page.waitForFunction(()=>document.getElementById('belleMenuButton')?.getAttribute('aria-expanded')==='false');
     await page.locator('#searchButton').click();
     const heading=await page.locator('#searchDialog .ba-search-title').textContent();
-    requireCheck(heading?.trim()===({pt:'Encontre o seu look.',en:'Find your look.',es:'Encuentra tu look.',it:'Trova il tuo look.'})[lang],
+    requireCheck(heading?.trim()===({pt:'Busque por peça ou cidade.',en:'Search by piece or city.',es:'Busca por prenda o ciudad.',it:'Cerca per capo o città.'})[lang],
       'search copy untranslated '+lang+' '+width+':'+heading);
     await page.keyboard.press('Escape');
     console.log('PASS',width,lang,'animated menu, search, overflow, keyboard');

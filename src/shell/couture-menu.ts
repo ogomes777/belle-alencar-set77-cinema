@@ -203,7 +203,7 @@ export function initCoutureMenu(): void {
       setOpen(false, false, true);
   });
   document.addEventListener('pointerdown', event => {
-    if (open && (event.target as Element).closest?.('#storeButton,#searchButton,#belleSettingsButton'))
+    if (open && (event.target as Element).closest?.('#storeButton,#searchButton'))
       setOpen(false, false);
   }, { passive: true });
   window.addEventListener('pagehide', () => setOpen(false, false));

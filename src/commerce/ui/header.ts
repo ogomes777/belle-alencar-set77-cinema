@@ -9,7 +9,7 @@ export function bindHeader(ctx: Ctx) {
   const sync = (bump = false) => {
     const s = ctx.commerce.get();
     const store = s.storeId ? STORES[s.storeId] : null;
-    $$('[data-store-label]').forEach((el) => (el.textContent = store ? store.city : 'Escolher loja'));
+    $$('[data-store-label]').forEach((el) => (el.textContent = store ? store.city : 'Loja'));
     document
       .getElementById('storeButton')
       ?.setAttribute('aria-label', store ? `Loja selecionada: ${store.city}. Trocar loja` : 'Escolher loja');
