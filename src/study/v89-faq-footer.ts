@@ -68,7 +68,7 @@ export function initBelleV89Study(){
   const form=document.querySelector<HTMLFormElement>('#v89NewsletterStudy');
   const status=document.querySelector<HTMLElement>('#v89NewsletterStatus');
   const qa=Array.from(section.querySelectorAll<HTMLDetailsElement>('.v89-faq__list details'));
-  if(qa.length&&!qa.some(x=>x.open))qa[0].open=true;
+  if(qa[0]&&!qa.some(x=>x.open))qa[0].open=true;
   // Exactly one expanded answer: accordion remains keyboard/native details accessible.
   for(const item of qa)item.addEventListener('toggle',()=>{
     if(item.open)for(const other of qa)if(other!==item)other.open=false;
@@ -78,14 +78,14 @@ export function initBelleV89Study(){
     const words=copy[locale];
     for(const el of document.querySelectorAll<HTMLElement>('[data-v89-key]')){
       const key=el.dataset.v89Key||'';
-      if(key==='formHelp'&&el.dataset.v89Submitted==='true')el.textContent=words.formResult;
+      if(key==='formHelp'&&el.dataset.v89Submitted==='true')el.textContent=words.formResult??'';
       else if(words[key]!==undefined)el.textContent=words[key];
     }
     if(theme){
       const current=document.documentElement.dataset.belleTheme||'light';
       theme.value=current;
       for(const option of theme.options)option.textContent=words[option.value]||option.value;
-      theme.setAttribute('aria-label',words.themeLabel);
+      theme.setAttribute('aria-label',words.themeLabel??'Tema do estudo');
     }
   };
   theme?.addEventListener('change',()=>{
@@ -100,7 +100,7 @@ export function initBelleV89Study(){
     if(!form.checkValidity()){form.reportValidity();return;}
     if(status){
       status.dataset.v89Submitted='true';
-      status.textContent=copy[getBelleLocale()].formResult;
+      status.textContent=copy[getBelleLocale()].formResult??'Nenhum cadastro foi enviado.';
     }
     const input=form.querySelector<HTMLInputElement>('input[type="email"]');
     if(input)input.value='';
