@@ -228,3 +228,19 @@ html body footer.site-footer.site-footer--studio .v89-footer__signature > span:f
     gap:clamp(38px,7vw,120px)!important;
   }
 }
+
+
+/* V94: only the two digits '77' in the SET77 LABS WORDMARK move up.
+   The separate spinning red 777 ribbon remains 100% untouched. */
+html body footer.site-footer--studio .v89-footer__madeby-copy strong .v94-credit-digits{
+  display:inline-block!important;
+  position:relative;
+  font:inherit!important;
+  font-size:inherit!important;
+  font-weight:inherit!important;
+  line-height:inherit!important;
+  letter-spacing:inherit!important;
+  color:inherit!important;
+  transform:translateY(-.12em);
+  vertical-align:baseline;
+}
