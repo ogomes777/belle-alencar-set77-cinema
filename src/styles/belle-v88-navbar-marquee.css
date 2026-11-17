@@ -1,0 +1,301 @@
+/* Belle V88 / production release.
+ * Target: solid navbar and theme-aware straight marquee only.
+ * Preserves latest V86 banners, all commerce handlers and newest centered couture menu.
+ */
+/*
+ * BELLE V87 / SET77 LABS · EXPERIMENTO SEM MERGE
+ * Base: produção V86. Mudanças restritas a header, titleband e menu.
+ * Componentes comerciais com os mesmos IDs e handlers originais.
+ */
+
+/* Os tokens seguem exatamente os três temas persistidos em preferences/settings.ts. */
+html,
+html[data-belle-theme="light"]{
+  --v87-navbar:#f5ece2;
+  --v87-nav-ink:#564134;
+  --v87-hairline:rgba(132,98,64,.24);
+  --v87-rose-1:#f6eee5;
+  --v87-rose-2:#e9d9c8;
+  --v87-rose-3:#f8f3ed;
+  --v87-outline:#74533d;
+  --v87-navbar-open:#ba965f;
+  --v87-navbar-open-ink:#292016;
+  --v87-metal:#bb9a6e;
+}
+html[data-belle-theme="rose"]{
+  --v87-navbar:#f5dbe7;
+  --v87-nav-ink:#5c3044;
+  --v87-hairline:rgba(148,86,105,.24);
+  --v87-rose-1:#f6dce9;
+  --v87-rose-2:#ebbad1;
+  --v87-rose-3:#f9e7ed;
+  --v87-outline:#69344c;
+  --v87-navbar-open:#c98a95;
+  --v87-navbar-open-ink:#4f2029;
+  --v87-metal:#bc9164;
+}
+html[data-belle-theme="dark"]{
+  --v87-navbar:#251d23;
+  --v87-nav-ink:#f6e7dd;
+  --v87-hairline:rgba(228,190,142,.24);
+  --v87-rose-1:#30242e;
+  --v87-rose-2:#503440;
+  --v87-rose-3:#292128;
+  --v87-outline:#f0ceb1;
+  --v87-navbar-open:#17130f;
+  --v87-navbar-open-ink:#ead1a9;
+  --v87-metal:#caaa79;
+}
+
+/* Deixa de ser cápsula flutuante. É uma única superfície sólida, de borda a borda. */
+html body #siteHeader.site-header,
+html body #siteHeader.site-header.is-compact{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  top:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  height:clamp(62px,5.8vw,76px)!important;
+  transform:none!important;
+  border-radius:0!important;
+  border:0!important;
+  border-bottom:1px solid var(--v87-hairline)!important;
+  outline:0!important;
+  padding:0 clamp(16px,3vw,55px)!important;
+  background:var(--v87-navbar)!important;
+  color:var(--v87-nav-ink)!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  box-shadow:none!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  transition:height .24s ease!important; /* theme colors update atomically in the same frame */
+  overflow:visible!important;
+  z-index:40!important;
+}
+html body #siteHeader.site-header.is-compact{height:clamp(60px,5.3vw,70px)!important}
+html body #siteHeader.site-header::before,
+html body #siteHeader.site-header::after{display:none!important}
+html body #siteHeader.site-header.is-nav-open{
+  background:var(--v87-navbar-open)!important;
+  color:var(--v87-navbar-open-ink)!important;
+  border-bottom-color:rgba(84,57,38,.22)!important;
+}
+
+/* BELLE permanece no centro, sem nenhum ícone concorrendo. */
+html body #siteHeader.site-header > .brand{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:calc(100% - 154px)!important;
+  gap:9px!important;
+  color:var(--v87-nav-ink)!important;
+  opacity:1!important;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+html body #siteHeader.site-header.is-nav-open > .brand{
+  color:var(--v87-navbar-open-ink)!important;
+}
+html body #siteHeader.site-header .brand__mark{
+  width:clamp(25px,2.5vw,36px)!important;
+  flex-basis:clamp(25px,2.5vw,36px)!important;
+  color:var(--v87-metal)!important;
+}
+html body #siteHeader.site-header .brand__word{
+  font-family:"Bodoni Moda",var(--serif)!important;
+  color:inherit!important;
+  font-size:clamp(.9rem,1.22vw,1.15rem)!important;
+  line-height:1.08!important;
+  letter-spacing:.155em!important;
+  font-weight:400!important;
+}
+html body #siteHeader.site-header .brand__word small{
+  color:inherit!important;opacity:.78;
+  font-size:clamp(.42rem,.48vw,.55rem)!important;
+  letter-spacing:.26em!important;
+  margin-top:5px;
+}
+html body #siteHeader.site-header .site-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  width:auto!important;
+  position:relative!important;
+  margin-left:auto!important;
+  z-index:4;
+}
+html body #siteHeader.site-header .site-actions > #belleMenuButton{
+  display:inline-flex!important;
+  position:relative!important;
+  margin:0!important;
+  height:42px!important;
+  color:inherit!important;
+}
+html body #siteHeader.site-header .couture-toggle__pill{
+  border-color:var(--v87-hairline)!important;
+  color:inherit!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-weight:500!important;
+}
+html body #siteHeader.site-header .couture-toggle__disc{
+  background:var(--v87-metal)!important;
+  border:1px solid rgba(255,255,255,.23)!important;
+  box-shadow:none!important;
+}
+html body #siteHeader.site-header .couture-toggle__diamond{background:#fdf6eb!important}
+html body #siteHeader.site-header .couture-toggle[aria-expanded="true"] .couture-toggle__close{
+  stroke:#412b22!important
+}
+html body #siteHeader.site-header .couture-toggle:hover .couture-toggle__pill{
+  border-color:var(--v87-metal)!important;
+}
+/* O chip fixo de loja está sem botão; #storeButton original foi para o menu. */
+/* Original corner store dock is kept in its original position and state. */
+
+/* O início da landing conecta materialmente navbar > faixa > banner. */
+html body #inicio.v86-opening{
+  background:var(--v87-rose-3)!important;
+}
+html body #inicio .v86-opening__titleband{
+  position:relative!important;
+  display:block!important;
+  flex:0 0 clamp(179px,23svh,235px)!important;
+  width:100%!important;
+  padding:0!important;
+  background:linear-gradient(110deg,var(--v87-rose-1),var(--v87-rose-2) 55%,var(--v87-rose-3))!important;
+  border-bottom:1px solid var(--v87-hairline)!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+html body #inicio .v86-opening__titleband::before{
+  background:radial-gradient(ellipse 55% 46% at 47% 110%,rgba(255,255,255,.17),transparent 97%)!important;
+  opacity:.7
+}
+html body #inicio .v86-opening__titleband::after{
+  content:"";position:absolute;bottom:0;left:0;right:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--v87-metal) 21%,var(--v87-metal) 79%,transparent);
+  opacity:.68
+}
+/* Loop CSS move um módulo com duplicata idêntica. Sem rAF, sem saltos de fase. */
+.v87-marquee{
+  position:absolute;inset:clamp(62px,5.8vw,76px) 0 0;
+  width:100%;height:auto;display:flex;align-items:center;overflow:hidden;
+  pointer-events:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 3%,#000 97%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 3%,#000 97%,transparent 100%);
+}
+.v87-marquee__track{
+  display:flex;align-items:center;gap:0;width:max-content;
+  height:100%;
+  white-space:nowrap;
+  animation:v87MarqueeTravel 38s linear infinite;
+  will-change:transform;
+}
+.v87-marquee__sequence{
+  display:flex;align-items:center;flex:0 0 auto;gap:0;
+  height:100%;
+}
+.v87-marquee__word{
+  font-family:"Archivo Black","Arial Black","Archivo",Arial,sans-serif!important;
+  font-size:clamp(4rem,8.2vw,9.25rem);
+  font-weight:400;
+  line-height:1.04;
+  letter-spacing:-.053em;
+  white-space:nowrap;
+  padding:0 .22em;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:1.5px var(--v87-outline)!important;
+  paint-order:stroke;
+  transition:none; /* instantaneous contrast on theme change */
+  text-shadow:none!important;
+}
+.v87-marquee__gem{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:clamp(46px,6vw,88px);
+  flex:0 0 clamp(46px,6vw,88px);
+  height:100%;
+  color:var(--v87-metal);
+  opacity:.94;
+}
+.v88-brand-symbols{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.v87-marquee__gem .v88-ba-monogram{
+  display:block;
+  width:clamp(36px,4.4vw,64px);
+  height:clamp(36px,4.4vw,64px);
+  overflow:visible;
+  transition:none; /* monogram color remains synced with the ribbon */
+}
+.v87-marquee__gem .v88-ba-monogram use{
+  fill:none!important;
+  stroke:var(--v87-metal)!important;
+  stroke-width:15;
+  stroke-dasharray:58 24;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  paint-order:stroke;
+}
+html[data-belle-theme="light"] .v87-marquee__gem .v88-ba-monogram use{stroke:#a77b49!important}
+html[data-belle-theme="rose"] .v87-marquee__gem .v88-ba-monogram use{stroke:#94623a!important}
+html[data-belle-theme="dark"] .v87-marquee__gem .v88-ba-monogram use{stroke:#e6be82!important}
+
+@keyframes v87MarqueeTravel{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
+html[data-belle-theme="dark"] body #inicio .v86-opening__carousel{
+  background:#282128!important;
+}
+/* Mantém as duas artes originais. Nada de textos ou filtros nas imagens. */
+html body #inicio .v86-opening__carousel{border:0!important}
+html body #inicio .v86-opening__slide picture.v86-opening__image img{
+  filter:none!important;
+}
+html body #inicio .v86-opening__carousel::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:3;
+  pointer-events:none;background:var(--v87-metal);opacity:.22;
+}
+
+
+/* Only header + marquee responsivity. The more recent centered couture menu
+   in the production branch remains completely untouched. */
+html body #belleLocationDock.belle-location-dock { z-index:41!important; }
+@media(max-width:860px){
+ html body #siteHeader.site-header,
+ html body #siteHeader.site-header.is-compact{padding:0 13px!important;height:63px!important}
+ html body #siteHeader.site-header > .brand{max-width:calc(100% - 90px)!important;gap:5px!important}
+ html body #siteHeader.site-header .brand__mark{width:26px!important;flex-basis:26px!important}
+ html body #siteHeader.site-header .brand__word{display:block!important;font-size:clamp(.71rem,1.7vw,1rem)!important;letter-spacing:.09em!important}
+ html body #siteHeader.site-header .brand__word small{font-size:.38rem!important;letter-spacing:.16em!important}
+ html body #siteHeader.site-header > .site-actions{position:static!important;margin-left:auto!important}
+ html body #siteHeader.site-header .couture-toggle__pill{display:none!important}
+ html body #siteHeader.site-header .couture-toggle__disc{width:43px!important;height:43px!important}
+ html body #inicio .v86-opening__titleband{flex-basis:clamp(158px,25svh,194px)!important}
+ .v87-marquee{top:63px!important}
+ .v87-marquee__word{font-size:clamp(2.65rem,11.6vw,6rem)}
+}
+@media(max-width:520px){
+ html body #siteHeader.site-header,
+ html body #siteHeader.site-header.is-compact{height:60px!important}
+ .v87-marquee{top:60px!important}
+ html body #siteHeader.site-header > .brand{max-width:calc(100% - 66px)!important}
+ html body #siteHeader.site-header .brand__word{font-size:clamp(.67rem,3vw,.85rem)!important}
+ html body #siteHeader.site-header .brand__mark{width:24px!important;flex-basis:24px!important}
+ html body #siteHeader.site-header .couture-toggle__disc{width:40px!important;height:40px!important}
+ .v87-marquee__word{font-size:clamp(2.9rem,13vw,4.5rem)}
+ .v87-marquee__gem{width:48px;flex-basis:48px}
+ .v87-marquee__gem .v88-ba-monogram{width:35px;height:35px}
+}
+@media(prefers-reduced-motion:reduce){
+ .v87-marquee__track{animation:none!important;will-change:auto}
+ html body #siteHeader.site-header,
+ html body #siteHeader.site-header.is-compact{transition:none!important}
+}
