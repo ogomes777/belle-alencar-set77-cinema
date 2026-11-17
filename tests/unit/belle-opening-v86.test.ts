@@ -55,7 +55,9 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(bridge).toContain('tag="h2"');
     expect(main).toContain("initBelleOpeningV86()");
     expect(main).toContain("v87-header-preview.css");
-    expect(main).toContain("initBelleV87Preview");
+    // V87.1: retain original store/search/settings in the header; favorites/bag
+    // remain in their original full-screen couture menu, no DOM reparenting.
+    expect(main).not.toContain("initBelleV87Preview");
   });
   it('keeps original skip/timing but refines handwriting with script calligraphy',()=>{
     // Vitest CSS raw imports are empty in jsdom: verify final CSS in built assets.
