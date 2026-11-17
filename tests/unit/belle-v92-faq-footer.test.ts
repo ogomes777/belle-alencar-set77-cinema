@@ -24,6 +24,9 @@ describe('Belle V92 · approved closing pages',()=>{
     expect(page).toContain('data-instagram-directory');
     expect(ctaStyles).toContain('.finale .finale__actions .belle-neon');
     expect(ctaStyles).toContain('animation:none!important');
+    expect(ctaStyles).toContain('grid-template-columns:repeat(2, 58px)');
+    expect(ctaStyles).toContain('background-color:transparent!important');
+    expect(ctaStyles).toContain('clip-path:inset(50%)');
   });
   it('keeps spinning original SET77 logo, original footer controls and safe signup demo',()=>{
     expect(page).toContain('class="v89-footer__ribbon"');
@@ -34,6 +37,8 @@ describe('Belle V92 · approved closing pages',()=>{
     expect(faqStyles).toContain('data:image/webp;base64,');
     expect(footerLogic).toContain("event.preventDefault()");
     expect(footerLogic).toContain("setBelleTheme");
+    expect(page).toContain('SET<span class="v94-credit-digits">77</span> LABS');
+    expect(faqStyles).toContain('transform:translateY(-.12em)');
   });
   it('keeps every unrelated campaign asset, navigation and the V88 ribbon',()=>{
     expect(page).toContain('banner-v86-assinatura-branca-4k.webp');
