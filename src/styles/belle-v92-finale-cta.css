@@ -169,3 +169,111 @@ html body .finale .finale__actions .belle-neon::after{
   display:none!important;
   content:none!important;
 }
+
+
+/* BELLE V94 — ÚNICA alteração no finale: somente dois ícones, sem caixas.
+ * Os labels permanecem no DOM para nomes acessíveis e traduções oficiais.
+ * WhatsApp segue como link e Instagram continua abrindo os perfis reais. */
+html body .finale .finale__actions {
+  display:grid!important;
+  grid-template-columns:repeat(2, 58px)!important;
+  justify-content:start!important;
+  justify-items:center!important;
+  align-items:center!important;
+  gap:17px!important;
+  width:max-content!important;
+  max-width:100%!important;
+}
+html body .finale .finale__actions > .belle-neon,
+html body .finale .finale__actions > .belle-neon--ig,
+html body .finale .finale__actions > .belle-neon:not(.belle-neon--ig){
+  display:grid!important;
+  place-items:center!important;
+  width:58px!important;
+  min-width:58px!important;
+  max-width:58px!important;
+  height:56px!important;
+  min-height:56px!important;
+  max-height:56px!important;
+  padding:0!important;
+  margin:0!important;
+  gap:0!important;
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  filter:none!important;
+  isolation:auto!important;
+  color:var(--v92-cta-solid)!important;
+  animation:none!important;
+  transition:color .2s ease,transform .2s ease,opacity .2s ease!important;
+}
+html body .finale .finale__actions > .belle-neon--ig{
+  color:var(--v92-cta-outline)!important;
+}
+html body .finale .finale__actions > .belle-neon:hover,
+html body .finale .finale__actions > .belle-neon--ig:hover{
+  background:transparent!important;
+  background-image:none!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+  filter:none!important;
+  transform:translateY(-2px) scale(1.08)!important;
+}
+html body .finale .finale__actions > .belle-neon::before,
+html body .finale .finale__actions > .belle-neon::after{
+  content:none!important;
+  display:none!important;
+}
+html body .finale .finale__actions > .belle-neon .belle-neon__icon{
+  width:34px!important;
+  height:34px!important;
+  flex:none!important;
+  display:grid!important;
+  place-items:center!important;
+  filter:none!important;
+  color:inherit!important;
+  opacity:1!important;
+}
+html body .finale .finale__actions > .belle-neon .belle-neon__icon svg{
+  width:31px!important;
+  height:31px!important;
+  fill:currentColor!important;
+  stroke:none!important;
+  display:block!important;
+}
+/* Visually hidden, rather than display:none: screen readers keep the label. */
+html body .finale .finale__actions > .belle-neon .belle-neon__label{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0 0 0 0)!important;
+  clip-path:inset(50%)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+html body .finale .finale__actions > .belle-neon:focus-visible{
+  outline:2px solid var(--v92-cta-outline)!important;
+  outline-offset:0!important;
+  border-radius:10px!important;
+}
+@media(max-width:820px){
+  html body .finale .finale__actions{grid-template-columns:repeat(2, 52px)!important;gap:15px!important}
+  html body .finale .finale__actions > .belle-neon{
+    width:52px!important;min-width:52px!important;max-width:52px!important;
+    height:52px!important;min-height:52px!important;max-height:52px!important;
+    padding:0!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body .finale .finale__actions > .belle-neon:hover{
+    transform:none!important;
+  }
+}
