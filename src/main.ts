@@ -56,6 +56,7 @@ import './styles/belle-v84-header-breathing.css'; // V84: prevent search from ov
 import './styles/belle-v85-optin-film.css'; // V85: runway leads, film locked until explicit entry; original scroll film on opt-in.
 import './styles/belle-v86-opening.css'; // V86: original banners and pink Cube Roll reveal.
 import './styles/belle-v86-loader-signature.css'; // V86: fine calligraphic loader handwriting.
+import './styles/belle-v88-navbar-marquee.css'; // V88: solid header + theme-synced outlined straight marquee only.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
