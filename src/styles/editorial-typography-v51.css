@@ -178,7 +178,6 @@ body :is(.btn,.store-pill,.couture-nav a,.store-card__cta,.portal-list button):a
  body .brand__word {font-size:clamp(.92rem,3.1vw,1.15rem);}
  body .lede {line-height:1.5;}
  body .pcard__title {font-size:clamp(1.06rem,4vw,1.3rem);}
- body .couture-nav__primary a {font-size:clamp(2rem,8vw,3.5rem);}
 }
 @media(max-width:359px) {
  body #filme .chapter__card .display {font-size:1.45rem;}

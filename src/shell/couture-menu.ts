@@ -4,8 +4,8 @@
  * Interaction grammar (reference studied: agrumeafarm.it, reinterpreted in
  * Belle's palette/type): a pill "Menu" + gold disc in the header; the panel
  * drops from the top (.9s), chapter titles rise letter by letter through a
- * mask in a diagonal staircase, separators draw in, the current chapter gets
- * a diamond; hovering rolls each letter. Closing lifts the panel away.
+ * mask in a centered list, the current chapter gets a diamond, and letters
+ * roll outward from the center on hover or keyboard focus. Closing lifts the panel away.
  *
  * Native anchors only (no router); body scroll is locked while open; Esc,
  * focus trap and focus restore; theme-aware via CSS; reduced motion = instant.
@@ -25,6 +25,7 @@ export function splitLetters(el: HTMLElement, roll = true): number {
   const box = document.createElement('span');
   box.className = 'cn-letters';
   box.setAttribute('aria-hidden', 'true');
+  const middle = (Array.from(text.replace(/\s+/g, '')).length - 1) / 2;
   let index = 0;
   for (const word of text.split(/(\s+)/)) {
     if (!word) continue;
@@ -34,7 +35,9 @@ export function splitLetters(el: HTMLElement, roll = true): number {
     for (const ch of word) {
       const c = document.createElement('span');
       c.className = 'cn-ch';
-      c.style.setProperty('--c', String(index++));
+      c.style.setProperty('--c', String(index));
+      c.style.setProperty('--roll-distance', String(Math.abs(index - middle)));
+      index++;
       const inner = document.createElement('span');
       inner.className = 'cn-ch__in';
       const a = document.createElement('span');
