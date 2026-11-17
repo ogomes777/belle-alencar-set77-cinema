@@ -16,7 +16,11 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(runway).toBeLessThan(boutique);
     expect((page.match(/id="inicio"/g)??[])).toHaveLength(1);
     expect(page).toContain('id="v86BannerCarousel"');
-    expect(page).toContain('id="v86CubeMount"');
+    // V87 study intentionally replaces the V86 cube ONLY in the pink band.
+    expect(page).toContain('class="v87-marquee"');
+    expect(page).toContain('class="v87-marquee__track"');
+    expect((page.match(/class="v87-marquee__sequence"/g)??[])).toHaveLength(2);
+    expect(page).not.toContain('id="v86CubeMount"');
     expect(page).toContain('id="filmEnter"');
   });
   it('shows the white signature before the white editorial with responsive WebP variants',()=>{
@@ -42,7 +46,7 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(slider).toContain('intro-done');
     expect(slider).toContain('prefers-reduced-motion');
   });
-  it('uses supplied Originkit 360-degree Cube Roll source in a separate React island',()=>{
+  it('preserves V86 Originkit sources for rollback without mounting the old cube in V87',()=>{
     expect(cube).toContain('Cube Roll Letter Role');
     expect(cube).toContain('rotateX: [0, -90 * sign, -180 * sign, -270 * sign, -360 * sign]');
     expect(cube).toContain('repeat: Infinity');
@@ -50,6 +54,8 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(bridge).toContain("CubeRollLetterRole");
     expect(bridge).toContain('tag="h2"');
     expect(main).toContain("initBelleOpeningV86()");
+    expect(main).toContain("v87-header-preview.css");
+    expect(main).toContain("initBelleV87Preview");
   });
   it('keeps original skip/timing but refines handwriting with script calligraphy',()=>{
     // Vitest CSS raw imports are empty in jsdom: verify final CSS in built assets.
