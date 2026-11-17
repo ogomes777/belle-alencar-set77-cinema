@@ -62,3 +62,27 @@ html body footer.site-footer.site-footer--studio{display:block!important;backgro
 @media(max-width:730px){html body .faq--studio .v89-faq__frame{display:block;padding:56px clamp(18px,5vw,40px) 68px}html body .faq--studio .v89-faq__heading{margin:0 0 32px!important}html body .faq--studio .v89-faq__headline{font-size:clamp(3rem,9.5vw,4.8rem)!important}html body .faq--studio .v89-faq__theme{margin-top:21px}html body .faq--studio .v89-faq__list summary{font-size:clamp(1rem,3.2vw,1.22rem)!important}html body footer.site-footer.site-footer--studio{padding:48px clamp(17px,5vw,38px) 30px!important}.site-footer--studio .v89-footer__top{grid-template-columns:repeat(2,minmax(0,1fr));gap:38px 22px}.site-footer--studio .v89-footer__newsletter{grid-column:1/-1}.site-footer--studio .v89-footer__signature{padding:68px 0 18px}.site-footer--studio .v89-footer__signature>span:first-child{font-size:clamp(2.7rem,10vw,5.8rem)}.site-footer--studio .v89-footer__bottom{align-items:start;flex-wrap:wrap;gap:20px}.site-footer--studio .v89-footer__madeby{margin-left:0}}
 @media(max-width:440px){.site-footer--studio .v89-footer__form-row{gap:7px}.site-footer--studio .v89-footer__form-row button{padding:0 11px;font-size:.73rem}.site-footer--studio .v89-footer__signature>span:first-child{font-size:clamp(2.5rem,10.15vw,4.7rem);-webkit-text-stroke:1.1px var(--v89-footer-ink)}.site-footer--studio .v89-footer__bottom{display:grid;grid-template-columns:1fr;gap:16px}.site-footer--studio .v89-footer__ribbon{width:61px;height:74px}.site-footer--studio .v89-footer__madeby-divider{height:57px}.site-footer--studio .v89-footer__madeby-copy span{font-size:.58rem}.site-footer--studio .v89-footer__legalbar{flex-direction:column;gap:15px}}
 @media(prefers-reduced-motion:reduce){html body .faq--studio .v89-faq__list details p{animation:none}}
+
+
+/* V89.1 · mesma rotação 3D do crédito NutriStock.
+   Fonte: nutristock-set77-landing/experiencia/src/closing.css.
+   Altera APENAS a fita 777; não gira os textos, divisória ou footer. */
+.site-footer--studio .v89-footer__madeby{
+  perspective:280px;
+}
+.site-footer--studio .v89-footer__ribbon{
+  transform-origin:50% 50%;
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+  animation:v89Set77CreditSpin 8s cubic-bezier(.42,0,.35,1) infinite;
+}
+@keyframes v89Set77CreditSpin{
+  0%,15%{transform:rotateY(0deg)}
+  84%,100%{transform:rotateY(360deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .site-footer--studio .v89-footer__ribbon{
+    animation:none!important;
+    transform:none!important;
+  }
+}
