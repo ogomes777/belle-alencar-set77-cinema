@@ -56,6 +56,7 @@ import './styles/belle-v84-header-breathing.css'; // V84: prevent search from ov
 import './styles/belle-v85-optin-film.css'; // V85: runway leads, film locked until explicit entry; original scroll film on opt-in.
 import './styles/belle-v86-opening.css'; // V86: original banners and pink Cube Roll reveal.
 import './styles/belle-v86-loader-signature.css'; // V86: fine calligraphic loader handwriting.
+import './styles/v87-header-preview.css'; // V87 preview only: faixa linear + header couture sólido.
 
 
 initPerfGuard(); // V37: adaptive lite mode before any costly module paints.
@@ -67,6 +68,8 @@ initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
+// V87: move REAL commerce/preferences controls to couture menu after listeners bind.
+void import('./shell/v87-header-preview').then(({initBelleV87Preview})=>initBelleV87Preview());
 // V57: boot the hero before below-the-fold enhancements and costly DOM
 // choreography. Download/compile proceeds while the intro is visible.
 const director = initDirector();
