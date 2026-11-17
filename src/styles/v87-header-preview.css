@@ -200,28 +200,49 @@ html body #inicio .v86-opening__titleband::after{
   height:100%;
 }
 .v87-marquee__word{
-  font-family:"Archivo","DM Sans",Arial,sans-serif!important;
+  font-family:"Archivo Black","Arial Black","Archivo",Arial,sans-serif!important;
   font-size:clamp(4rem,8.2vw,9.25rem);
-  font-weight:100;
+  font-weight:400;
   line-height:1.04;
-  letter-spacing:.038em;
+  letter-spacing:-.053em;
   white-space:nowrap;
   padding:0 .22em;
   color:transparent!important;
   -webkit-text-fill-color:transparent!important;
-  -webkit-text-stroke:1.24px var(--v87-outline)!important;
+  -webkit-text-stroke:1.5px var(--v87-outline)!important;
   paint-order:stroke;
   transition:-webkit-text-stroke-color .38s ease;
   text-shadow:none!important;
 }
 .v87-marquee__gem{
   display:inline-flex;align-items:center;justify-content:center;
-  width:clamp(32px,4.8vw,72px);
-  flex:0 0 clamp(32px,4.8vw,72px);
-  font:300 clamp(15px,2.4vw,30px)/1 "Bodoni Moda",serif;
+  width:clamp(46px,6vw,88px);
+  flex:0 0 clamp(46px,6vw,88px);
+  height:100%;
   color:var(--v87-metal);
-  opacity:.74;
+  opacity:.94;
 }
+.v88-brand-symbols{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.v87-marquee__gem .v88-ba-monogram{
+  display:block;
+  width:clamp(36px,4.4vw,64px);
+  height:clamp(36px,4.4vw,64px);
+  overflow:visible;
+  transition:color .4s ease;
+}
+.v87-marquee__gem .v88-ba-monogram use{
+  fill:none!important;
+  stroke:var(--v87-metal)!important;
+  stroke-width:15;
+  stroke-dasharray:58 24;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  paint-order:stroke;
+}
+html[data-belle-theme="light"] .v87-marquee__gem .v88-ba-monogram use{stroke:#a77b49!important}
+html[data-belle-theme="rose"] .v87-marquee__gem .v88-ba-monogram use{stroke:#94623a!important}
+html[data-belle-theme="dark"] .v87-marquee__gem .v88-ba-monogram use{stroke:#e6be82!important}
+
 @keyframes v87MarqueeTravel{
   from{transform:translate3d(0,0,0)}
   to{transform:translate3d(-50%,0,0)}
@@ -478,4 +499,10 @@ html body #belleLocationDock.belle-location-dock{z-index:41!important}
   html body #siteHeader.site-header > .site-actions{
     position:static!important;
   }
+}
+
+/* V88 mobile: o monograma continua menor que o logotipo, sem cortar o loop. */
+@media(max-width:520px){
+  .v87-marquee__gem{width:48px;flex-basis:48px}
+  .v87-marquee__gem .v88-ba-monogram{width:35px;height:35px}
 }
