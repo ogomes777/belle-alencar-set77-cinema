@@ -1,0 +1,115 @@
+/* BELLE V92 · FINAL ASSINATURA · CTA Signature / Only WhatsApp and Instagram.
+ * All WebGL, monogram, finale copy, navbar, banners and layout stay unchanged.
+ * Reuses official commercial handlers and original accessibility labels.
+ */
+html{
+  --v92-cta-solid:#604147;
+  --v92-cta-solid-text:#fff6ef;
+  --v92-cta-outline:#795a56;
+  --v92-cta-border:rgba(113,79,71,.38);
+  --v92-cta-hover:rgba(113,79,71,.06);
+}
+html[data-belle-theme="rose"]{
+  --v92-cta-solid:#67364f;
+  --v92-cta-solid-text:#fff3f7;
+  --v92-cta-outline:#75405e;
+  --v92-cta-border:rgba(122,63,92,.4);
+  --v92-cta-hover:rgba(122,63,92,.07);
+}
+html[data-belle-theme="dark"]{
+  --v92-cta-solid:#dfbf92;
+  --v92-cta-solid-text:#231c20;
+  --v92-cta-outline:#e2c39c;
+  --v92-cta-border:rgba(226,195,156,.56);
+  --v92-cta-hover:rgba(226,195,156,.09);
+}
+/* Overrides only the existing final WhatsApp/Instagram pair. */
+html body .finale .finale__actions .belle-neon,
+html body .finale .finale__actions .belle-neon--ig{
+  --v42-aura:transparent!important;
+  --v42-tint:transparent!important;
+  position:relative!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:9px!important;
+  min-height:46px!important;
+  width:100%!important;
+  padding:10px clamp(11px,1.2vw,17px)!important;
+  border-radius:3px!important;
+  background:var(--v92-cta-solid)!important;
+  border:1px solid var(--v92-cta-solid)!important;
+  color:var(--v92-cta-solid-text)!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+  filter:none!important;
+  font:600 clamp(.68rem,.78vw,.83rem)/1.2 "Archivo",var(--sans)!important;
+  letter-spacing:.025em!important;
+  text-transform:none!important;
+  text-decoration:none!important;
+  animation:none!important;
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease,transform .18s ease!important;
+}
+html body .finale .finale__actions .belle-neon--ig{
+  color:var(--v92-cta-outline)!important;
+  background:transparent!important;
+  border-color:var(--v92-cta-border)!important;
+}
+/* Remove neon, spinning gradients, dark glossy overlay and bloom. */
+html body .finale .finale__actions .belle-neon::before,
+html body .finale .finale__actions .belle-neon::after{
+  content:none!important;
+  display:none!important;
+  animation:none!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+html body .finale .finale__actions .belle-neon__icon{
+  display:grid!important;
+  place-items:center!important;
+  width:18px!important;
+  height:18px!important;
+  flex:0 0 18px!important;
+  color:inherit!important;
+  filter:none!important;
+  text-shadow:none!important;
+}
+html body .finale .finale__actions .belle-neon__icon svg{
+  width:17px!important;height:17px!important;display:block!important;
+  color:inherit!important;fill:currentColor!important;stroke:none!important;
+}
+html body .finale .finale__actions .belle-neon__label{
+  color:inherit!important;
+  font:inherit!important;
+  flex:0 1 auto!important;
+  min-width:0!important;
+  text-align:center!important;
+}
+html body .finale .finale__actions .belle-neon:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+html body .finale .finale__actions .belle-neon--ig:hover{
+  background:var(--v92-cta-hover)!important;
+  border-color:var(--v92-cta-outline)!important;
+  color:var(--v92-cta-outline)!important;
+}
+html body .finale .finale__actions .belle-neon:focus-visible{
+  outline:2px solid var(--v92-cta-outline)!important;
+  outline-offset:3px!important;
+}
+html body .finale .finale__actions .belle-neon:active{
+  transform:translateY(0)!important;
+}
+@media(max-width:820px){
+  html body .finale .finale__actions .belle-neon,
+  html body .finale .finale__actions .belle-neon--ig{
+    min-height:46px!important;
+    padding:10px 12px!important;
+    font-size:.76rem!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body .finale .finale__actions .belle-neon{transition:none!important;transform:none!important}
+}
