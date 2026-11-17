@@ -220,3 +220,11 @@ html body footer.site-footer.site-footer--studio .v89-footer__signature > span:f
     -webkit-text-stroke:1.1px var(--v89-footer-ink)!important;
   }
 }
+
+/* Align the right FAQ column to the approved reference (left 39% / right 61%). */
+@media(min-width:731px){
+  html body section.faq.faq--studio .v89-faq__frame{
+    grid-template-columns:minmax(250px,.78fr) minmax(0,1.22fr)!important;
+    gap:clamp(38px,7vw,120px)!important;
+  }
+}
