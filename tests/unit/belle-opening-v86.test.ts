@@ -16,7 +16,12 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(runway).toBeLessThan(boutique);
     expect((page.match(/id="inicio"/g)??[])).toHaveLength(1);
     expect(page).toContain('id="v86BannerCarousel"');
-    expect(page).toContain('id="v86CubeMount"');
+    // V88 replaces only the old letter cube with the continuous BA marquee.
+    expect(page).not.toContain('id="v86CubeMount"');
+    expect(page).toContain('class="v87-marquee__track"');
+    expect((page.match(/class="v87-marquee__sequence"/g)??[])).toHaveLength(2);
+    expect((page.match(/href="#v88-ba-monogram-outline"/g)??[])).toHaveLength(8);
+    expect(page).toContain('class="couture-nav__footer"'); // latest centered menu stays
     expect(page).toContain('id="filmEnter"');
   });
   it('shows the white signature before the white editorial with responsive WebP variants',()=>{
@@ -50,6 +55,8 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(bridge).toContain("CubeRollLetterRole");
     expect(bridge).toContain('tag="h2"');
     expect(main).toContain("initBelleOpeningV86()");
+    expect(main).toContain("belle-v88-navbar-marquee.css");
+    expect(main).not.toContain("initBelleV87Preview");
   });
   it('keeps original skip/timing but refines handwriting with script calligraphy',()=>{
     // Vitest CSS raw imports are empty in jsdom: verify final CSS in built assets.
