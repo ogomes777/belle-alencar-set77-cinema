@@ -14,6 +14,8 @@
 <!-- BELLE V51: five licensed/open display roles. The four reference originals
      require separately purchased webfont licenses; only OFL substitutes are loaded. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- V87 preview only: thin Archivo for the outlined moving signature. -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Italiana&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Righteous&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
@@ -145,8 +147,22 @@
   <!-- V86: brand's actual two provided 16:9 banners. No copy over either image. -->
   <section class="v86-opening" id="inicio" aria-label="Campanha Belle Alencar">
     <div class="v86-opening__titleband">
-      <div class="v86-opening__cube" id="v86CubeMount" aria-label="Belle Alencar">
-        <h2 class="v86-opening__fallback">BELLE ALENCAR</h2>
+      <!-- V87 PREVIEW ONLY · faixa reta infinita substitui apenas o Cube Roll. -->
+      <div class="v87-marquee" role="img" aria-label="Belle Alencar, assinatura em faixa contínua">
+        <div class="v87-marquee__track" aria-hidden="true">
+          <div class="v87-marquee__sequence">
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+          </div>
+          <div class="v87-marquee__sequence">
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+            <span class="v87-marquee__word">BELLE ALENCAR</span><span class="v87-marquee__gem">✦</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="v86-opening__carousel" id="v86BannerCarousel" role="region" aria-roledescription="carrossel" aria-label="Campanhas Belle Alencar" tabindex="0">
