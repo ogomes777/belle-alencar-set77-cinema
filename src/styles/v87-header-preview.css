@@ -261,7 +261,8 @@ html body #belleMenuPanel .couture-nav__item{
 html body #belleMenuPanel .couture-nav__link{
   font-size:clamp(2.15rem,min(8vh,6vw),5.65rem);
 }
-html body #belleMenuPanel .couture-nav__commerce{display:none!important}
+/* A sacola e os favoritos usam os botões originais dentro do menu couture. */
+html body #belleMenuPanel .couture-nav__commerce{display:flex!important}
 .v87-tools{
   flex:none;
   position:relative;
@@ -465,4 +466,16 @@ html body #siteHeader.is-nav-open .brand__mark{color:var(--cn-ink)!important}
 @media(prefers-reduced-motion:reduce){
   .v87-marquee__track{animation:none!important;will-change:auto}
   html body #siteHeader.site-header, html body #siteHeader.site-header.is-compact{transition:none!important}
+}
+
+
+/* V87.1 · Somente realocação de controles requisitada; faixa/banners intocados. */
+/* O seletor independente de loja deve ficar acima do fundo sólido da navbar. */
+html body #belleLocationDock.belle-location-dock{z-index:41!important}
+/* No mobile, os botões originais da V84 usam posicionamento relativo ao header,
+   não ao contêiner de ações. Preserva esquerda: busca/ajustes, direita: menu. */
+@media(max-width:860px){
+  html body #siteHeader.site-header > .site-actions{
+    position:static!important;
+  }
 }
