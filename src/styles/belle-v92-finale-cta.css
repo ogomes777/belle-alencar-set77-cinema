@@ -113,3 +113,59 @@ html body .finale .finale__actions .belle-neon:active{
 @media(prefers-reduced-motion:reduce){
   html body .finale .finale__actions .belle-neon{transition:none!important;transform:none!important}
 }
+
+
+/* BELLE V93 · somente o par WhatsApp/Instagram no monograma 360.
+   Signature do estudo aprovado, bordas mais arredondadas e tom rosé.
+   Nenhum HTML, evento comercial ou WebGL é alterado. */
+html:not([data-belle-theme]),
+html[data-belle-theme="light"]{
+  --v92-cta-solid:#8d5c73;
+  --v92-cta-solid-text:#fff7fb;
+  --v92-cta-outline:#996a81;
+  --v92-cta-border:rgba(153,106,129,.40);
+  --v92-cta-hover:rgba(153,106,129,.10);
+}
+html[data-belle-theme="rose"]{
+  --v92-cta-solid:#7c4c66;
+  --v92-cta-solid-text:#fff4fa;
+  --v92-cta-outline:#8d5674;
+  --v92-cta-border:rgba(141,86,116,.44);
+  --v92-cta-hover:rgba(141,86,116,.11);
+}
+html[data-belle-theme="dark"]{
+  --v92-cta-solid:#cb9db6;
+  --v92-cta-solid-text:#271b26;
+  --v92-cta-outline:#e1b8cf;
+  --v92-cta-border:rgba(225,184,207,.46);
+  --v92-cta-hover:rgba(225,184,207,.11);
+}
+html body .finale .finale__actions .belle-neon,
+html body .finale .finale__actions .belle-neon--ig{
+  min-height:46px!important;
+  border-radius:15px!important;
+  letter-spacing:.02em!important;
+  box-shadow:none!important;
+}
+html body .finale .finale__actions .belle-neon:not(.belle-neon--ig){
+  background:linear-gradient(180deg,
+    color-mix(in srgb,var(--v92-cta-solid) 91%,white 9%),
+    var(--v92-cta-solid))!important;
+  border-color:var(--v92-cta-solid)!important;
+  color:var(--v92-cta-solid-text)!important;
+  box-shadow:0 6px 17px rgba(108,53,83,.10)!important;
+}
+html body .finale .finale__actions .belle-neon--ig{
+  background:color-mix(in srgb,var(--v92-cta-solid) 7%,transparent)!important;
+  color:var(--v92-cta-outline)!important;
+  border-color:var(--v92-cta-border)!important;
+}
+html body .finale .finale__actions .belle-neon--ig:hover{
+  background:var(--v92-cta-hover)!important;
+  border-color:var(--v92-cta-outline)!important;
+}
+html body .finale .finale__actions .belle-neon::before,
+html body .finale .finale__actions .belle-neon::after{
+  display:none!important;
+  content:none!important;
+}
