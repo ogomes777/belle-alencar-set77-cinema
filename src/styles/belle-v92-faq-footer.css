@@ -121,3 +121,102 @@ html body .faq--studio .v89-faq__list details p{
   font-size:clamp(1rem,1.2vw,1.12rem)!important;
 }
 html body .faq--studio .v89-faq__theme{display:none!important}
+
+
+/* BELLE V93 · igual aos estudos locais definitivos apresentados em 17/11.
+   Altera SOMENTE o FAQ e o grande lettering vazado do rodapé.
+   O menu de tema continua EXCLUSIVAMENTE na navbar. */
+html:not([data-belle-theme]),
+html[data-belle-theme="light"] {
+  --v89-faq:#f1e1e7;
+  --v89-faq-ink:#583642;
+  --v89-faq-line:rgba(117,80,97,.24);
+  --v89-faq-accent:#c69b74;
+}
+html[data-belle-theme="rose"]{
+  --v89-faq:#e8bfd2;
+  --v89-faq-ink:#593447;
+  --v89-faq-line:rgba(120,72,95,.28);
+  --v89-faq-accent:#ad7756;
+}
+html[data-belle-theme="dark"]{
+  --v89-faq:#261d27;
+  --v89-faq-ink:#f3e5e1;
+  --v89-faq-line:rgba(242,222,229,.22);
+  --v89-faq-accent:#d8b78b;
+}
+/* Avoid inherited/transparent content in the light theme even after scrolling reveals. */
+html body section.faq.faq--studio{
+  background:var(--v89-faq)!important;
+  color:var(--v89-faq-ink)!important;
+}
+html body section.faq.faq--studio .v89-faq__heading,
+html body section.faq.faq--studio .v89-faq__headline,
+html body section.faq.faq--studio .v89-faq__headline span,
+html body section.faq.faq--studio .v89-faq__note,
+html body section.faq.faq--studio .v89-faq__list,
+html body section.faq.faq--studio .v89-faq__list details,
+html body section.faq.faq--studio .v89-faq__list summary,
+html body section.faq.faq--studio .v89-faq__list details p{
+  color:var(--v89-faq-ink)!important;
+  text-shadow:none!important;
+}
+html body section.faq.faq--studio .v89-faq__headline,
+html body section.faq.faq--studio .v89-faq__headline span{
+  font-family:"Archivo Black","Archivo",Arial,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:-.073em!important;
+  font-size:clamp(46px,5.3vw,88px)!important;
+  line-height:.94!important;
+  opacity:1!important;
+}
+html body section.faq.faq--studio .v89-faq__eyebrow{
+  color:var(--v89-faq-ink)!important;
+  font:700 11px/1.2 "Archivo",Arial,sans-serif!important;
+  letter-spacing:.21em!important;
+  opacity:.96;
+}
+html body section.faq.faq--studio .v89-faq__note{
+  font:400 clamp(14px,1.15vw,17px)/1.65 "Archivo",Arial,sans-serif!important;
+  opacity:.92!important;
+}
+html body section.faq.faq--studio .v89-faq__list summary{
+  font:700 clamp(15px,1.25vw,19px)/1.4 "Archivo",Arial,sans-serif!important;
+  letter-spacing:-.02em!important;
+}
+html body section.faq.faq--studio .v89-faq__list details p{
+  font:400 clamp(14px,1.15vw,17px)/1.7 "Archivo",Arial,sans-serif!important;
+  opacity:.92!important;
+}
+html body section.faq.faq--studio .v89-faq__list summary::after{
+  color:var(--v89-faq-accent)!important;
+}
+html body section.faq.faq--studio .faq__list.v89-faq__list,
+html body section.faq.faq--studio .v89-faq__list details{
+  border-color:var(--v89-faq-line)!important;
+}
+/* The reference footer has a tall high-contrast outlined fashion serif,
+   NOT the geometric Archivo Black used in V92. */
+html body footer.site-footer.site-footer--studio .v89-footer__signature > span:first-child{
+  font-family:"Bodoni Moda",Georgia,serif!important;
+  font-weight:400!important;
+  font-size:clamp(46px,9.2vw,150px)!important;
+  line-height:1!important;
+  letter-spacing:-.079em!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:1.25px var(--v89-footer-ink)!important;
+  text-shadow:none!important;
+}
+@media(max-width:730px){
+  html body section.faq.faq--studio .v89-faq__headline,
+  html body section.faq.faq--studio .v89-faq__headline span{
+    font-size:clamp(46px,9.5vw,77px)!important;
+  }
+}
+@media(max-width:440px){
+  html body footer.site-footer.site-footer--studio .v89-footer__signature > span:first-child{
+    font-size:clamp(41px,10vw,60px)!important;
+    -webkit-text-stroke:1.1px var(--v89-footer-ink)!important;
+  }
+}
