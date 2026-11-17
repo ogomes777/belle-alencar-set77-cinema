@@ -677,18 +677,28 @@
   </section>
 
   <!-- DÚVIDAS FREQUENTES -->
-  <section class="faq" id="duvidas" aria-labelledby="faqTitle">
-    <header class="sec-head">
-      <p class="eyebrow">DÚVIDAS ANTES DE CONSULTAR</p>
-      <h2 class="display" id="faqTitle" data-reveal>O que você precisa <em>saber.</em></h2>
-    </header>
-    <div class="faq__list">
-      <details><summary>Consigo finalizar a compra pelo site?</summary><p>Ainda não. Salve as peças na sacola, envie sua lista pelo WhatsApp oficial e confirme os detalhes com a loja antes de comprar.</p></details>
-      <details><summary>Como consulto o preço de uma peça?</summary><p>O catálogo digital ainda é demonstrativo. Envie a referência à unidade e peça os preços e as opções disponíveis.</p></details>
-      <details><summary>As peças mostradas estão disponíveis?</summary><p>Não necessariamente. Estas imagens são referências ilustrativas, não confirmação de estoque. A unidade informa quais modelos tem.</p></details>
-      <details><summary>Como confirmo meu tamanho?</summary><p>Informe seu tamanho habitual ou suas medidas à equipe e peça para conferir a grade do modelo escolhido.</p></details>
-      <details><summary>Quais são as opções de retirada e entrega?</summary><p>Pergunte à unidade sobre retirada, entrega e troca antes de fechar o pedido. As condições podem variar.</p></details>
-      <details><summary>Perco minhas peças salvas ao trocar de loja?</summary><p>Não. A sacola fica salva no navegador. Você escolhe se leva as referências para outra unidade ou mantém cada lista separada.</p></details>
+  <!-- BELLE V89 • visual study only. FAQ questions/answers remain unchanged. -->
+  <section class="faq faq--studio" id="duvidas" aria-labelledby="faqTitle">
+    <div class="v89-faq__frame">
+      <header class="sec-head v89-faq__heading">
+        <p class="eyebrow v89-faq__eyebrow" data-i18n-skip data-v89-key="faqEyebrow">CONVERSA ABERTA</p>
+        <h2 class="display v89-faq__headline" id="faqTitle" data-reveal data-i18n-skip><span data-v89-key="faqLineA">Antes de</span><span data-v89-key="faqLineB">escolher.</span></h2>
+        <p class="v89-faq__note" data-i18n-skip data-v89-key="faqNote">Sua experiência começa com as respostas certas. Escolha com calma, a Belle acompanha.</p>
+        <div class="v89-faq__theme" data-i18n-skip>
+          <label for="v89ThemeControl" data-v89-key="themeLabel">Tema do estudo</label>
+          <select id="v89ThemeControl" aria-label="Trocar tema do estudo">
+            <option value="light">Claro</option><option value="rose">Rosé Gold</option><option value="dark">Escuro</option>
+          </select>
+        </div>
+      </header>
+      <div class="faq__list v89-faq__list" aria-label="Dúvidas frequentes da Belle Alencar">
+        <details><summary>Consigo finalizar a compra pelo site?</summary><p>Ainda não. Salve as peças na sacola, envie sua lista pelo WhatsApp oficial e confirme os detalhes com a loja antes de comprar.</p></details>
+        <details><summary>Como consulto o preço de uma peça?</summary><p>O catálogo digital ainda é demonstrativo. Envie a referência à unidade e peça os preços e as opções disponíveis.</p></details>
+        <details><summary>As peças mostradas estão disponíveis?</summary><p>Não necessariamente. Estas imagens são referências ilustrativas, não confirmação de estoque. A unidade informa quais modelos tem.</p></details>
+        <details><summary>Como confirmo meu tamanho?</summary><p>Informe seu tamanho habitual ou suas medidas à equipe e peça para conferir a grade do modelo escolhido.</p></details>
+        <details><summary>Quais são as opções de retirada e entrega?</summary><p>Pergunte à unidade sobre retirada, entrega e troca antes de fechar o pedido. As condições podem variar.</p></details>
+        <details><summary>Perco minhas peças salvas ao trocar de loja?</summary><p>Não. A sacola fica salva no navegador. Você escolhe se leva as referências para outra unidade ou mantém cada lista separada.</p></details>
+      </div>
     </div>
   </section>
 
@@ -720,13 +730,63 @@
   </section>
 </main>
 
-<footer class="site-footer">
-  <div class="site-footer__brand" role="img" aria-label="Belle Alencar, Moda e Acessórios"><span data-monogram="footer" aria-hidden="true"></span></div>
-  <p>Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)</p>
-  <p class="site-footer__legal">Este site apresenta referências ilustrativas e experiências 3D, não o estoque das lojas. Preços, tamanhos e disponibilidade são confirmados pela unidade. Projeto digital: SET77 Labs.</p>
-  <button type="button" class="director" id="directorToggle" aria-pressed="false">
+<footer class="site-footer site-footer--studio" id="belleFooter">
+  <!-- BELLE V89 • redesign visual isolado. Nenhum cadastro é enviado. -->
+  <div class="v89-footer__top">
+    <div class="v89-footer__newsletter">
+      <p class="v89-footer__micro" data-v89-key="newsletterEyebrow" data-i18n-skip>CARTA BELLE</p>
+      <h2 class="v89-footer__title" data-v89-key="newsletterTitle" data-i18n-skip>Novidades da Belle</h2>
+      <form id="v89NewsletterStudy" class="v89-footer__form" autocomplete="off">
+        <label for="v89NewsletterEmail" data-v89-key="emailLabel" data-i18n-skip>Seu e-mail</label>
+        <div class="v89-footer__form-row">
+          <input id="v89NewsletterEmail" type="email" name="email" placeholder="voce@exemplo.com" autocomplete="off" maxlength="254" required>
+          <button type="submit" data-v89-key="subscribe" data-i18n-skip>Quero receber</button>
+        </div>
+        <p class="v89-footer__form-status" id="v89NewsletterStatus" role="status" aria-live="polite" data-v89-key="formHelp" data-i18n-skip>Prévia de cadastro. Nenhum e-mail é enviado.</p>
+      </form>
+    </div>
+    <nav class="v89-footer__nav" aria-label="Explore a Belle Alencar">
+      <h3 data-v89-key="explore" data-i18n-skip>EXPLORE</h3>
+      <a href="#colecao" data-v89-key="collection" data-i18n-skip>Coleção</a>
+      <a href="#passarela" data-v89-key="runway" data-i18n-skip>Passarela</a>
+      <a href="#lojas" data-v89-key="stores" data-i18n-skip>Nossas lojas</a>
+      <a href="#como-comprar" data-v89-key="how" data-i18n-skip>Como comprar</a>
+    </nav>
+    <nav class="v89-footer__nav v89-footer__nav--connect" aria-label="Conecte-se com a Belle">
+      <h3 data-v89-key="connect" data-i18n-skip>CONECTE</h3>
+      <button type="button" data-instagram-directory data-v89-key="instagram" data-i18n-skip>Instagram</button>
+      <a href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      <a href="#atendimento-final" data-v89-key="consult" data-i18n-skip>Atendimento</a>
+    </nav>
+  </div>
+  <div class="v89-footer__signature" role="img" aria-label="BELLE ALENCAR, moda e acessórios">
+    <span aria-hidden="true">BELLE ALENCAR</span>
+    <span class="v89-footer__signature-star" aria-hidden="true">✦</span>
+  </div>
+  <div class="v89-footer__bottom">
+    <div class="v89-footer__belle">
+      <div class="site-footer__brand" role="img" aria-label="Belle Alencar, Moda e Acessórios"><span data-monogram="footer" aria-hidden="true"></span></div>
+      <span class="v89-footer__belle-meta" data-v89-key="belleDescriptor" data-i18n-skip>MODA &amp; ACESSÓRIOS</span>
+    </div>
+    <div class="v89-footer__madeby" aria-label="Projeto digital por SET77 Labs">
+      <span class="v89-footer__ribbon" aria-hidden="true"></span>
+      <span class="v89-footer__madeby-divider" aria-hidden="true"></span>
+      <div class="v89-footer__madeby-copy">
+        <strong>SET77 LABS</strong>
+        <span data-v89-key="creditLineA" data-i18n-skip>ESTRATÉGIA DE MARCA · DIREÇÃO CRIATIVA</span>
+        <span data-v89-key="creditLineB" data-i18n-skip>DESIGN DE EXPERIÊNCIA · ENGENHARIA DE DESIGN</span>
+      </div>
+    </div>
+  </div>
+  <div class="v89-footer__legalbar">
+    <div class="v89-footer__legalcopy">
+      <p class="v89-footer__cities">Araxá · Frutal · Ibiá (MG) · Catalão · Mineiros (GO) · Franca (SP)</p>
+      <p class="site-footer__legal">Este site apresenta referências ilustrativas e experiências 3D, não o estoque das lojas. Preços, tamanhos e disponibilidade são confirmados pela unidade. Projeto digital: SET77 Labs.</p>
+    </div>
+    <button type="button" class="director" id="directorToggle" aria-pressed="false">
     <span class="director__dot" aria-hidden="true"></span><span data-director-label>Movimento: cinema</span>
   </button>
+  </div>
 </footer>
 
 <a class="float-cta" id="floatCta" href="https://wa.me/message/YYDB5NC7JMUQP1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span>Falar com a Belle</span></a>
