@@ -68,8 +68,7 @@ initCoutureMenu(); // V38: full-page chapter menu.
 initCommerce();
 initBelleI18n();
 initBelleSettings();
-// V87: move REAL commerce/preferences controls to couture menu after listeners bind.
-void import('./shell/v87-header-preview').then(({initBelleV87Preview})=>initBelleV87Preview());
+// V87: keep the original store, search and settings controls in their native positions.
 // V57: boot the hero before below-the-fold enhancements and costly DOM
 // choreography. Download/compile proceeds while the intro is visible.
 const director = initDirector();
