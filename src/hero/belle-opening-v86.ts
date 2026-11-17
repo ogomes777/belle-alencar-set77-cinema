@@ -87,7 +87,7 @@ export function initBelleOpeningV86(): void {
   }
   play();
   // Keep the next original art cached while avoiding duplicate first-frame downloads.
-  const warmSecond=()=>{const image=new Image();image.src='/media/banner-v86-travertino.webp';};
+  const warmSecond=()=>{const image=slides[1]?.querySelector<HTMLImageElement>('.v86-opening__image img');if(image)image.loading='eager';};
   if('requestIdleCallback' in window)window.requestIdleCallback(warmSecond,{timeout:2200});
   else setTimeout(warmSecond,1400);
 

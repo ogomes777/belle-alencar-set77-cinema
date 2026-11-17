@@ -19,14 +19,14 @@ describe('Belle V86 · branded first-page campaign',()=>{
     expect(page).toContain('id="v86CubeMount"');
     expect(page).toContain('id="filmEnter"');
   });
-  it('shows exactly the two unmodified supplied banners with lighter WebP variants',()=>{
+  it('shows the white signature before the white editorial with responsive WebP variants',()=>{
     expect((page.match(/class="v86-opening__slide/g)??[])).toHaveLength(2);
-    for(const name of ['vinho','travertino']){
-      expect(page).toContain('/media/banner-v86-'+name+'.png');
-      expect(page).toContain('/media/banner-v86-'+name+'.webp');
-    }
     const figures=page.match(/<figure class="v86-opening__slide[\s\S]*?<\/figure>/g)??[];
     expect(figures).toHaveLength(2);
+    for (const [index, name] of ['assinatura-branca', 'editorial-branco'].entries()) {
+      expect(figures[index]).toContain('/media/banner-v86-' + name + '.webp');
+      expect(figures[index]).toContain('/media/banner-v86-' + name + '-4k.webp');
+    }
     for(const figure of figures){
       expect(figure).not.toMatch(/<h[1-6]|<p\b|<figcaption/);
     }
